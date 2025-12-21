@@ -5,6 +5,9 @@ import connectDB from "./config/db.js";
 import blogsRoute from "./routes/blogsRoute.js"; // <-- import blogs route
 import multerErrorHandler from "./middlewares/multerErrorHandler.js";
 import ServiceRoutes from "./routes/serviceRoutes.js";
+import hostingRoute from "./routes/hostingRoute.js";
+import path from "path";
+import { fileURLToPath } from "url";
 
 dotenv.config();
 
@@ -17,17 +20,15 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-
-app.use('/api/service/',ServiceRoutes)
-// Test route
-app.get("/", (req, res) => {
-  res.send("🚀 Backend is running...");
-});
+// Serve uploaded files statically at /uploads
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Register routes
-
-app.use("/api/blogs", blogsRoute); // <-- use blogs route
-// Multer-specific error handler (returns 400 for unexpected fields / other multer errors)
+app.use('/api/service/',ServiceRoutes)
+app.use("/api/blogs", blogsRoute); 
+app.use("/api/hosting", hostingRoute); 
 app.use(multerErrorHandler);
 const PORT = process.env.PORT || 5000;
 

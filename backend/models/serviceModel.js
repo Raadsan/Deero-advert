@@ -5,6 +5,10 @@ const serviceSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  serviceIcon: {
+    type: String,
+    required: true  
+  },
 
   packages: [
     {

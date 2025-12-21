@@ -23,8 +23,8 @@ router.get("/", getBlogs);
 router.get("/:idOrSlug", getBlogByIdOrSlug);
 
 // Update blog by ID
-// Update blog by ID (accept file uploads on partial update)
-router.patch("/:id", upload.any(), updateBlog);
+// Update blog by ID (accept file uploads on update)
+router.put("/:id", upload.any(), updateBlog);
 
 // Delete blog by ID
 router.delete("/:id", deleteBlog);

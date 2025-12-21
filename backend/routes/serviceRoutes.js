@@ -1,11 +1,15 @@
 import express from "express";
-import { CreateService, deleteServiceById, getALlServices, getServicesById } from "../controllers/serviceController.js";
+import upload from "../utils/multer.js";
+import { CreateService, deleteServiceById, getALlServices, getServicesById, updateServiceById } from "../controllers/serviceController.js";
 
-const ServiceRoutes=express.Router();
+const ServiceRoutes = express.Router();
 
-ServiceRoutes.post('/create',CreateService);
-ServiceRoutes.get('/',getALlServices);
-ServiceRoutes.get('/:_id',getServicesById);
-ServiceRoutes.delete('/:id',deleteServiceById)
+// Create service: accept multipart/form-data with required file field `serviceIcon` (or aliases: icon, service_icon)
+ServiceRoutes.post('/create', upload.any(), CreateService);
+ServiceRoutes.get('/', getALlServices);
+ServiceRoutes.get('/:_id', getServicesById);
+ServiceRoutes.put('/:id', upload.any(), updateServiceById);
+ServiceRoutes.patch('/:id', upload.any(), updateServiceById);
+ServiceRoutes.delete('/:id', deleteServiceById);
 
 export default ServiceRoutes;

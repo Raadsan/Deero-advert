@@ -2,11 +2,40 @@ import HostingPackage from "../models/HostingPackage.js";
 
 export const createPackage = async (req, res) => {
   try {
+    // Validate required fields before creating
+    const { name, price } = req.body;
+    
+    if (!name) {
+      return res.status(400).json({ 
+        success: false, 
+        message: "name field is required" 
+      });
+    }
+    
+    if (price === undefined || price === null) {
+      return res.status(400).json({ 
+        success: false, 
+        message: "price field is required" 
+      });
+    }
+
     const pkg = new HostingPackage(req.body);
     await pkg.save();
     res.status(201).json({ success: true, data: pkg });
   } catch (error) {
-    res.status(400).json({ success: false, message: error.message });
+    // Handle Mongoose validation errors
+    if (error.name === 'ValidationError') {
+      const errors = Object.values(error.errors).map(err => err.message).join(', ');
+      return res.status(400).json({ 
+        success: false, 
+        message: `Validation error: ${errors}` 
+      });
+    }
+    
+    res.status(400).json({ 
+      success: false, 
+      message: error.message 
+    });
   }
 };
 
