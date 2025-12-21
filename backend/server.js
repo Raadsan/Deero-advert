@@ -4,6 +4,7 @@ import cors from "cors";
 import connectDB from "./config/db.js";
 import blogsRoute from "./routes/blogsRoute.js"; // <-- import blogs route
 import multerErrorHandler from "./middlewares/multerErrorHandler.js";
+import ServiceRoutes from "./routes/serviceRoutes.js";
 
 dotenv.config();
 
@@ -16,6 +17,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+
+app.use('/api/service/',ServiceRoutes)
 // Test route
 app.get("/", (req, res) => {
   res.send("🚀 Backend is running...");
