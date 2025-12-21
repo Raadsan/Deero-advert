@@ -7,6 +7,7 @@ import multerErrorHandler from "./middlewares/multerErrorHandler.js";
 import ServiceRoutes from "./routes/serviceRoutes.js";
 import hostingRoute from "./routes/hostingRoute.js";
 import achievementRoute from "./routes/achievementRoutes.js";
+import TestimonialRoute from "./routes/testimonialRoutes.js"; 
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -31,6 +32,7 @@ app.use('/api/service/',ServiceRoutes)
 app.use("/api/blogs", blogsRoute); 
 app.use("/api/hosting", hostingRoute); 
 app.use("/api/achievements", achievementRoute);
+app.use("/api/testimonials", TestimonialRoute);
 app.use(multerErrorHandler);
 const PORT = process.env.PORT || 5000;
 
