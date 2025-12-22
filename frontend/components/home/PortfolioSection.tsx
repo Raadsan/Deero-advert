@@ -62,7 +62,8 @@ export default function PortfolioSection() {
                         </p>
                     </div>
                     <Link
-                        href="/portfolio"
+                        href="https://www.behance.net/deeroadvert"
+                        target="_blank"
                         className="bg-[#EB4724] text-white px-10 py-3 rounded-full font-bold hover:bg-[#d13d1d] transition uppercase tracking-wider text-sm shadow-md"
                     >
                         View More

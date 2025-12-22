@@ -23,11 +23,13 @@ const contactDetails = [
 
 export default function ContactHero() {
     return (
-        <section className="relative w-full bg-gradient-to-r from-[#4d0e0e] via-[#651313] to-[#EB4724] py-9 lg:py-[60px] px-4 overflow-visible">
+        <section className="relative w-full bg-gradient-to-r from-[#4d0e0e] via-[#651313] to-[#EB4724] py-9 lg:py-[60px] px-4 overflow-x-clip">
             {/* Background Decoration */}
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-white/5 rounded-full -translate-y-1/2 translate-x-1/4 blur-3xl pointer-events-none"></div>
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-white/5 rounded-full -translate-y-1/2 translate-x-1/4 blur-3xl"></div>
+            </div>
 
-            <div className="mx-auto max-w-6xl relative z-10">
+            <div className="mx-auto max-w-6xl relative z-10 w-full">
                 <div className="flex flex-col md:flex-row items-center justify-between mb-12">
                     {/* Left Content */}
                     <div className="w-full md:w-1/2 text-white space-y-6 text-center md:text-left mb-12 md:mb-0">
@@ -60,33 +62,35 @@ export default function ContactHero() {
                 </div>
 
                 {/* Overlapping Info Cards */}
-                <div className="absolute left-4 right-4 -bottom-16 lg:-bottom-24 translate-y-1/2 grid grid-cols-1 md:grid-cols-3 gap-8 pointer-events-auto">
-                    {contactDetails.map((item, index) => (
-                        <div
-                            key={index}
-                            className="bg-[#EB4724] rounded-2xl p-10 pt-16 relative shadow-[0_20px_50px_rgba(0,0,0,0.3)] transition hover:-translate-y-2 duration-300"
-                        >
-                            {/* Icon Circle */}
-                            <div className="absolute top-0 left-10 -translate-y-1/2 w-16 h-16 bg-[#4d0e0e] rounded-full flex items-center justify-center shadow-lg border-4 border-[#EB4724]">
-                                <item.icon className="h-6 w-6 text-white" />
+                <div className="absolute left-0 right-0 -bottom-16 lg:-bottom-24 translate-y-1/2 px-4 pointer-events-auto">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        {contactDetails.map((item, index) => (
+                            <div
+                                key={index}
+                                className="bg-[#EB4724] rounded-2xl p-10 pt-16 relative shadow-[0_20px_50px_rgba(0,0,0,0.3)] transition hover:-translate-y-2 duration-300"
+                            >
+                                {/* Icon Circle */}
+                                <div className="absolute top-0 left-10 -translate-y-1/2 w-16 h-16 bg-[#4d0e0e] rounded-full flex items-center justify-center shadow-lg border-4 border-[#EB4724]">
+                                    <item.icon className="h-6 w-6 text-white" />
+                                </div>
+
+                                <h3 className="text-white text-2xl font-bold mb-4">{item.title}</h3>
+
+                                <div className="space-y-1">
+                                    {item.details.map((detail, idx) => (
+                                        <p key={idx} className="text-white/90 text-[13px] font-medium leading-relaxed">
+                                            {detail}
+                                        </p>
+                                    ))}
+                                </div>
+
+                                {/* Decorative Line (Only for Address as in image) */}
+                                {item.title === "Address" && (
+                                    <div className="mt-4 w-full h-px bg-white/30"></div>
+                                )}
                             </div>
-
-                            <h3 className="text-white text-2xl font-bold mb-4">{item.title}</h3>
-
-                            <div className="space-y-1">
-                                {item.details.map((detail, idx) => (
-                                    <p key={idx} className="text-white/90 text-[13px] font-medium leading-relaxed">
-                                        {detail}
-                                    </p>
-                                ))}
-                            </div>
-
-                            {/* Decorative Line (Only for Address as in image) */}
-                            {item.title === "Address" && (
-                                <div className="mt-4 w-full h-px bg-white/30"></div>
-                            )}
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
             </div>
         </section>

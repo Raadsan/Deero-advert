@@ -8,8 +8,8 @@ const navLinks = [
   { label: "Home", href: "#" },
   { label: "Hosting", href: "#hosting" },
   { label: "Services", href: "#services" },
-  { label: "Portfolio", href: "#portfolio" },
-  { label: "About", href: "#about" },
+  { label: "Portfolio", href: "https://www.behance.net/deeroadvert" },
+  { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];
 
