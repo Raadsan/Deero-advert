@@ -2,6 +2,10 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import AboutHero from "@/components/about/AboutHero";
 import AboutContent from "@/components/about/AboutContent";
+import CoreValues from "@/components/about/CoreValues";
+import OurApproaches from "@/components/about/OurApproaches";
+import AwardsSection from "@/components/about/AwardsSection";
+import AchievementsSection from "@/components/home/AchievementsSection";
 
 export default function AboutPage() {
     return (
@@ -10,6 +14,10 @@ export default function AboutPage() {
             <main className="flex-grow">
                 <AboutHero />
                 <AboutContent />
+                <CoreValues />
+                <OurApproaches />
+                <AwardsSection />
+                <AchievementsSection />
             </main>
             <Footer />
         </div>
