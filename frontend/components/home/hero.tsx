@@ -1,0 +1,127 @@
+"use client";
+
+import Image from "next/image";
+import { useEffect, useMemo, useState } from "react";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+
+type Slide = {
+  title: string;
+  description: string;
+  image: string;
+};
+
+const slides: Slide[] = [
+  {
+    title: "Graphic Design",
+    description:
+      "We offer a range of graphic design services including logo design, UI design, event branding, and brand identity. With our expertise, we create captivating and memorable brands that resonate with the public.",
+    image: "/home-images/graphic design.png",
+  },
+  {
+    title: "Digital Marketing",
+    description:
+      "Complete digital marketing services: social media strategy, analytics, branding, content writing, and campaign management to align with your business objectives.",
+    image: "/home-images/digital-marketing.png",
+  },
+  {
+    title: "Web Solutions",
+    description:
+      "Responsive web design, domain services, SSL, and hosting. We build experiences that look wonderful on every device and keep your brand secure online.",
+    image: "/home-images/web solution.png",
+  },
+  {
+    title: "Event Branding",
+    description:
+      "Full suite of event branding and consulting, from digital strategy and social media to on-site branding and highlight videos.",
+    image: "/home-images/event branding.png",
+  },
+  {
+    title: "Digital Consulting",
+    description:
+      "Comprehensive digital consulting across marketing, branding, content creation, media, and communication to guide your teams.",
+    image: "/home-images/digital consulting.png",
+  },
+];
+
+export default function Hero() {
+  const [active, setActive] = useState(0);
+  const total = useMemo(() => slides.length, []);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setActive((prev) => (prev + 1) % total);
+    }, 5500);
+    return () => clearInterval(id);
+  }, [total]);
+
+  const slide = slides[active];
+
+  const goTo = (idx: number) => setActive(idx);
+  const next = () => setActive((prev) => (prev + 1) % total);
+  const prev = () => setActive((prev) => (prev - 1 + total) % total);
+
+  return (
+    <section className="relative overflow-hidden bg-[linear-gradient(to_right,#651313_0%,#651313_60%,#EB4724_100%)] text-white">
+      <div className="mx-auto flex max-w-6xl flex-col gap-12 px-4 py-14 sm:px-10 lg:flex-row lg:items-center lg:py-20">
+        <button
+          type="button"
+          aria-label="Previous slide"
+          onClick={prev}
+          className="absolute left-3 top-1/2 hidden -translate-y-1/2 text-white transition hover:scale-110 lg:inline-flex"
+        >
+          <ChevronLeftIcon className="h-8 w-8" />
+        </button>
+
+        <div className="flex-1 space-y-6">
+        
+          <h1 className="text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">
+            {slide.title}
+          </h1>
+          <p className="max-w-2xl text-lg leading-8 text-white/90">
+            {slide.description}
+          </p>
+          <div className="flex items-center gap-4">
+            <button className="rounded-md bg-[#c88a66] px-5 py-3 text-base font-semibold text-white shadow transition hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
+              See More
+            </button>
+          </div>
+        </div>
+
+        <div className="relative flex-1 flex items-center justify-center">
+          <div className="relative z-10">
+            <Image
+              src={slide.image}
+              alt={slide.title}
+              width={620}
+              height={420}
+              className="h-auto w-full max-w-[520px]"
+              priority
+            />
+          </div>
+        </div>
+
+        <button
+          type="button"
+          aria-label="Next slide"
+          onClick={next}
+          className="absolute right-3 top-1/2 hidden -translate-y-1/2 text-white transition hover:scale-110 lg:inline-flex"
+        >
+          <ChevronRightIcon className="h-8 w-8" />
+        </button>
+      </div>
+
+      <div className="flex items-center justify-center gap-3 pb-8">
+        {slides.map((_, idx) => (
+          <button
+            key={idx}
+            type="button"
+            aria-label={`Go to slide ${idx + 1}`}
+            onClick={() => goTo(idx)}
+            className={`h-2 rounded-full transition ${active === idx ? "w-6 bg-white" : "w-2 bg-white/60 hover:bg-white"
+              }`}
+          />
+        ))}
+      </div>
+    </section>
+  );
+}

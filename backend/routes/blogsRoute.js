@@ -10,10 +10,7 @@ import upload from "../utils/multer.js";
 const router = express.Router();
 
 
-
-// Create a new blog (accepts file uploads)
-// Use `upload.any()` to accept different file field names from clients,
-// then map aliases in the controller (avatar -> author_avatar, image -> featured_image).
+// Add new blog (accept file uploads)
 router.post("/", upload.any(), addBlog);
 
 // Get all blogs
