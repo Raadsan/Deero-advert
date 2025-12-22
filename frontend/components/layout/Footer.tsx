@@ -13,7 +13,7 @@ export default function Footer() {
                     {/* Logo */}
                     <div className="relative w-32 h-32 mb-8">
                         <Image
-                            src="/home-images/Deero Logo.png"
+                            src="/home-images/footer logo.svg"
                             alt="Deero Logo"
                             fill
                             className="object-contain"

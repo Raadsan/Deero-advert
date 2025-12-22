@@ -10,7 +10,7 @@ const navLinks = [
   { label: "Services", href: "#services" },
   { label: "Portfolio", href: "#portfolio" },
   { label: "About", href: "#about" },
-  { label: "Contact", href: "#contact" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export default function Header() {
@@ -56,7 +56,7 @@ export default function Header() {
       {/* Main header */}
       <div className="border-b border-white/20 bg-white shadow-sm sm:px-6">
         <div className="mx-auto max-w-7xl px-4 md:px-6 h-[120px] flex items-center justify-between">
-          
+
           {/* Logo - Left */}
           <div className="flex-shrink-0">
             <Image
@@ -101,11 +101,11 @@ export default function Header() {
           >
             {open ? (
               <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M6 18L18 6M6 6l12 12" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M6 18L18 6M6 6l12 12" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             ) : (
               <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M4 6h16M4 12h16M4 18h16" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M4 6h16M4 12h16M4 18h16" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             )}
           </button>
