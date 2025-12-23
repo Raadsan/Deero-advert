@@ -22,7 +22,7 @@ const contactDetails = [
 
 export default function ContactInfoCards() {
     return (
-        <section className="bg-[#fce5d8] py-24 px-4 -mt-12 group">
+        <section className="bg-[#f5f5f7] py-24 px-4 -mt-12 group">
             <div className="mx-auto max-w-6xl">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     {contactDetails.map((item, index) => (

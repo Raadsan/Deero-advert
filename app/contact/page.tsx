@@ -11,8 +11,8 @@ export default function ContactPage() {
             <Header />
             <main className="flex-grow">
                 <ContactHero />
-                {/* Spacer section with peach background to catch the overlapping cards */}
-                <div className="bg-[#fce5d8] h-32 lg:h-48"></div>
+                {/* Spacer section with light grey background to catch the overlapping cards */}
+                <div className="bg-[#f5f5f7] h-32 lg:h-48"></div>
                 <ContactForm />
             </main>
             <Footer />

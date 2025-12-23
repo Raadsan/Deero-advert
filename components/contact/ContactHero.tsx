@@ -41,10 +41,17 @@ export default function ContactHero() {
                             Easily accessible customer service is crucial in today's 24-hour, online business environment. Hostim's experienced team Members.
                         </p>
 
-                        <button className="bg-white/20 backdrop-blur-md border border-white/30 text-white px-8 py-3 rounded-full flex items-center gap-3 hover:bg-white/30 transition-all font-bold group mx-auto md:mx-0">
-                            <ChatBubbleLeftRightIcon className="h-5 w-5 text-white group-hover:scale-110 transition-transform" />
-                            Live Chat
-                        </button>
+                        <a
+                            href="https://wa.me/252618553839"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-block"
+                        >
+                            <button className="bg-white/20 backdrop-blur-md border border-white/30 text-white px-8 py-3 rounded-full flex items-center gap-3 hover:bg-white/30 transition-all font-bold group">
+                                <ChatBubbleLeftRightIcon className="h-5 w-5 text-white group-hover:scale-110 transition-transform" />
+                                Live Chat
+                            </button>
+                        </a>
                     </div>
 
                     {/* Right Content - Illustration */}

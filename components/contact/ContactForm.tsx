@@ -1,91 +1,111 @@
 "use client";
 
-import { ChevronRightIcon } from "@heroicons/react/24/solid";
+import { PaperAirplaneIcon } from "@heroicons/react/24/solid";
 
 export default function ContactForm() {
     return (
-        <section className="bg-[#fce5d8] py-20 px-4">
+        <section className="bg-[#f5f5f7] py-16 sm:py-24 px-4">
             <div className="mx-auto max-w-4xl">
                 {/* Title */}
-                <div className="text-center mb-16">
-                    <h2 className="text-3xl md:text-4xl font-bold text-[#651313] leading-tight">
-                        We're Ready To Help You<br />
-                        Send Us Message
+                <div className="text-center mb-12">
+                    <h2 className="text-4xl sm:text-5xl font-bold text-[#4d0e0e] mb-3">
+                        Send us a message
                     </h2>
+                    <p className="text-[#651313]/70 text-base sm:text-lg">
+                        We'd love to hear from you. Fill out the form below and we'll get back to you soon.
+                    </p>
                 </div>
 
-                {/* Form */}
-                <form className="space-y-8" onSubmit={(e) => e.preventDefault()}>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-10">
-                        {/* Name */}
-                        <div className="relative">
-                            <label className="absolute -top-3 left-4 bg-white px-2 py-0.5 text-[#651313] text-xs font-bold rounded shadow-sm z-10">
-                                Name
-                            </label>
-                            <input
-                                type="text"
-                                placeholder="Your Name"
-                                className="w-full bg-white border border-transparent rounded-lg px-6 py-4 text-sm text-[#651313] focus:outline-none focus:border-[#EB4724] transition-colors shadow-sm"
-                            />
+                {/* Form Card */}
+                <div className="bg-white rounded-3xl shadow-2xl shadow-[#651313]/10 p-8 sm:p-12">
+                    <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+                        {/* Name and Email Row */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {/* Name */}
+                            <div>
+                                <label className="block text-[#4d0e0e] font-bold text-sm mb-2">
+                                    Name <span className="text-[#EB4724]">*</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    placeholder="Enter your name"
+                                    className="w-full bg-[#f8f9fa] border-2 border-[#e0e0e0] rounded-xl px-5 py-3.5 text-[#4d0e0e] placeholder:text-gray-400 focus:outline-none focus:border-[#EB4724] focus:bg-white transition-all"
+                                    required
+                                />
+                            </div>
+
+                            {/* Email */}
+                            <div>
+                                <label className="block text-[#4d0e0e] font-bold text-sm mb-2">
+                                    Email <span className="text-[#EB4724]">*</span>
+                                </label>
+                                <input
+                                    type="email"
+                                    placeholder="Enter your email"
+                                    className="w-full bg-[#f8f9fa] border-2 border-[#e0e0e0] rounded-xl px-5 py-3.5 text-[#4d0e0e] placeholder:text-gray-400 focus:outline-none focus:border-[#EB4724] focus:bg-white transition-all"
+                                    required
+                                />
+                            </div>
                         </div>
 
-                        {/* Email */}
-                        <div className="relative">
-                            <label className="absolute -top-3 left-4 bg-white px-2 py-0.5 text-[#651313] text-xs font-bold rounded shadow-sm z-10">
-                                Email
-                            </label>
-                            <input
-                                type="email"
-                                placeholder="Enter Email"
-                                className="w-full bg-white border border-transparent rounded-lg px-6 py-4 text-sm text-[#651313] focus:outline-none focus:border-[#EB4724] transition-colors shadow-sm"
-                            />
+                        {/* Phone and Subject Row */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {/* Phone */}
+                            <div>
+                                <label className="block text-[#4d0e0e] font-bold text-sm mb-2">
+                                    Phone <span className="text-[#EB4724]">*</span>
+                                </label>
+                                <input
+                                    type="tel"
+                                    placeholder="Enter your phone"
+                                    className="w-full bg-[#f8f9fa] border-2 border-[#e0e0e0] rounded-xl px-5 py-3.5 text-[#4d0e0e] placeholder:text-gray-400 focus:outline-none focus:border-[#EB4724] focus:bg-white transition-all"
+                                    required
+                                />
+                            </div>
+
+                            {/* Subject */}
+                            <div>
+                                <label className="block text-[#4d0e0e] font-bold text-sm mb-2">
+                                    Subject <span className="text-[#EB4724]">*</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    placeholder="Enter subject"
+                                    className="w-full bg-[#f8f9fa] border-2 border-[#e0e0e0] rounded-xl px-5 py-3.5 text-[#4d0e0e] placeholder:text-gray-400 focus:outline-none focus:border-[#EB4724] focus:bg-white transition-all"
+                                    required
+                                />
+                            </div>
                         </div>
 
-                        {/* Phone */}
-                        <div className="relative">
-                            <label className="absolute -top-3 left-4 bg-white px-2 py-0.5 text-[#651313] text-xs font-bold rounded shadow-sm z-10">
-                                Phone
+                        {/* Message */}
+                        <div>
+                            <label className="block text-[#4d0e0e] font-bold text-sm mb-2">
+                                Message <span className="text-[#EB4724]">*</span>
                             </label>
-                            <input
-                                type="tel"
-                                placeholder="Enter phone"
-                                className="w-full bg-white border border-transparent rounded-lg px-6 py-4 text-sm text-[#651313] focus:outline-none focus:border-[#EB4724] transition-colors shadow-sm"
-                            />
+                            <textarea
+                                rows={6}
+                                placeholder="Enter your message"
+                                className="w-full bg-[#f8f9fa] border-2 border-[#e0e0e0] rounded-xl px-5 py-3.5 text-[#4d0e0e] placeholder:text-gray-400 focus:outline-none focus:border-[#EB4724] focus:bg-white transition-all resize-none"
+                                required
+                            ></textarea>
                         </div>
 
-                        {/* Subject */}
-                        <div className="relative">
-                            <label className="absolute -top-3 left-4 bg-white px-2 py-0.5 text-[#651313] text-xs font-bold rounded shadow-sm z-10">
-                                Subject
-                            </label>
-                            <input
-                                type="text"
-                                placeholder="Enter Subject"
-                                className="w-full bg-white border border-transparent rounded-lg px-6 py-4 text-sm text-[#651313] focus:outline-none focus:border-[#EB4724] transition-colors shadow-sm"
-                            />
+                        {/* Submit Button */}
+                        <div className="pt-4">
+                            <button
+                                type="submit"
+                                className="w-full bg-gradient-to-r from-[#4d0e0e] via-[#651313] to-[#EB4724] text-white font-bold text-lg py-4 rounded-xl hover:shadow-2xl hover:shadow-[#EB4724]/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-3 group"
+                            >
+                                <span>Submit</span>
+                                <PaperAirplaneIcon className="h-5 w-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                            </button>
                         </div>
-                    </div>
 
-                    {/* Message */}
-                    <div className="relative">
-                        <label className="absolute -top-3 left-4 bg-white px-2 py-0.5 text-[#651313] text-xs font-bold rounded shadow-sm z-10">
-                            Message
-                        </label>
-                        <textarea
-                            rows={6}
-                            placeholder="Write Message"
-                            className="w-full bg-white border border-transparent rounded-lg px-6 py-4 text-sm text-[#651313] focus:outline-none focus:border-[#EB4724] transition-colors shadow-sm resize-none"
-                        ></textarea>
-                    </div>
 
-                    {/* Submit */}
-                    <div className="flex justify-center pt-4">
-                        <button className="bg-[#4d0e0e] text-white px-10 py-3.5 rounded-full font-bold flex items-center gap-2 hover:bg-[#651313] transition-colors group shadow-lg">
-                            Send Message
-                            <ChevronRightIcon className="h-4 w-4 text-white group-hover:translate-x-1 transition-transform" />
-                        </button>
-                    </div>
-                </form>
+                    </form>
+                </div>
+
+
             </div>
         </section>
     );
