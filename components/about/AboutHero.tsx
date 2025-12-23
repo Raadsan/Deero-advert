@@ -27,9 +27,7 @@ export default function AboutHero() {
 
                 {/* Breadcrumb - Absolute to the right on desktop */}
                 <nav className="md:absolute md:right-4 flex items-center gap-2 text-white/90 font-medium text-xs md:text-sm mt-4 md:mt-0 bg-black/10 backdrop-blur-sm md:bg-transparent p-2 rounded-lg">
-                    <Link href="/" className="hover:text-white transition-colors">Home</Link>
-                    <ChevronRightIcon className="h-3 w-3" />
-                    <span>About</span>
+                
                 </nav>
             </div>
         </section>

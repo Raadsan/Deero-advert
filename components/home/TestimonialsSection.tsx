@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { StarIcon } from "@heroicons/react/24/solid";
+import { motion } from "framer-motion";
 
 const ratings = [
     {
@@ -42,62 +43,104 @@ const testimonials = [
     },
 ];
 
+const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.15,
+        },
+    },
+};
+
+const itemVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+};
+
 export default function TestimonialsSection() {
     return (
-        <section className="bg-[#f8f8f8] py-20 px-4">
-            <div className="mx-auto max-w-6xl">
-                {/* Top Ratings Bar */}
-                <div className="flex flex-wrap justify-center gap-8 mb-24">
-                    {ratings.map((item, index) => (
-                        <div key={index} className="bg-[#f0e9e7] rounded-xl p-6 flex items-center justify-between w-full md:w-[480px] shadow-sm hover:shadow-md transition duration-300">
-                            <div className="flex flex-col gap-2">
-                                <div className="h-6 relative w-24">
-                                    <img src={item.logo} alt={item.platform} className="h-full object-contain object-left" />
+        <>
+            {/* Top Ratings Bar Section - White Background */}
+            <section className="bg-white py-12 px-4 sm:px-10 overflow-hidden">
+                <motion.div
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, amount: 0.5 }}
+                    variants={containerVariants}
+                    className="mx-auto max-w-6xl"
+                >
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        {ratings.map((item, index) => (
+                            <motion.div
+                                key={index}
+                                variants={{
+                                    hidden: { opacity: 0, x: index === 0 ? -50 : 50 },
+                                    visible: { opacity: 1, x: 0, transition: { duration: 0.6 } }
+                                }}
+                                whileHover={{ scale: 1.02 }}
+                                className="bg-[#f0e9e7] rounded-xl p-10 flex items-center justify-between shadow-sm hover:shadow-md transition-all duration-300"
+                            >
+                                <div className="flex flex-col gap-3">
+                                    <div className="h-10 relative w-32">
+                                        <img src={item.logo} alt={item.platform} className="h-full object-contain object-left" />
+                                    </div>
+                                    <div className="flex gap-1">
+                                        {[...Array(item.stars)].map((_, i) => (
+                                            <StarIcon key={i} className="w-6 h-6 text-orange-400" />
+                                        ))}
+                                    </div>
                                 </div>
-                                <div className="flex gap-1">
-                                    {[...Array(item.stars)].map((_, i) => (
-                                        <StarIcon key={i} className="w-4 h-4 text-orange-400" />
-                                    ))}
+                                <div className="text-4xl font-bold text-[#651313]">{item.rating}</div>
+                            </motion.div>
+                        ))}
+                    </div>
+                </motion.div>
+            </section>
+
+            {/* Testimonials Content Section - Grey Background */}
+            <section className="bg-[#f8f8f8] py-20 px-4 sm:px-10 overflow-hidden">
+                <motion.div
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, amount: 0.2 }}
+                    variants={containerVariants}
+                    className="mx-auto max-w-6xl"
+                >
+                    {/* Section Title */}
+                    <motion.h2 variants={itemVariants} className="text-3xl font-bold text-[#651313] text-center mb-16">Testimonials</motion.h2>
+
+                    {/* Testimonial Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
+                        {testimonials.map((item, index) => (
+                            <motion.div
+                                key={item.id}
+                                variants={itemVariants}
+                                whileHover={{ y: -10 }}
+                                className="p-10 md:p-12 flex flex-col items-center text-center bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 relative"
+                            >
+                                <p className="text-gray-500 text-[13px] leading-relaxed mb-10 italic max-w-[280px]">
+                                    "{item.text}"
+                                </p>
+
+                                <div className="mt-auto flex flex-col items-center">
+                                    <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-[#EB4724] mb-4">
+                                        <Image
+                                            src={item.image}
+                                            alt={item.name}
+                                            width={56}
+                                            height={56}
+                                            className="object-cover"
+                                        />
+                                    </div>
+                                    <h4 className="text-[#651313] font-bold text-sm uppercase tracking-wide mb-1">{item.name}</h4>
+                                    <p className="text-gray-400 text-[10px] font-medium uppercase">{item.role}</p>
                                 </div>
-                            </div>
-                            <div className="text-2xl font-bold text-[#651313]">{item.rating}</div>
-                        </div>
-                    ))}
-                </div>
-
-                {/* Section Title */}
-                <h2 className="text-2xl font-bold text-[#651313] text-center mb-16 uppercase tracking-wider">Testimonials</h2>
-
-                {/* Testimonial Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-0 relative">
-                    {testimonials.map((item, index) => (
-                        <div
-                            key={item.id}
-                            className={`p-10 flex flex-col items-center text-center bg-transparent relative
-                                ${index !== 2 ? "md:border-r border-gray-200" : ""}
-                            `}
-                        >
-                            <p className="text-gray-500 text-sm leading-relaxed mb-12 italic">
-                                "{item.text}"
-                            </p>
-
-                            <div className="mt-auto flex flex-col items-center">
-                                <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-[#EB4724] mb-4">
-                                    <Image
-                                        src={item.image}
-                                        alt={item.name}
-                                        width={64}
-                                        height={64}
-                                        className="object-cover"
-                                    />
-                                </div>
-                                <h4 className="text-[#651313] font-bold text-sm uppercase tracking-wide mb-1">{item.name}</h4>
-                                <p className="text-gray-400 text-[10px] font-medium uppercase">{item.role}</p>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </section>
+                            </motion.div>
+                        ))}
+                    </div>
+                </motion.div>
+            </section>
+        </>
     );
 }

@@ -2,12 +2,13 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 const navLinks = [
-  { label: "Home", href: "#" },
-  { label: "Hosting", href: "#hosting" },
-  { label: "Services", href: "#services" },
+  { label: "Home", href: "/" },
+  { label: "Hosting", href: "/#hosting" },
+  { label: "Services", href: "/services" },
   { label: "Portfolio", href: "https://www.behance.net/deeroadvert" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
@@ -15,6 +16,16 @@ const navLinks = [
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname() || "";
+  const [hash, setHash] = useState("");
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const setCurrentHash = () => setHash(window.location.hash || "");
+    setCurrentHash();
+    window.addEventListener("hashchange", setCurrentHash);
+    return () => window.removeEventListener("hashchange", setCurrentHash);
+  }, []);
 
   return (
     <header className="w-full">
@@ -46,7 +57,7 @@ export default function Header() {
           </Link>
           <Link
             href="#download"
-            className="rounded-full bg-[#EB4724] px-4 py-2 text-white transition hover:opacity-90"
+            className="rounded-full bg-[#EB4724] px-4 py-1.5 text-white transition hover:opacity-90"
           >
             Download
           </Link>
@@ -63,27 +74,38 @@ export default function Header() {
               src="/home-images/Deero Logo full.png"
               alt="Deero Advertising Agency"
               width={500}
-              height={200}
+              height={500}
               className="w-[220px] md:w-[260px] lg:w-[300px] h-auto"
               priority
             />
           </div>
 
           {/* Navigation - Center */}
-          <nav className="hidden md:flex gap-8 font-semibold text-[#651313]">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="transition hover:text-[#EB4724]"
-              >
-                {link.label}
-              </Link>
-            ))}
+          <nav className="hidden md:flex gap-8 font-semibold   text-[#651313] pr-22">
+            {navLinks.map((link) => {
+              const [linkPathPart, linkHashPart] = link.href.split("#");
+              const linkPath = linkPathPart || "/";
+              const linkHash = linkHashPart ? `#${linkHashPart}` : "";
+
+              const isActive = linkHash
+                ? pathname === linkPath && hash === linkHash
+                : pathname === linkPath;
+
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`transition ${isActive ? "text-[#EB4724]" : "text-[#651313]"
+                    } hover:text-[#EB4724]`}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
           </nav>
 
           {/* Client Area - Right */}
-          <div className="hidden md:flex">
+          <div className="hidden md:flex pr-25">
             <Link
               href="#client-area"
               className="rounded-full bg-[#EB4724] px-6 py-2.5 font-semibold text-white transition hover:opacity-90"
@@ -115,16 +137,23 @@ export default function Header() {
         {open && (
           <div className="md:hidden border-t border-white/30 bg-white px-4 pb-4 shadow-sm">
             <div className="flex flex-col gap-3 font-semibold text-[#651313]">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="rounded-md px-2 py-2 transition hover:bg-[#651313]/5"
-                  onClick={() => setOpen(false)}
-                >
-                  {link.label}
-                </Link>
-              ))}
+              {navLinks.map((link) => {
+                const isActive =
+                  link.href.startsWith("/") &&
+                  (pathname === link.href || pathname.startsWith(link.href));
+
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={`rounded-md px-2 py-2 transition ${isActive ? "text-[#EB4724]" : "text-[#651313]"
+                      } hover:bg-[#651313]/5`}
+                    onClick={() => setOpen(false)}
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
               <Link
                 href="#client-area"
                 className="rounded-full bg-[#EB4724] px-5 py-2 text-center text-white shadow-sm transition hover:opacity-90"

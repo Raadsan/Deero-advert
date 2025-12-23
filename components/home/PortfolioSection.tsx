@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 const portfolioItems = [
     {
@@ -48,34 +49,59 @@ const portfolioItems = [
     },
 ];
 
+const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.1,
+        },
+    },
+};
+
+const itemVariants = {
+    hidden: { opacity: 0, scale: 0.9, y: 30 },
+    visible: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.5 } },
+};
+
 export default function PortfolioSection() {
     return (
-        <section className="bg-[#fce5d8] py-20 px-4">
-            <div className="mx-auto max-w-7xl">
+        <section className="bg-[#fcd7c3] py-20 px-4 sm:px-10">
+            <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.1 }}
+                variants={containerVariants}
+                className="mx-auto max-w-6xl"
+            >
                 {/* Header Area */}
                 <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
-                    <div>
+                    <motion.div variants={itemVariants}>
                         <h2 className="text-4xl font-bold text-[#651313] mb-4">Our Portfolios</h2>
                         <p className="text-[#651313] max-w-md">
                             Our portfolios speaks for itself, <br />
                             Check out all project and see for yourself!
                         </p>
-                    </div>
-                    <Link
-                        href="https://www.behance.net/deeroadvert"
-                        target="_blank"
-                        className="bg-[#EB4724] text-white px-10 py-3 rounded-full font-bold hover:bg-[#d13d1d] transition uppercase tracking-wider text-sm shadow-md"
-                    >
-                        View More
-                    </Link>
+                    </motion.div>
+                    <motion.div variants={itemVariants}>
+                        <Link
+                            href="https://www.behance.net/deeroadvert"
+                            target="_blank"
+                            className="bg-[#EB4724] text-white px-10 py-3 rounded-full font-bold hover:bg-[#d13d1d] hover:scale-105 active:scale-95 transition-all uppercase tracking-wider text-sm shadow-md inline-block"
+                        >
+                            View More
+                        </Link>
+                    </motion.div>
                 </div>
 
                 {/* Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {portfolioItems.map((item) => (
-                        <div
+                        <motion.div
                             key={item.id}
-                            className="group relative bg-white rounded-xl overflow-hidden shadow-lg transition hover:-translate-y-2 duration-300"
+                            variants={itemVariants}
+                            whileHover={{ y: -8 }}
+                            className="group relative bg-white rounded-xl overflow-hidden shadow-lg transition-all duration-300"
                         >
                             {/* Image Container */}
                             <div className="relative aspect-[4/3] overflow-hidden">
@@ -106,10 +132,10 @@ export default function PortfolioSection() {
                             <div className="p-6 text-center border-t border-gray-100">
                                 <h3 className="text-[#EB4724] font-bold text-lg">{item.title}</h3>
                             </div>
-                        </div>
+                        </motion.div>
                     ))}
                 </div>
-            </div>
+            </motion.div>
         </section>
     );
 }

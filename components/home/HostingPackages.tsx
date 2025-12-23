@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { CheckIcon } from "@heroicons/react/24/outline";
+import { motion } from "framer-motion";
 
 const plans = [
     {
@@ -22,7 +23,7 @@ const plans = [
             "Support & Server Monitoring",
         ],
         buttonColor: "bg-[#f28b6d]",
-        bgColor: "bg-[#fce5d8]",
+        bgColor: "bg-[#fcd7c3]",
         isMain: false,
     },
     {
@@ -43,7 +44,7 @@ const plans = [
             "Support & Server Monitoring",
         ],
         buttonColor: "bg-[#651313]",
-        bgColor: "bg-[#fdeada]",
+        bgColor: "bg-[#fcd7c3]",
         isMain: true,
     },
     {
@@ -64,38 +65,64 @@ const plans = [
             "Support & Server Monitoring",
         ],
         buttonColor: "bg-[#f28b6d]",
-        bgColor: "bg-[#fce5d8]",
+        bgColor: "bg-[#fcd7c3]",
         isMain: false,
     },
 ];
+
+const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.1,
+        },
+    },
+};
+
+const itemVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+};
 
 export default function HostingPackages() {
     const [isYearly, setIsYearly] = useState(false);
 
     return (
-        <section className="bg-white py-20 px-4">
-            <div className="mx-auto max-w-7xl">
-                <div className="text-center mb-12">
-                    <h2 className="text-3xl font-bold text-[#651313] mb-8">Web Hosting Packages</h2>
+        <section className="bg-white py-12 px-4 sm:px-10">
+            <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.2 }}
+                variants={containerVariants}
+                className="mx-auto max-w-6xl"
+            >
+                <div className="text-center mb-8">
+                    <motion.h2 variants={itemVariants} className="text-3xl font-bold text-[#651313] mb-8">Web Hosting Packages</motion.h2>
 
                     {/* Toggle */}
-                    <div className="flex items-center justify-center gap-4">
-                        <span className={`text-sm font-semibold ${!isYearly ? 'text-[#651313]' : 'text-gray-400'}`}>Monthly</span>
+                    <motion.div variants={itemVariants} className="flex items-center justify-center gap-4">
+                        <span className={`text-sm font-semibold transition-colors duration-300 ${!isYearly ? 'text-[#651313]' : 'text-gray-400'}`}>Monthly</span>
                         <button
                             onClick={() => setIsYearly(!isYearly)}
                             className="relative w-14 h-7 bg-[#EB4724] rounded-full p-1 transition-colors duration-300"
                         >
-                            <div className={`w-5 h-5 bg-white rounded-full shadow-md transform transition-transform duration-300 ${isYearly ? 'translate-x-7' : 'translate-x-0'}`}></div>
+                            <motion.div
+                                animate={{ x: isYearly ? 28 : 0 }}
+                                className="w-5 h-5 bg-white rounded-full shadow-md"
+                            ></motion.div>
                         </button>
-                        <span className={`text-sm font-semibold ${isYearly ? 'text-[#651313]' : 'text-gray-400'}`}>Yearly</span>
-                    </div>
+                        <span className={`text-sm font-semibold transition-colors duration-300 ${isYearly ? 'text-[#651313]' : 'text-gray-400'}`}>Yearly</span>
+                    </motion.div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
                     {plans.map((plan) => (
-                        <div
+                        <motion.div
                             key={plan.name}
-                            className={`${plan.bgColor} rounded-2xl p-8 shadow-sm flex flex-col relative overflow-hidden transition-transform hover:scale-[1.02] duration-300`}
+                            variants={itemVariants}
+                            whileHover={{ scale: 1.02 }}
+                            className={`${plan.bgColor} p-6 shadow-sm flex flex-col relative overflow-hidden transition-all duration-300`}
                         >
                             {/* Decorative element for main card */}
                             {plan.isMain && (
@@ -105,16 +132,16 @@ export default function HostingPackages() {
                             )}
 
                             <h3 className="text-3xl font-bold text-[#651313] mb-4">{plan.name}</h3>
-                            <p className="text-sm text-[#651313]/80 mb-6 leading-relaxed">
+                            <p className="text-sm text-[#651313]/80 mb-4 leading-relaxed">
                                 {plan.description}
                             </p>
 
-                            <div className="bg-[#651313] text-white text-[10px] font-bold py-1 px-3 rounded-full w-fit mb-6 uppercase tracking-wider">
+                            <div className="bg-[#651313] text-white text-[10px] font-bold py-1 px-3 rounded-full w-fit mb-4 uppercase tracking-wider">
                                 Save {plan.save}
                             </div>
 
                             <div className="mb-2 text-[#651313]/60 text-xs font-semibold">From only</div>
-                            <div className="flex items-baseline mb-8">
+                            <div className="flex items-baseline mb-6">
                                 <span className="text-4xl font-bold text-[#651313]">
                                     ${isYearly ? plan.yearlyPrice : plan.monthlyPrice}
                                 </span>
@@ -123,7 +150,7 @@ export default function HostingPackages() {
                                 </span>
                             </div>
 
-                            <ul className="space-y-4 mb-10 flex-1">
+                            <ul className="space-y-3 mb-6 flex-1">
                                 {plan.features.map((feature) => (
                                     <li key={feature} className="flex items-center gap-3 text-[#651313] text-sm">
                                         <CheckIcon className="h-4 w-4 shrink-0 stroke-[3]" />
@@ -132,13 +159,13 @@ export default function HostingPackages() {
                                 ))}
                             </ul>
 
-                            <button className={`${plan.buttonColor} text-white font-bold py-4 rounded-full shadow-lg hover:brightness-110 transition uppercase tracking-widest text-xs`}>
+                            <button className={`${plan.buttonColor} text-white font-bold py-4 rounded-full shadow-lg hover:brightness-110 active:scale-95 transition-all uppercase tracking-widest text-xs`}>
                                 Choose Plan
                             </button>
-                        </div>
+                        </motion.div>
                     ))}
                 </div>
-            </div>
+            </motion.div>
         </section>
     );
 }

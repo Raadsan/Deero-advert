@@ -5,7 +5,7 @@ import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 
 export default function DomainSearch() {
     return (
-        <section className="bg-[#fce5d8] py-12 px-4 ">
+        <section className="bg-[#fcd7c3] py-12 px-4 sm:px-10 ">
             <div className="mx-auto max-w-6xl flex flex-col md:flex-row items-center justify-between gap-8">
                 {/* Left side: Search */}
                 <div className="flex-1 space-y-8">

@@ -62,7 +62,7 @@ export default function Hero() {
 
   return (
     <section className="relative overflow-hidden bg-[linear-gradient(to_right,#651313_0%,#651313_60%,#EB4724_100%)] text-white">
-      <div className="mx-auto flex max-w-6xl flex-col gap-12 px-4 py-14 sm:px-10 lg:flex-row lg:items-center lg:py-20">
+      <div className="mx-auto flex max-w-6xl flex-col gap-12 px-4 py-14 sm:px-10 lg:flex-row lg:items-center lg:py-20 ">
         <button
           type="button"
           aria-label="Previous slide"
@@ -71,34 +71,36 @@ export default function Hero() {
         >
           <ChevronLeftIcon className="h-8 w-8" />
         </button>
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between w-full gap-10 ">
+          <div className="space-y-6 lg:w-1/2">
 
-        <div className="flex-1 space-y-6">
-        
-          <h1 className="text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">
-            {slide.title}
-          </h1>
-          <p className="max-w-2xl text-lg leading-8 text-white/90">
-            {slide.description}
-          </p>
-          <div className="flex items-center gap-4">
-            <button className="rounded-md bg-[#c88a66] px-5 py-3 text-base font-semibold text-white shadow transition hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
-              See More
-            </button>
+            <h1 className="text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">
+              {slide.title}
+            </h1>
+            <p className="max-w-2xl text-lg leading-8 text-white/90">
+              {slide.description}
+            </p>
+            <div className="flex items-center gap-4 ">
+              <button className="rounded-md bg-[#c88a66] px-10 py-3 pl-8 text-base font-semibold text-white shadow transition hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
+                See More
+              </button>
+            </div>
+          </div>
+
+          <div className="relative lg:w-1/2 flex justify-center items-center  ">
+            <div className="relative z-10">
+              <Image
+                src={slide.image}
+                alt={slide.title}
+                width={620}
+                height={420}
+                className="h-auto w-full max-w-[520px] object-contain"
+                priority
+              />
+            </div>
           </div>
         </div>
 
-        <div className="relative flex-1 flex items-center justify-center">
-          <div className="relative z-10">
-            <Image
-              src={slide.image}
-              alt={slide.title}
-              width={620}
-              height={420}
-              className="h-auto w-full max-w-[520px]"
-              priority
-            />
-          </div>
-        </div>
 
         <button
           type="button"
