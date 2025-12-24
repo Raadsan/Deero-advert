@@ -42,7 +42,7 @@ export default function ContactHero() {
                         </p>
 
                         <a
-                            href="https://wa.me/252618553839"
+                            href="https://wa.me/252618553566"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="inline-block"
