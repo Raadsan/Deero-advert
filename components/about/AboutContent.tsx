@@ -46,7 +46,7 @@ export default function AboutContent() {
                 {/* Vision & Mission Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-24">
                     {/* Vision Card */}
-                    <div className="bg-[#4d0e0e] rounded-2xl p-10 md:p-12 text-center text-white flex flex-col items-center space-y-6 shadow-xl transition hover:-translate-y-2 duration-300">
+                    <div className="group bg-[#4d0e0e] rounded-2xl p-10 md:p-12 text-center text-white flex flex-col items-center space-y-6 shadow-xl transition hover:-translate-y-2 hover:bg-[#f6f6f6] hover:text-[#1a1a1a] duration-300">
                         <div className="relative w-24 h-24 md:w-28 md:h-28">
                             <Image
                                 src="/home-images/Vis-01.svg"
@@ -55,14 +55,14 @@ export default function AboutContent() {
                                 className="object-contain"
                             />
                         </div>
-                        <h3 className="text-2xl font-bold">Vision</h3>
-                        <p className="text-white/80 leading-relaxed max-w-sm">
+                        <h3 className="text-2xl font-bold group-hover:text-[#1a1a1a]">Vision</h3>
+                        <p className="text-white/80 leading-relaxed max-w-sm group-hover:text-[#1a1a1a]">
                             To provide quality, innovative & high-value service to customers locally and worldwide.
                         </p>
                     </div>
 
                     {/* Mission Card */}
-                    <div className="bg-[#4d0e0e] rounded-2xl p-10 md:p-12 text-center text-white flex flex-col items-center space-y-6 shadow-xl transition hover:-translate-y-2 duration-300">
+                    <div className="group bg-[#4d0e0e] rounded-2xl p-10 md:p-12 text-center text-white flex flex-col items-center space-y-6 shadow-xl transition hover:-translate-y-2 hover:bg-[#f6f6f6] hover:text-[#1a1a1a] duration-300">
                         <div className="relative w-24 h-24 md:w-28 md:h-28">
                             <Image
                                 src="/home-images/Mis-01.svg"
@@ -71,8 +71,8 @@ export default function AboutContent() {
                                 className="object-contain"
                             />
                         </div>
-                        <h3 className="text-2xl font-bold">Mission</h3>
-                        <p className="text-white/80 leading-relaxed max-w-sm">
+                        <h3 className="text-2xl font-bold group-hover:text-[#1a1a1a]">Mission</h3>
+                        <p className="text-white/80 leading-relaxed max-w-sm group-hover:text-[#1a1a1a]">
                             To provide quality services that exceeds the expectations of our esteemed customers
                         </p>
                     </div>

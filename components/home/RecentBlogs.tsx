@@ -35,6 +35,7 @@ const blogs = [
         color: "bg-[#9b7677]",
         image: "/home-images/blog3.png",
     },
+  
 ];
 
 const containerVariants = {
@@ -42,7 +43,7 @@ const containerVariants = {
     visible: {
         opacity: 1,
         transition: {
-            staggerChildren: 0.1,
+            staggerChildren: 0.15,
         },
     },
 };
@@ -58,7 +59,7 @@ export default function RecentBlogs() {
             <motion.div
                 initial="hidden"
                 whileInView="visible"
-                viewport={{ once: true, amount: 0.1 }}
+                viewport={{ once: true, amount: 0.2 }}
                 variants={containerVariants}
                 className="mx-auto max-w-6xl"
             >
@@ -69,7 +70,7 @@ export default function RecentBlogs() {
                         <motion.div
                             key={blog.id}
                             variants={itemVariants}
-                            whileHover={{ y: -8 }}
+                            whileHover={{ y: -10 }}
                             className="bg-white rounded-xl overflow-hidden shadow-xl flex flex-col group transition-all duration-300"
                         >
                             {/* Top Card Area with Icon */}
