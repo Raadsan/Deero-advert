@@ -11,7 +11,7 @@ export default function AboutPage() {
     return (
         <div className="flex flex-col min-h-screen">
             <Header />
-            <main className="flex-grow">
+            <main className="flex-grow pt-[170px]">
                 <AboutHero />
                 <AboutContent />
                 <CoreValues />

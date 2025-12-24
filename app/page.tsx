@@ -7,13 +7,14 @@ import HostingPackages from "@/components/home/HostingPackages";
 import AchievementsSection from "@/components/home/AchievementsSection";
 import RecentBlogs from "@/components/home/RecentBlogs";
 import TestimonialsSection from "@/components/home/TestimonialsSection";
+import NewsletterSection from "@/components/home/NewsletterSection";
 import Footer from "@/components/layout/Footer";
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-white text-[#1a1a1a]">
       <Header />
-      <main>
+      <main className="pt-[170px]">
         <Hero />
         <DomainSearch />
         <ServicesSection />
@@ -22,6 +23,7 @@ export default function Home() {
         <AchievementsSection />
         <RecentBlogs />
         <TestimonialsSection />
+        <NewsletterSection />
         <Footer />
       </main>
     </div>

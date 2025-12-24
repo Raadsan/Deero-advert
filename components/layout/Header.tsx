@@ -28,9 +28,9 @@ export default function Header() {
   }, []);
 
   return (
-    <header className="w-full">
+    <header className="fixed top-0 left-0 right-0 w-full z-50">
       {/* Top bar */}
-      <div className="flex flex-wrap items-center justify-center gap-6 bg-[#651313] py-2 text-sm font-medium text-white sm:px-6 md:text-base">
+        <div className="flex flex-wrap items-center justify-center gap-6 bg-[#651313] py-3 text-sm font-medium text-white sm:px-6 md:text-base">
         <span className="text-base md:text-lg">+252 61 8553566</span>
         <span className="hidden sm:inline">|</span>
         <a
@@ -44,28 +44,28 @@ export default function Header() {
         <span className="hidden sm:inline">|</span>
         <div className="flex items-center gap-3 font-semibold">
           <Link
-            href="#news"
+            href="/news"
             className="transition hover:text-[#EB4724]"
           >
             News
           </Link>
           <Link
-            href="#career"
+            href="/career"
             className="transition hover:text-[#EB4724]"
           >
             Career
           </Link>
-          <Link
+          {/* <Link
             href="#download"
             className="rounded-full bg-[#EB4724] px-4 py-1.5 text-white transition hover:opacity-90"
           >
             Download
-          </Link>
+          </Link> */}
         </div>
       </div>
 
       {/* Main header */}
-      <div className="border-b border-white/20 bg-white shadow-sm sm:px-6">
+      <div className="border-b border-white/20 bg-white/95 backdrop-blur-sm shadow-sm sm:px-6">
         <div className="mx-auto max-w-7xl px-4 md:px-6 h-[120px] flex items-center justify-between">
 
           {/* Logo - Left */}

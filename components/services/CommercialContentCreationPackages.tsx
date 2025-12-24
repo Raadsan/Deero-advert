@@ -59,7 +59,7 @@ const itemVariants = {
 
 export default function CommercialContentCreationPackages() {
     return (
-        <section className="bg-[#f2f2f2] py-24 px-4 sm:px-10 overflow-hidden">
+        <section id="digital-consulting" className="bg-[#f2f2f2] py-24 px-4 sm:px-10 overflow-hidden">
             <motion.div
                 initial="hidden"
                 whileInView="visible"
@@ -68,52 +68,52 @@ export default function CommercialContentCreationPackages() {
                 className="mx-auto max-w-6xl"
             >
                 <div className="text-center mb-16">
-                    <motion.h2 variants={itemVariants} className="text-4xl md:text-5xl font-bold text-[#EB4724] uppercase">
+                    <motion.h2 variants={itemVariants} className="text-3xl md:text-4xl font-bold text-[#EB4724] uppercase">
                         Commercial Content<br />Creation Package
                     </motion.h2>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
                     {contentPlans.map((plan) => (
                         <motion.div
                             key={plan.name}
                             variants={itemVariants}
                             whileHover={{ scale: 1.02 }}
-                            className="bg-[#fcd7c3] p-8 md:p-10 shadow-sm flex flex-col relative overflow-hidden rounded-2xl transition-all duration-300"
+                            className="bg-[#fcd7c3] p-6 md:p-7 shadow-sm flex flex-col relative overflow-hidden rounded-2xl transition-all duration-300 min-h-[480px]"
                         >
                             {/* Most Popular Ribbon */}
                             {plan.isPopular && (
-                                <div className="absolute top-8 -right-8 w-40 h-8">
+                                <div className="absolute top-6 -right-8 w-40 h-8">
                                     <div className="bg-[#651313] w-full h-full rotate-45 flex items-center justify-center shadow-md">
                                         <span className="text-white text-[10px] font-bold uppercase tracking-widest translate-y-[1px]">Most Popular</span>
                                     </div>
                                 </div>
                             )}
 
-                            <h3 className="text-3xl font-bold text-[#4d0e0e] mb-2 pr-8 leading-tight">{plan.name}</h3>
+                            <h3 className="text-xl font-bold text-[#4d0e0e] mb-2 pr-8 leading-tight">{plan.name}</h3>
 
-                            <div className="flex items-baseline mb-10">
-                                <span className="text-5xl font-bold text-[#EB4724]">
+                            <div className="flex items-baseline mb-6">
+                                <span className="text-4xl font-bold text-[#EB4724]">
                                     ${plan.price}
                                 </span>
                             </div>
 
-                            <ul className="space-y-5 mb-6 flex-1">
+                            <ul className="space-y-4 mb-0 flex-1">
                                 {plan.features.map((feature) => (
                                     <li key={feature} className="flex items-start gap-3 text-[#4d0e0e] text-sm md:text-base font-medium leading-tight">
                                         <CheckIcon className="h-4 w-4 shrink-0 stroke-[4] text-[#4d0e0e] mt-1" />
                                         <span>{feature}</span>
                                     </li>
                                 ))}
-                            </ul>
-
-                            {/* Expand Feature Toggle Placeholder */}
-                            <div className="flex items-center gap-2 text-[#4d0e0e]/60 text-sm font-bold mb-10 cursor-pointer hover:text-[#4d0e0e] transition-colors group">
+                                 <div className="flex items-center gap-2 text-[#4d0e0e]/60 text-sm font-bold mb-6 cursor-pointer hover:text-[#4d0e0e] transition-colors group">
                                 <div className="w-5 h-5 rounded-full bg-white/50 flex items-center justify-center group-hover:bg-white transition-colors">
                                     <ChevronDownIcon className="h-3 w-3 stroke-[3]" />
                                 </div>
                                 <span>Expand Feature</span>
                             </div>
+                            </ul>
+
+                           
 
                             <button className={`${plan.buttonColor} text-white font-bold py-4 rounded-xl shadow-lg hover:brightness-110 active:scale-95 transition-all text-sm uppercase tracking-wide`}>
                                 Purchase Plan

@@ -8,14 +8,16 @@ interface ServiceCardProps {
     icon: string;
     index: number;
     itemVariants: any;
+    onClick?: () => void;
 }
 
-export default function ServiceCard({ name, icon, index, itemVariants }: ServiceCardProps) {
+export default function ServiceCard({ name, icon, index, itemVariants, onClick }: ServiceCardProps) {
     return (
         <motion.div
             variants={itemVariants}
-            whileHover="hover"
-            className="flex flex-col items-center relative group p-6 cursor-pointer"
+            whileHover={onClick ? "hover" : undefined}
+            onClick={onClick}
+            className={`flex flex-col items-center relative group p-6 ${onClick ? "cursor-pointer" : "cursor-default"}`}
         >
             {/* Hover Background Circle */}
             <motion.div

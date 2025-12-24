@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { StarIcon } from "@heroicons/react/24/solid";
 import { motion } from "framer-motion";
@@ -41,6 +42,20 @@ const testimonials = [
         role: "Director SIMAD Institute",
         image: "/home-images/t-3.png",
     },
+    {
+        id: 4,
+        text: "Deero Advert consistently delivers high-quality work and great communication. Their team helped us refine our message and deliver polished creative assets.",
+        name: "Hodan A.",
+        role: "Marketing Lead",
+        image: "/home-images/t-4.png",
+    },
+    {
+        id: 5,
+        text: "Working with Deero Advert was seamless — creative ideas and measurable results. Highly recommended!",
+        name: "Yusuf M.",
+        role: "Founder",
+        image: "/home-images/t-5.png",
+    },
 ];
 
 const containerVariants = {
@@ -59,6 +74,16 @@ const itemVariants = {
 };
 
 export default function TestimonialsSection() {
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const visibleCount = 3; // number of testimonials visible at once on md+
+
+    useEffect(() => {
+        const total = Math.max(1, testimonials.length - visibleCount + 1);
+        const interval = setInterval(() => {
+            setCurrentIndex((prev) => (prev + 1) % total);
+        }, 4000);
+        return () => clearInterval(interval);
+    }, []);
     return (
         <>
             {/* Top Ratings Bar Section - White Background */}
@@ -110,34 +135,51 @@ export default function TestimonialsSection() {
                     {/* Section Title */}
                     <motion.h2 variants={itemVariants} className="text-3xl font-bold text-[#651313] text-center mb-16">Testimonials</motion.h2>
 
-                    {/* Testimonial Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
-                        {testimonials.map((item, index) => (
-                            <motion.div
-                                key={item.id}
-                                variants={itemVariants}
-                                whileHover={{ y: -10 }}
-                                className="p-10 md:p-12 flex flex-col items-center text-center bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 relative"
-                            >
-                                <p className="text-gray-500 text-[13px] leading-relaxed mb-10 italic max-w-[280px]">
-                                    "{item.text}"
-                                </p>
+                    {/* Testimonial Slider */}
+                    <div className="relative overflow-hidden w-full">
+                        <motion.div variants={containerVariants} className="flex transition-transform duration-700 ease-in-out"
+                            style={{ transform: `translateX(-${currentIndex * (100 / visibleCount)}%)` }}>
+                            {testimonials.map((item) => (
+                                <motion.div
+                                    key={item.id}
+                                    variants={itemVariants}
+                                    whileHover={{ y: -8 }}
+                                    className="flex-shrink-0 w-full md:w-1/3 px-3"
+                                >
+                                    <div className="p-8 md:p-12 flex flex-col items-center text-center bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 h-full">
+                                        <p className="text-gray-500 text-[13px] leading-relaxed mb-8 italic">
+                                            "{item.text}"
+                                        </p>
 
-                                <div className="mt-auto flex flex-col items-center">
-                                    <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-[#EB4724] mb-4">
-                                        <Image
-                                            src={item.image}
-                                            alt={item.name}
-                                            width={56}
-                                            height={56}
-                                            className="object-cover"
-                                        />
+                                        <div className="mt-auto flex flex-col items-center">
+                                            <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-[#EB4724] mb-4">
+                                                <Image
+                                                    src={item.image}
+                                                    alt={item.name}
+                                                    width={56}
+                                                    height={56}
+                                                    className="object-cover"
+                                                />
+                                            </div>
+                                            <h4 className="text-[#651313] font-bold text-sm uppercase tracking-wide mb-1">{item.name}</h4>
+                                            <p className="text-gray-400 text-[10px] font-medium uppercase">{item.role}</p>
+                                        </div>
                                     </div>
-                                    <h4 className="text-[#651313] font-bold text-sm uppercase tracking-wide mb-1">{item.name}</h4>
-                                    <p className="text-gray-400 text-[10px] font-medium uppercase">{item.role}</p>
-                                </div>
-                            </motion.div>
-                        ))}
+                                </motion.div>
+                            ))}
+                        </motion.div>
+
+                        {/* Navigation Dots */}
+                        <div className="flex justify-center gap-2 mt-6">
+                            {Array.from({ length: Math.max(1, testimonials.length - visibleCount + 1) }).map((_, i) => (
+                                <button
+                                    key={i}
+                                    onClick={() => setCurrentIndex(i)}
+                                    className={`h-1.5 rounded-full transition-all duration-300 ${currentIndex === i ? "w-6 bg-[#EB4724]" : "w-1.5 bg-gray-300"}`}
+                                    aria-label={`Go to testimonial ${i + 1}`}
+                                />
+                            ))}
+                        </div>
                     </div>
                 </motion.div>
             </section>

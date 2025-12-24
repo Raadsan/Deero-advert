@@ -2,16 +2,35 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect } from "react";
 import ServiceCard from "./ServiceCard";
 
 const services = [
-    { name: "Graphic\nDesign", icon: "/home-images/d-1.svg" },
-    { name: "Digital\nMarketing", icon: "/home-images/d-2.svg" },
-    { name: "Web Solutions", icon: "/home-images/d-3.svg" },
-    { name: "Motion\nGraphics", icon: "/home-images/d-4.svg" },
-    { name: "Event\nBranding", icon: "/home-images/d-5.svg" },
-    { name: "Digital\nConsulting", icon: "/home-images/d-6.svg" },
+    { name: "Graphic\nDesign", icon: "/home-images/d-1.svg", sectionId: "graphic-design" },
+    { name: "Digital\nMarketing", icon: "/home-images/d-2.svg", sectionId: "digital-marketing" },
+    { name: "Web Solutions", icon: "/home-images/d-3.svg", sectionId: "web-solutions" },
+    { name: "Motion\nGraphics", icon: "/home-images/d-4.svg", sectionId: "digital-consulting" },
+    { name: "Event\nBranding", icon: "/home-images/d-5.svg", sectionId: "event-branding" },
+    { name: "Digital\nConsulting", icon: "/home-images/d-6.svg", sectionId: null },
 ];
+
+const HEADER_OFFSET = 170; // match fixed header height
+
+const scrollToSection = (sectionId: string | null) => {
+    if (!sectionId) return;
+    const element = document.getElementById(sectionId);
+    if (!element) return;
+
+    const rect = element.getBoundingClientRect();
+    const scrollTop = window.scrollY || window.pageYOffset;
+    const targetY = rect.top + scrollTop - HEADER_OFFSET;
+
+    window.scrollTo({
+        top: targetY,
+        behavior: "smooth"
+    });
+};
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -39,6 +58,32 @@ export default function ServicesContent({
     showViewMore = false,
     paddingClasses = "py-16 px-4 sm:px-10"
 }: ServicesContentProps) {
+    const pathname = usePathname();
+    const router = useRouter();
+    const isServicesPage = pathname === "/services";
+
+    // Handle scroll after navigation from hash
+    useEffect(() => {
+        if (isServicesPage && window.location.hash) {
+            const hash = window.location.hash.substring(1);
+            setTimeout(() => {
+                scrollToSection(hash);
+            }, 100);
+        }
+    }, [isServicesPage]);
+
+    const handleServiceClick = (sectionId: string | null) => {
+        if (!sectionId) return;
+
+        if (isServicesPage) {
+            // Already on services page, just scroll
+            scrollToSection(sectionId);
+        } else {
+            // Navigate to services page with hash
+            router.push(`/services#${sectionId}`);
+        }
+    };
+
     return (
         <section className={`bg-[#f2f2f2] overflow-hidden ${paddingClasses}`}>
             <motion.div
@@ -62,6 +107,7 @@ export default function ServicesContent({
                             icon={service.icon}
                             index={index}
                             itemVariants={itemVariants}
+                            onClick={() => handleServiceClick(service.sectionId)}
                         />
                     ))}
                 </div>
