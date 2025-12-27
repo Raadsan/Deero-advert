@@ -14,81 +14,99 @@ const features = [
     "Business Stationery Design – letterhead, envelope, stamp, invoice templates",
     "Marketing Materials – brochures, flyers, books, roll-ups, banners",
     "Advertising Campaign Setup – traditional marketing and digital marketing plan",
-    "Delivery Timeline: 4–6 Weeks",
 ];
 
 export default function BusinessGrowthSolution() {
     return (
-        <section className="bg-[#f2f2f2] py-20 px-4 sm:px-10 overflow-hidden border-t border-gray-200">
+        <section id="business-growth" className="bg-[#f2f2f2] py-8 px-4 sm:px-10 overflow-hidden">
             <div className="mx-auto max-w-6xl">
-                <div className="flex flex-col lg:flex-row items-start gap-10 lg:gap-16">
-
-                    {/* Left Side - Large Stylized Illustration */}
-                    <div className="w-full lg:w-1/2 flex justify-center lg:justify-start lg:sticky lg:top-32">
-                        <motion.div
-                            initial={{ opacity: 0, x: -50 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.8 }}
-                            className="relative group"
-                        >
-                            {/* The Swell Effect (Static version as it's a feature highlight) */}
-                            <div className="relative w-full max-w-lg aspect-square flex items-center justify-center">
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6 }}
+                    className="bg-gradient-to-br from-[#FFE5D9] to-[#FFD4C4] rounded-3xl p-5 md:p-6 shadow-xl"
+                >
+                    <div className="flex flex-col lg:flex-row items-center gap-4 lg:gap-6">
+                        {/* Left Side - Image */}
+                        <div className="w-full lg:w-1/2 flex justify-center items-center">
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.8 }}
+                                whileInView={{ opacity: 1, scale: 1 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.6 }}
+                                className="relative w-full max-w-xs md:max-w-sm"
+                            >
                                 <Image
                                     src="/home-images/bussines-1.png"
                                     alt="Business Growth Illustration"
-                                    width={600}
-                                    height={600}
-                                    className="w-full h-full object-contain"
+                                    width={400}
+                                    height={400}
+                                    className="w-full h-auto object-contain"
                                     priority
                                 />
-                            </div>
-                        </motion.div>
+                            </motion.div>
+                        </div>
+
+                        {/* Right Side - Content */}
+                        <div className="w-full lg:w-1/2 space-y-3">
+                            <motion.div
+                                initial={{ opacity: 0, y: 30 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                className="space-y-1"
+                            >
+                                <h2 className="text-2xl md:text-3xl font-bold text-[#8B4513] leading-tight">
+                                    All-in-One Business Growth Solution
+                                </h2>
+                                <div className="text-3xl md:text-4xl font-bold text-[#EB4724]">
+                                    $2499<sup className="text-xl md:text-2xl">.99</sup>
+                                </div>
+                            </motion.div>
+
+                            <ul className="space-y-1.5">
+                                {features.map((feature, index) => (
+                                    <motion.li
+                                        key={index}
+                                        initial={{ opacity: 0, x: 20 }}
+                                        whileInView={{ opacity: 1, x: 0 }}
+                                        viewport={{ once: true }}
+                                        transition={{ delay: index * 0.05 }}
+                                        className="flex items-start gap-2"
+                                    >
+                                        <CheckIcon className="h-4 w-4 shrink-0 stroke-[4] text-[#8B4513] mt-1" />
+                                        <p className="text-[#8B4513] text-xs md:text-sm font-medium leading-relaxed">
+                                            {feature}
+                                        </p>
+                                    </motion.li>
+                                ))}
+                            </ul>
+
+                            {/* Delivery Timeline */}
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                            >
+                                <p className="text-[#8B4513] text-sm md:text-base font-medium">
+                                    Delivery Timeline: 4-6 Weeks
+                                </p>
+                            </motion.div>
+
+                            {/* Purchase Plan Button */}
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                className="pt-1"
+                            >
+                                <button className="bg-[#EB4724] text-white px-8 py-3 rounded-xl font-bold text-base hover:bg-[#d63e1f] transition-all shadow-lg active:scale-95 w-full md:w-auto">
+                                    Purchase Plan
+                                </button>
+                            </motion.div>
+                        </div>
                     </div>
-
-                    {/* Right Side - Content */}
-                    <div className="w-full lg:w-1/2 space-y-6">
-                        <motion.div
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            className="space-y-2"
-                        >
-                            <h2 className="text-2xl md:text-3xl font-bold text-[#4d0e0e] leading-tight">
-                                All-in-One Business Growth Solution <span className="text-[#EB4724] whitespace-nowrap">$2499.99</span>
-                            </h2>
-                        </motion.div>
-
-                        <ul className="space-y-3">
-                            {features.map((feature, index) => (
-                                <motion.li
-                                    key={index}
-                                    initial={{ opacity: 0, x: 20 }}
-                                    whileInView={{ opacity: 1, x: 0 }}
-                                    viewport={{ once: true }}
-                                    transition={{ delay: index * 0.05 }}
-                                    className="flex items-start gap-3"
-                                >
-                                    <CheckIcon className="h-4 w-4 shrink-0 stroke-[4] text-[#4d0e0e] mt-1" />
-                                    <p className="text-[#4d0e0e] text-xs md:text-sm font-medium leading-relaxed">
-                                        {feature}
-                                    </p>
-                                </motion.li>
-                            ))}
-                        </ul>
-
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            className="pt-4"
-                        >
-                            <button className="bg-[#606d7a] text-white px-8 py-3 rounded-lg font-bold text-base hover:bg-[#4d5a67] transition-all shadow-lg active:scale-95">
-                                Purchase Plan
-                            </button>
-                        </motion.div>
-                    </div>
-                </div>
+                </motion.div>
             </div>
         </section>
     );

@@ -1,4 +1,6 @@
-import { Users, DollarSign, TrendingUp, Activity, Briefcase, Newspaper, Award, MessageSquare } from "lucide-react";
+"use client";
+
+import { Users, DollarSign, TrendingUp, Activity, Briefcase, Newspaper, Award, MessageSquare, ArrowUpRight, ArrowDownRight } from "lucide-react";
 
 const stats = [
     {
@@ -65,30 +67,155 @@ export default function AdminPage() {
                 })}
             </div>
 
-            {/* Recent Activity / Content Section */}
+            {/* Charts Section */}
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
-                {/* Main Chart Area Placeholder */}
+                {/* Revenue Overview Chart */}
                 <div className="col-span-4 rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
-                    <h3 className="mb-4 text-lg font-medium text-gray-900">Revenue Overview</h3>
-                    <div className="flex h-[300px] items-center justify-center rounded-lg border border-dashed border-gray-200 bg-gray-50 text-gray-400">
-                        Chart Placeholder
+                    <div className="mb-4 flex items-center justify-between">
+                        <h3 className="text-lg font-semibold text-gray-900">Revenue Overview</h3>
+                        <div className="flex items-center gap-2 text-sm">
+                            <span className="text-gray-500">Last 6 months</span>
+                            <div className="flex items-center gap-1 text-green-600">
+                                <TrendingUp className="h-4 w-4" />
+                                <span className="font-medium">+12.5%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="h-[300px] relative">
+                        <svg viewBox="0 0 600 300" className="w-full h-full">
+                            {/* Gradient definitions */}
+                            <defs>
+                                <linearGradient id="revenueGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" stopColor="#EB4724" stopOpacity="0.3" />
+                                    <stop offset="100%" stopColor="#EB4724" stopOpacity="0.05" />
+                                </linearGradient>
+                                <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" stopColor="#651313" />
+                                    <stop offset="100%" stopColor="#EB4724" />
+                                </linearGradient>
+                            </defs>
+                            
+                            {/* Grid lines */}
+                            {[0, 1, 2, 3, 4].map((i) => (
+                                <line
+                                    key={i}
+                                    x1="50"
+                                    y1={50 + i * 50}
+                                    x2="550"
+                                    y2={50 + i * 50}
+                                    stroke="#f3f4f6"
+                                    strokeWidth="1"
+                                />
+                            ))}
+                            
+                            {/* Data points */}
+                            <path
+                                d="M 50,200 Q 150,180 250,150 T 450,100 T 550,80"
+                                fill="none"
+                                stroke="url(#lineGradient)"
+                                strokeWidth="3"
+                                strokeLinecap="round"
+                            />
+                            
+                            {/* Area fill */}
+                            <path
+                                d="M 50,200 Q 150,180 250,150 T 450,100 T 550,80 L 550,250 L 50,250 Z"
+                                fill="url(#revenueGradient)"
+                            />
+                            
+                            {/* Data points circles */}
+                            {[
+                                { x: 50, y: 200 },
+                                { x: 150, y: 180 },
+                                { x: 250, y: 150 },
+                                { x: 350, y: 120 },
+                                { x: 450, y: 100 },
+                                { x: 550, y: 80 },
+                            ].map((point, i) => (
+                                <circle
+                                    key={i}
+                                    cx={point.x}
+                                    cy={point.y}
+                                    r="5"
+                                    fill="#EB4724"
+                                    stroke="white"
+                                    strokeWidth="2"
+                                />
+                            ))}
+                            
+                            {/* X-axis labels */}
+                            {["Jan", "Feb", "Mar", "Apr", "May", "Jun"].map((label, i) => (
+                                <text
+                                    key={i}
+                                    x={50 + i * 100}
+                                    y={280}
+                                    textAnchor="middle"
+                                    className="text-xs fill-gray-500"
+                                    fontSize="12"
+                                >
+                                    {label}
+                                </text>
+                            ))}
+                            
+                            {/* Y-axis labels */}
+                            {["$0", "$10k", "$20k", "$30k", "$40k"].map((label, i) => (
+                                <text
+                                    key={i}
+                                    x="30"
+                                    y={250 - i * 50}
+                                    textAnchor="end"
+                                    className="text-xs fill-gray-500"
+                                    fontSize="12"
+                                >
+                                    {label}
+                                </text>
+                            ))}
+                        </svg>
                     </div>
                 </div>
 
-                {/* Recent Sales / Users Placeholder */}
+                {/* Recent Activity Chart */}
                 <div className="col-span-3 rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
-                    <h3 className="mb-4 text-lg font-medium text-gray-900">Recent Activity</h3>
+                    <div className="mb-4 flex items-center justify-between">
+                        <h3 className="text-lg font-semibold text-gray-900">Recent Activity</h3>
+                        <Activity className="h-5 w-5 text-[#EB4724]" />
+                    </div>
                     <div className="space-y-4">
-                        {[1, 2, 3, 4, 5].map((i) => (
-                            <div key={i} className="flex items-center gap-4">
-                                <div className="h-9 w-9 rounded-full bg-gray-100" />
-                                <div className="flex-1 space-y-1">
-                                    <p className="text-sm font-medium leading-none">User Action {i}</p>
-                                    <p className="text-xs text-gray-500">2 minutes ago</p>
+                        {[
+                            { action: "New Service Added", time: "5 min ago", amount: "+$2,500", trend: "up" },
+                            { action: "Blog Published", time: "12 min ago", amount: "+$1,200", trend: "up" },
+                            { action: "Client Inquiry", time: "18 min ago", amount: "+$3,800", trend: "up" },
+                            { action: "Project Completed", time: "25 min ago", amount: "+$5,000", trend: "up" },
+                            { action: "New Testimonial", time: "32 min ago", amount: "+$800", trend: "up" },
+                        ].map((item, i) => (
+                            <div
+                                key={i}
+                                className="flex items-center gap-3 p-3 rounded-lg bg-gradient-to-r from-gray-50 to-white hover:from-gray-100 hover:shadow-sm transition-all border border-gray-100"
+                            >
+                                <div className="relative flex-shrink-0">
+                                    <div className="h-10 w-10 rounded-full bg-gradient-to-br from-[#651313] to-[#EB4724] flex items-center justify-center shadow-sm">
+                                        <Activity className="h-5 w-5 text-white" />
+                                    </div>
+                                    {item.trend === "up" && (
+                                        <div className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-green-500 border-2 border-white flex items-center justify-center">
+                                            <ArrowUpRight className="h-2.5 w-2.5 text-white" />
+                                        </div>
+                                    )}
                                 </div>
-                                <div className="text-sm font-medium text-[#EB4724]">+$1,999.00</div>
+                                <div className="flex-1 min-w-0">
+                                    <p className="text-sm font-semibold text-gray-900 truncate">{item.action}</p>
+                                    <p className="text-xs text-gray-500 mt-0.5">{item.time}</p>
+                                </div>
+                                <div className="flex items-center gap-1 text-sm font-bold text-[#EB4724] flex-shrink-0">
+                                    {item.amount}
+                                </div>
                             </div>
                         ))}
+                    </div>
+                    <div className="mt-4 pt-4 border-t border-gray-100">
+                        <button className="w-full text-sm font-medium text-[#651313] hover:text-[#EB4724] transition-colors">
+                            View All Activity →
+                        </button>
                     </div>
                 </div>
             </div>

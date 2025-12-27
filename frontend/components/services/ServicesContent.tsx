@@ -12,7 +12,7 @@ const services = [
     { name: "Web Solutions", icon: "/home-images/d-3.svg", sectionId: "web-solutions" },
     { name: "Motion\nGraphics", icon: "/home-images/d-4.svg", sectionId: "digital-consulting" },
     { name: "Event\nBranding", icon: "/home-images/d-5.svg", sectionId: "event-branding" },
-    { name: "Digital\nConsulting", icon: "/home-images/d-6.svg", sectionId: null },
+    { name: "Digital\nConsulting", icon: "/home-images/d-6.svg", sectionId: "business-growth" },
 ];
 
 const HEADER_OFFSET = 170; // match fixed header height

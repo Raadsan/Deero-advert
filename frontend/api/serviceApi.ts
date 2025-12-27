@@ -1,9 +1,13 @@
 // frontend/services/serviceApi.ts
 import api from "./axios"; // your axios instance
 
-// ➕ CREATE SERVICE
-export const createService = (data: any) => {
-  return api.post("/service", data);
+// ➕ CREATE SERVICE (with FormData for file upload)
+export const createService = (formData: FormData) => {
+  return api.post("/service/create", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 };
 
 // 📄 GET ALL SERVICES
@@ -16,9 +20,13 @@ export const getServiceById = (id: string) => {
   return api.get(`/service/${id}`);
 };
 
-// ✏️ UPDATE SERVICE
-export const updateService = (id: string, data: any) => {
-  return api.patch(`/service/${id}`, data);
+// ✏️ UPDATE SERVICE (with FormData for file upload)
+export const updateService = (id: string, formData: FormData) => {
+  return api.patch(`/service/${id}`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 };
 
 // 🗑 DELETE SERVICE

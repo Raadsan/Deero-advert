@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 
 const portfolioItems = [
@@ -65,6 +66,14 @@ const itemVariants = {
 };
 
 export default function PortfolioSection() {
+    const router = useRouter();
+
+    const handlePortfolioClick = (title: string) => {
+        if (title === "Digital Consulting") {
+            router.push("/services#business-growth");
+        }
+    };
+
     return (
         <section className="bg-[#fcd7c3] py-20 px-4 sm:px-10">
             <motion.div
@@ -101,7 +110,8 @@ export default function PortfolioSection() {
                             key={item.id}
                             variants={itemVariants}
                             whileHover={{ y: -8 }}
-                            className="group relative bg-white rounded-xl overflow-hidden shadow-lg transition-all duration-300"
+                            onClick={() => handlePortfolioClick(item.title)}
+                            className={`group relative bg-white rounded-xl overflow-hidden shadow-lg transition-all duration-300 ${item.title === "Digital Consulting" ? "cursor-pointer" : ""}`}
                         >
                             {/* Image Container */}
                             <div className="relative aspect-[4/3] overflow-hidden">

@@ -3,7 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { logout } from "../../api/authApi";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -18,6 +19,8 @@ export default function Header() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname() || "";
   const [hash, setHash] = useState("");
+  const [user, setUser] = useState<any>(null);
+  const router = useRouter();
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -26,6 +29,24 @@ export default function Header() {
     window.addEventListener("hashchange", setCurrentHash);
     return () => window.removeEventListener("hashchange", setCurrentHash);
   }, []);
+
+  useEffect(() => {
+    // Check if user is logged in
+    const userData = localStorage.getItem("user");
+    if (userData) {
+      try {
+        setUser(JSON.parse(userData));
+      } catch (e) {
+        console.error("Error parsing user data", e);
+      }
+    }
+  }, []);
+
+  const handleLogout = () => {
+    logout();
+    setUser(null);
+    router.push("/");
+  };
 
   return (
     <header className="fixed top-0 left-0 right-0 w-full z-50">
@@ -49,6 +70,7 @@ export default function Header() {
           >
             News
           </Link>
+          <span className="hidden sm:inline">|</span>
           <Link
             href="/career"
             className="transition hover:text-[#EB4724]"
@@ -104,14 +126,25 @@ export default function Header() {
             })}
           </nav>
 
-          {/* Client Area - Right */}
+          {/* Client Area / Dashboard - Right */}
           <div className="hidden md:flex pr-25">
-            <Link
-              href="#client-area"
-              className="rounded-full bg-[#EB4724] px-6 py-2.5 font-semibold text-white transition hover:opacity-90"
-            >
-              Client Area
-            </Link>
+            {user ? (
+              <div className="flex items-center gap-3">
+                <Link
+                  href="/dashboard"
+                  className="rounded-full bg-[#EB4724] px-6 py-2.5 font-semibold text-white transition hover:opacity-90"
+                >
+                  Dashboard
+                </Link>
+              </div>
+            ) : (
+              <Link
+                href="/login"
+                className="rounded-full bg-[#EB4724] px-6 py-2.5 font-semibold text-white transition hover:opacity-90"
+              >
+                Client Area
+              </Link>
+            )}
           </div>
 
           {/* Mobile menu toggle */}
@@ -154,13 +187,23 @@ export default function Header() {
                   </Link>
                 );
               })}
-              <Link
-                href="#client-area"
-                className="rounded-full bg-[#EB4724] px-5 py-2 text-center text-white shadow-sm transition hover:opacity-90"
-                onClick={() => setOpen(false)}
-              >
-                Client Area
-              </Link>
+              {user ? (
+                <Link
+                  href="/dashboard"
+                  className="rounded-full bg-[#EB4724] px-5 py-2 text-center text-white shadow-sm transition hover:opacity-90"
+                  onClick={() => setOpen(false)}
+                >
+                  Dashboard
+                </Link>
+              ) : (
+                <Link
+                  href="/login"
+                  className="rounded-full bg-[#EB4724] px-5 py-2 text-center text-white shadow-sm transition hover:opacity-90"
+                  onClick={() => setOpen(false)}
+                >
+                  Client Area
+                </Link>
+              )}
             </div>
           </div>
         )}

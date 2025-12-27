@@ -20,7 +20,8 @@ export default function TestimonialsPage() {
   const [formData, setFormData] = useState({
     clientName: "",
     clientTitle: "",
-    clientImage: "",
+    clientImage: null as File | null,
+    clientImagePreview: "",
     message: "",
   });
 
@@ -60,22 +61,58 @@ export default function TestimonialsPage() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // Handle file input change
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setFormData((prev) => ({
+        ...prev,
+        clientImage: file,
+        clientImagePreview: URL.createObjectURL(file),
+      }));
+    }
+  };
+
   // ✅ Add or update testimonial
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const payload = { ...formData };
+
+    // Create FormData
+    const formDataToSend = new FormData();
+    formDataToSend.append("clientName", formData.clientName);
+    formDataToSend.append("clientTitle", formData.clientTitle);
+    formDataToSend.append("message", formData.message);
+
+    // Add client image file if present
+    if (formData.clientImage) {
+      formDataToSend.append("clientImage", formData.clientImage);
+    }
+
     try {
       if (editingId) {
-        await updateTestimonial(editingId, payload);
+        // Client image is optional for update (only update if new file is selected)
+        await updateTestimonial(editingId, formDataToSend);
       } else {
-        await createTestimonial(payload);
+        // Client image is required for create
+        if (!formData.clientImage) {
+          alert("Client image is required");
+          return;
+        }
+        await createTestimonial(formDataToSend);
       }
       setIsModalOpen(false);
       setEditingId(null);
-      setFormData({ clientName: "", clientTitle: "", clientImage: "", message: "" });
+      setFormData({
+        clientName: "",
+        clientTitle: "",
+        clientImage: null,
+        clientImagePreview: "",
+        message: "",
+      });
       fetchTestimonials(); // reload table
-    } catch (err) {
+    } catch (err: any) {
       console.error("Failed to save testimonial", err);
+      alert(err.response?.data?.message || "Failed to save testimonial");
     }
   };
 
@@ -93,10 +130,14 @@ export default function TestimonialsPage() {
   // ✅ Edit testimonial
   const handleEdit = (testimonial: any) => {
     setEditingId(testimonial.id);
+    const imageUrl = testimonial.clientImage.startsWith("/")
+      ? testimonial.clientImage
+      : `/${testimonial.clientImage}`;
     setFormData({
       clientName: testimonial.clientName,
       clientTitle: testimonial.clientTitle,
-      clientImage: testimonial.clientImage,
+      clientImage: null,
+      clientImagePreview: imageUrl,
       message: testimonial.message,
     });
     setIsModalOpen(true);
@@ -164,35 +205,68 @@ export default function TestimonialsPage() {
 
       <Modal
         isOpen={isModalOpen}
-        onClose={() => { setIsModalOpen(false); setEditingId(null); }}
+        onClose={() => {
+          setIsModalOpen(false);
+          setEditingId(null);
+          setFormData({
+            clientName: "",
+            clientTitle: "",
+            clientImage: null,
+            clientImagePreview: "",
+            message: "",
+          });
+        }}
         title={editingId ? "Edit Testimonial" : "Add New Testimonial"}
       >
-        <form onSubmit={handleSubmit} className="space-y-2">
-          {/* Image input */}
-          <div className="flex flex-col items-center justify-center mb-3">
-            <div className="relative h-16 w-16 rounded-full bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors group">
-              {formData.clientImage ? (
-                <img src={formData.clientImage} alt="Preview" className="h-full w-full rounded-full object-cover" />
-              ) : (
-                <Camera className="h-5 w-5 text-gray-400 group-hover:text-[#EB4724] transition-colors" />
-              )}
-              <input
-                type="text"
-                name="clientImage"
-                placeholder="Image URL..."
-                className="absolute inset-0 opacity-0 cursor-pointer"
-                readOnly
-              />
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Client Image Upload */}
+          <div className="space-y-0.5">
+            <label className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">
+              Client Image {!editingId && <span className="text-red-500">*</span>}
+            </label>
+            <div className="flex items-center gap-3">
+              <div className="relative h-20 w-20 rounded-full bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors group overflow-hidden">
+                {formData.clientImagePreview ? (
+                  <img
+                    src={formData.clientImagePreview}
+                    alt="Client Preview"
+                    className="h-full w-full rounded-full object-cover"
+                  />
+                ) : (
+                  <Camera className="h-6 w-6 text-gray-400 group-hover:text-[#EB4724] transition-colors" />
+                )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="absolute inset-0 opacity-0 cursor-pointer"
+                />
+              </div>
+              <div className="flex-1">
+                <p className="text-xs text-gray-500">
+                  {formData.clientImage
+                    ? formData.clientImage.name
+                    : editingId
+                    ? "Click to change image (required)"
+                    : "Click to upload client image"}
+                </p>
+                {formData.clientImage && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFormData((prev) => ({
+                        ...prev,
+                        clientImage: null,
+                        clientImagePreview: editingId ? prev.clientImagePreview : "",
+                      }));
+                    }}
+                    className="text-xs text-red-500 hover:text-red-700 mt-1"
+                  >
+                    Remove
+                  </button>
+                )}
+              </div>
             </div>
-            <p className="text-[10px] text-gray-500 mt-1">Upload Photo</p>
-            <input
-              type="text"
-              name="clientImage"
-              value={formData.clientImage}
-              onChange={handleInputChange}
-              placeholder="Image URL..."
-              className="mt-1 w-2/3 text-[10px] border border-gray-200 rounded px-2 py-0.5 focus:outline-none focus:border-[#EB4724]"
-            />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
@@ -241,7 +315,17 @@ export default function TestimonialsPage() {
           <div className="flex justify-end gap-2 pt-3 border-t border-gray-100 mt-4">
             <button
               type="button"
-              onClick={() => { setIsModalOpen(false); setEditingId(null); }}
+              onClick={() => {
+                setIsModalOpen(false);
+                setEditingId(null);
+                setFormData({
+                  clientName: "",
+                  clientTitle: "",
+                  clientImage: null,
+                  clientImagePreview: "",
+                  message: "",
+                });
+              }}
               className="px-3 py-1.5 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
             >
               Cancel

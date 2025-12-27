@@ -54,7 +54,8 @@ export default function UsersPage() {
     if (isEditing) {
       await updateUser(formData.id, formData);
     } else {
-      await createUser(formData);
+      // Automatically set role to "admin" when creating from admin panel
+      await createUser({ ...formData, role: "admin" });
     }
     await fetchUsers();
     closeModal();

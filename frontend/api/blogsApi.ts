@@ -1,9 +1,13 @@
 // frontend/services/blogsApi.ts
 import api from "./axios"; // your axios instance
 
-// ➕ CREATE BLOG
-export const createBlog = (data: any) => {
-  return api.post("/blogs", data);
+// ➕ CREATE BLOG (with FormData for file uploads)
+export const createBlog = (formData: FormData) => {
+  return api.post("/blogs", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 };
 
 // 📄 GET ALL BLOGS
@@ -16,9 +20,13 @@ export const getBlogById = (id: string) => {
   return api.get(`/blogs/${id}`);
 };
 
-// ✏️ UPDATE BLOG
-export const updateBlog = (id: string, data: any) => {
-  return api.patch(`/blogs/${id}`, data);
+// ✏️ UPDATE BLOG (with FormData for file uploads)
+export const updateBlog = (id: string, formData: FormData) => {
+  return api.put(`/blogs/${id}`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 };
 
 // 🗑 DELETE BLOG

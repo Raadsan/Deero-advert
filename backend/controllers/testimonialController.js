@@ -38,6 +38,82 @@ export const getTestimonials = async (req, res) => {
 };
 
 // =======================
+// Update Testimonial
+// =======================
+export const updateTestimonial = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { clientName, clientTitle, message } = req.body;
+
+    // Build update object (only include fields that are provided)
+    const update = {};
+
+    if (clientName !== undefined) {
+      update.clientName = clientName;
+    }
+
+    if (clientTitle !== undefined) {
+      update.clientTitle = clientTitle;
+    }
+
+    if (message !== undefined) {
+      update.message = message;
+    }
+
+    // Handle client image file upload if provided (optional for update)
+    if (req.file) {
+      update.clientImage = req.file.filename;
+    }
+
+    // If no fields provided to update, return 400
+    if (Object.keys(update).length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "No updatable fields provided"
+      });
+    }
+
+    const updatedTestimonial = await Testimonial.findByIdAndUpdate(
+      id,
+      update,
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedTestimonial) {
+      return res.status(404).json({
+        success: false,
+        message: "Testimonial not found"
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Testimonial updated successfully",
+      data: updatedTestimonial
+    });
+
+  } catch (error) {
+    console.error("Update Testimonial Error:", error);
+    
+    // Handle Mongoose validation errors
+    if (error.name === 'ValidationError') {
+      const errors = Object.values(error.errors).map(err => err.message).join(', ');
+      return res.status(400).json({
+        message: "Validation error",
+        success: false,
+        error: errors
+      });
+    }
+
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message
+    });
+  }
+};
+
+// =======================
 // Delete Testimonial
 // =======================
 export const deleteTestimonial = async (req, res) => {

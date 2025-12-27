@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { LayoutDashboard, Users, Settings, FileText, BarChart3, LogOut, X, Briefcase, Newspaper, Award, MessageSquare } from "lucide-react";
 import Image from "next/image";
+import { logout } from "../../api/authApi";
 
 const sidebarLinks = [
     { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
@@ -17,6 +18,12 @@ const sidebarLinks = [
 
 export default function Sidebar({ isOpen, onClose }: { isOpen?: boolean; onClose?: () => void }) {
     const pathname = usePathname();
+    const router = useRouter();
+
+    const handleLogout = () => {
+        logout();
+        router.push("/login");
+    };
 
     return (
         <>
@@ -79,7 +86,10 @@ export default function Sidebar({ isOpen, onClose }: { isOpen?: boolean; onClose
 
                     {/* Bottom Actions */}
                     <div className="mt-auto border-t border-white/10 pt-4">
-                        <button className="flex w-full items-center rounded-lg px-4 py-3 text-white/80 transition-colors hover:bg-white/10 hover:text-white">
+                        <button 
+                            onClick={handleLogout}
+                            className="flex w-full items-center rounded-lg px-4 py-3 text-white/80 transition-colors hover:bg-white/10 hover:text-white"
+                        >
                             <LogOut className="h-5 w-5 flex-shrink-0" />
                             <span className="ml-3 text-sm font-medium">Logout</span>
                         </button>

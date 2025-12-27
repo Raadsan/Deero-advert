@@ -20,7 +20,8 @@ export default function AchievementsPage() {
   const [formData, setFormData] = useState({
     title: "",
     count: "",
-    icon: "", // URL for image
+    icon: null as File | null,
+    iconPreview: "",
   });
 
   // ✅ Fetch achievements from backend
@@ -54,26 +55,51 @@ export default function AchievementsPage() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // Handle file input change
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setFormData((prev) => ({
+        ...prev,
+        icon: file,
+        iconPreview: URL.createObjectURL(file),
+      }));
+    }
+  };
+
   // ✅ Create or update achievement
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const payload = {
-        title: formData.title,
-        count: Number(formData.count),
-        icon: formData.icon,
-      };
-      if (editingId) {
-        await updateAchievement(editingId, payload);
-      } else {
-        await createAchievement(payload);
+      // Create FormData
+      const formDataToSend = new FormData();
+      formDataToSend.append("title", formData.title);
+      formDataToSend.append("count", formData.count);
+
+      // Add icon file if present
+      if (formData.icon) {
+        formDataToSend.append("icon", formData.icon);
       }
+
+      if (editingId) {
+        // Icon is optional for update (only update if new file is selected)
+        await updateAchievement(editingId, formDataToSend);
+      } else {
+        // Icon is required for create
+        if (!formData.icon) {
+          alert("Icon is required");
+          return;
+        }
+        await createAchievement(formDataToSend);
+      }
+
       setIsModalOpen(false);
       setEditingId(null);
-      setFormData({ title: "", count: "", icon: "" });
+      setFormData({ title: "", count: "", icon: null, iconPreview: "" });
       fetchAchievements(); // reload table
-    } catch (err) {
+    } catch (err: any) {
       console.error("Failed to save achievement", err);
+      alert(err.response?.data?.message || "Failed to save achievement");
     }
   };
 
@@ -91,10 +117,12 @@ export default function AchievementsPage() {
   // ✅ Edit achievement
   const handleEdit = (achievement: any) => {
     setEditingId(achievement.id);
+    const iconUrl = achievement.icon.startsWith("/") ? achievement.icon : `/${achievement.icon}`;
     setFormData({
       title: achievement.title,
       count: achievement.count.toString(),
-      icon: achievement.icon,
+      icon: null,
+      iconPreview: iconUrl,
     });
     setIsModalOpen(true);
   };
@@ -159,7 +187,11 @@ export default function AchievementsPage() {
 
       <Modal
         isOpen={isModalOpen}
-        onClose={() => { setIsModalOpen(false); setEditingId(null); }}
+        onClose={() => {
+          setIsModalOpen(false);
+          setEditingId(null);
+          setFormData({ title: "", count: "", icon: null, iconPreview: "" });
+        }}
         title={editingId ? "Edit Achievement" : "Add Achievement"}
       >
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -192,24 +224,64 @@ export default function AchievementsPage() {
             </div>
           </div>
 
+          {/* Icon Upload */}
           <div className="space-y-0.5">
             <label className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">
-              Icon URL
+              Icon {!editingId && <span className="text-red-500">*</span>}
             </label>
-            <input
-              type="text"
-              name="icon"
-              value={formData.icon}
-              onChange={handleInputChange}
-              placeholder="https://example.com/icon.png"
-              className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#EB4724] focus:border-[#EB4724]"
-            />
+            <div className="flex items-center gap-3">
+              <div className="relative h-20 w-20 rounded-lg bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors group overflow-hidden">
+                {formData.iconPreview ? (
+                  <img
+                    src={formData.iconPreview}
+                    alt="Icon Preview"
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <Camera className="h-6 w-6 text-gray-400 group-hover:text-[#EB4724] transition-colors" />
+                )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="absolute inset-0 opacity-0 cursor-pointer"
+                />
+              </div>
+              <div className="flex-1">
+                <p className="text-xs text-gray-500">
+                  {formData.icon
+                    ? formData.icon.name
+                    : editingId
+                    ? "Click to change icon (required)"
+                    : "Click to upload icon"}
+                </p>
+                {formData.icon && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFormData((prev) => ({
+                        ...prev,
+                        icon: null,
+                        iconPreview: editingId ? prev.iconPreview : "",
+                      }));
+                    }}
+                    className="text-xs text-red-500 hover:text-red-700 mt-1"
+                  >
+                    Remove
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
 
           <div className="flex justify-end gap-2 pt-3 border-t border-gray-100 mt-4">
             <button
               type="button"
-              onClick={() => { setIsModalOpen(false); setEditingId(null); }}
+              onClick={() => {
+                setIsModalOpen(false);
+                setEditingId(null);
+                setFormData({ title: "", count: "", icon: null, iconPreview: "" });
+              }}
               className="px-3 py-1.5 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
             >
               Cancel

@@ -1,8 +1,32 @@
 "use client";
 
-import { Bell, Search, Menu } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { Bell, Search, Menu, LogOut, User } from "lucide-react";
+import { logout } from "../../api/authApi";
 
 export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
+    const router = useRouter();
+    const [user, setUser] = useState<any>(null);
+    const [showDropdown, setShowDropdown] = useState(false);
+
+    useEffect(() => {
+        // Get user from localStorage
+        const userData = localStorage.getItem("user");
+        if (userData) {
+            try {
+                setUser(JSON.parse(userData));
+            } catch (e) {
+                console.error("Error parsing user data", e);
+            }
+        }
+    }, []);
+
+    const handleLogout = () => {
+        logout();
+        setShowDropdown(false);
+        router.push("/login");
+    };
     return (
         <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-gray-200 bg-white px-4 shadow-sm sm:px-6 lg:px-8">
             <div className="flex items-center gap-4">
@@ -34,11 +58,45 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
                     <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-[#EB4724]"></span>
                 </button>
 
-                <div className="h-8 w-8 overflow-hidden rounded-full bg-gray-200">
-                    {/* Placeholder for user avatar */}
-                    <div className="flex h-full w-full items-center justify-center bg-[#651313] text-xs font-medium text-white">
-                        AD
-                    </div>
+                <div className="relative">
+                    <button
+                        onClick={() => setShowDropdown(!showDropdown)}
+                        className="h-8 w-8 overflow-hidden rounded-full bg-gray-200 hover:ring-2 hover:ring-[#EB4724] transition-all"
+                    >
+                        {user?.fullname ? (
+                            <div className="flex h-full w-full items-center justify-center bg-[#651313] text-xs font-medium text-white">
+                                {user.fullname.charAt(0).toUpperCase()}
+                                {user.fullname.split(" ")[1]?.charAt(0).toUpperCase() || ""}
+                            </div>
+                        ) : (
+                            <div className="flex h-full w-full items-center justify-center bg-[#651313] text-xs font-medium text-white">
+                                <User className="h-4 w-4" />
+                            </div>
+                        )}
+                    </button>
+
+                    {/* Dropdown Menu */}
+                    {showDropdown && (
+                        <>
+                            <div
+                                className="fixed inset-0 z-10"
+                                onClick={() => setShowDropdown(false)}
+                            />
+                            <div className="absolute right-0 mt-2 w-48 rounded-lg border border-gray-200 bg-white shadow-lg z-20">
+                                <div className="p-3 border-b border-gray-100">
+                                    <p className="text-sm font-semibold text-gray-900">{user?.fullname || "Admin"}</p>
+                                    <p className="text-xs text-gray-500">{user?.email || ""}</p>
+                                </div>
+                                <button
+                                    onClick={handleLogout}
+                                    className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                                >
+                                    <LogOut className="h-4 w-4" />
+                                    Logout
+                                </button>
+                            </div>
+                        </>
+                    )}
                 </div>
             </div>
         </header>

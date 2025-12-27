@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 
 type Slide = {
@@ -46,6 +47,7 @@ const slides: Slide[] = [
 export default function Hero() {
   const [active, setActive] = useState(0);
   const total = useMemo(() => slides.length, []);
+  const router = useRouter();
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -59,6 +61,14 @@ export default function Hero() {
   const goTo = (idx: number) => setActive(idx);
   const next = () => setActive((prev) => (prev + 1) % total);
   const prev = () => setActive((prev) => (prev - 1 + total) % total);
+
+  const handleSeeMore = () => {
+    if (slide.title === "Digital Consulting") {
+      router.push("/services#business-growth");
+    } else {
+      router.push("/services");
+    }
+  };
 
   return (
     <section className="relative overflow-hidden bg-[linear-gradient(to_right,#651313_0%,#651313_60%,#EB4724_100%)] text-white">
@@ -81,7 +91,10 @@ export default function Hero() {
               {slide.description}
             </p>
             <div className="flex items-center gap-4 ">
-              <button className="rounded-md bg-[#c88a66] px-10 py-3 pl-8 text-base font-semibold text-white shadow transition hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
+              <button 
+                onClick={handleSeeMore}
+                className="rounded-md bg-[#c88a66] px-10 py-3 pl-8 text-base font-semibold text-white shadow transition hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              >
                 See More
               </button>
             </div>

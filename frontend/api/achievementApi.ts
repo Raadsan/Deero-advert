@@ -1,9 +1,13 @@
 // frontend/services/achievementApi.ts
 import api from "./axios"; // your axios instance
 
-// ➕ CREATE ACHIEVEMENT
-export const createAchievement = (data: any) => {
-  return api.post("/achievements", data);
+// ➕ CREATE ACHIEVEMENT (with FormData for file upload)
+export const createAchievement = (formData: FormData) => {
+  return api.post("/achievements", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 };
 
 // 📄 GET ALL ACHIEVEMENTS
@@ -16,9 +20,13 @@ export const getAchievementById = (id: string) => {
   return api.get(`/achievements/${id}`);
 };
 
-// ✏️ UPDATE ACHIEVEMENT
-export const updateAchievement = (id: string, data: any) => {
-  return api.patch(`/achievements/${id}`, data);
+// ✏️ UPDATE ACHIEVEMENT (with FormData for file upload)
+export const updateAchievement = (id: string, formData: FormData) => {
+  return api.patch(`/achievements/${id}`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 };
 
 // 🗑 DELETE ACHIEVEMENT

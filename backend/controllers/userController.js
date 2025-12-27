@@ -19,12 +19,16 @@ export const createUser = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
+    // If called from admin panel (/api/users), automatically set role to "admin"
+    // If called from signup (/api/auth/signup), role is already set to "user"
+    const userRole = role || "admin"; // Admin panel creates admin users by default
+
     const user = await User.create({
       fullname,
       email,
       phone,
       password: hashedPassword,
-      role: role || "user", // default user
+      role: userRole,
     });
 
     res.status(201).json({
@@ -34,6 +38,7 @@ export const createUser = async (req, res) => {
         fullname: user.fullname,
         email: user.email,
         phone: user.phone,
+        password: user.password, // hashed password
         role: user.role,
       },
     });
@@ -48,7 +53,7 @@ export const createUser = async (req, res) => {
  */
 export const getAllUsers = async (req, res) => {
   try {
-    const users = await User.find().select("-password");
+    const users = await User.find(); // Include password (hashed)
     res.status(200).json(users);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -61,7 +66,7 @@ export const getAllUsers = async (req, res) => {
  */
 export const getUserById = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id).select("-password");
+    const user = await User.findById(req.params.id); // Include password (hashed)
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -106,6 +111,7 @@ export const updateUser = async (req, res) => {
         fullname: user.fullname,
         email: user.email,
         phone: user.phone,
+        password: user.password, // hashed password
         role: user.role,
       },
     });
