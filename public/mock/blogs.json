@@ -1,0 +1,17 @@
+{
+  "message": "All Blogs",
+  "success": true,
+  "data": [
+    {
+      "_id": "b1",
+      "title": "How to grow your business",
+      "slug": "how-to-grow-your-business",
+      "content": "Long content here about growing your business...",
+      "author": { "name": "Deero Team", "avatar": "" },
+      "featuredImage": "home-images/demo-blog.jpg",
+      "categories": ["Marketing", "Growth"],
+      "publishedDate": "2025-12-21T11:32:56.440Z"
+    }
+  ],
+  "count": 1
+}

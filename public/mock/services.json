@@ -1,0 +1,23 @@
+{
+  "message": "All Services",
+  "success": true,
+  "data": [
+    {
+      "_id": "6947dae848d8451281c7dc2e",
+      "serviceTitle": "wwww",
+      "serviceIcon": "uploads/1766316776394.jpg",
+      "packages": [
+        {
+          "packageTitle": "Basic Package",
+          "price": 50,
+          "features": ["5 pages", "Mobile responsive", "Basic SEO"],
+          "_id": "6947dae848d8451281c7dc2f"
+        }
+      ],
+      "createdAt": "2025-12-21T11:32:56.440Z",
+      "updatedAt": "2025-12-21T11:32:56.440Z",
+      "__v": 0
+    }
+  ],
+  "count": 1
+}
