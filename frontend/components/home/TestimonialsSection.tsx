@@ -27,6 +27,7 @@ const testimonials = [
         name: "ABDIWAHAB A. ELMI",
         role: "Managing Director of Brawa",
         image: "/home-images/t-1.png",
+        rating: 5,
     },
     {
         id: 2,
@@ -34,6 +35,7 @@ const testimonials = [
         name: "Eng. Mohamed Mohamud",
         role: "SIMAD University",
         image: "/home-images/t-2.png",
+        rating: 5,
     },
     {
         id: 3,
@@ -41,6 +43,7 @@ const testimonials = [
         name: "ABDIRAHMAN H. DHIBLAWE",
         role: "Director SIMAD Institute",
         image: "/home-images/t-3.png",
+        rating: 5,
     },
     {
         id: 4,
@@ -48,6 +51,7 @@ const testimonials = [
         name: "Hodan A.",
         role: "Marketing Lead",
         image: "/home-images/t-4.png",
+        rating: 5,
     },
     {
         id: 5,
@@ -55,6 +59,7 @@ const testimonials = [
         name: "Yusuf M.",
         role: "Founder",
         image: "/home-images/t-5.png",
+        rating: 5,
     },
 ];
 
@@ -81,13 +86,14 @@ export default function TestimonialsSection() {
         const total = Math.max(1, testimonials.length - visibleCount + 1);
         const interval = setInterval(() => {
             setCurrentIndex((prev) => (prev + 1) % total);
-        }, 4000);
+        }, 5000); // 5 seconds
         return () => clearInterval(interval);
     }, []);
+
     return (
         <>
             {/* Top Ratings Bar Section - White Background */}
-            <section className="bg-white py-12 px-4 sm:px-10 overflow-hidden">
+            <section className="bg-white py-12 px-4 sm:px-10 overflow-hidden relative border-b border-gray-100">
                 <motion.div
                     initial="hidden"
                     whileInView="visible"
@@ -104,19 +110,22 @@ export default function TestimonialsSection() {
                                     visible: { opacity: 1, x: 0, transition: { duration: 0.6 } }
                                 }}
                                 whileHover={{ scale: 1.02 }}
-                                className="bg-[#f0e9e7] rounded-xl p-10 flex items-center justify-between shadow-sm hover:shadow-md transition-all duration-300"
+                                className="bg-white border border-gray-100 rounded-2xl p-8 flex items-center justify-between shadow-sm hover:shadow-lg transition-all duration-300 group"
                             >
                                 <div className="flex flex-col gap-3">
-                                    <div className="h-10 relative w-32">
+                                    <div className="h-10 relative w-32 grayscale group-hover:grayscale-0 transition-all duration-300">
                                         <img src={item.logo} alt={item.platform} className="h-full object-contain object-left" />
                                     </div>
                                     <div className="flex gap-1">
                                         {[...Array(item.stars)].map((_, i) => (
-                                            <StarIcon key={i} className="w-6 h-6 text-orange-400" />
+                                            <StarIcon key={i} className="w-5 h-5 text-[#EB4724]" />
                                         ))}
                                     </div>
                                 </div>
-                                <div className="text-4xl font-bold text-[#651313]">{item.rating}</div>
+                                <div className="flex flex-col items-end">
+                                    <span className="text-4xl font-extrabold text-gray-900">{item.rating}</span>
+                                    <span className="text-xs text-gray-400 font-medium uppercase tracking-wider">Average Rating</span>
+                                </div>
                             </motion.div>
                         ))}
                     </div>
@@ -124,45 +133,75 @@ export default function TestimonialsSection() {
             </section>
 
             {/* Testimonials Content Section - Grey Background */}
-            <section className="bg-[#f8f8f8] py-20 px-4 sm:px-10 overflow-hidden">
+            <section className="bg-[#f8f9fa] py-24 px-4 sm:px-10 overflow-hidden">
                 <motion.div
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true, amount: 0.2 }}
                     variants={containerVariants}
-                    className="mx-auto max-w-6xl"
+                    className="mx-auto max-w-7xl"
                 >
                     {/* Section Title */}
-                    <motion.h2 variants={itemVariants} className="text-3xl font-bold text-[#651313] text-center mb-16">Testimonials</motion.h2>
+                    <div className="text-center mb-16">
+                        <motion.h2 variants={itemVariants} className="text-3xl md:text-4xl font-bold text-[#651313] mb-4">
+                            What Our Clients Say
+                        </motion.h2>
+                        <motion.div variants={itemVariants} className="w-20 h-1.5 bg-[#EB4724] mx-auto rounded-full"></motion.div>
+                    </div>
 
                     {/* Testimonial Slider */}
-                    <div className="relative overflow-hidden w-full">
-                        <motion.div variants={containerVariants} className="flex transition-transform duration-700 ease-in-out"
-                            style={{ transform: `translateX(-${currentIndex * (100 / visibleCount)}%)` }}>
+                    <div className="relative overflow-hidden w-full px-2 py-4">
+                        <motion.div
+                            variants={containerVariants}
+                            className="flex transition-transform duration-700 ease-in-out"
+                            style={{ transform: `translateX(-${currentIndex * (100 / visibleCount)}%)` }}
+                        >
                             {testimonials.map((item) => (
                                 <motion.div
                                     key={item.id}
                                     variants={itemVariants}
-                                    whileHover={{ y: -8 }}
-                                    className="flex-shrink-0 w-full md:w-1/3 px-3"
+                                    className="flex-shrink-0 w-full md:w-1/3 px-4"
                                 >
-                                    <div className="p-8 md:p-12 flex flex-col items-center text-center bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 h-full">
-                                        <p className="text-gray-500 text-[13px] leading-relaxed mb-8 italic">
+                                    <div className="bg-white rounded-3xl p-8 shadow-[0_10px_40px_-15px_rgba(0,0,0,0.1)] hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] transition-all duration-300 h-full flex flex-col relative border border-gray-50 group">
+
+                                        {/* Quote Icon */}
+                                        <div className="absolute top-6 right-8 text-[#EB4724]/10 group-hover:text-[#EB4724]/20 transition-colors duration-300">
+                                            <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M14.017 21L14.017 18C14.017 16.0547 15.3739 14.7919 16.6661 14.1576L16.5161 14.1204C16.8961 14.0254 17.5144 13.8706 17.5144 12.9248V10.2977H14.017V6H19V12.9248C19 18.068 15.3614 20.3129 14.017 21ZM5 21L5 18C5 16.0547 6.35695 14.7919 7.64917 14.1576L7.49914 14.1204C7.87914 14.0254 8.49751 13.8706 8.49751 12.9248V10.2977H5V6H9.98299V12.9248C9.98299 18.068 6.34437 20.3129 5 21Z" />
+                                            </svg>
+                                        </div>
+
+                                        {/* Rating */}
+                                        <div className="flex gap-1 mb-6">
+                                            {[...Array(item.rating)].map((_, i) => (
+                                                <StarIcon key={i} className="w-5 h-5 text-[#EB4724]" />
+                                            ))}
+                                        </div>
+
+                                        {/* Text */}
+                                        <p className="text-gray-600 text-[15px] leading-relaxed mb-8 flex-grow font-medium">
                                             "{item.text}"
                                         </p>
 
-                                        <div className="mt-auto flex flex-col items-center">
-                                            <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-[#EB4724] mb-4">
+                                        {/* User Info */}
+                                        <div className="mt-auto flex items-center gap-4 pt-6 border-t border-gray-100">
+                                            <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-white shadow-md flex-shrink-0">
                                                 <Image
                                                     src={item.image}
                                                     alt={item.name}
                                                     width={56}
                                                     height={56}
-                                                    className="object-cover"
+                                                    className="w-full h-full object-cover"
                                                 />
                                             </div>
-                                            <h4 className="text-[#651313] font-bold text-sm uppercase tracking-wide mb-1">{item.name}</h4>
-                                            <p className="text-gray-400 text-[10px] font-medium uppercase">{item.role}</p>
+                                            <div>
+                                                <h4 className="text-[#651313] font-bold text-sm uppercase tracking-wide leading-tight mb-1">
+                                                    {item.name}
+                                                </h4>
+                                                <p className="text-gray-400 text-xs font-semibold uppercase tracking-wider">
+                                                    {item.role}
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
                                 </motion.div>
@@ -170,13 +209,13 @@ export default function TestimonialsSection() {
                         </motion.div>
 
                         {/* Navigation Dots */}
-                        <div className="flex justify-center gap-2 mt-6">
+                        <div className="flex justify-center gap-2 mt-12">
                             {Array.from({ length: Math.max(1, testimonials.length - visibleCount + 1) }).map((_, i) => (
                                 <button
                                     key={i}
                                     onClick={() => setCurrentIndex(i)}
-                                    className={`h-1.5 rounded-full transition-all duration-300 ${currentIndex === i ? "w-6 bg-[#EB4724]" : "w-1.5 bg-gray-300"}`}
-                                    aria-label={`Go to testimonial ${i + 1}`}
+                                    className={`h-2 rounded-full transition-all duration-300 ${currentIndex === i ? "w-8 bg-[#EB4724]" : "w-2 bg-gray-300 hover:bg-gray-400"}`}
+                                    aria-label={`Go to testimonial group ${i + 1}`}
                                 />
                             ))}
                         </div>

@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Eye, EyeOff, Mail, Lock, User, Phone, ArrowLeft } from "lucide-react";
 import { loginUser, signupUser, forgotPassword } from "../../api/authApi";
 import { useRouter } from "next/navigation";
+import { isAuthenticated, isAdmin, isUser } from "@/utils/auth";
 
 type ViewType = "login" | "signup" | "forgot";
 
@@ -14,6 +15,17 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const router = useRouter();
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (isAuthenticated()) {
+      if (isAdmin()) {
+        router.push("/admin");
+      } else if (isUser()) {
+        router.push("/user");
+      }
+    }
+  }, [router]);
 
   // Login form
   const [loginData, setLoginData] = useState({
@@ -53,7 +65,7 @@ export default function LoginPage() {
           if (userRole === "admin") {
             router.push("/admin");
           } else {
-            router.push("/dashboard");
+            router.push("/user");
           }
         }, 1000);
       }

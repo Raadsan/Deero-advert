@@ -1,32 +1,128 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Users, DollarSign, TrendingUp, Activity, Briefcase, Newspaper, Award, MessageSquare, ArrowUpRight, ArrowDownRight } from "lucide-react";
-
-const stats = [
-    {
-        title: "Total Services",
-        value: "12",
-        change: "Active services offered",
-        icon: Briefcase,
-        color: "bg-blue-100 text-blue-700",
-    },
-    {
-        title: "Total Users",
-        value: "2,350",
-        change: "+180 new this month",
-        icon: Users,
-        color: "bg-green-100 text-green-700",
-    },
-    {
-        title: "Achievements",
-        value: "8",
-        change: "Awards & Recognitions",
-        icon: Award,
-        color: "bg-orange-100 text-orange-700",
-    },
-];
+import { getAllServices } from "@/api/serviceApi";
+import { getAllUsers } from "@/api/usersApi";
+import { getAllAchievements } from "@/api/achievementApi";
+import DataTable from "@/components/admin/DataTable";
 
 export default function AdminPage() {
+    const [stats, setStats] = useState([
+        {
+            title: "Total Services",
+            value: "0",
+            change: "Active services offered",
+            icon: Briefcase,
+            color: "bg-blue-100 text-blue-700",
+        },
+        {
+            title: "Total Users",
+            value: "0",
+            change: "Total registered users",
+            icon: Users,
+            color: "bg-green-100 text-green-700",
+        },
+        {
+            title: "Achievements",
+            value: "0",
+            change: "Awards & Recognitions",
+            icon: Award,
+            color: "bg-orange-100 text-orange-700",
+        },
+    ]);
+    const [loading, setLoading] = useState(true);
+    const [topUsers, setTopUsers] = useState<any[]>([]);
+    const [usersLoading, setUsersLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchStats = async () => {
+            try {
+                setLoading(true);
+                
+                // Fetch all data in parallel
+                const [servicesRes, usersRes, achievementsRes] = await Promise.all([
+                    getAllServices(),
+                    getAllUsers(),
+                    getAllAchievements(),
+                ]);
+
+                // Extract counts from backend responses
+                // Services and Achievements return { data: [...], count: number }
+                // Users returns array directly
+                const servicesCount = servicesRes.data?.count || 0;
+                const usersCount = Array.isArray(usersRes.data) ? usersRes.data.length : 0;
+                const achievementsCount = achievementsRes.data?.count || 0;
+
+                // Format numbers with commas
+                const formatNumber = (num: number) => {
+                    return num.toLocaleString();
+                };
+
+                setStats([
+                    {
+                        title: "Total Services",
+                        value: formatNumber(servicesCount),
+                        change: "Active services offered",
+                        icon: Briefcase,
+                        color: "bg-blue-100 text-blue-700",
+                    },
+                    {
+                        title: "Total Users",
+                        value: formatNumber(usersCount),
+                        change: "Total registered users",
+                        icon: Users,
+                        color: "bg-green-100 text-green-700",
+                    },
+                    {
+                        title: "Achievements",
+                        value: formatNumber(achievementsCount),
+                        change: "Awards & Recognitions",
+                        icon: Award,
+                        color: "bg-orange-100 text-orange-700",
+                    },
+                ]);
+            } catch (error) {
+                console.error("Error fetching stats:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchStats();
+    }, []);
+
+    useEffect(() => {
+        const fetchTopUsers = async () => {
+            try {
+                setUsersLoading(true);
+                const res = await getAllUsers();
+                const users = Array.isArray(res.data) ? res.data : [];
+                
+                // Filter only users with role "user" (exclude admins)
+                const regularUsers = users.filter((user: any) => 
+                    user.role === "user" || !user.role || user.role === undefined
+                );
+                
+                // Sort by createdAt (newest first) and take top 10
+                const sortedUsers = [...regularUsers]
+                    .sort((a, b) => {
+                        const dateA = new Date(a.createdAt || a._id).getTime();
+                        const dateB = new Date(b.createdAt || b._id).getTime();
+                        return dateB - dateA;
+                    })
+                    .slice(0, 10);
+                
+                setTopUsers(sortedUsers);
+            } catch (error) {
+                console.error("Error fetching top users:", error);
+            } finally {
+                setUsersLoading(false);
+            }
+        };
+
+        fetchTopUsers();
+    }, []);
     return (
         <div className="space-y-6">
             <div className="flex flex-col gap-2">
@@ -36,35 +132,58 @@ export default function AdminPage() {
 
             {/* Stats Grid */}
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {stats.map((stat, index) => {
-                    const Icon = stat.icon;
-                    return (
+                {loading ? (
+                    // Loading skeleton
+                    [1, 2, 3].map((i) => (
                         <div
-                            key={index}
-                            className="group relative overflow-hidden rounded-2xl bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg border border-gray-100/50"
+                            key={i}
+                            className="group relative overflow-hidden rounded-2xl bg-white p-5 shadow-sm border border-gray-100/50 animate-pulse"
                         >
-                            <div className="absolute right-0 top-0 -mr-4 -mt-4 h-20 w-20 rounded-full bg-gray-50 opacity-50 transition-transform group-hover:scale-110"></div>
-
+                            <div className="absolute right-0 top-0 -mr-4 -mt-4 h-20 w-20 rounded-full bg-gray-50 opacity-50"></div>
                             <div className="relative flex items-start justify-between">
-                                <div>
-                                    <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">{stat.title}</p>
-                                    <h3 className="mt-1 text-2xl font-bold text-gray-900">{stat.value}</h3>
+                                <div className="flex-1">
+                                    <div className="h-3 w-24 bg-gray-200 rounded mb-2"></div>
+                                    <div className="h-8 w-16 bg-gray-200 rounded"></div>
                                 </div>
-                                <div className={`rounded-xl p-2.5 ${stat.color} bg-opacity-10 group-hover:scale-110 transition-transform`}>
-                                    <Icon className={`h-5 w-5 ${stat.color.replace('bg-', 'text-').replace('100', '600')}`} />
-                                </div>
+                                <div className="rounded-xl p-2.5 bg-gray-200 w-10 h-10"></div>
                             </div>
-
                             <div className="mt-3 flex items-center gap-2">
-                                <span className="flex items-center gap-1 text-[10px] font-medium text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
-                                    <TrendingUp className="h-3 w-3" />
-                                    {stat.change.includes('+') ? '+12%' : 'Active'}
-                                </span>
-                                <span className="text-xs text-gray-400">{stat.change}</span>
+                                <div className="h-4 w-16 bg-gray-200 rounded-full"></div>
+                                <div className="h-3 w-24 bg-gray-200 rounded"></div>
                             </div>
                         </div>
-                    );
-                })}
+                    ))
+                ) : (
+                    stats.map((stat, index) => {
+                        const Icon = stat.icon;
+                        return (
+                            <div
+                                key={index}
+                                className="group relative overflow-hidden rounded-2xl bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg border border-gray-100/50"
+                            >
+                                <div className="absolute right-0 top-0 -mr-4 -mt-4 h-20 w-20 rounded-full bg-gray-50 opacity-50 transition-transform group-hover:scale-110"></div>
+
+                                <div className="relative flex items-start justify-between">
+                                    <div>
+                                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">{stat.title}</p>
+                                        <h3 className="mt-1 text-2xl font-bold text-gray-900">{stat.value}</h3>
+                                    </div>
+                                    <div className={`rounded-xl p-2.5 ${stat.color} bg-opacity-10 group-hover:scale-110 transition-transform`}>
+                                        <Icon className={`h-5 w-5 ${stat.color.replace('bg-', 'text-').replace('100', '600')}`} />
+                                    </div>
+                                </div>
+
+                                <div className="mt-3 flex items-center gap-2">
+                                    <span className="flex items-center gap-1 text-[10px] font-medium text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
+                                        <TrendingUp className="h-3 w-3" />
+                                        {stat.change.includes('+') ? '+12%' : 'Active'}
+                                    </span>
+                                    <span className="text-xs text-gray-400">{stat.change}</span>
+                                </div>
+                            </div>
+                        );
+                    })
+                )}
             </div>
 
             {/* Charts Section */}
@@ -175,50 +294,155 @@ export default function AdminPage() {
                 </div>
 
                 {/* Recent Activity Chart */}
-                <div className="col-span-3 rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
-                    <div className="mb-4 flex items-center justify-between">
-                        <h3 className="text-lg font-semibold text-gray-900">Recent Activity</h3>
-                        <Activity className="h-5 w-5 text-[#EB4724]" />
+              <div className="col-span-3 rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+    <div className="mb-4 flex items-center justify-between">
+        <h3 className="text-lg font-semibold text-gray-900">Events & News</h3>
+        <Activity className="h-5 w-5 text-[#EB4724]" />
+    </div>
+
+    <div className="space-y-4">
+        {[
+            {
+                title: "Annual Tech Conference",
+                date: "Jan 10, 2025",
+                category: "Event",
+                trend: "up"
+            },
+            {
+                title: "New Website Launched",
+                date: "Jan 8, 2025",
+                category: "News",
+                trend: "up"
+            },
+            {
+                title: "Partnership Announcement",
+                date: "Jan 5, 2025",
+                category: "News",
+                trend: "up"
+            },
+            {
+                title: "Startup Pitch Event",
+                date: "Jan 2, 2025",
+                category: "Event",
+                trend: "up"
+            },
+            {
+                title: "Product Update Released",
+                date: "Dec 30, 2024",
+                category: "News",
+                trend: "up"
+            },
+        ].map((item, i) => (
+            <div
+                key={i}
+                className="flex items-center gap-3 p-3 rounded-lg bg-gradient-to-r from-gray-50 to-white hover:from-gray-100 hover:shadow-sm transition-all border border-gray-100"
+            >
+                <div className="relative flex-shrink-0">
+                    <div className="h-10 w-10 rounded-full bg-gradient-to-br from-[#651313] to-[#EB4724] flex items-center justify-center shadow-sm">
+                        <Activity className="h-5 w-5 text-white" />
                     </div>
-                    <div className="space-y-4">
-                        {[
-                            { action: "New Service Added", time: "5 min ago", amount: "+$2,500", trend: "up" },
-                            { action: "Blog Published", time: "12 min ago", amount: "+$1,200", trend: "up" },
-                            { action: "Client Inquiry", time: "18 min ago", amount: "+$3,800", trend: "up" },
-                            { action: "Project Completed", time: "25 min ago", amount: "+$5,000", trend: "up" },
-                            { action: "New Testimonial", time: "32 min ago", amount: "+$800", trend: "up" },
-                        ].map((item, i) => (
-                            <div
-                                key={i}
-                                className="flex items-center gap-3 p-3 rounded-lg bg-gradient-to-r from-gray-50 to-white hover:from-gray-100 hover:shadow-sm transition-all border border-gray-100"
-                            >
-                                <div className="relative flex-shrink-0">
-                                    <div className="h-10 w-10 rounded-full bg-gradient-to-br from-[#651313] to-[#EB4724] flex items-center justify-center shadow-sm">
-                                        <Activity className="h-5 w-5 text-white" />
-                                    </div>
-                                    {item.trend === "up" && (
-                                        <div className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-green-500 border-2 border-white flex items-center justify-center">
-                                            <ArrowUpRight className="h-2.5 w-2.5 text-white" />
-                                        </div>
-                                    )}
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                    <p className="text-sm font-semibold text-gray-900 truncate">{item.action}</p>
-                                    <p className="text-xs text-gray-500 mt-0.5">{item.time}</p>
-                                </div>
-                                <div className="flex items-center gap-1 text-sm font-bold text-[#EB4724] flex-shrink-0">
-                                    {item.amount}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                    <div className="mt-4 pt-4 border-t border-gray-100">
-                        <button className="w-full text-sm font-medium text-[#651313] hover:text-[#EB4724] transition-colors">
-                            View All Activity →
-                        </button>
-                    </div>
+
+                    {item.trend === "up" && (
+                        <div className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-green-500 border-2 border-white flex items-center justify-center">
+                            <ArrowUpRight className="h-2.5 w-2.5 text-white" />
+                        </div>
+                    )}
+                </div>
+
+                <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-gray-900 truncate">
+                        {item.title}
+                    </p>
+                    <p className="text-xs text-gray-500 mt-0.5">
+                        {item.date}
+                    </p>
+                </div>
+
+                <div className="flex items-center gap-1 text-sm font-bold text-[#EB4724] flex-shrink-0">
+                    {item.category}
                 </div>
             </div>
+        ))}
+    </div>
+
+    <div className="mt-4 pt-4 border-t border-gray-100">
+        <button className="w-full text-sm font-medium text-[#651313] hover:text-[#EB4724] transition-colors">
+            View All Events & News →
+        </button>
+    </div>
+            </div>
+            </div>
+
+            {/* Top 10 Users Section */}
+            {usersLoading ? (
+                <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+                    <div className="animate-pulse">
+                        <div className="h-6 w-32 bg-gray-200 rounded mb-4"></div>
+                        <div className="space-y-3">
+                            {[1, 2, 3, 4, 5].map((i) => (
+                                <div key={i} className="h-12 bg-gray-200 rounded"></div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            ) : (
+                <DataTable
+                    title="Top 10 Regular Users"
+                    columns={[
+                        {
+                            label: "#",
+                            key: "rank",
+                            width: "60px",
+                            render: (_: any, index: number) => (
+                                <span className="font-semibold text-gray-600">{index + 1}</span>
+                            ),
+                        },
+                        {
+                            label: "Fullname",
+                            key: "fullname",
+                            render: (row: any) => (
+                                <div className="flex items-center gap-3">
+                                    <div className="h-10 w-10 rounded-full bg-gradient-to-br from-[#651313] to-[#EB4724] flex items-center justify-center shadow-sm text-white font-semibold text-sm">
+                                        {row.fullname?.charAt(0)?.toUpperCase() || "U"}
+                                        {row.fullname?.split(" ")[1]?.charAt(0)?.toUpperCase() || ""}
+                                    </div>
+                                    <span className="font-medium text-gray-900">{row.fullname || "Unknown User"}</span>
+                                </div>
+                            ),
+                        },
+                        {
+                            label: "Email",
+                            key: "email",
+                            render: (row: any) => (
+                                <span className="text-gray-600">{row.email || "-"}</span>
+                            ),
+                        },
+                        {
+                            label: "Phone",
+                            key: "phone",
+                            render: (row: any) => (
+                                <span className="text-gray-600">{row.phone || "-"}</span>
+                            ),
+                        },
+                        {
+                            label: "Role",
+                            key: "role",
+                            width: "120px",
+                            render: (row: any) => (
+                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                    row.role === "admin" 
+                                        ? "bg-purple-100 text-purple-700 border border-purple-200" 
+                                        : "bg-blue-100 text-blue-700 border border-blue-200"
+                                }`}>
+                                    {row.role || "user"}
+                                </span>
+                            ),
+                        },
+                    ]}
+                    data={topUsers}
+                    showAddButton={false}
+                />
+            )}
         </div>
     );
 }

@@ -3,16 +3,17 @@
 export default function NewsHero() {
     return (
         <section className="relative w-full bg-gradient-to-r from-[#4d0e0e] via-[#651313] to-[#EB4724] py-16 lg:py-20 px-4 overflow-hidden">
-            {/* Subtle watermark row */}
-            <div className="absolute inset-0 opacity-10 pointer-events-none select-none">
-                <div className="max-w-6xl mx-auto h-full flex items-center justify-between">
-                    {Array.from({ length: 6 }).map((_, i) => (
-                        <div
-                            key={i}
-                            className="w-20 h-20 md:w-24 md:h-24 rounded-full border border-white/20"
+            {/* Watermark Pattern - Single Row */}
+            <div className="absolute inset-0 flex items-center justify-between opacity-10 pointer-events-none select-none px-4">
+                {Array.from({ length: 7 }).map((_, i) => (
+                    <div key={i} className="w-24 h-24 md:w-32 md:h-32 relative shrink-0">
+                        <img
+                            src="/home-images/about-01.svg"
+                            alt=""
+                            className="w-full h-full object-contain grayscale brightness-0 invert opacity-30"
                         />
-                    ))}
-                </div>
+                    </div>
+                ))}
             </div>
 
             <div className="relative z-10 max-w-6xl mx-auto flex flex-col gap-4">
