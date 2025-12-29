@@ -10,3 +10,4 @@ const roleSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 export default mongoose.model("Role", roleSchema);
+ 

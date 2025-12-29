@@ -48,34 +48,34 @@ export default function UsersPage() {
   };
 
   // Handle Create / Update
- const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  try {
-    if (isEditing) {
-      await updateUser(formData.id, formData);
-    } else {
-      // Automatically set role to "admin" when creating from admin panel
-      await createUser({ ...formData, role: "admin" });
-    }
-    await fetchUsers();
-    closeModal();
-  } catch (err) {
-    const error = err as any; // <-- cast to any
-    alert(error.response?.data?.message || "Operation failed");
-  }
-};
-
-const handleDelete = async (id: string) => {
-  if (confirm("Are you sure you want to delete this user?")) {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     try {
-      await deleteUser(id);
-      fetchUsers();
+      if (isEditing) {
+        await updateUser(formData.id, formData);
+      } else {
+        // Automatically set role to "admin" when creating from admin panel
+        await createUser({ ...formData, role: "admin" });
+      }
+      await fetchUsers();
+      closeModal();
     } catch (err) {
       const error = err as any; // <-- cast to any
-      alert(error.response?.data?.message || "Failed to delete user");
+      alert(error.response?.data?.message || "Operation failed");
     }
-  }
-};
+  };
+
+  const handleDelete = async (id: string) => {
+    if (confirm("Are you sure you want to delete this user?")) {
+      try {
+        await deleteUser(id);
+        fetchUsers();
+      } catch (err) {
+        const error = err as any; // <-- cast to any
+        alert(error.response?.data?.message || "Failed to delete user");
+      }
+    }
+  };
 
   const handleEdit = (user: any) => {
     setFormData({
@@ -121,17 +121,20 @@ const handleDelete = async (id: string) => {
     {
       label: "Role",
       key: "role",
-      render: (row: any) => (
-        <span className={`px-2 py-0.5 rounded-full text-xs font-medium 
-          ${row.role === "Administrator"
-            ? "bg-red-50 text-red-700 border border-red-100"
-            : row.role === "Editor"
-            ? "bg-blue-50 text-blue-700 border border-blue-100"
-            : "bg-gray-50 text-gray-600 border border-gray-100"}`}
-        >
-          {row.role}
-        </span>
-      ),
+      render: (row: any) => {
+        const roleName = typeof row.role === 'object' ? row.role?.name : row.role;
+        return (
+          <span className={`px-2 py-0.5 rounded-full text-xs font-medium 
+          ${roleName === "admin"
+              ? "bg-red-50 text-red-700 border border-red-100"
+              : roleName === "manager"
+                ? "bg-blue-50 text-blue-700 border border-blue-100"
+                : "bg-gray-50 text-gray-600 border border-gray-100"}`}
+          >
+            {roleName}
+          </span>
+        )
+      },
     },
     {
       label: "Actions",
