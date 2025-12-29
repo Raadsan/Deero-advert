@@ -1,18 +1,22 @@
 import express from "express";
 import {
-  createUser,
-  getAllUsers,
+  signup,
+  login,
+  forgotPassword,
+  getUsers,
   getUserById,
   updateUser,
-  deleteUser,
+  deleteUser
 } from "../controllers/userController.js";
+import router from "./menuRoutes.js";
 
-const router = express.Router();
-
-router.post("/", createUser);       // Create
-router.get("/", getAllUsers);        // Read all
-router.get("/:id", getUserById);     // Read one
-router.patch("/:id", updateUser);      // Update
-router.delete("/:id", deleteUser);   // Delete
+// Protected user CRUD routes
+router.get("/", getUsers);
+router.get("/:id", getUserById);
+router.put("/:id", updateUser);
+router.delete("/:id", deleteUser);
+router.post("/signup", signup);
+router.post("/login", login);
+router.post("/forgot-password", forgotPassword);
 
 export default router;

@@ -9,7 +9,10 @@ import hostingRoute from "./routes/hostingRoute.js";
 import achievementRoute from "./routes/achievementRoutes.js";
 import TestimonialRoute from "./routes/testimonialRoutes.js"; 
 import userRoute from "./routes/userRoute.js";
-import authRoute from "./routes/authRoute.js";
+
+import permissionRoutes from "./routes/permissionRoutes.js";
+import roleRoutes from "./routes/roleRoutes.js";
+import menuRoutes from "./routes/menuRoutes.js";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -36,7 +39,9 @@ app.use("/api/hosting", hostingRoute);
 app.use("/api/achievements", achievementRoute);
 app.use("/api/testimonials", TestimonialRoute);
 app.use("/api/users", userRoute);
-app.use("/api/auth", authRoute);
+app.use("/api/permissions", permissionRoutes);
+app.use("/api/roles", roleRoutes);
+app.use("/api/menus", menuRoutes);
 app.use(multerErrorHandler);
 const PORT = process.env.PORT || 5000;
 
