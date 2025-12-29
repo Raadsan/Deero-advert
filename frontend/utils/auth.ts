@@ -22,12 +22,16 @@ export const isAuthenticated = (): boolean => {
 
 export const isAdmin = (): boolean => {
     const user = getUser();
-    return user?.role === "admin";
+    return user?.role === "admin" || user?.role?.name === "admin";
 };
 
 export const isUser = (): boolean => {
     const user = getUser();
-    return user?.role === "user" || (!user?.role && isAuthenticated());
+    return (
+        user?.role === "user" ||
+        user?.role?.name === "user" ||
+        (!user?.role && isAuthenticated())
+    );
 };
 
 export const getUserId = (): string | null => {

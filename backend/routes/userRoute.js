@@ -8,7 +8,7 @@ import {
   updateUser,
   deleteUser
 } from "../controllers/userController.js";
-import router from "./menuRoutes.js";
+const router = express.Router();
 
 // Protected user CRUD routes
 router.get("/", getUsers);

@@ -2,17 +2,17 @@ import api from "./axios";
 
 // Login
 export const loginUser = (data: { email: string; password: string }) => {
-  return api.post("/auth/login", data);
+  return api.post("/users/login", data);
 };
 
 // Signup
 export const signupUser = (data: { fullname: string; email: string; phone: string; password: string }) => {
-  return api.post("/auth/signup", data);
+  return api.post("/users/signup", data);
 };
 
 // Forgot Password
 export const forgotPassword = (email: string) => {
-  return api.post("/auth/forgot-password", { email });
+  return api.post("/users/forgot-password", { email });
 };
 
 // Logout

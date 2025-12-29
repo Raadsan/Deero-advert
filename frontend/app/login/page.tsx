@@ -61,8 +61,10 @@ export default function LoginPage() {
         setSuccess("Login successful! Redirecting...");
         setTimeout(() => {
           // Check user role and redirect accordingly
-          const userRole = res.data.user?.role || "user";
-          if (userRole === "admin") {
+          const userRole = res.data.user?.role;
+          const roleName = typeof userRole === "object" ? userRole?.name : userRole;
+
+          if (roleName === "admin") {
             router.push("/admin");
           } else {
             router.push("/user");
