@@ -22,7 +22,7 @@ export default function LoginPage() {
       if (isAdmin()) {
         router.push("/admin");
       } else if (isUser()) {
-        router.push("/user");
+        router.push("/");
       }
     }
   }, [router]);
@@ -70,7 +70,7 @@ export default function LoginPage() {
           if (roleName && roleName.toString().toLowerCase() === "admin") {
             router.push("/admin");
           } else {
-            router.push("/user");
+            router.push("/");
           }
         }, 1000);
       }

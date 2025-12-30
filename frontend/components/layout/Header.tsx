@@ -3,7 +3,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { Bell, User, LogOut, ShoppingCart } from "lucide-react";
+import { isAuthenticated, getUser, clearAuth } from "@/utils/auth";
+import { logout as apiLogout } from "../../api/authApi";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -18,8 +21,18 @@ export default function Header() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname() || "";
   const [hash, setHash] = useState("");
+  const router = useRouter();
+  const [user, setUser] = useState<any>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showProfileDropdown, setShowProfileDropdown] = useState(false);
 
   useEffect(() => {
+    setIsLoggedIn(isAuthenticated());
+    const userData = getUser();
+    if (userData) {
+      setUser(userData);
+    }
+
     if (typeof window === "undefined") return;
     const setCurrentHash = () => setHash(window.location.hash || "");
     setCurrentHash();
@@ -27,10 +40,19 @@ export default function Header() {
     return () => window.removeEventListener("hashchange", setCurrentHash);
   }, []);
 
+  const handleLogout = async () => {
+    await apiLogout();
+    clearAuth();
+    setIsLoggedIn(false);
+    setUser(null);
+    setShowProfileDropdown(false);
+    router.push("/");
+  };
+
   return (
     <header className="fixed top-0 left-0 right-0 w-full z-50">
-      {/* Top bar */}
-        <div className="flex flex-wrap items-center justify-center gap-6 bg-[#651313] py-3 text-sm font-medium text-white sm:px-6 md:text-base">
+      {/* Top bar logic... */}
+      <div className="flex flex-wrap items-center justify-center gap-6 bg-[#651313] py-3 text-sm font-medium text-white sm:px-6 md:text-base">
         <span className="text-base md:text-lg">+252 61 8553566</span>
         <span className="hidden sm:inline">|</span>
         <a
@@ -56,12 +78,6 @@ export default function Header() {
           >
             Career
           </Link>
-          {/* <Link
-            href="#download"
-            className="rounded-full bg-[#EB4724] px-4 py-1.5 text-white transition hover:opacity-90"
-          >
-            Download
-          </Link> */}
         </div>
       </div>
 
@@ -82,7 +98,7 @@ export default function Header() {
           </div>
 
           {/* Navigation - Center */}
-          <nav className="hidden md:flex gap-8 font-semibold   text-[#651313] pr-22">
+          <nav className="hidden md:flex gap-8 font-semibold text-[#651313] pr-22">
             {navLinks.map((link) => {
               const [linkPathPart, linkHashPart] = link.href.split("#");
               const linkPath = linkPathPart || "/";
@@ -106,13 +122,73 @@ export default function Header() {
           </nav>
 
           {/* Client Area - Right */}
-          <div className="hidden md:flex pr-25">
-            <Link
-              href="/login"
-              className="rounded-full bg-[#EB4724] px-6 py-2.5 font-semibold text-white transition hover:opacity-90"
-            >
-              Sign In
-            </Link>
+          <div className="hidden md:flex items-center gap-6 pr-25">
+            {isLoggedIn ? (
+              <div className="flex items-center gap-4">
+                {/* Cart Icon */}
+                <button className="relative p-2 text-[#651313] hover:bg-gray-100 rounded-full transition">
+                  <ShoppingCart className="h-6 w-6" />
+                  <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-[#EB4724] text-[10px] font-bold text-white border-2 border-white">
+                    0
+                  </span>
+                </button>
+
+                {/* Notification Bell */}
+                <button className="relative p-2 text-[#651313] hover:bg-gray-100 rounded-full transition">
+                  <Bell className="h-6 w-6" />
+                  <span className="absolute top-1.5 right-1.5 h-2 w-2 bg-[#EB4724] rounded-full"></span>
+                </button>
+
+                {/* Profile Icon with Dropdown */}
+                <div className="relative">
+                  <button
+                    onClick={() => setShowProfileDropdown(!showProfileDropdown)}
+                    className="flex h-10 w-10 items-center justify-center rounded-full bg-[#651313] text-white hover:ring-2 hover:ring-[#EB4724] transition"
+                  >
+                    {user?.fullname ? (
+                      <span className="text-sm font-bold">
+                        {user.fullname.charAt(0).toUpperCase()}
+                      </span>
+                    ) : (
+                      <User className="h-5 w-5" />
+                    )}
+                  </button>
+
+                  {showProfileDropdown && (
+                    <>
+                      <div
+                        className="fixed inset-0 z-10"
+                        onClick={() => setShowProfileDropdown(false)}
+                      />
+                      <div className="absolute right-0 mt-3 w-48 rounded-xl border border-gray-100 bg-white p-2 shadow-xl z-20">
+                        <div className="px-3 py-2 border-b border-gray-50 mb-1">
+                          <p className="text-sm font-bold text-[#651313] truncate">
+                            {user?.fullname || "User"}
+                          </p>
+                          <p className="text-xs text-gray-400 truncate">
+                            {user?.email || ""}
+                          </p>
+                        </div>
+                        <button
+                          onClick={handleLogout}
+                          className="w-full flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition"
+                        >
+                          <LogOut className="h-4 w-4" />
+                          Logout
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <Link
+                href="/login"
+                className="rounded-full bg-[#EB4724] px-6 py-2.5 font-semibold text-white transition hover:opacity-90"
+              >
+                Sign In
+              </Link>
+            )}
           </div>
 
           {/* Mobile menu toggle */}
@@ -155,13 +231,42 @@ export default function Header() {
                   </Link>
                 );
               })}
-              <Link
-                href="/login"
-                className="rounded-full bg-[#EB4724] px-5 py-2 text-center text-white shadow-sm transition hover:opacity-90"
-                onClick={() => setOpen(false)}
-              >
-                Client Area
-              </Link>
+              {isLoggedIn ? (
+                <div className="flex flex-col gap-3 mt-2 pt-2 border-t border-gray-100">
+                  <div className="flex items-center justify-between px-2 py-2">
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 flex items-center justify-center rounded-full bg-[#651313] text-white">
+                        {user?.fullname?.charAt(0).toUpperCase() || <User className="h-5 w-5" />}
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold text-[#651313]">{user?.fullname}</p>
+                        <p className="text-xs text-gray-400">{user?.email}</p>
+                      </div>
+                    </div>
+                    {/* Cart Icon Mobile */}
+                    <button className="relative p-2 text-[#651313]">
+                      <ShoppingCart className="h-6 w-6" />
+                      <span className="absolute top-0 right-0 flex h-4 w-4 items-center justify-center rounded-full bg-[#EB4724] text-[8px] font-bold text-white">
+                        0
+                      </span>
+                    </button>
+                  </div>
+                  <button
+                    onClick={handleLogout}
+                    className="w-full rounded-full border border-red-100 py-2 text-center text-red-600 bg-red-50 font-semibold transition"
+                  >
+                    Logout
+                  </button>
+                </div>
+              ) : (
+                <Link
+                  href="/login"
+                  className="rounded-full bg-[#EB4724] px-5 py-2 text-center text-white shadow-sm transition hover:opacity-90"
+                  onClick={() => setOpen(false)}
+                >
+                  Client Area
+                </Link>
+              )}
             </div>
           </div>
         )}

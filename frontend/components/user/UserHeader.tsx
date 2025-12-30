@@ -25,7 +25,7 @@ export default function UserHeader({ onMenuClick }: { onMenuClick: () => void })
     const handleLogout = () => {
         logout();
         setShowDropdown(false);
-        router.push("/login");
+        router.push("/");
     };
     return (
         <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-gray-200 bg-white px-4 shadow-sm sm:px-6 lg:px-8">
