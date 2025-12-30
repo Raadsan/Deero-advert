@@ -70,7 +70,7 @@ export default function MarketingPackages() {
             >
                 <div className="text-center mb-12">
                     <motion.h2 variants={itemVariants} className="text-4xl font-bold text-[#EB4724]">
-                        Social Media Marketing<br />Packages
+                        Graphic Design & Social Media<br />Marketing Packages
                     </motion.h2>
                 </div>
 
@@ -106,13 +106,13 @@ export default function MarketingPackages() {
                                         <span>{feature}</span>
                                     </li>
                                 ))}
-                                  {/* Expand Feature Toggle Placeholder */}
-                            <div className="flex items-center gap-2 text-[#4d0e0e]/60 text-sm font-bold mb-6 cursor-pointer hover:text-[#4d0e0e] transition-colors group">
-                                <div className="w-5 h-5 rounded-full bg-white/50 flex items-center justify-center group-hover:bg-white transition-colors">
-                                    <ChevronDownIcon className="h-3 w-3 stroke-[3]" />
+                                {/* Expand Feature Toggle Placeholder */}
+                                <div className="flex items-center gap-2 text-[#4d0e0e]/60 text-sm font-bold mb-6 cursor-pointer hover:text-[#4d0e0e] transition-colors group">
+                                    <div className="w-5 h-5 rounded-full bg-white/50 flex items-center justify-center group-hover:bg-white transition-colors">
+                                        <ChevronDownIcon className="h-3 w-3 stroke-[3]" />
+                                    </div>
+                                    <span>Expand Feature</span>
                                 </div>
-                                <span>Expand Feature</span>
-                            </div>
                             </ul>
 
                             <button className={`${plan.buttonColor} text-white font-bold py-4 rounded-xl shadow-lg hover:brightness-110 active:scale-95 transition-all text-sm uppercase tracking-wide`}>

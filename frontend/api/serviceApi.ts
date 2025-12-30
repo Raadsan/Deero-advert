@@ -1,35 +1,49 @@
-// frontend/services/serviceApi.ts
-import api from "./axios"; // your axios instance
+export interface Service {
+  _id: string;
+  serviceTitle: string;
+  serviceDescription: string;
+  serviceIcon: string;
+  packages?: {
+    packageTitle: string;
+    price: number;
+    features: string[];
+    _id?: string;
+  }[];
+  createdAt?: string;
+  updatedAt?: string;
+}
 
-// ➕ CREATE SERVICE (with FormData for file upload)
-export const createService = (formData: FormData) => {
-  return api.post("/service/create", formData, {
+import axios from "@/api/axios";
+
+export const getAllServices = async (): Promise<Service[]> => {
+  const response = await axios.get("/service/");
+  return response.data;
+};
+
+export const getServiceById = async (id: string): Promise<Service> => {
+  const response = await axios.get(`/service/${id}`);
+  return response.data;
+};
+
+export const createService = async (formData: FormData) => {
+  const response = await axios.post("/service/create", formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
   });
+  return response.data;
 };
 
-// 📄 GET ALL SERVICES
-export const getAllServices = () => {
-  return api.get("/service");
-};
-
-// 📄 GET SERVICE BY ID
-export const getServiceById = (id: string) => {
-  return api.get(`/service/${id}`);
-};
-
-// ✏️ UPDATE SERVICE (with FormData for file upload)
-export const updateService = (id: string, formData: FormData) => {
-  return api.patch(`/service/${id}`, formData, {
+export const updateService = async (id: string, formData: FormData) => {
+  const response = await axios.put(`/service/${id}`, formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
   });
+  return response.data;
 };
 
-// 🗑 DELETE SERVICE
-export const deleteService = (id: string) => {
-  return api.delete(`/service/${id}`);
+export const deleteService = async (id: string) => {
+  const response = await axios.delete(`/service/${id}`);
+  return response.data;
 };

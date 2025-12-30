@@ -7,11 +7,12 @@ interface ServiceCardProps {
     name: string;
     icon: string;
     index: number;
+    active?: boolean;
     itemVariants: any;
     onClick?: () => void;
 }
 
-export default function ServiceCard({ name, icon, index, itemVariants, onClick }: ServiceCardProps) {
+export default function ServiceCard({ name, icon, index, active, itemVariants, onClick }: ServiceCardProps) {
     return (
         <motion.div
             variants={itemVariants}
@@ -19,7 +20,7 @@ export default function ServiceCard({ name, icon, index, itemVariants, onClick }
             onClick={onClick}
             className={`flex flex-col items-center relative group p-6 rounded-2xl transition-all duration-300 ${onClick ? "cursor-pointer" : "cursor-default"}`}
         >
-            {/* Hover Background - Rounded Rectangle */}
+            {/* Hover/Active Background - Rounded Rectangle */}
             <motion.div
                 variants={{
                     hover: {
@@ -27,8 +28,9 @@ export default function ServiceCard({ name, icon, index, itemVariants, onClick }
                         scale: 1,
                     }
                 }}
-                initial={{ opacity: 0, scale: 0.95 }}
-                className="absolute inset-0 bg-gray-200 rounded-2xl z-0 pointer-events-none transition-all duration-300"
+                animate={active ? { opacity: 0, scale: 1 } : undefined}
+                initial={active ? { opacity: 0, scale: 1 } : { opacity: 0, scale: 0.95 }}
+                className={`absolute inset-0 rounded-2xl z-0 pointer-events-none transition-all duration-300 bg-gray-100`}
             />
 
             {/* Icon Container */}
@@ -41,8 +43,8 @@ export default function ServiceCard({ name, icon, index, itemVariants, onClick }
                     className="w-24 h-24 md:w-32 md:h-32 flex items-center justify-center relative z-20"
                 >
                     <Image
-                        src={icon}
-                        alt={name.replace("\n", " ")}
+                        src={icon || "/placeholder-icon.png"}
+                        alt={(name || "Service").replace("\n", " ")}
                         width={100}
                         height={100}
                         className="w-full h-full object-contain group-hover:invert-0 transition-all duration-300"
