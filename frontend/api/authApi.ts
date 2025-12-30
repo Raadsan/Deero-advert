@@ -24,3 +24,8 @@ export const logout = () => {
   return Promise.resolve();
 };
 
+// Reset Password
+export const resetPassword = (token: string, password: string) => {
+  return api.post(`/users/reset-password/${token}`, { password });
+};
+

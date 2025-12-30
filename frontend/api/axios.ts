@@ -27,7 +27,7 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    if (error.response?.status === 401 && !error.config.url?.includes("login")) {
       // Unauthorized - clear auth and redirect to login
       if (typeof window !== "undefined") {
         localStorage.removeItem("token");
