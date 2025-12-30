@@ -6,7 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import ServiceCard from "./ServiceCard";
 import { getAllServices, Service } from "@/api/serviceApi";
-import { CheckIcon } from "@heroicons/react/24/outline";
+import { CheckIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 
 const HEADER_OFFSET = 170; // match fixed header height
 const API_URL = process.env.NEXT_PUBLIC_API_URL?.replace("/api", "") || "http://localhost:5000";
@@ -62,6 +62,7 @@ export default function ServicesContent({
     const [groupedServices, setGroupedServices] = useState<Service[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const [expandedPackages, setExpandedPackages] = useState<Record<string, boolean>>({});
 
     useEffect(() => {
         const fetchServices = async () => {
@@ -207,42 +208,70 @@ export default function ServicesContent({
                                             {service.serviceTitle} Packages
                                         </h3>
                                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 justify-center items-stretch">
-                                            {service.packages.map((pkg: any, idx: number) => (
-                                                <motion.div
-                                                    key={idx}
-                                                    variants={itemVariants}
-                                                    whileHover={{ scale: 1.02 }}
-                                                    className="bg-[#fcd7c3] p-8 rounded-2xl shadow-sm border-none flex flex-col transition-all duration-300 relative overflow-hidden group min-h-[480px] text-left"
-                                                >
-                                                    {/* Most Popular Ribbon logic */}
-                                                    {idx === 1 && (
-                                                        <div className="absolute top-6 -right-8 w-40 h-8">
-                                                            <div className="bg-[#651313] w-full h-full rotate-45 flex items-center justify-center shadow-md">
-                                                                <span className="text-white text-[10px] font-bold uppercase tracking-widest translate-y-[1px]">Most Popular</span>
+                                            {service.packages.map((pkg: any, idx: number) => {
+                                                const packageId = `${service._id}-${idx}`;
+                                                const isExpanded = expandedPackages[packageId];
+                                                const initialFeaturesCount = 4;
+                                                const hasMoreFeatures = pkg.features?.length > initialFeaturesCount;
+                                                const displayedFeatures = isExpanded ? pkg.features : (pkg.features?.slice(0, initialFeaturesCount) || []);
+
+                                                return (
+                                                    <motion.div
+                                                        key={idx}
+                                                        variants={itemVariants}
+                                                        whileHover={{ scale: 1.02 }}
+                                                        className="bg-[#fcd7c3] p-8 rounded-2xl shadow-sm border-none flex flex-col transition-all duration-300 relative overflow-hidden group min-h-[480px] text-left"
+                                                    >
+                                                        {/* Most Popular Ribbon logic */}
+                                                        {idx === 1 && (
+                                                            <div className="absolute top-6 -right-8 w-40 h-8">
+                                                                <div className="bg-[#651313] w-full h-full rotate-45 flex items-center justify-center shadow-md">
+                                                                    <span className="text-white text-[10px] font-bold uppercase tracking-widest translate-y-[1px]">Most Popular</span>
+                                                                </div>
                                                             </div>
+                                                        )}
+
+                                                        <h4 className="text-2xl font-bold text-[#4d0e0e] mb-4 pr-8 leading-tight">{pkg.packageTitle}</h4>
+
+                                                        <div className="flex items-baseline mb-8">
+                                                            <span className="text-5xl font-bold text-[#EB4724]">${pkg.price}</span>
                                                         </div>
-                                                    )}
 
-                                                    <h4 className="text-2xl font-bold text-[#4d0e0e] mb-4 pr-8 leading-tight">{pkg.packageTitle}</h4>
+                                                        <div className="flex-1">
+                                                            <ul className="space-y-4 mb-6">
+                                                                {displayedFeatures.map((feature: string, fIdx: number) => (
+                                                                    <motion.li
+                                                                        initial={{ opacity: 0, x: -10 }}
+                                                                        animate={{ opacity: 1, x: 0 }}
+                                                                        transition={{ delay: fIdx * 0.05 }}
+                                                                        key={fIdx}
+                                                                        className="flex items-start gap-3"
+                                                                    >
+                                                                        <CheckIcon className="h-4 w-4 shrink-0 stroke-[4] text-[#EB4724] mt-1" />
+                                                                        <span className="text-base text-[#4d0e0e] font-medium leading-tight">{feature}</span>
+                                                                    </motion.li>
+                                                                ))}
+                                                            </ul>
 
-                                                    <div className="flex items-baseline mb-8">
-                                                        <span className="text-5xl font-bold text-[#EB4724]">${pkg.price}</span>
-                                                    </div>
+                                                            {hasMoreFeatures && (
+                                                                <button
+                                                                    onClick={() => setExpandedPackages(prev => ({ ...prev, [packageId]: !isExpanded }))}
+                                                                    className="flex items-center gap-2 text-[#651313] font-bold text-sm mb-8 hover:text-[#EB4724] transition-colors"
+                                                                >
+                                                                    <div className={`w-6 h-6 rounded-full bg-white flex items-center justify-center shadow-sm transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}>
+                                                                        <ChevronDownIcon className="h-4 w-4" />
+                                                                    </div>
+                                                                    {isExpanded ? 'Collapse Feature' : 'Expand Feature'}
+                                                                </button>
+                                                            )}
+                                                        </div>
 
-                                                    <ul className="space-y-4 mb-8 flex-1">
-                                                        {Array.isArray(pkg.features) && pkg.features.map((feature: string, fIdx: number) => (
-                                                            <li key={fIdx} className="flex items-start gap-3">
-                                                                <CheckIcon className="h-4 w-4 shrink-0 stroke-[4] text-[#EB4724] mt-1" />
-                                                                <span className="text-base text-[#4d0e0e] font-medium leading-tight">{feature}</span>
-                                                            </li>
-                                                        ))}
-                                                    </ul>
-
-                                                    <button className="w-full py-4 px-6 rounded-xl bg-[#651313] text-white font-bold text-sm uppercase tracking-widest hover:brightness-110 active:scale-95 transition-all shadow-lg">
-                                                        Get Started
-                                                    </button>
-                                                </motion.div>
-                                            ))}
+                                                        <button className="w-full py-4 px-6 rounded-xl bg-[#651313] text-white font-bold text-sm uppercase tracking-widest hover:brightness-110 active:scale-95 transition-all shadow-lg">
+                                                            Get Started
+                                                        </button>
+                                                    </motion.div>
+                                                );
+                                            })}
                                         </div>
                                     </motion.div>
                                 )
