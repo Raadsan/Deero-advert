@@ -1,9 +1,44 @@
 "use client";
 
+import Link from "next/link";
 import Image from "next/image";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { MagnifyingGlassIcon, ExclamationCircleIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
+import { useState } from "react";
+import { checkDomainAvailability, DomainCheckResult } from "@/api/domainApi";
 
 export default function DomainSearch() {
+    const [query, setQuery] = useState("");
+    const [results, setResults] = useState<DomainCheckResult[] | null>(null);
+    const [loading, setLoading] = useState(false);
+
+    const handleSearch = async () => {
+        if (!query.trim()) return;
+        setLoading(true);
+        try {
+            // Remove extension if user typed it, backend handling might vary but let's send just the name if possible or full.
+            // Backend `const fullDomain = domain + ext;` implies we should send JUST the name (e.g. "abdi").
+            // But if user types "abdi.com", backend might double it to "abdi.com.com".
+            // Let's simple-clean: remove known extensions or just let user type name.
+            // User prompt says "abdi.com" in input in image... wait.
+            // If input is "abdi.com", and backend does `domain + ext`, it becomes `abdi.com.com`.
+            // Let's strip extension for now or assume user types name.
+            // Looking at image, input says "abdi.com".
+            // If backend is strictly `const fullDomain = domain + ext;`, I should probably strip the extension from the input if it matches one of the target extensions.
+            // Or better, just send the raw input and let backend/frontend handle...
+            // "abdi.com" -> backend adds .com -> "abdi.com.com".
+            // Quick fix: extract SLD (Second Level Domain) if possible.
+            const name = query.split('.')[0];
+            const data = await checkDomainAvailability(name);
+            if (data.success) {
+                setResults(data.results);
+            }
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <section className="bg-[#fcd7c3] py-8 sm:py-12 px-4 sm:px-10">
             <div className="mx-auto max-w-6xl flex flex-col md:flex-row items-center justify-between gap-6 sm:gap-8">
@@ -16,32 +51,101 @@ export default function DomainSearch() {
                     <div className="flex overflow-hidden rounded-md shadow-sm w-full max-w-2xl">
                         <input
                             type="text"
-                            placeholder="Search your Domain"
-                            className="flex-1 px-3 sm:px-4 py-2 sm:py-3 text-base sm:text-lg outline-none bg-white/90"
+                            value={query}
+                            onChange={(e) => setQuery(e.target.value)}
+                            placeholder="Search your Domain (e.g. abdi)"
+                            className="flex-1 px-3 sm:px-4 py-2 sm:py-3 text-base sm:text-lg outline-none bg-white/90 text-black"
                         />
-                        <button className="bg-[#651313] px-4 sm:px-6 py-2 sm:py-3 text-white flex items-center gap-1 sm:gap-2 hover:bg-[#4d0e0e] transition">
-                            <MagnifyingGlassIcon className="h-5 w-5 sm:h-6 sm:w-6" />
+                        <button
+                            onClick={handleSearch}
+                            disabled={loading}
+                            className="bg-[#651313] px-4 sm:px-6 py-2 sm:py-3 text-white flex items-center gap-1 sm:gap-2 hover:bg-[#4d0e0e] transition disabled:opacity-70"
+                        >
+                            {loading ? (
+                                <span className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full" />
+                            ) : (
+                                <MagnifyingGlassIcon className="h-5 w-5 sm:h-6 sm:w-6" />
+                            )}
                             <span className="font-bold text-sm sm:text-base">Search</span>
                         </button>
                     </div>
 
+                    {/* Banner for primary domain status */}
+                    {results && query && (() => {
+                        // Find the exact match or the .com match if no extension provided
+                        // If user typed 'abdi', we look for 'abdi.com' as primary? 
+                        // Or just look for any unavailable? 
+                        // User screenshot: "deero.com" input -> "deero.com is unavailable" banner.
+                        // My backend returns full domain. 
+                        const searchDomain = query.includes('.') ? query.toLowerCase() : `${query.toLowerCase()}.com`;
+                        const match = results.find(r => r.domain.toLowerCase() === searchDomain);
+
+                        if (match) {
+                            if (!match.available) {
+                                return (
+                                    <div className="w-full max-w-2xl bg-white rounded-md p-3 flex items-center gap-2 text-[#651313]">
+                                        <div className="bg-[#651313] rounded-full p-1">
+                                            <ExclamationCircleIcon className="w-5 h-5 text-white" />
+                                        </div>
+                                        <span className="font-medium text-lg">{match.domain} is unavailable</span>
+                                    </div>
+                                );
+                            } else {
+                                // Optional: Success banner? Or just nothing?
+                                // User only showed failure case. Let's add a success one for good UX or leave blank?
+                                // Let's leave blank to not clutter, or simple green one.
+                                // User said "like this" pointing to failure.
+                                return (
+                                    <div className="w-full max-w-2xl bg-white rounded-md p-3 flex items-center gap-2 text-green-700">
+                                        <div className="bg-green-600 rounded-full p-1">
+                                            <CheckCircleIcon className="w-5 h-5 text-white" />
+                                        </div>
+                                        <span className="font-medium text-lg">{match.domain} is available!</span>
+                                    </div>
+                                );
+                            }
+                        }
+                        return null;
+                    })()}
+
                     <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-4 sm:gap-8 text-[#651313]">
-                        <div className="text-center">
-                            <p className="text-xl sm:text-2xl font-bold">.com</p>
-                            <p className="text-xs sm:text-sm font-semibold text-[#EB4724]">$14.99/Year</p>
-                        </div>
-                        <div className="text-center">
-                            <p className="text-xl sm:text-2xl font-bold">.org</p>
-                            <p className="text-xs sm:text-sm font-semibold text-[#EB4724]">$14.99/Year</p>
-                        </div>
-                        <div className="text-center">
-                            <p className="text-xl sm:text-2xl font-bold">.net</p>
-                            <p className="text-xs sm:text-sm font-semibold text-[#EB4724]">$14.99/Year</p>
-                        </div>
-                        <div className="text-center">
-                            <p className="text-xl sm:text-2xl font-bold">.edu</p>
-                            <p className="text-xs sm:text-sm font-semibold text-[#EB4724]">$14.99/Year</p>
-                        </div>
+                        {!results ? (
+                            // Default static view
+                            <>
+                                <div className="text-center">
+                                    <p className="text-xl sm:text-2xl font-bold">.com</p>
+                                    <p className="text-xs sm:text-sm font-semibold text-[#EB4724]">$14.99/Year</p>
+                                </div>
+                                <div className="text-center">
+                                    <p className="text-xl sm:text-2xl font-bold">.org</p>
+                                    <p className="text-xs sm:text-sm font-semibold text-[#EB4724]">$14.99/Year</p>
+                                </div>
+                                <div className="text-center">
+                                    <p className="text-xl sm:text-2xl font-bold">.net</p>
+                                    <p className="text-xs sm:text-sm font-semibold text-[#EB4724]">$14.99/Year</p>
+                                </div>
+                                <div className="text-center">
+                                    <p className="text-xl sm:text-2xl font-bold">.edu</p>
+                                    <p className="text-xs sm:text-sm font-semibold text-[#EB4724]">$14.99/Year</p>
+                                </div>
+                            </>
+                        ) : (
+                            // Search Results
+                            results.map((res) => {
+                                // Extract extension for display title
+                                const ext = res.domain.substring(res.domain.lastIndexOf('.'));
+                                return (
+                                    <div key={res.domain} className="text-center">
+                                        <p className="text-xl sm:text-2xl font-bold">{ext}</p>
+                                        {res.available ? (
+                                            <p className="text-xs sm:text-sm font-semibold text-[#EB4724]">{res.price}</p>
+                                        ) : (
+                                            <p className="text-xs sm:text-sm font-bold text-red-600">Taken</p>
+                                        )}
+                                    </div>
+                                );
+                            })
+                        )}
                     </div>
                 </div>
 
