@@ -5,12 +5,13 @@ import Testimonial from "../models/TestimonialModel.js";
 // =======================
 export const addTestimonial = async (req, res) => {
   try {
-    const { clientName, clientTitle, message } = req.body;
+    const { clientName, clientTitle, message, rating } = req.body;
 
     const testimonial = new Testimonial({
       clientName,
       clientTitle,
       message,
+      rating: rating || 5,
       clientImage: req.file ? req.file.filename : ""
     });
 
@@ -43,7 +44,7 @@ export const getTestimonials = async (req, res) => {
 export const updateTestimonial = async (req, res) => {
   try {
     const { id } = req.params;
-    const { clientName, clientTitle, message } = req.body;
+    const { clientName, clientTitle, message, rating } = req.body;
 
     // Build update object (only include fields that are provided)
     const update = {};
@@ -58,6 +59,10 @@ export const updateTestimonial = async (req, res) => {
 
     if (message !== undefined) {
       update.message = message;
+    }
+
+    if (rating !== undefined) {
+      update.rating = rating;
     }
 
     // Handle client image file upload if provided (optional for update)
@@ -94,7 +99,7 @@ export const updateTestimonial = async (req, res) => {
 
   } catch (error) {
     console.error("Update Testimonial Error:", error);
-    
+
     // Handle Mongoose validation errors
     if (error.name === 'ValidationError') {
       const errors = Object.values(error.errors).map(err => err.message).join(', ');

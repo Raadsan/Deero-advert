@@ -1,9 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
+import NextImage from "next/image";
 import { StarIcon } from "@heroicons/react/24/solid";
 import { motion } from "framer-motion";
+import { getTestimonials, Testimonial } from "@/api/testimonialApi";
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL?.replace("/api", "") || "http://localhost:5000";
 
 const ratings = [
     {
@@ -20,45 +23,29 @@ const ratings = [
     },
 ];
 
-const testimonials = [
+const staticFallback: Testimonial[] = [
     {
-        id: 1,
-        text: "We owe our business growth to Deero Advert's outstanding web, graphics design, and digital marketing services. Their team's understanding of our needs and industry helped us reach our goals with tailored, effective solutions.",
-        name: "ABDIWAHAB A. ELMI",
-        role: "Managing Director of Brawa",
-        image: "/home-images/t-1.png",
+        _id: "1",
+        message: "We owe our business growth to Deero Advert's outstanding web, graphics design, and digital marketing services. Their team's understanding of our needs and industry helped us reach our goals with tailored, effective solutions.",
+        clientName: "ABDIWAHAB A. ELMI",
+        clientTitle: "MANAGING DIRECTOR OF BRAWA",
+        clientImage: "/home-images/t-1.png",
         rating: 5,
     },
     {
-        id: 2,
-        text: "Deero Advert played a key role in the success of SIMAD University's 20th Anniversary. Their creativity and collaboration significantly boosted the branding and visibility of the event. We truly value their professionalism.",
-        name: "Eng. Mohamed Mohamud",
-        role: "SIMAD University",
-        image: "/home-images/t-2.png",
+        _id: "2",
+        message: "Deero Advert played a key role in the success of SIMAD University's 20th Anniversary. Their creativity and collaboration significantly boosted the branding and visibility of the event.",
+        clientName: "Eng. Mohamed Mohamud",
+        clientTitle: "SIMAD UNIVERSITY",
+        clientImage: "/home-images/t-2.png",
         rating: 5,
     },
     {
-        id: 3,
-        text: "I'm deeply impressed by Deero Advert's dedication and results-driven work. Their professionalism, skill, and attention to detail truly exceeded my expectations. It was a pleasure working with such a talented team.",
-        name: "ABDIRAHMAN H. DHIBLAWE",
-        role: "Director SIMAD Institute",
-        image: "/home-images/t-3.png",
-        rating: 5,
-    },
-    {
-        id: 4,
-        text: "Deero Advert consistently delivers high-quality work and great communication. Their team helped us refine our message and deliver polished creative assets.",
-        name: "Hodan A.",
-        role: "Marketing Lead",
-        image: "/home-images/t-4.png",
-        rating: 5,
-    },
-    {
-        id: 5,
-        text: "Working with Deero Advert was seamless — creative ideas and measurable results. Highly recommended!",
-        name: "Yusuf M.",
-        role: "Founder",
-        image: "/home-images/t-5.png",
+        _id: "3",
+        message: "I'm deeply impressed by Deero Advert's dedication and results-driven work. Their professionalism, skill, and attention to detail truly exceeded my expectations.",
+        clientName: "ABDIRAHMAN H. DHIBLAWE",
+        clientTitle: "DIRECTOR SIMAD INSTITUTE",
+        clientImage: "/home-images/t-3.png",
         rating: 5,
     },
 ];
@@ -80,35 +67,60 @@ const itemVariants = {
 
 export default function TestimonialsSection() {
     const [currentIndex, setCurrentIndex] = useState(0);
-    const visibleCount = 3; // number of testimonials visible at once on md+
+    const [dynamicTestimonials, setDynamicTestimonials] = useState<Testimonial[]>([]);
+    const [loading, setLoading] = useState(true);
+    const visibleCount = 3;
 
     useEffect(() => {
-        const total = Math.max(1, testimonials.length - visibleCount + 1);
+        const fetch = async () => {
+            try {
+                console.log("Fetching testimonials...");
+                const data = await getTestimonials();
+                console.log("Fetched data:", data);
+                if (data && data.length > 0) {
+                    setDynamicTestimonials(data);
+                }
+            } catch (err) {
+                console.error("Failed to fetch testimonials", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetch();
+    }, []);
+
+    const getTestimonialsToDisplay = () => {
+        return dynamicTestimonials.length > 0 ? dynamicTestimonials : staticFallback;
+    };
+
+    const testimonialsToDisplay = getTestimonialsToDisplay();
+
+    useEffect(() => {
+        if (testimonialsToDisplay.length <= visibleCount) {
+            setCurrentIndex(0);
+            return;
+        }
+
+        const total = testimonialsToDisplay.length - visibleCount + 1;
         const interval = setInterval(() => {
             setCurrentIndex((prev) => (prev + 1) % total);
-        }, 5000); // 5 seconds
+        }, 5000);
         return () => clearInterval(interval);
-    }, []);
+    }, [testimonialsToDisplay]);
 
     return (
         <>
             {/* Top Ratings Bar Section - White Background */}
             <section className="bg-white py-12 px-4 sm:px-10 overflow-hidden relative border-b border-gray-100">
-                <motion.div
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, amount: 0.5 }}
-                    variants={containerVariants}
-                    className="mx-auto max-w-6xl"
-                >
+                <div className="mx-auto max-w-6xl">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         {ratings.map((item, index) => (
                             <motion.div
                                 key={index}
-                                variants={{
-                                    hidden: { opacity: 0, x: index === 0 ? -50 : 50 },
-                                    visible: { opacity: 1, x: 0, transition: { duration: 0.6 } }
-                                }}
+                                initial={{ opacity: 0, x: index === 0 ? -50 : 50 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.6 }}
+                                viewport={{ once: true }}
                                 whileHover={{ scale: 1.02 }}
                                 className="bg-white border border-gray-100 rounded-2xl p-8 flex items-center justify-between shadow-sm hover:shadow-lg transition-all duration-300 group"
                             >
@@ -129,98 +141,108 @@ export default function TestimonialsSection() {
                             </motion.div>
                         ))}
                     </div>
-                </motion.div>
+                </div>
             </section>
 
             {/* Testimonials Content Section - Grey Background */}
-            <section className="bg-[#f8f9fa] py-24 px-4 sm:px-10 overflow-hidden">
-                <motion.div
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, amount: 0.2 }}
-                    variants={containerVariants}
-                    className="mx-auto max-w-7xl"
-                >
+            <section className="bg-[#f8f9fa] py-24 px-4 sm:px-10 overflow-hidden min-h-[600px]">
+                <div className="mx-auto max-w-7xl">
                     {/* Section Title */}
                     <div className="text-center mb-16">
-                        <motion.h2 variants={itemVariants} className="text-3xl md:text-4xl font-bold text-[#651313] mb-4">
+                        <h2 className="text-3xl md:text-4xl font-bold text-[#651313] mb-4">
                             What Our Clients Say
-                        </motion.h2>
-                        <motion.div variants={itemVariants} className="w-20 h-1.5 bg-[#EB4724] mx-auto rounded-full"></motion.div>
+                        </h2>
+                        <div className="w-20 h-1.5 bg-[#EB4724] mx-auto rounded-full"></div>
                     </div>
 
                     {/* Testimonial Slider */}
-                    <div className="relative overflow-hidden w-full px-2 py-4">
-                        <motion.div
-                            variants={containerVariants}
-                            className="flex transition-transform duration-700 ease-in-out"
-                            style={{ transform: `translateX(-${currentIndex * (100 / visibleCount)}%)` }}
-                        >
-                            {testimonials.map((item) => (
+                    <div className="relative w-full px-2 py-4">
+                        {loading && (
+                            <div className="flex justify-center items-center py-20">
+                                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#EB4724]"></div>
+                            </div>
+                        )}
+
+                        {!loading && testimonialsToDisplay.length === 0 && (
+                            <div className="text-center py-20 text-gray-500 font-medium">
+                                No testimonials found.
+                            </div>
+                        )}
+
+                        {!loading && testimonialsToDisplay.length > 0 && (
+                            <div className="overflow-hidden">
                                 <motion.div
-                                    key={item.id}
-                                    variants={itemVariants}
-                                    className="flex-shrink-0 w-full md:w-1/3 px-4"
+                                    className={`flex transition-transform duration-700 ease-in-out ${testimonialsToDisplay.length < visibleCount ? 'justify-center' : ''}`}
+                                    style={{
+                                        transform: testimonialsToDisplay.length > visibleCount ? `translateX(-${currentIndex * (100 / visibleCount)}%)` : 'none'
+                                    }}
                                 >
-                                    <div className="bg-white rounded-3xl p-8 shadow-[0_10px_40px_-15px_rgba(0,0,0,0.1)] hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] transition-all duration-300 h-full flex flex-col relative border border-gray-50 group">
+                                    {testimonialsToDisplay.map((item) => (
+                                        <div
+                                            key={item._id}
+                                            className="flex-shrink-0 w-full md:w-1/3 px-4"
+                                        >
+                                            <div className="bg-white rounded-3xl p-8 shadow-[0_10px_40px_-15px_rgba(0,0,0,0.1)] hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] transition-all duration-300 h-full flex flex-col relative border border-gray-50 group">
+                                                {/* Quote Icon */}
+                                                <div className="absolute top-6 right-8 text-[#EB4724]/10 group-hover:text-[#EB4724]/20 transition-colors duration-300 text-3xl font-serif">
+                                                    "
+                                                </div>
 
-                                        {/* Quote Icon */}
-                                        <div className="absolute top-6 right-8 text-[#EB4724]/10 group-hover:text-[#EB4724]/20 transition-colors duration-300">
-                                            <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor">
-                                                <path d="M14.017 21L14.017 18C14.017 16.0547 15.3739 14.7919 16.6661 14.1576L16.5161 14.1204C16.8961 14.0254 17.5144 13.8706 17.5144 12.9248V10.2977H14.017V6H19V12.9248C19 18.068 15.3614 20.3129 14.017 21ZM5 21L5 18C5 16.0547 6.35695 14.7919 7.64917 14.1576L7.49914 14.1204C7.87914 14.0254 8.49751 13.8706 8.49751 12.9248V10.2977H5V6H9.98299V12.9248C9.98299 18.068 6.34437 20.3129 5 21Z" />
-                                            </svg>
-                                        </div>
+                                                {/* Rating */}
+                                                <div className="flex gap-1 mb-6">
+                                                    {[...Array(item.rating || 5)].map((_, i) => (
+                                                        <StarIcon key={i} className="w-5 h-5 text-[#EB4724]" />
+                                                    ))}
+                                                </div>
 
-                                        {/* Rating */}
-                                        <div className="flex gap-1 mb-6">
-                                            {[...Array(item.rating)].map((_, i) => (
-                                                <StarIcon key={i} className="w-5 h-5 text-[#EB4724]" />
-                                            ))}
-                                        </div>
-
-                                        {/* Text */}
-                                        <p className="text-gray-600 text-[15px] leading-relaxed mb-8 flex-grow font-medium">
-                                            "{item.text}"
-                                        </p>
-
-                                        {/* User Info */}
-                                        <div className="mt-auto flex items-center gap-4 pt-6 border-t border-gray-100">
-                                            <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-white shadow-md flex-shrink-0">
-                                                <Image
-                                                    src={item.image}
-                                                    alt={item.name}
-                                                    width={56}
-                                                    height={56}
-                                                    className="w-full h-full object-cover"
-                                                />
-                                            </div>
-                                            <div>
-                                                <h4 className="text-[#651313] font-bold text-sm uppercase tracking-wide leading-tight mb-1">
-                                                    {item.name}
-                                                </h4>
-                                                <p className="text-gray-400 text-xs font-semibold uppercase tracking-wider">
-                                                    {item.role}
+                                                {/* Text */}
+                                                <p className="text-gray-600 text-[15px] leading-relaxed mb-8 flex-grow font-medium italic">
+                                                    "{item.message}"
                                                 </p>
+
+                                                {/* User Info */}
+                                                <div className="mt-auto flex items-center gap-4 pt-6 border-t border-gray-100">
+                                                    <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-white shadow-md flex-shrink-0 bg-gray-50">
+                                                        <NextImage
+                                                            src={item.clientImage ? (item.clientImage.startsWith('http') || item.clientImage.startsWith('/') ? item.clientImage : `${API_URL}/uploads/${item.clientImage}`) : "/home-images/placeholder.png"}
+                                                            alt={item.clientName}
+                                                            width={56}
+                                                            height={56}
+                                                            className="w-full h-full object-cover"
+                                                            unoptimized // helpful to avoid local next/image path issues for now
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <h4 className="text-[#EB4724] font-bold text-sm uppercase tracking-wide leading-tight mb-1">
+                                                            {item.clientName}
+                                                        </h4>
+                                                        <p className="text-[#2B5A8E] text-[10px] font-bold uppercase tracking-wider">
+                                                            {item.clientTitle}
+                                                        </p>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    ))}
                                 </motion.div>
-                            ))}
-                        </motion.div>
+                            </div>
+                        )}
 
                         {/* Navigation Dots */}
-                        <div className="flex justify-center gap-2 mt-12">
-                            {Array.from({ length: Math.max(1, testimonials.length - visibleCount + 1) }).map((_, i) => (
-                                <button
-                                    key={i}
-                                    onClick={() => setCurrentIndex(i)}
-                                    className={`h-2 rounded-full transition-all duration-300 ${currentIndex === i ? "w-8 bg-[#EB4724]" : "w-2 bg-gray-300 hover:bg-gray-400"}`}
-                                    aria-label={`Go to testimonial group ${i + 1}`}
-                                />
-                            ))}
-                        </div>
+                        {testimonialsToDisplay.length > visibleCount && (
+                            <div className="flex justify-center gap-2 mt-12">
+                                {Array.from({ length: testimonialsToDisplay.length - visibleCount + 1 }).map((_, i) => (
+                                    <button
+                                        key={i}
+                                        onClick={() => setCurrentIndex(i)}
+                                        className={`h-2 rounded-full transition-all duration-300 ${currentIndex === i ? "w-8 bg-[#EB4724]" : "w-2 bg-gray-300 hover:bg-gray-400"}`}
+                                        aria-label={`Go to testimonial group ${i + 1}`}
+                                    />
+                                ))}
+                            </div>
+                        )}
                     </div>
-                </motion.div>
+                </div>
             </section>
         </>
     );
