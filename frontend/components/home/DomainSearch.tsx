@@ -40,7 +40,7 @@ export default function DomainSearch() {
                             type="text"
                             value={query}
                             onChange={(e) => setQuery(e.target.value)}
-                            placeholder="Search your Domain (e.g. abdi)"
+                            placeholder="Search your Domain"
                             className="flex-1 px-3 sm:px-4 py-2 sm:py-3 text-base sm:text-lg outline-none bg-white/90 text-black"
                         />
                         <button

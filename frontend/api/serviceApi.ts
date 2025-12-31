@@ -15,9 +15,8 @@ export interface Service {
 
 import axios from "@/api/axios";
 
-export const getAllServices = async (): Promise<Service[]> => {
-  const response = await axios.get("/service/");
-  return response.data;
+export const getAllServices = (): Promise<any> => {
+  return axios.get("/service/");
 };
 
 export const getServiceById = async (id: string): Promise<Service> => {

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { LayoutDashboard, Users, Settings, FileText, BarChart3, LogOut, X, Briefcase, Newspaper, Award, MessageSquare } from "lucide-react";
+import { LayoutDashboard, Users, Settings, FileText, BarChart3, LogOut, X, Briefcase, Newspaper, Award, MessageSquare, Calendar } from "lucide-react";
 import Image from "next/image";
 import { logout } from "../../api/authApi";
 
@@ -13,6 +13,7 @@ const sidebarLinks = [
     { label: "Blogs", href: "/admin/blogs", icon: Newspaper },
     { label: "Achievements", href: "/admin/achievements", icon: Award },
     { label: "Testimonials", href: "/admin/testmonial", icon: MessageSquare },
+    { label: "Events & News", href: "/admin/events-news", icon: Calendar },
     { label: "Reports", href: "/admin/reports", icon: FileText },
 ];
 
@@ -86,7 +87,7 @@ export default function Sidebar({ isOpen, onClose }: { isOpen?: boolean; onClose
 
                     {/* Bottom Actions */}
                     <div className="mt-auto border-t border-white/10 pt-4">
-                        <button 
+                        <button
                             onClick={handleLogout}
                             className="flex w-full items-center rounded-lg px-4 py-3 text-white/80 transition-colors hover:bg-white/10 hover:text-white"
                         >

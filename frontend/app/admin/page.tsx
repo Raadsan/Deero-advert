@@ -5,6 +5,7 @@ import { Users, DollarSign, TrendingUp, Activity, Briefcase, Newspaper, Award, M
 import { getAllServices } from "@/api/serviceApi";
 import { getAllUsers } from "@/api/usersApi";
 import { getAllAchievements } from "@/api/achievementApi";
+import { getAllEventsNews } from "@/api/eventsNewsApi";
 import DataTable from "@/components/admin/DataTable";
 
 export default function AdminPage() {
@@ -34,12 +35,14 @@ export default function AdminPage() {
     const [loading, setLoading] = useState(true);
     const [topUsers, setTopUsers] = useState<any[]>([]);
     const [usersLoading, setUsersLoading] = useState(true);
+    const [eventsNews, setEventsNews] = useState<any[]>([]);
+    const [eventsLoading, setEventsLoading] = useState(true);
 
     useEffect(() => {
         const fetchStats = async () => {
             try {
                 setLoading(true);
-                
+
                 // Fetch all data in parallel
                 const [servicesRes, usersRes, achievementsRes] = await Promise.all([
                     getAllServices(),
@@ -48,11 +51,12 @@ export default function AdminPage() {
                 ]);
 
                 // Extract counts from backend responses
-                // Services and Achievements return { data: [...], count: number }
-                // Users returns array directly
-                const servicesCount = servicesRes.data?.count || 0;
+                const servicesResAny = servicesRes as any;
+                const achievementsResAny = achievementsRes as any;
+
+                const servicesCount = servicesResAny.data?.count || servicesResAny.data?.data?.length || 0;
                 const usersCount = Array.isArray(usersRes.data) ? usersRes.data.length : 0;
-                const achievementsCount = achievementsRes.data?.count || 0;
+                const achievementsCount = achievementsResAny.data?.count || achievementsResAny.data?.data?.length || 0;
 
                 // Format numbers with commas
                 const formatNumber = (num: number) => {
@@ -98,12 +102,12 @@ export default function AdminPage() {
                 setUsersLoading(true);
                 const res = await getAllUsers();
                 const users = Array.isArray(res.data) ? res.data : [];
-                
+
                 // Filter only users with role "user" (exclude admins)
-                const regularUsers = users.filter((user: any) => 
+                const regularUsers = users.filter((user: any) =>
                     user.role === "user" || !user.role || user.role === undefined
                 );
-                
+
                 // Sort by createdAt (newest first) and take top 10
                 const sortedUsers = [...regularUsers]
                     .sort((a, b) => {
@@ -112,7 +116,7 @@ export default function AdminPage() {
                         return dateB - dateA;
                     })
                     .slice(0, 10);
-                
+
                 setTopUsers(sortedUsers);
             } catch (error) {
                 console.error("Error fetching top users:", error);
@@ -122,6 +126,25 @@ export default function AdminPage() {
         };
 
         fetchTopUsers();
+    }, []);
+
+    useEffect(() => {
+        const fetchEventsNews = async () => {
+            try {
+                setEventsLoading(true);
+                const res = await getAllEventsNews();
+                if (res.data.success) {
+                    // Take top 5 for the dashboard
+                    setEventsNews(res.data.data.slice(0, 5));
+                }
+            } catch (error) {
+                console.error("Error fetching events & news:", error);
+            } finally {
+                setEventsLoading(false);
+            }
+        };
+
+        fetchEventsNews();
     }, []);
     return (
         <div className="space-y-6">
@@ -213,7 +236,7 @@ export default function AdminPage() {
                                     <stop offset="100%" stopColor="#EB4724" />
                                 </linearGradient>
                             </defs>
-                            
+
                             {/* Grid lines */}
                             {[0, 1, 2, 3, 4].map((i) => (
                                 <line
@@ -226,7 +249,7 @@ export default function AdminPage() {
                                     strokeWidth="1"
                                 />
                             ))}
-                            
+
                             {/* Data points */}
                             <path
                                 d="M 50,200 Q 150,180 250,150 T 450,100 T 550,80"
@@ -235,13 +258,13 @@ export default function AdminPage() {
                                 strokeWidth="3"
                                 strokeLinecap="round"
                             />
-                            
+
                             {/* Area fill */}
                             <path
                                 d="M 50,200 Q 150,180 250,150 T 450,100 T 550,80 L 550,250 L 50,250 Z"
                                 fill="url(#revenueGradient)"
                             />
-                            
+
                             {/* Data points circles */}
                             {[
                                 { x: 50, y: 200 },
@@ -261,7 +284,7 @@ export default function AdminPage() {
                                     strokeWidth="2"
                                 />
                             ))}
-                            
+
                             {/* X-axis labels */}
                             {["Jan", "Feb", "Mar", "Apr", "May", "Jun"].map((label, i) => (
                                 <text
@@ -275,7 +298,7 @@ export default function AdminPage() {
                                     {label}
                                 </text>
                             ))}
-                            
+
                             {/* Y-axis labels */}
                             {["$0", "$10k", "$20k", "$30k", "$40k"].map((label, i) => (
                                 <text
@@ -294,83 +317,65 @@ export default function AdminPage() {
                 </div>
 
                 {/* Recent Activity Chart */}
-              <div className="col-span-3 rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
-    <div className="mb-4 flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-gray-900">Events & News</h3>
-        <Activity className="h-5 w-5 text-[#EB4724]" />
-    </div>
-
-    <div className="space-y-4">
-        {[
-            {
-                title: "Annual Tech Conference",
-                date: "Jan 10, 2025",
-                category: "Event",
-                trend: "up"
-            },
-            {
-                title: "New Website Launched",
-                date: "Jan 8, 2025",
-                category: "News",
-                trend: "up"
-            },
-            {
-                title: "Partnership Announcement",
-                date: "Jan 5, 2025",
-                category: "News",
-                trend: "up"
-            },
-            {
-                title: "Startup Pitch Event",
-                date: "Jan 2, 2025",
-                category: "Event",
-                trend: "up"
-            },
-            {
-                title: "Product Update Released",
-                date: "Dec 30, 2024",
-                category: "News",
-                trend: "up"
-            },
-        ].map((item, i) => (
-            <div
-                key={i}
-                className="flex items-center gap-3 p-3 rounded-lg bg-gradient-to-r from-gray-50 to-white hover:from-gray-100 hover:shadow-sm transition-all border border-gray-100"
-            >
-                <div className="relative flex-shrink-0">
-                    <div className="h-10 w-10 rounded-full bg-gradient-to-br from-[#651313] to-[#EB4724] flex items-center justify-center shadow-sm">
-                        <Activity className="h-5 w-5 text-white" />
+                <div className="col-span-3 rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+                    <div className="mb-4 flex items-center justify-between">
+                        <h3 className="text-lg font-semibold text-gray-900">Events & News</h3>
+                        <Activity className="h-5 w-5 text-[#EB4724]" />
                     </div>
 
-                    {item.trend === "up" && (
-                        <div className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-green-500 border-2 border-white flex items-center justify-center">
-                            <ArrowUpRight className="h-2.5 w-2.5 text-white" />
-                        </div>
-                    )}
-                </div>
+                    <div className="space-y-4">
+                        {eventsLoading ? (
+                            // Loading skeleton for events
+                            [1, 2, 3].map((i) => (
+                                <div key={i} className="h-16 bg-gray-50 rounded-lg animate-pulse"></div>
+                            ))
+                        ) : eventsNews.length > 0 ? (
+                            eventsNews.map((item, i) => (
+                                <div
+                                    key={i}
+                                    className="flex items-center gap-3 p-3 rounded-lg bg-gradient-to-r from-gray-50 to-white hover:from-gray-100 hover:shadow-sm transition-all border border-gray-100"
+                                >
+                                    <div className="relative flex-shrink-0">
+                                        <div className="h-10 w-10 rounded-full bg-gradient-to-br from-[#651313] to-[#EB4724] flex items-center justify-center shadow-sm">
+                                            <Activity className="h-5 w-5 text-white" />
+                                        </div>
 
-                <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-gray-900 truncate">
-                        {item.title}
-                    </p>
-                    <p className="text-xs text-gray-500 mt-0.5">
-                        {item.date}
-                    </p>
-                </div>
+                                        <div className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-green-500 border-2 border-white flex items-center justify-center">
+                                            <ArrowUpRight className="h-2.5 w-2.5 text-white" />
+                                        </div>
+                                    </div>
 
-                <div className="flex items-center gap-1 text-sm font-bold text-[#EB4724] flex-shrink-0">
-                    {item.category}
-                </div>
-            </div>
-        ))}
-    </div>
+                                    <div className="flex-1 min-w-0">
+                                        <p className="text-sm font-semibold text-gray-900 truncate">
+                                            {item.title}
+                                        </p>
+                                        <p className="text-xs text-gray-500 mt-0.5">
+                                            {new Date(item.date).toLocaleDateString('en-US', {
+                                                month: 'short',
+                                                day: 'numeric',
+                                                year: 'numeric'
+                                            })}
+                                        </p>
+                                    </div>
 
-    <div className="mt-4 pt-4 border-t border-gray-100">
-        <button className="w-full text-sm font-medium text-[#651313] hover:text-[#EB4724] transition-colors">
-            View All Events & News →
-        </button>
-    </div>
-            </div>
+                                    <div className="flex items-center gap-1 text-sm font-bold text-[#EB4724] flex-shrink-0 capitalize">
+                                        {item.type}
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            <div className="text-center py-6 text-gray-400 text-sm italic">
+                                No events or news found.
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="mt-4 pt-4 border-t border-gray-100">
+                        <button className="w-full text-sm font-medium text-[#651313] hover:text-[#EB4724] transition-colors">
+                            View All Events & News →
+                        </button>
+                    </div>
+                </div>
             </div>
 
             {/* Top 10 Users Section */}
@@ -429,11 +434,10 @@ export default function AdminPage() {
                             key: "role",
                             width: "120px",
                             render: (row: any) => (
-                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                    row.role === "admin" 
-                                        ? "bg-purple-100 text-purple-700 border border-purple-200" 
-                                        : "bg-blue-100 text-blue-700 border border-blue-200"
-                                }`}>
+                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${row.role === "admin"
+                                    ? "bg-purple-100 text-purple-700 border border-purple-200"
+                                    : "bg-blue-100 text-blue-700 border border-blue-200"
+                                    }`}>
                                     {row.role || "user"}
                                 </span>
                             ),
