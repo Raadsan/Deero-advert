@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import ServiceCard from "./ServiceCard";
-import { getAllServices, Service } from "@/api/serviceApi";
+import { getAllServices, Service } from "../../api/serviceApi";
 import { CheckIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 
 const HEADER_OFFSET = 170; // match fixed header height

@@ -23,32 +23,7 @@ const ratings = [
     },
 ];
 
-const staticFallback: Testimonial[] = [
-    {
-        _id: "1",
-        message: "We owe our business growth to Deero Advert's outstanding web, graphics design, and digital marketing services. Their team's understanding of our needs and industry helped us reach our goals with tailored, effective solutions.",
-        clientName: "ABDIWAHAB A. ELMI",
-        clientTitle: "MANAGING DIRECTOR OF BRAWA",
-        clientImage: "/home-images/t-1.png",
-        rating: 5,
-    },
-    {
-        _id: "2",
-        message: "Deero Advert played a key role in the success of SIMAD University's 20th Anniversary. Their creativity and collaboration significantly boosted the branding and visibility of the event.",
-        clientName: "Eng. Mohamed Mohamud",
-        clientTitle: "SIMAD UNIVERSITY",
-        clientImage: "/home-images/t-2.png",
-        rating: 5,
-    },
-    {
-        _id: "3",
-        message: "I'm deeply impressed by Deero Advert's dedication and results-driven work. Their professionalism, skill, and attention to detail truly exceeded my expectations.",
-        clientName: "ABDIRAHMAN H. DHIBLAWE",
-        clientTitle: "DIRECTOR SIMAD INSTITUTE",
-        clientImage: "/home-images/t-3.png",
-        rating: 5,
-    },
-];
+
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -91,11 +66,7 @@ export default function TestimonialsSection() {
         return () => clearInterval(pollInterval);
     }, []);
 
-    const getTestimonialsToDisplay = () => {
-        return dynamicTestimonials.length > 0 ? dynamicTestimonials : staticFallback;
-    };
-
-    const testimonialsToDisplay = getTestimonialsToDisplay();
+    const testimonialsToDisplay = dynamicTestimonials;
 
     useEffect(() => {
         if (testimonialsToDisplay.length <= visibleCount) {

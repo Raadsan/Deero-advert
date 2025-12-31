@@ -12,6 +12,7 @@ import userRoute from "./routes/userRoute.js";
 import permissionRoutes from "./routes/permissionRoutes.js";
 import roleRoutes from "./routes/roleRoutes.js";
 import menuRoutes from "./routes/menuRoutes.js";
+import contactRoute from "./routes/contactRoute.js";
 
 import path from "path";
 import { fileURLToPath } from "url";
@@ -42,6 +43,7 @@ app.use("/api/users", userRoute);
 app.use("/api/permissions", permissionRoutes);
 app.use("/api/roles", roleRoutes);
 app.use("/api/menus", menuRoutes);
+app.use("/api/contact", contactRoute);
 app.use(multerErrorHandler);
 const PORT = process.env.PORT || 5000;
 
