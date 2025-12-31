@@ -15,20 +15,7 @@ export default function DomainSearch() {
         if (!query.trim()) return;
         setLoading(true);
         try {
-            // Remove extension if user typed it, backend handling might vary but let's send just the name if possible or full.
-            // Backend `const fullDomain = domain + ext;` implies we should send JUST the name (e.g. "abdi").
-            // But if user types "abdi.com", backend might double it to "abdi.com.com".
-            // Let's simple-clean: remove known extensions or just let user type name.
-            // User prompt says "abdi.com" in input in image... wait.
-            // If input is "abdi.com", and backend does `domain + ext`, it becomes `abdi.com.com`.
-            // Let's strip extension for now or assume user types name.
-            // Looking at image, input says "abdi.com".
-            // If backend is strictly `const fullDomain = domain + ext;`, I should probably strip the extension from the input if it matches one of the target extensions.
-            // Or better, just send the raw input and let backend/frontend handle...
-            // "abdi.com" -> backend adds .com -> "abdi.com.com".
-            // Quick fix: extract SLD (Second Level Domain) if possible.
-            const name = query.split('.')[0];
-            const data = await checkDomainAvailability(name);
+            const data = await checkDomainAvailability(query);
             if (data.success) {
                 setResults(data.results);
             }
@@ -72,11 +59,6 @@ export default function DomainSearch() {
 
                     {/* Banner for primary domain status */}
                     {results && query && (() => {
-                        // Find the exact match or the .com match if no extension provided
-                        // If user typed 'abdi', we look for 'abdi.com' as primary? 
-                        // Or just look for any unavailable? 
-                        // User screenshot: "deero.com" input -> "deero.com is unavailable" banner.
-                        // My backend returns full domain. 
                         const searchDomain = query.includes('.') ? query.toLowerCase() : `${query.toLowerCase()}.com`;
                         const match = results.find(r => r.domain.toLowerCase() === searchDomain);
 
@@ -91,10 +73,6 @@ export default function DomainSearch() {
                                     </div>
                                 );
                             } else {
-                                // Optional: Success banner? Or just nothing?
-                                // User only showed failure case. Let's add a success one for good UX or leave blank?
-                                // Let's leave blank to not clutter, or simple green one.
-                                // User said "like this" pointing to failure.
                                 return (
                                     <div className="w-full max-w-2xl bg-white rounded-md p-3 flex items-center gap-2 text-green-700">
                                         <div className="bg-green-600 rounded-full p-1">
@@ -108,39 +86,36 @@ export default function DomainSearch() {
                         return null;
                     })()}
 
-                    <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-4 sm:gap-8 text-[#651313]">
+                    <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-6 sm:gap-12 text-[#651313]">
                         {!results ? (
-                            // Default static view
                             <>
                                 <div className="text-center">
-                                    <p className="text-xl sm:text-2xl font-bold">.com</p>
-                                    <p className="text-xs sm:text-sm font-semibold text-[#EB4724]">$14.99/Year</p>
+                                    <p className="text-2xl sm:text-3xl font-bold">.com</p>
+                                    <p className="text-sm sm:text-base font-semibold text-[#EB4724]">$14.99/Year</p>
                                 </div>
                                 <div className="text-center">
-                                    <p className="text-xl sm:text-2xl font-bold">.org</p>
-                                    <p className="text-xs sm:text-sm font-semibold text-[#EB4724]">$14.99/Year</p>
+                                    <p className="text-2xl sm:text-3xl font-bold">.org</p>
+                                    <p className="text-sm sm:text-base font-semibold text-[#EB4724]">$14.99/Year</p>
                                 </div>
                                 <div className="text-center">
-                                    <p className="text-xl sm:text-2xl font-bold">.net</p>
-                                    <p className="text-xs sm:text-sm font-semibold text-[#EB4724]">$14.99/Year</p>
+                                    <p className="text-2xl sm:text-3xl font-bold">.net</p>
+                                    <p className="text-sm sm:text-base font-semibold text-[#EB4724]">$14.99/Year</p>
                                 </div>
                                 <div className="text-center">
-                                    <p className="text-xl sm:text-2xl font-bold">.edu</p>
-                                    <p className="text-xs sm:text-sm font-semibold text-[#EB4724]">$14.99/Year</p>
+                                    <p className="text-2xl sm:text-3xl font-bold">.edu</p>
+                                    <p className="text-sm sm:text-base font-semibold text-[#EB4724]">$14.99/Year</p>
                                 </div>
                             </>
                         ) : (
-                            // Search Results
                             results.map((res) => {
-                                // Extract extension for display title
                                 const ext = res.domain.substring(res.domain.lastIndexOf('.'));
                                 return (
                                     <div key={res.domain} className="text-center">
-                                        <p className="text-xl sm:text-2xl font-bold">{ext}</p>
+                                        <p className="text-2xl sm:text-3xl font-bold">{ext}</p>
                                         {res.available ? (
-                                            <p className="text-xs sm:text-sm font-semibold text-[#EB4724]">{res.price}</p>
+                                            <p className="text-sm sm:text-base font-semibold text-[#EB4724]">{res.price}</p>
                                         ) : (
-                                            <p className="text-xs sm:text-sm font-bold text-red-600">Taken</p>
+                                            <p className="text-sm sm:text-base font-bold text-red-600">Taken</p>
                                         )}
                                     </div>
                                 );
