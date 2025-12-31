@@ -14,6 +14,7 @@ const sidebarLinks = [
     { label: "Achievements", href: "/admin/achievements", icon: Award },
     { label: "Testimonials", href: "/admin/testmonial", icon: MessageSquare },
     { label: "Events & News", href: "/admin/events-news", icon: Calendar },
+    { label: "Careers", href: "/admin/careers", icon: Briefcase },
     { label: "Reports", href: "/admin/reports", icon: FileText },
 ];
 

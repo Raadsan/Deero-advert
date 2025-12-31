@@ -76,7 +76,7 @@ export default function Header() {
           </Link>
           <span className="hidden sm:inline">|</span>
           <Link
-            href="/career"
+            href="/careers"
             className="transition hover:text-[#EB4724]"
           >
             Career

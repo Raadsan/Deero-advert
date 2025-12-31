@@ -2,10 +2,10 @@
 
 import { motion } from "framer-motion";
 
-export default function NewsHero() {
+export default function CareersHero() {
     return (
         <section className="relative w-full bg-gradient-to-r from-[#4d0e0e] via-[#651313] to-[#EB4724] py-16 lg:py-20 px-4 overflow-hidden">
-            {/* Watermark Pattern - Single Row */}
+            {/* Watermark Pattern */}
             <div className="absolute inset-0 flex items-center justify-between opacity-10 pointer-events-none select-none px-4">
                 {Array.from({ length: 7 }).map((_, i) => (
                     <div key={i} className="w-24 h-24 md:w-32 md:h-32 relative shrink-0">
@@ -25,7 +25,7 @@ export default function NewsHero() {
                     transition={{ duration: 0.6 }}
                     className="text-3xl md:text-4xl lg:text-5xl font-bold text-white"
                 >
-                    News & Updates
+                    Open Positions
                 </motion.h1>
                 <motion.p
                     initial={{ opacity: 0, y: 20 }}
@@ -33,11 +33,12 @@ export default function NewsHero() {
                     transition={{ duration: 0.6, delay: 0.2 }}
                     className="text-white/90 max-w-2xl text-sm md:text-base"
                 >
-                    Stay up to date with Deero Advert – latest campaigns, brand launches,
-                    industry insights and stories from our creative team.
+                    We're always looking for passionate creatives. Send your portfolio and CV to{" "}
+                    <a href="mailto:info@advert.deero.so" className="font-bold underline hover:text-white transition-colors">
+                        info@advert.deero.so
+                    </a>
                 </motion.p>
             </div>
         </section>
     );
 }
-

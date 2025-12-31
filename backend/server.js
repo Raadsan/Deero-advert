@@ -14,6 +14,7 @@ import roleRoutes from "./routes/roleRoutes.js";
 import menuRoutes from "./routes/menuRoutes.js";
 import contactRoute from "./routes/contactRoute.js";
 import eventsNewsRoutes from "./routes/eventNewsroutes.js";
+import careerRoutes from "./routes/careerRoutes.js";
 
 import path from "path";
 import { fileURLToPath } from "url";
@@ -46,6 +47,7 @@ app.use("/api/roles", roleRoutes);
 app.use("/api/menus", menuRoutes);
 app.use("/api/contact", contactRoute);
 app.use("/api/events-news", eventsNewsRoutes);
+app.use("/api/careers", careerRoutes);
 app.use(multerErrorHandler);
 const PORT = process.env.PORT || 5000;
 

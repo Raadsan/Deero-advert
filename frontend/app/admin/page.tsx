@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { Users, DollarSign, TrendingUp, Activity, Briefcase, Newspaper, Award, MessageSquare, ArrowUpRight, ArrowDownRight } from "lucide-react";
 import { getAllServices } from "@/api/serviceApi";
 import { getAllUsers } from "@/api/usersApi";
@@ -371,9 +372,9 @@ export default function AdminPage() {
                     </div>
 
                     <div className="mt-4 pt-4 border-t border-gray-100">
-                        <button className="w-full text-sm font-medium text-[#651313] hover:text-[#EB4724] transition-colors">
+                        <Link href="/admin/events-news" className="block w-full text-center text-sm font-medium text-[#651313] hover:text-[#EB4724] transition-colors">
                             View All Events & News →
-                        </button>
+                        </Link>
                     </div>
                 </div>
             </div>
