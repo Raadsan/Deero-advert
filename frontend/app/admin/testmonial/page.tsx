@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import DataTable from "@/components/admin/DataTable";
 import Modal from "@/components/admin/Modal";
-import { Pencil, Trash2, Camera } from "lucide-react";
+import { Pencil, Trash2, Camera, Star as StarIcon } from "lucide-react";
 import {
   getAllTestimonials,
   createTestimonial,
@@ -23,6 +23,7 @@ export default function TestimonialsPage() {
     clientImage: null as File | null,
     clientImagePreview: "",
     message: "",
+    rating: 5,
   });
 
   // ✅ Fetch testimonials from backend
@@ -40,6 +41,7 @@ export default function TestimonialsPage() {
             ? t.clientImage
             : `/${t.clientImage}`,
           message: t.message,
+          rating: t.rating || 5,
         }))
       );
     } catch (err) {
@@ -82,6 +84,7 @@ export default function TestimonialsPage() {
     formDataToSend.append("clientName", formData.clientName);
     formDataToSend.append("clientTitle", formData.clientTitle);
     formDataToSend.append("message", formData.message);
+    formDataToSend.append("rating", formData.rating.toString());
 
     // Add client image file if present
     if (formData.clientImage) {
@@ -108,6 +111,7 @@ export default function TestimonialsPage() {
         clientImage: null,
         clientImagePreview: "",
         message: "",
+        rating: 5,
       });
       fetchTestimonials(); // reload table
     } catch (err: any) {
@@ -139,6 +143,7 @@ export default function TestimonialsPage() {
       clientImage: null,
       clientImagePreview: imageUrl,
       message: testimonial.message,
+      rating: testimonial.rating || 5,
     });
     setIsModalOpen(true);
   };
@@ -166,6 +171,21 @@ export default function TestimonialsPage() {
       key: "message",
       width: "40%",
       render: (row: any) => <p className="line-clamp-2 text-gray-600 italic">"{row.message}"</p>,
+    },
+    {
+      label: "Rating",
+      key: "rating",
+      render: (row: any) => (
+        <div className="flex gap-1">
+          {[...Array(5)].map((_, i) => (
+            <StarIcon
+              key={i}
+              className={`h-4 w-4 ${i < row.rating ? "text-[#EB4724] fill-[#EB4724]" : "text-gray-300 fill-gray-300"
+                }`}
+            />
+          ))}
+        </div>
+      ),
     },
     {
       label: "Actions",
@@ -214,6 +234,7 @@ export default function TestimonialsPage() {
             clientImage: null,
             clientImagePreview: "",
             message: "",
+            rating: 5,
           });
         }}
         title={editingId ? "Edit Testimonial" : "Add New Testimonial"}
@@ -247,8 +268,8 @@ export default function TestimonialsPage() {
                   {formData.clientImage
                     ? formData.clientImage.name
                     : editingId
-                    ? "Click to change image (required)"
-                    : "Click to upload client image"}
+                      ? "Click to change image (required)"
+                      : "Click to upload client image"}
                 </p>
                 {formData.clientImage && (
                   <button
@@ -312,6 +333,25 @@ export default function TestimonialsPage() {
             />
           </div>
 
+          <div className="space-y-0.5">
+            <label className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">
+              Rating <span className="text-red-500">*</span>
+            </label>
+            <select
+              name="rating"
+              required
+              value={formData.rating}
+              onChange={(e) => setFormData(prev => ({ ...prev, rating: parseInt(e.target.value) }))}
+              className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#EB4724] focus:border-[#EB4724]"
+            >
+              {[1, 2, 3, 4, 5].map((num) => (
+                <option key={num} value={num}>
+                  {num} Star{num > 1 ? "s" : ""}
+                </option>
+              ))}
+            </select>
+          </div>
+
           <div className="flex justify-end gap-2 pt-3 border-t border-gray-100 mt-4">
             <button
               type="button"
@@ -324,6 +364,7 @@ export default function TestimonialsPage() {
                   clientImage: null,
                   clientImagePreview: "",
                   message: "",
+                  rating: 5,
                 });
               }}
               className="px-3 py-1.5 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
@@ -339,6 +380,6 @@ export default function TestimonialsPage() {
           </div>
         </form>
       </Modal>
-    </div>
+    </div >
   );
 }

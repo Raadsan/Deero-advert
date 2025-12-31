@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { Bell, User, LogOut, ShoppingCart } from "lucide-react";
-import { isAuthenticated, getUser, clearAuth } from "@/utils/auth";
+import { isAuthenticated, getUser, clearAuth, isAdmin } from "@/utils/auth";
 import { logout as apiLogout } from "../../api/authApi";
 
 const navLinks = [
@@ -24,6 +24,7 @@ export default function Header() {
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAdminUser, setIsAdminUser] = useState(false);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
 
   useEffect(() => {
@@ -31,6 +32,7 @@ export default function Header() {
     const userData = getUser();
     if (userData) {
       setUser(userData);
+      setIsAdminUser(isAdmin());
     }
 
     if (typeof window === "undefined") return;
@@ -44,6 +46,7 @@ export default function Header() {
     await apiLogout();
     clearAuth();
     setIsLoggedIn(false);
+    setIsAdminUser(false);
     setUser(null);
     setShowProfileDropdown(false);
     router.push("/");
@@ -125,19 +128,24 @@ export default function Header() {
           <div className="hidden md:flex items-center gap-6 pr-25">
             {isLoggedIn ? (
               <div className="flex items-center gap-4">
-                {/* Cart Icon */}
-                <button className="relative p-2 text-[#651313] hover:bg-gray-100 rounded-full transition">
-                  <ShoppingCart className="h-6 w-6" />
-                  <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-[#EB4724] text-[10px] font-bold text-white border-2 border-white">
-                    0
-                  </span>
-                </button>
+                {/* Icons only for regular users, not admins */}
+                {!isAdminUser && (
+                  <>
+                    {/* Cart Icon */}
+                    <button className="relative p-2 text-[#651313] hover:bg-gray-100 rounded-full transition">
+                      <ShoppingCart className="h-6 w-6" />
+                      <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-[#EB4724] text-[10px] font-bold text-white border-2 border-white">
+                        0
+                      </span>
+                    </button>
 
-                {/* Notification Bell */}
-                <button className="relative p-2 text-[#651313] hover:bg-gray-100 rounded-full transition">
-                  <Bell className="h-6 w-6" />
-                  <span className="absolute top-1.5 right-1.5 h-2 w-2 bg-[#EB4724] rounded-full"></span>
-                </button>
+                    {/* Notification Bell */}
+                    <button className="relative p-2 text-[#651313] hover:bg-gray-100 rounded-full transition">
+                      <Bell className="h-6 w-6" />
+                      <span className="absolute top-1.5 right-1.5 h-2 w-2 bg-[#EB4724] rounded-full"></span>
+                    </button>
+                  </>
+                )}
 
                 {/* Profile Icon with Dropdown */}
                 <div className="relative">
@@ -243,13 +251,15 @@ export default function Header() {
                         <p className="text-xs text-gray-400">{user?.email}</p>
                       </div>
                     </div>
-                    {/* Cart Icon Mobile */}
-                    <button className="relative p-2 text-[#651313]">
-                      <ShoppingCart className="h-6 w-6" />
-                      <span className="absolute top-0 right-0 flex h-4 w-4 items-center justify-center rounded-full bg-[#EB4724] text-[8px] font-bold text-white">
-                        0
-                      </span>
-                    </button>
+                    {/* Cart Icon Mobile - Hide if admin */}
+                    {!isAdminUser && (
+                      <button className="relative p-2 text-[#651313]">
+                        <ShoppingCart className="h-6 w-6" />
+                        <span className="absolute top-0 right-0 flex h-4 w-4 items-center justify-center rounded-full bg-[#EB4724] text-[8px] font-bold text-white">
+                          0
+                        </span>
+                      </button>
+                    )}
                   </div>
                   <button
                     onClick={handleLogout}

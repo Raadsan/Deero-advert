@@ -17,7 +17,7 @@ const ratings = [
     },
     {
         platform: "facebook",
-        logo: "https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_2023.png",
+        logo: "https://www.vectorlogo.zone/logos/facebook/facebook-official.svg",
         rating: "5/5",
         stars: 5,
     },
@@ -127,8 +127,10 @@ export default function TestimonialsSection() {
                                 className="bg-white border border-gray-100 rounded-2xl p-8 flex items-center justify-between shadow-sm hover:shadow-lg transition-all duration-300 group"
                             >
                                 <div className="flex flex-col gap-3">
-                                    <div className="h-10 relative w-32 grayscale group-hover:grayscale-0 transition-all duration-300">
-                                        <img src={item.logo} alt={item.platform} className="h-full object-contain object-left" />
+                                    <div className="h-10 flex items-center">
+                                        <span className="text-2xl font-bold text-[#651313] uppercase tracking-tight group-hover:text-[#EB4724] transition-colors duration-300">
+                                            {item.platform}
+                                        </span>
                                     </div>
                                     <div className="flex gap-1">
                                         {[...Array(item.stars)].map((_, i) => (
