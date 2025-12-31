@@ -3,7 +3,7 @@ import api from "./axios";
 export interface Career {
     _id: string;
     title: string;
-    type: "Full-time" | "Part-time" | "Contract" | "Internship";
+    type: "Full-time" | "Part-time"  | "Internship";
     location: string;
     description: string;
     postedDate: string;

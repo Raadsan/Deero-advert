@@ -15,13 +15,7 @@ const roles = [
         summary:
             "Plan and execute performance-driven campaigns across social media platforms with a strong focus on content and analytics.",
     },
-    {
-        title: "Web & UI Designer",
-        type: "Contract / Project-based",
-        location: "Hybrid",
-        summary:
-            "Design clean, responsive websites and landing pages that connect Deero’s creative concepts with smooth user experiences.",
-    },
+   
 ];
 
 export default function CareerList() {

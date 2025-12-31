@@ -161,8 +161,8 @@ export default function LoginPage() {
           {view === "login" && (
             <div className="space-y-6">
               <div>
-                <h1 className="text-3xl font-bold text-[#651313] mb-2">Hello!</h1>
-                <p className="text-gray-500">Sign in to your account.</p>
+                
+                <p className="text-gray-500 text-center">Sign in to your account.</p>
               </div>
 
               <form onSubmit={handleLogin} className="space-y-4">
