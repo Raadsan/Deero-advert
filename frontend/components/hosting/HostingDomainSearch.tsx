@@ -4,7 +4,7 @@ import { useState } from "react";
 import { MagnifyingGlassIcon, ArrowPathIcon } from "@heroicons/react/24/outline";
 import { motion, AnimatePresence } from "framer-motion";
 
-import { checkDomainAvailability, DomainCheckResult } from "@/api/domainApi";
+import { checkDomainAvailability, DomainCheckResult } from "../../api/domainApi";
 import { ExclamationCircleIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
 
 export default function HostingDomainSearch() {
@@ -123,11 +123,16 @@ export default function HostingDomainSearch() {
                                                     );
                                                 } else {
                                                     return (
-                                                        <div className="w-full bg-green-50 rounded-xl p-4 flex items-center gap-3 text-green-700">
-                                                            <div className="bg-green-600 rounded-full p-1 shrink-0">
-                                                                <CheckCircleIcon className="w-5 h-5 text-white" />
+                                                        <div className="w-full bg-green-50 rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-green-700">
+                                                            <div className="flex items-center gap-3">
+                                                                <div className="bg-green-600 rounded-full p-1 shrink-0">
+                                                                    <CheckCircleIcon className="w-5 h-5 text-white" />
+                                                                </div>
+                                                                <span className="font-semibold text-lg">{match.domain} is available!</span>
                                                             </div>
-                                                            <span className="font-semibold text-lg">{match.domain} is available!</span>
+                                                            <button className="whitespace-nowrap bg-[#EB4724] hover:bg-[#d13d1d] text-white px-6 py-2 rounded-lg font-bold transition-colors shadow-sm active:scale-95">
+                                                                Add to Cart
+                                                            </button>
                                                         </div>
                                                     );
                                                 }
@@ -140,13 +145,15 @@ export default function HostingDomainSearch() {
                                             {results.map((res) => {
                                                 const ext = res.domain.substring(res.domain.lastIndexOf('.'));
                                                 return (
-                                                    <div key={res.domain} className="bg-gray-50 p-4 rounded-xl text-center border border-gray-100 hover:border-[#EB4724]/30 transition-colors">
-                                                        <p className="text-xl font-bold text-[#651313]">{ext}</p>
-                                                        {res.available ? (
-                                                            <p className="text-sm font-semibold text-[#EB4724]">{res.price}</p>
-                                                        ) : (
-                                                            <p className="text-sm font-bold text-red-600">Taken</p>
-                                                        )}
+                                                    <div key={res.domain} className="bg-gray-50 p-4 rounded-xl text-center border border-gray-100 hover:border-[#EB4724]/30 transition-all flex flex-col items-center justify-center gap-3">
+                                                        <div>
+                                                            <p className="text-xl font-bold text-[#651313]">{ext}</p>
+                                                            {res.available ? (
+                                                                <p className="text-sm font-semibold text-[#EB4724]">{res.price}</p>
+                                                            ) : (
+                                                                <p className="text-sm font-bold text-red-600">Taken</p>
+                                                            )}
+                                                        </div>
                                                     </div>
                                                 );
                                             })}

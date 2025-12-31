@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import NextImage from "next/image";
 import { StarIcon } from "@heroicons/react/24/solid";
 import { motion } from "framer-motion";
-import { getTestimonials, Testimonial } from "@/api/testimonialApi";
+import { getTestimonials, Testimonial } from "../../api/testimonialApi";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL?.replace("/api", "") || "http://localhost:5000";
 
@@ -61,8 +61,8 @@ const containerVariants = {
 };
 
 const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+    hidden: { opacity: 0, x: -50 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.6 } },
 };
 
 export default function TestimonialsSection() {
@@ -74,9 +74,7 @@ export default function TestimonialsSection() {
     useEffect(() => {
         const fetch = async () => {
             try {
-                console.log("Fetching testimonials...");
                 const data = await getTestimonials();
-                console.log("Fetched data:", data);
                 if (data && data.length > 0) {
                     setDynamicTestimonials(data);
                 }
@@ -87,6 +85,10 @@ export default function TestimonialsSection() {
             }
         };
         fetch();
+
+        // Poll for new testimonials every 60 seconds
+        const pollInterval = setInterval(fetch, 60000);
+        return () => clearInterval(pollInterval);
     }, []);
 
     const getTestimonialsToDisplay = () => {
@@ -148,12 +150,18 @@ export default function TestimonialsSection() {
             <section className="bg-[#f8f9fa] py-24 px-4 sm:px-10 overflow-hidden min-h-[600px]">
                 <div className="mx-auto max-w-7xl">
                     {/* Section Title */}
-                    <div className="text-center mb-16">
-                        <h2 className="text-3xl md:text-4xl font-bold text-[#651313] mb-4">
+                    <motion.div
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, amount: 0.2 }}
+                        variants={containerVariants}
+                        className="text-center mb-16"
+                    >
+                        <motion.h2 variants={itemVariants} className="text-3xl md:text-4xl font-bold text-[#651313] mb-4">
                             What Our Clients Say
-                        </h2>
-                        <div className="w-20 h-1.5 bg-[#EB4724] mx-auto rounded-full"></div>
-                    </div>
+                        </motion.h2>
+                        <motion.div variants={itemVariants} className="w-20 h-1.5 bg-[#EB4724] mx-auto rounded-full"></motion.div>
+                    </motion.div>
 
                     {/* Testimonial Slider */}
                     <div className="relative w-full px-2 py-4">
@@ -172,14 +180,19 @@ export default function TestimonialsSection() {
                         {!loading && testimonialsToDisplay.length > 0 && (
                             <div className="overflow-hidden">
                                 <motion.div
+                                    initial="hidden"
+                                    whileInView="visible"
+                                    viewport={{ once: true, amount: 0.1 }}
+                                    variants={containerVariants}
                                     className={`flex transition-transform duration-700 ease-in-out ${testimonialsToDisplay.length < visibleCount ? 'justify-center' : ''}`}
                                     style={{
                                         transform: testimonialsToDisplay.length > visibleCount ? `translateX(-${currentIndex * (100 / visibleCount)}%)` : 'none'
                                     }}
                                 >
                                     {testimonialsToDisplay.map((item) => (
-                                        <div
+                                        <motion.div
                                             key={item._id}
+                                            variants={itemVariants}
                                             className="flex-shrink-0 w-full md:w-1/3 px-4"
                                         >
                                             <div className="bg-white rounded-3xl p-8 shadow-[0_10px_40px_-15px_rgba(0,0,0,0.1)] hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] transition-all duration-300 h-full flex flex-col relative border border-gray-50 group">
@@ -222,7 +235,7 @@ export default function TestimonialsSection() {
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </motion.div>
                                     ))}
                                 </motion.div>
                             </div>

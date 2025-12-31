@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { MagnifyingGlassIcon, ExclamationCircleIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
-import { checkDomainAvailability, DomainCheckResult } from "@/api/domainApi";
+import { checkDomainAvailability, DomainCheckResult } from "../../api/domainApi";
 
 export default function DomainSearch() {
     const [query, setQuery] = useState("");
