@@ -1,0 +1,186 @@
+{
+  "info": {
+    "_postman_id": "9a7d8b21-4c2a-4f9c-a111-roles-menus-rbac",
+    "name": "RBAC System API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+
+    {
+      "name": "Roles",
+      "item": [
+        {
+          "name": "Create Role",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"admin\",\n  \"description\": \"System Administrator\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/roles",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "roles"]
+            }
+          }
+        },
+        {
+          "name": "Get All Roles",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:5000/api/roles",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "roles"]
+            }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Menus",
+      "item": [
+        {
+          "name": "Create Menu",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Dashboard\",\n  \"icon\": \"home\",\n  \"url\": \"/dashboard\",\n  \"isCollapsible\": false\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/menus",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "menus"]
+            }
+          }
+        },
+        {
+          "name": "Create Menu With SubMenus",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Users\",\n  \"icon\": \"users\",\n  \"isCollapsible\": true,\n  \"subMenus\": [\n    { \"title\": \"All Users\", \"url\": \"/users\" },\n    { \"title\": \"Create User\", \"url\": \"/users/create\" }\n  ]\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/menus",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "menus"]
+            }
+          }
+        },
+        {
+          "name": "Get All Menus",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:5000/api/menus",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "menus"]
+            }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Role Permissions",
+      "item": [
+        {
+          "name": "Assign Permissions To Role",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"ROLE_ID_HERE\",\n  \"menusAccess\": [\n    {\n      \"menuId\": \"MENU_ID_HERE\",\n      \"subMenus\": [\n        { \"subMenuId\": \"SUB_MENU_ID_HERE\" }\n      ]\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/role-permissions",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "role-permissions"]
+            }
+          }
+        },
+        {
+          "name": "Get Role Permissions",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:5000/api/role-permissions/admin",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "role-permissions", "admin"]
+            }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Create User",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullname\": \"Ahmed Ali\",\n  \"email\": \"admin@test.com\",\n  \"password\": \"123456\",\n  \"phone\": \"0612345678\",\n  \"role\": \"ROLE_ID_HERE\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/users",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "users"]
+            }
+          }
+        },
+        {
+          "name": "Get All Users (With Role)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:5000/api/users",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "users"]
+            }
+          }
+        }
+      ]
+    }
+
+  ]
+}

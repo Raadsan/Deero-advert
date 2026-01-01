@@ -9,12 +9,13 @@ import hostingRoute from "./routes/hostingRoute.js";
 import achievementRoute from "./routes/achievementRoutes.js";
 import TestimonialRoute from "./routes/testimonialRoutes.js";
 import userRoute from "./routes/userRoute.js";
-import permissionRoutes from "./routes/permissionRoutes.js";
+import rolepermissionRoutes from "./routes/RolePermissionRoutes.js";
 import roleRoutes from "./routes/roleRoutes.js";
 import menuRoutes from "./routes/menuRoutes.js";
 import contactRoute from "./routes/contactRoute.js";
 import eventsNewsRoutes from "./routes/eventNewsroutes.js";
 import careerRoutes from "./routes/careerRoutes.js";
+
 
 import path from "path";
 import { fileURLToPath } from "url";
@@ -42,7 +43,7 @@ app.use("/api/hosting", hostingRoute);
 app.use("/api/achievements", achievementRoute);
 app.use("/api/testimonials", TestimonialRoute);
 app.use("/api/users", userRoute);
-app.use("/api/permissions", permissionRoutes);
+app.use("/api/rolepermissions", rolepermissionRoutes);
 app.use("/api/roles", roleRoutes);
 app.use("/api/menus", menuRoutes);
 app.use("/api/contact", contactRoute);

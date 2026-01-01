@@ -3,12 +3,13 @@ import Role from "../models/roleModel.js";
 // CREATE Role
 export const createRole = async (req, res) => {
   try {
-    const { name } = req.body;
+    const { name, description } = req.body;
 
-    // Hubi in name la bixiyay
-    if (!name) return res.status(400).json({ success: false, message: "Role name is required" });
+    if (!name) {
+      return res.status(400).json({ success: false, message: "Role name is required" });
+    }
 
-    const role = await Role.create({ name });
+    const role = await Role.create({ name, description });
     res.status(201).json({ success: true, role });
   } catch (err) {
     // Handle duplicate key error
@@ -43,14 +44,16 @@ export const getRoleById = async (req, res) => {
 // UPDATE Role
 export const updateRole = async (req, res) => {
   try {
-    const { name } = req.body;
+    const { name, description } = req.body;
     const role = await Role.findByIdAndUpdate(
       req.params.id,
-      { name },
-      { new: true, runValidators: true } // runValidators si enum iyo required loo hubiyo
+      { name, description },
+      { new: true, runValidators: true }
     );
 
-    if (!role) return res.status(404).json({ success: false, message: "Role not found" });
+    if (!role) {
+      return res.status(404).json({ success: false, message: "Role not found" });
+    }
 
     res.json({ success: true, role });
   } catch (err) {
