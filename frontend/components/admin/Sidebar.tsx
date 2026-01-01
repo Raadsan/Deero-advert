@@ -172,7 +172,7 @@ export default function Sidebar({ isOpen, onClose }: { isOpen?: boolean; onClose
                         ) : menus.length === 0 ? (
                             <li className="px-4 py-3 text-white/60 text-sm">No menus available</li>
                         ) : (
-                            menus.map((menu) => {
+                            menus.map((menu, index) => {
                                 const Icon = getIcon(menu.icon);
                                 const isActive = isMenuActive(menu);
                                 const isExpanded = expandedMenus.has(menu._id);
@@ -180,13 +180,13 @@ export default function Sidebar({ isOpen, onClose }: { isOpen?: boolean; onClose
                                 if (!menu.isCollapsible && menu.url) {
                                     // Simple link menu
                                     return (
-                                        <li key={menu._id}>
+                                        <li key={`${menu._id}-${index}`}>
                                             <Link
                                                 href={menu.url}
                                                 onClick={onClose}
                                                 className={`flex items-center rounded-lg px-4 py-3 transition-colors hover:bg-white/10 ${isActive
-                                                        ? "bg-[#EB4724] text-white shadow-md"
-                                                        : "text-white/80 hover:text-white"
+                                                    ? "bg-[#EB4724] text-white shadow-md"
+                                                    : "text-white/80 hover:text-white"
                                                     }`}
                                             >
                                                 <Icon className="h-5 w-5 flex-shrink-0" />
@@ -200,12 +200,12 @@ export default function Sidebar({ isOpen, onClose }: { isOpen?: boolean; onClose
 
                                 // Collapsible menu with submenus
                                 return (
-                                    <li key={menu._id}>
+                                    <li key={`${menu._id}-${index}`}>
                                         <button
                                             onClick={() => toggleMenu(menu._id)}
                                             className={`flex w-full items-center justify-between rounded-lg px-4 py-3 transition-colors hover:bg-white/10 ${isActive
-                                                    ? "bg-[#EB4724] text-white shadow-md"
-                                                    : "text-white/80 hover:text-white"
+                                                ? "bg-[#EB4724] text-white shadow-md"
+                                                : "text-white/80 hover:text-white"
                                                 }`}
                                         >
                                             <div className="flex items-center">
@@ -224,16 +224,16 @@ export default function Sidebar({ isOpen, onClose }: { isOpen?: boolean; onClose
                                         {/* Submenus */}
                                         {isExpanded && menu.subMenus.length > 0 && (
                                             <ul className="mt-1 ml-4 space-y-1">
-                                                {menu.subMenus.map((submenu) => {
+                                                {menu.subMenus.map((submenu, subIndex) => {
                                                     const isSubActive = pathname === submenu.url;
                                                     return (
-                                                        <li key={submenu._id}>
+                                                        <li key={`${submenu._id}-${subIndex}`}>
                                                             <Link
                                                                 href={submenu.url}
                                                                 onClick={onClose}
                                                                 className={`flex items-center rounded-lg px-4 py-2 pl-8 text-sm transition-colors hover:bg-white/10 ${isSubActive
-                                                                        ? "bg-white/20 text-white font-medium"
-                                                                        : "text-white/70 hover:text-white"
+                                                                    ? "bg-white/20 text-white font-medium"
+                                                                    : "text-white/70 hover:text-white"
                                                                     }`}
                                                             >
                                                                 {submenu.title}

@@ -204,9 +204,9 @@ export default function RolePermissionsPage() {
                 </div>
             ) : (
                 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                    {permissions.map((perm) => (
+                    {permissions.map((perm, index) => (
                         <div
-                            key={perm._id}
+                            key={`${perm._id}-${index}`}
                             className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100"
                         >
                             {/* Role Header with Gradient */}
@@ -259,8 +259,8 @@ export default function RolePermissionsPage() {
 
                                 <div className="space-y-3">
                                     {perm.menusAccess.length > 0 ? (
-                                        perm.menusAccess.map((ma) => (
-                                            <div key={ma._id} className="bg-gradient-to-br from-gray-50 to-white rounded-xl p-4 border border-gray-200 hover:border-[#EB4724] transition-colors">
+                                        perm.menusAccess.map((ma, maIndex) => (
+                                            <div key={`${ma._id || 'menu'}-${maIndex}`} className="bg-gradient-to-br from-gray-50 to-white rounded-xl p-4 border border-gray-200 hover:border-[#EB4724] transition-colors">
                                                 {/* Main Menu */}
                                                 <div className="flex items-center gap-2 mb-2">
                                                     <div className="w-2 h-2 rounded-full bg-[#651313]"></div>
@@ -272,11 +272,11 @@ export default function RolePermissionsPage() {
                                                 {/* Submenus */}
                                                 {ma.subMenus.length > 0 && (
                                                     <div className="ml-4 space-y-1.5 mt-2">
-                                                        {ma.subMenus.map((sm) => {
+                                                        {ma.subMenus.map((sm, smIndex) => {
                                                             const subMenuTitle = getSubMenuTitle(ma.menuId?._id || "", sm.subMenuId);
                                                             return (
                                                                 <div
-                                                                    key={sm._id}
+                                                                    key={`${sm._id || 'sub'}-${smIndex}`}
                                                                     className="flex items-center gap-2 text-sm"
                                                                 >
                                                                     <Check className="h-3 w-3 text-green-600" />
@@ -299,7 +299,8 @@ export default function RolePermissionsPage() {
                                             <X className="h-12 w-12 text-gray-300 mx-auto mb-2" />
                                             <p className="text-sm text-gray-400">No menus assigned</p>
                                         </div>
-                                    )}
+                                    )
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -366,8 +367,8 @@ export default function RolePermissionsPage() {
                                         required
                                     >
                                         <option value="">Choose a role...</option>
-                                        {roles.map((role) => (
-                                            <option key={role._id} value={role._id}>
+                                        {roles.map((role, idx) => (
+                                            <option key={`${role._id}-${idx}`} value={role._id}>
                                                 {role.name.toUpperCase()} {role.description && `- ${role.description}`}
                                             </option>
                                         ))}
@@ -380,9 +381,9 @@ export default function RolePermissionsPage() {
                                         Configure Menu Access
                                     </label>
                                     <div className="space-y-3 max-h-96 overflow-y-auto bg-gray-50 rounded-xl p-4 border-2 border-gray-200">
-                                        {menus.map((menu) => (
+                                        {menus.map((menu, idx) => (
                                             <div
-                                                key={menu._id}
+                                                key={`${menu._id}-${idx}`}
                                                 className="bg-white rounded-xl p-4 shadow-sm border border-gray-200 hover:border-[#EB4724] transition-colors"
                                             >
                                                 <label className="flex items-center gap-3 cursor-pointer group">
@@ -409,9 +410,9 @@ export default function RolePermissionsPage() {
                                                 {/* Submenus */}
                                                 {selectedMenus[menu._id]?.enabled && menu.subMenus.length > 0 && (
                                                     <div className="ml-8 mt-3 space-y-2 pt-3 border-t border-gray-200">
-                                                        {menu.subMenus.map((submenu) => (
+                                                        {menu.subMenus.map((submenu, subIdx) => (
                                                             <label
-                                                                key={submenu._id}
+                                                                key={`${submenu._id}-${subIdx}`}
                                                                 className="flex items-center gap-3 cursor-pointer group/sub"
                                                             >
                                                                 <input

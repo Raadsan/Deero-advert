@@ -17,12 +17,12 @@ const router = express.Router();
 router.post("/", createMenu);
 router.get("/", getMenus);
 router.get("/:id", getMenuById);
-router.put("/:id", updateMenu);
+router.patch("/:id", updateMenu);
 router.delete("/:id", deleteMenu);
 
 // SubMenu routes
 router.post("/:id/submenu", addSubMenu);
-router.put("/:menuId/submenu/:subMenuId", updateSubMenu);
+router.patch("/:menuId/submenu/:subMenuId", updateSubMenu);
 router.delete("/:menuId/submenu/:subMenuId", deleteSubMenu);
 
 // Get user-specific menus based on role

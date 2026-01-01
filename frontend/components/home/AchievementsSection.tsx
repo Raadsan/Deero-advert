@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { motion, animate, useInView } from "framer-motion";
 import { getAllAchievements, Achievement } from "../../api/achievementApi";
+import { getMajorClients } from "../../api/majorClientApi";
 
 function Counter({ value, duration = 2 }: { value: number; duration?: number }) {
     const [count, setCount] = useState(0);
@@ -45,32 +46,45 @@ export default function AchievementsSection() {
     const [currentIndex, setCurrentIndex] = useState(0);
     const visibleCount = 4;
 
-    const clients = Array.from({ length: 14 }, (_, i) => {
-        const num = i + 1;
-        const extension = num === 13 ? "jpg" : "png";
-        return {
-            id: num,
-            image: `/home-images/${num}.${extension}`,
-        };
-    });
+    const [majorClients, setMajorClients] = useState<any[]>([]);
+    const [clientsLoading, setClientsLoading] = useState(true);
 
-    const totalClients = clients.length;
+    const totalClients = majorClients.length;
 
     useEffect(() => {
-        const fetchAchievements = async () => {
+        const fetchData = async () => {
             try {
-                const response = await getAllAchievements();
-                if (response.data.success) {
-                    setDynamicAchievements(response.data.data);
+                // Fetch Achievements
+                const achievementsData = await getAllAchievements();
+                if (achievementsData.data.success) {
+                    setDynamicAchievements(achievementsData.data.data);
                 }
+
+                // Fetch Major Clients
+                const clientsData = await getMajorClients();
+                const fetchedClients = clientsData.clients || clientsData.data || [];
+
+                // Extract all images from all clients (flattening the array if multiple images per client)
+                const allimages = fetchedClients.flatMap((client: any) =>
+                    client.images.map((img: string, idx: number) => ({
+                        id: `${client._id}-${idx}`,
+                        image: img.startsWith("http")
+                            ? img
+                            : `${(process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api").replace("/api", "")}/uploads/${img}`,
+                        title: client.description
+                    }))
+                );
+
+                setMajorClients(allimages);
             } catch (error) {
-                console.error("Failed to fetch achievements:", error);
+                console.error("Failed to fetch data:", error);
             } finally {
                 setLoading(false);
+                setClientsLoading(false);
             }
         };
 
-        fetchAchievements();
+        fetchData();
     }, []);
 
     useEffect(() => {
@@ -155,52 +169,65 @@ export default function AchievementsSection() {
                             Our Major Clients
                         </motion.h2>
 
-                        <motion.div
-                            initial="hidden"
-                            whileInView="visible"
-                            viewport={{ once: true, amount: 0.1 }}
-                            variants={itemVariants}
-                            className="relative overflow-hidden w-full max-w-5xl mx-auto py-2"
-                        >
-                            <div
-                                className="flex transition-transform duration-700 ease-in-out"
-                                style={{
-                                    transform: `translateX(-${currentIndex * (100 / visibleCount)}%)`,
-                                }}
-                            >
-                                {clients.map((client) => (
-                                    <div
-                                        key={client.id}
-                                        className="flex-shrink-0 w-1/2 sm:w-1/4 px-4 flex justify-center items-center"
-                                    >
-                                        <div className="w-full h-36 sm:h-40 max-w-[220px] relative transition-all duration-300 transform hover:scale-110">
-                                            <Image
-                                                src={client.image}
-                                                alt={`Client logo ${client.id}`}
-                                                fill
-                                                className="object-contain"
-                                            />
-                                        </div>
-                                    </div>
-                                ))}
+                        {clientsLoading ? (
+                            <div className="flex justify-center items-center py-10">
+                                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#EB4724]"></div>
                             </div>
-                        </motion.div>
+                        ) : majorClients.length > 0 ? (
+                            <>
+                                <motion.div
+                                    initial="hidden"
+                                    whileInView="visible"
+                                    viewport={{ once: true, amount: 0.1 }}
+                                    variants={itemVariants}
+                                    className="relative overflow-hidden w-full max-w-5xl mx-auto py-2"
+                                >
+                                    <div
+                                        className="flex transition-transform duration-700 ease-in-out"
+                                        style={{
+                                            transform: `translateX(-${currentIndex * (100 / Math.min(visibleCount, totalClients || 1))}%)`,
+                                        }}
+                                    >
+                                        {majorClients.map((client) => (
+                                            <div
+                                                key={client.id}
+                                                className="flex-shrink-0 w-1/2 sm:w-1/4 px-4 flex justify-center items-center"
+                                            >
+                                                <div className="w-full h-36 sm:h-40 max-w-[220px] relative transition-all duration-300 transform hover:scale-110">
+                                                    <Image
+                                                        src={client.image}
+                                                        alt="Client Logo"
+                                                        unoptimized
+                                                        fill
+                                                        className="object-contain"
+                                                    />
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </motion.div>
 
-                        {/* Navigation Dots */}
-                        <motion.div variants={itemVariants} className="flex justify-center gap-2 mt-8">
-                            {Array.from({ length: Math.max(0, totalClients - visibleCount + 1) }).map((_, i) => (
-                                <button
-                                    key={i}
-                                    onClick={() => setCurrentIndex(i)}
-                                    className={`h-1.5 rounded-full transition-all duration-300 ${currentIndex === i ? "w-6 bg-[#EB4724]" : "w-1.5 bg-gray-300"
-                                        }`}
-                                    aria-label={`Go to slide ${i + 1}`}
-                                />
-                            ))}
-                        </motion.div>
+                                {/* Navigation Dots */}
+                                {totalClients > visibleCount && (
+                                    <motion.div variants={itemVariants} className="flex justify-center gap-2 mt-8">
+                                        {Array.from({ length: Math.max(0, totalClients - visibleCount + 1) }).map((_, i) => (
+                                            <button
+                                                key={i}
+                                                onClick={() => setCurrentIndex(i)}
+                                                className={`h-1.5 rounded-full transition-all duration-300 ${currentIndex === i ? "w-6 bg-[#EB4724]" : "w-1.5 bg-gray-300"
+                                                    }`}
+                                                aria-label={`Go to slide ${i + 1}`}
+                                            />
+                                        ))}
+                                    </motion.div>
+                                )}
+                            </>
+                        ) : (
+                            <p className="text-[#651313]/60 italic">No clients found.</p>
+                        )}
                     </div>
                 </div>
-            </div>
-        </section>
+            </div >
+        </section >
     );
 }
