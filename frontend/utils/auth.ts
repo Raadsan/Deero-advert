@@ -25,6 +25,15 @@ export const isAdmin = (): boolean => {
     return user?.role === "admin" || user?.role?.name === "admin";
 };
 
+export const isManager = (): boolean => {
+    const user = getUser();
+    return user?.role === "manager" || user?.role?.name === "manager";
+};
+
+export const isAdminOrManager = (): boolean => {
+    return isAdmin() || isManager();
+};
+
 export const isUser = (): boolean => {
     const user = getUser();
     return (
@@ -32,6 +41,14 @@ export const isUser = (): boolean => {
         user?.role?.name === "user" ||
         (!user?.role && isAuthenticated())
     );
+};
+
+export const getUserRole = (): string | null => {
+    const user = getUser();
+    if (typeof user?.role === "object") {
+        return user?.role?.name || null;
+    }
+    return user?.role || null;
 };
 
 export const getUserId = (): string | null => {
@@ -44,4 +61,3 @@ export const clearAuth = (): void => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
 };
-

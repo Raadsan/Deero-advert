@@ -3,8 +3,6 @@ import { MenuResponse } from "../types/menu";
 
 /**
  * Get user menus based on role ID
- * @param roleId - The role ID of the user
- * @returns Promise with menu data
  */
 export const getUserMenus = async (roleId: string): Promise<MenuResponse> => {
     const response = await api.get<MenuResponse>(`/menus/user/${roleId}`);
@@ -12,10 +10,56 @@ export const getUserMenus = async (roleId: string): Promise<MenuResponse> => {
 };
 
 /**
- * Get all menus (admin only)
- * @returns Promise with all menus
+ * Get all menus
  */
 export const getAllMenus = async (): Promise<MenuResponse> => {
     const response = await api.get<MenuResponse>("/menus");
+    return response.data;
+};
+
+/**
+ * Get menu by ID
+ */
+export const getMenuById = async (id: string): Promise<MenuResponse> => {
+    const response = await api.get<MenuResponse>(`/menus/${id}`);
+    return response.data;
+};
+
+/**
+ * Create new menu
+ */
+export const createMenu = async (data: {
+    title: string;
+    icon?: string;
+    url?: string;
+    isCollapsible: boolean;
+    subMenus?: Array<{ title: string; url: string }>;
+}): Promise<MenuResponse> => {
+    const response = await api.post<MenuResponse>("/menus", data);
+    return response.data;
+};
+
+/**
+ * Update menu
+ */
+export const updateMenu = async (
+    id: string,
+    data: {
+        title?: string;
+        icon?: string;
+        url?: string;
+        isCollapsible?: boolean;
+        subMenus?: Array<{ _id?: string; title: string; url: string }>;
+    }
+): Promise<MenuResponse> => {
+    const response = await api.put<MenuResponse>(`/menus/${id}`, data);
+    return response.data;
+};
+
+/**
+ * Delete menu
+ */
+export const deleteMenu = async (id: string): Promise<MenuResponse> => {
+    const response = await api.delete<MenuResponse>(`/menus/${id}`);
     return response.data;
 };

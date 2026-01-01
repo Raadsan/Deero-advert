@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Eye, EyeOff, Mail, Lock, User, Phone, ArrowLeft } from "lucide-react";
 import { loginUser, signupUser, forgotPassword } from "../../api/authApi";
 import { useRouter } from "next/navigation";
-import { isAuthenticated, isAdmin, isUser } from "@/utils/auth";
+import { isAuthenticated, isAdminOrManager } from "@/utils/auth";
 
 type ViewType = "login" | "signup" | "forgot";
 
@@ -19,9 +19,9 @@ export default function LoginPage() {
   // Redirect if already logged in
   useEffect(() => {
     if (isAuthenticated()) {
-      if (isAdmin()) {
-        router.push("/admin");
-      } else if (isUser()) {
+      if (isAdminOrManager()) {
+        router.push("/dashboard");
+      } else {
         router.push("/");
       }
     }
@@ -62,13 +62,12 @@ export default function LoginPage() {
         setTimeout(() => {
           // Check user role and redirect accordingly
           const userRole = res.data.user?.role;
-          console.log("Login Response Data:", res.data);
-
           const roleName = typeof userRole === "object" ? userRole?.name : userRole;
-          console.log("Detected Role Name:", roleName);
+          const roleNameLower = roleName?.toString().toLowerCase();
 
-          if (roleName && roleName.toString().toLowerCase() === "admin") {
-            router.push("/admin");
+          // Admin and Manager go to dashboard, regular users to website
+          if (roleNameLower === "admin" || roleNameLower === "manager") {
+            router.push("/dashboard");
           } else {
             router.push("/");
           }
@@ -161,7 +160,7 @@ export default function LoginPage() {
           {view === "login" && (
             <div className="space-y-6">
               <div>
-                
+
                 <p className="text-gray-500 text-center">Sign in to your account.</p>
               </div>
 

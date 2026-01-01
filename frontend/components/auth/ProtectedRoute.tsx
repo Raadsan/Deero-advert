@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { getToken, getUser, isAdmin, isUser } from "@/utils/auth";
+import { getToken, getUser, isAdminOrManager } from "@/utils/auth";
 
 interface ProtectedRouteProps {
     children: React.ReactNode;
@@ -28,20 +28,20 @@ export default function ProtectedRoute({ children, requiredRole = "any" }: Prote
 
             // Check role-based access
             if (requiredRole === "admin") {
-                if (!isAdmin()) {
-                    // User is not admin, redirect to user dashboard
-                    router.push("/user");
+                // Allow both admin and manager roles for admin routes
+                if (!isAdminOrManager()) {
+                    // Regular user trying to access admin routes, redirect to home
+                    router.push("/");
                     return;
                 }
             } else if (requiredRole === "user") {
-                if (!isUser() || isAdmin()) {
-                    // User is admin trying to access user routes, redirect to admin
-                    if (isAdmin()) {
-                        router.push("/admin");
-                        return;
-                    }
-                    // Not authenticated as user
-                    router.push("/login");
+                // This is for user-only routes (if any)
+                const userRole = user?.role?.name || user?.role;
+                const roleNameLower = userRole?.toString().toLowerCase();
+
+                if (roleNameLower === "admin" || roleNameLower === "manager") {
+                    // Admin/Manager trying to access user routes, redirect to dashboard
+                    router.push("/dashboard");
                     return;
                 }
             }
@@ -71,4 +71,3 @@ export default function ProtectedRoute({ children, requiredRole = "any" }: Prote
 
     return <>{children}</>;
 }
-
