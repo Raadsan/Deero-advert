@@ -2,29 +2,128 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { LayoutDashboard, Users, Settings, FileText, BarChart3, LogOut, X, Briefcase, Newspaper, Award, MessageSquare, Calendar } from "lucide-react";
+import {
+    LayoutDashboard,
+    Users,
+    Settings,
+    FileText,
+    BarChart3,
+    LogOut,
+    X,
+    Briefcase,
+    Newspaper,
+    Award,
+    MessageSquare,
+    Calendar,
+    ChevronDown,
+    ChevronRight,
+    Folder,
+    LucideIcon
+} from "lucide-react";
 import Image from "next/image";
 import { logout } from "../../api/authApi";
+import { useEffect, useState } from "react";
+import { getUserMenus } from "../../api/menuApi";
+import { Menu } from "../../types/menu";
 
-const sidebarLinks = [
-    { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
-    { label: "Users", href: "/admin/users", icon: Users },
-    { label: "Services", href: "/admin/services", icon: Briefcase },
-    { label: "Blogs", href: "/admin/blogs", icon: Newspaper },
-    { label: "Achievements", href: "/admin/achievements", icon: Award },
-    { label: "Testimonials", href: "/admin/testmonial", icon: MessageSquare },
-    { label: "Events & News", href: "/admin/events-news", icon: Calendar },
-    { label: "Careers", href: "/admin/careers", icon: Briefcase },
-    { label: "Reports", href: "/admin/reports", icon: FileText },
-];
+// Icon mapping from string names to Lucide components
+const iconMap: Record<string, LucideIcon> = {
+    dashboard: LayoutDashboard,
+    "layout-dashboard": LayoutDashboard,
+    users: Users,
+    settings: Settings,
+    "file-text": FileText,
+    filetext: FileText,
+    "bar-chart": BarChart3,
+    barchart: BarChart3,
+    briefcase: Briefcase,
+    newspaper: Newspaper,
+    award: Award,
+    "message-square": MessageSquare,
+    messagesquare: MessageSquare,
+    calendar: Calendar,
+    folder: Folder,
+};
 
 export default function Sidebar({ isOpen, onClose }: { isOpen?: boolean; onClose?: () => void }) {
     const pathname = usePathname();
     const router = useRouter();
+    const [menus, setMenus] = useState<Menu[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const [expandedMenus, setExpandedMenus] = useState<Set<string>>(new Set());
+
+    useEffect(() => {
+        const fetchMenus = async () => {
+            try {
+                setLoading(true);
+                setError(null);
+
+                // Get user from localStorage
+                const userStr = localStorage.getItem("user");
+                if (!userStr) {
+                    setError("User not found. Please login again.");
+                    setLoading(false);
+                    return;
+                }
+
+                const user = JSON.parse(userStr);
+                const roleId = user.role?._id || user.role;
+
+                if (!roleId) {
+                    setError("Role not found. Please login again.");
+                    setLoading(false);
+                    return;
+                }
+
+                // Fetch menus from API
+                const response = await getUserMenus(roleId);
+
+                if (response.success) {
+                    setMenus(response.menus);
+                } else {
+                    setError("Failed to load menus");
+                }
+            } catch (err: any) {
+                console.error("Error fetching menus:", err);
+                setError(err.message || "Failed to load menus");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchMenus();
+    }, []);
 
     const handleLogout = () => {
         logout();
         router.push("/login");
+    };
+
+    const toggleMenu = (menuId: string) => {
+        setExpandedMenus(prev => {
+            const newSet = new Set(prev);
+            if (newSet.has(menuId)) {
+                newSet.delete(menuId);
+            } else {
+                newSet.add(menuId);
+            }
+            return newSet;
+        });
+    };
+
+    const getIcon = (iconName?: string): LucideIcon => {
+        if (!iconName) return Folder;
+        const normalizedName = iconName.toLowerCase().replace(/\s+/g, "-");
+        return iconMap[normalizedName] || Folder;
+    };
+
+    const isMenuActive = (menu: Menu): boolean => {
+        if (!menu.isCollapsible && menu.url) {
+            return pathname === menu.url;
+        }
+        // Check if any submenu is active
+        return menu.subMenus.some(sub => pathname === sub.url);
     };
 
     return (
@@ -65,25 +164,89 @@ export default function Sidebar({ isOpen, onClose }: { isOpen?: boolean; onClose
                     </div>
 
                     {/* Navigation Links */}
-                    <ul className="flex-1 space-y-1.5 font-medium   py-5">
-                        {sidebarLinks.map((link) => {
-                            const Icon = link.icon;
-                            const isActive = pathname === link.href;
+                    <ul className="flex-1 space-y-1.5 font-medium py-5 overflow-y-auto">
+                        {loading ? (
+                            <li className="px-4 py-3 text-white/60 text-sm">Loading menus...</li>
+                        ) : error ? (
+                            <li className="px-4 py-3 text-red-300 text-sm">{error}</li>
+                        ) : menus.length === 0 ? (
+                            <li className="px-4 py-3 text-white/60 text-sm">No menus available</li>
+                        ) : (
+                            menus.map((menu) => {
+                                const Icon = getIcon(menu.icon);
+                                const isActive = isMenuActive(menu);
+                                const isExpanded = expandedMenus.has(menu._id);
 
-                            return (
-                                <li key={link.href}>
-                                    <Link
-                                        href={link.href}
-                                        onClick={onClose} // Auto-close on mobile nav
-                                        className={`flex items-center rounded-lg px-4 py-3 transition-colors hover:bg-white/10 ${isActive ? "bg-[#EB4724] text-white shadow-md" : "text-white/80 hover:text-white"
-                                            }`}
-                                    >
-                                        <Icon className="h-5 w-5 flex-shrink-0" />
-                                        <span className="ml-3 text-sm font-medium tracking-wide">{link.label}</span>
-                                    </Link>
-                                </li>
-                            );
-                        })}
+                                if (!menu.isCollapsible && menu.url) {
+                                    // Simple link menu
+                                    return (
+                                        <li key={menu._id}>
+                                            <Link
+                                                href={menu.url}
+                                                onClick={onClose}
+                                                className={`flex items-center rounded-lg px-4 py-3 transition-colors hover:bg-white/10 ${isActive
+                                                        ? "bg-[#EB4724] text-white shadow-md"
+                                                        : "text-white/80 hover:text-white"
+                                                    }`}
+                                            >
+                                                <Icon className="h-5 w-5 flex-shrink-0" />
+                                                <span className="ml-3 text-sm font-medium tracking-wide">
+                                                    {menu.title}
+                                                </span>
+                                            </Link>
+                                        </li>
+                                    );
+                                }
+
+                                // Collapsible menu with submenus
+                                return (
+                                    <li key={menu._id}>
+                                        <button
+                                            onClick={() => toggleMenu(menu._id)}
+                                            className={`flex w-full items-center justify-between rounded-lg px-4 py-3 transition-colors hover:bg-white/10 ${isActive
+                                                    ? "bg-[#EB4724] text-white shadow-md"
+                                                    : "text-white/80 hover:text-white"
+                                                }`}
+                                        >
+                                            <div className="flex items-center">
+                                                <Icon className="h-5 w-5 flex-shrink-0" />
+                                                <span className="ml-3 text-sm font-medium tracking-wide">
+                                                    {menu.title}
+                                                </span>
+                                            </div>
+                                            {isExpanded ? (
+                                                <ChevronDown className="h-4 w-4" />
+                                            ) : (
+                                                <ChevronRight className="h-4 w-4" />
+                                            )}
+                                        </button>
+
+                                        {/* Submenus */}
+                                        {isExpanded && menu.subMenus.length > 0 && (
+                                            <ul className="mt-1 ml-4 space-y-1">
+                                                {menu.subMenus.map((submenu) => {
+                                                    const isSubActive = pathname === submenu.url;
+                                                    return (
+                                                        <li key={submenu._id}>
+                                                            <Link
+                                                                href={submenu.url}
+                                                                onClick={onClose}
+                                                                className={`flex items-center rounded-lg px-4 py-2 pl-8 text-sm transition-colors hover:bg-white/10 ${isSubActive
+                                                                        ? "bg-white/20 text-white font-medium"
+                                                                        : "text-white/70 hover:text-white"
+                                                                    }`}
+                                                            >
+                                                                {submenu.title}
+                                                            </Link>
+                                                        </li>
+                                                    );
+                                                })}
+                                            </ul>
+                                        )}
+                                    </li>
+                                );
+                            })
+                        )}
                     </ul>
 
                     {/* Bottom Actions */}
