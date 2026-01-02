@@ -336,7 +336,7 @@ export default function RolePermissionsPage() {
             {/* Enhanced Modal */}
             {showModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-                    <div className="w-full max-w-4xl rounded-2xl bg-white shadow-2xl max-h-[90vh] overflow-hidden flex flex-col">
+                    <div className="w-full max-w-2xl rounded-2xl bg-white shadow-2xl max-h-[90vh] overflow-hidden flex flex-col">
                         {/* Modal Header */}
                         <div className="bg-gradient-to-r from-[#651313] to-[#EB4724] p-6 text-white">
                             <div className="flex items-center gap-3">
@@ -369,7 +369,7 @@ export default function RolePermissionsPage() {
                                         <option value="">Choose a role...</option>
                                         {roles.map((role, idx) => (
                                             <option key={`${role._id}-${idx}`} value={role._id}>
-                                                {role.name.toUpperCase()} {role.description && `- ${role.description}`}
+                                                {role.name.toUpperCase()}
                                             </option>
                                         ))}
                                     </select>

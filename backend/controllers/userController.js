@@ -1,6 +1,7 @@
 import User from "../models/UserModel.js";
 import Role from "../models/roleModel.js";
 import bcrypt from "bcryptjs";
+import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 
 /**
@@ -19,14 +20,39 @@ export const signup = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    let roleId = role;
+    let roleId;
+
+    if (role) {
+      if (mongoose.Types.ObjectId.isValid(role)) {
+        // It's a valid ID, use it directly (assuming the caller knows what they are doing)
+        roleId = role;
+      } else {
+        // It's likely a role name (string)
+        const roleName = role.toLowerCase().trim();
+        let foundRole = await Role.findOne({ name: roleName });
+
+        if (foundRole) {
+          roleId = foundRole._id;
+        } else {
+          // Role doesn't exist, create it!
+          const newRole = await Role.create({
+            name: roleName,
+            description: `Role created automatically for ${roleName}`
+          });
+          roleId = newRole._id;
+        }
+      }
+    }
+
+    // Fallback if no role provided or something went wrong (though logic above handles provided role)
     if (!roleId) {
       const userRole = await Role.findOne({ name: "user" });
       if (userRole) {
         roleId = userRole._id;
       } else {
-        // Fallback or error - deciding to error for now if system is not set up correctly
-        return res.status(500).json({ message: "System error: Default role 'user' not found." });
+        // Create default 'user' role if it really doesn't exist
+        const newUserRole = await Role.create({ name: "user", description: "Standard user" });
+        roleId = newUserRole._id;
       }
     }
 

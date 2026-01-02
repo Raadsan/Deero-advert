@@ -14,6 +14,7 @@ const router = express.Router();
 // Protected user CRUD routes
 router.get("/", getUsers);
 router.get("/:id", getUserById);
+router.post("/", signup);
 router.put("/:id", updateUser);
 router.delete("/:id", deleteUser);
 router.post("/signup", signup);

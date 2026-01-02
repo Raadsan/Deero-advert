@@ -10,9 +10,11 @@ import {
   deleteUser,
   updateUser,
 } from "../../../api/usersApi"; // adjust path
+import { getAllRoles } from "@/api/roleApi";
 
 export default function UsersPage() {
   const [data, setData] = useState([]);
+  const [roles, setRoles] = useState<any[]>([]); // roles state
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
@@ -20,6 +22,7 @@ export default function UsersPage() {
     email: "",
     password: "",
     phone: "",
+    role: "", // Add role to state
     id: "", // for editing
   });
   const [isEditing, setIsEditing] = useState(false);
@@ -27,7 +30,22 @@ export default function UsersPage() {
   // Fetch users from backend
   useEffect(() => {
     fetchUsers();
+    fetchRoles();
   }, []);
+
+  const fetchRoles = async () => {
+    try {
+      const res = await getAllRoles();
+      if (res.roles) {
+        setRoles(res.roles);
+      } else if (Array.isArray(res)) {
+        // handle case where api might return array directly
+        setRoles(res);
+      }
+    } catch (error) {
+      console.error("Failed to fetch roles", error);
+    }
+  };
 
   const fetchUsers = async () => {
     try {
@@ -54,8 +72,8 @@ export default function UsersPage() {
       if (isEditing) {
         await updateUser(formData.id, formData);
       } else {
-        // Automatically set role to "admin" when creating from admin panel
-        await createUser({ ...formData, role: "admin" });
+        // Use the typed role or default to 'user'
+        await createUser({ ...formData, role: formData.role || "user" });
       }
       await fetchUsers();
       closeModal();
@@ -84,6 +102,7 @@ export default function UsersPage() {
       email: user.email,
       password: "", // optional: leave empty for no change
       phone: user.phone,
+      role: user.role?._id || user.role, // Use ID for radio matching
     });
     setIsEditing(true);
     setIsModalOpen(true);
@@ -92,7 +111,7 @@ export default function UsersPage() {
   const closeModal = () => {
     setIsModalOpen(false);
     setIsEditing(false);
-    setFormData({ fullname: "", email: "", password: "", phone: "", id: "" });
+    setFormData({ fullname: "", email: "", password: "", phone: "", role: "", id: "" });
   };
 
   if (loading) return <p className="text-gray-500">Loading users...</p>;
@@ -234,6 +253,27 @@ export default function UsersPage() {
                 placeholder="••••••••"
                 required={!isEditing}
               />
+            </div>
+
+            <div className="space-y-0.5 col-span-1 sm:col-span-2">
+              <label className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">
+                Role
+              </label>
+              <select
+                name="role"
+                value={formData.role}
+                onChange={handleInputChange}
+                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#EB4724] focus:border-[#EB4724] transition-all bg-white"
+              >
+                <option value="">Select a role</option>
+                {roles
+                  .filter((role: any) => role.name.toLowerCase() !== 'user') // Hide 'user' role
+                  .map((role: any) => (
+                    <option key={role._id} value={role._id}>
+                      {role.name.charAt(0).toUpperCase() + role.name.slice(1)}
+                    </option>
+                  ))}
+              </select>
             </div>
           </div>
 
