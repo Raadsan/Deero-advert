@@ -1,4 +1,5 @@
 import User from "../models/UserModel.js";
+import Role from "../models/roleModel.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
@@ -18,12 +19,23 @@ export const signup = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    let roleId = role;
+    if (!roleId) {
+      const userRole = await Role.findOne({ name: "user" });
+      if (userRole) {
+        roleId = userRole._id;
+      } else {
+        // Fallback or error - deciding to error for now if system is not set up correctly
+        return res.status(500).json({ message: "System error: Default role 'user' not found." });
+      }
+    }
+
     const user = await User.create({
       fullname,
       email: email.toLowerCase(),
       password: hashedPassword,
       phone,
-      role, // must be valid ObjectId
+      role: roleId,
     });
 
     const token = jwt.sign(

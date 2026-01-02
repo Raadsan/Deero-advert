@@ -9,13 +9,28 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
     const router = useRouter();
     const [user, setUser] = useState<any>(null);
     const [showDropdown, setShowDropdown] = useState(false);
+    const [portalTitle, setPortalTitle] = useState("Portal");
 
     useEffect(() => {
         // Get user from localStorage
         const userData = localStorage.getItem("user");
         if (userData) {
             try {
-                setUser(JSON.parse(userData));
+                const parsedUser = JSON.parse(userData);
+                setUser(parsedUser);
+
+                // Determine Portal Title based on role
+                const role = parsedUser.role;
+                // If role is an object (populated), use .name. If string (ID), default to 'user' (common for fresh signup)
+                const roleName = (typeof role === 'object' && role?.name) ? role.name.toLowerCase() : 'user';
+
+                if (roleName === 'admin') {
+                    setPortalTitle("Admin Portal");
+                } else if (roleName === 'manager') {
+                    setPortalTitle("Manager Portal");
+                } else {
+                    setPortalTitle("User Portal");
+                }
             } catch (e) {
                 console.error("Error parsing user data", e);
             }
@@ -39,7 +54,7 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
                     <Menu className="h-6 w-6" />
                 </button>
                 <div className="hidden md:block">
-                    <h1 className="text-xl font-bold text-[#651313]">Admin Portal</h1>
+                    <h1 className="text-xl font-bold text-[#651313]">{portalTitle}</h1>
                 </div>
             </div>
 

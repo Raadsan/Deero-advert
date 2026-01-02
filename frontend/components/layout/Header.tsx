@@ -128,24 +128,11 @@ export default function Header() {
           <div className="hidden md:flex items-center gap-6 pr-25">
             {isLoggedIn ? (
               <div className="flex items-center gap-4">
-                {/* Icons only for regular users, not admins */}
-                {!isAdminUser && (
-                  <>
-                    {/* Cart Icon */}
-                    <button className="relative p-2 text-[#651313] hover:bg-gray-100 rounded-full transition">
-                      <ShoppingCart className="h-6 w-6" />
-                      <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-[#EB4724] text-[10px] font-bold text-white border-2 border-white">
-                        0
-                      </span>
-                    </button>
-
-                    {/* Notification Bell */}
-                    <button className="relative p-2 text-[#651313] hover:bg-gray-100 rounded-full transition">
-                      <Bell className="h-6 w-6" />
-                      <span className="absolute top-1.5 right-1.5 h-2 w-2 bg-[#EB4724] rounded-full"></span>
-                    </button>
-                  </>
-                )}
+                {/* Notification Bell */}
+                <button className="relative p-2 text-[#651313] hover:bg-gray-100 rounded-full transition">
+                  <Bell className="h-6 w-6" />
+                  <span className="absolute top-1.5 right-1.5 h-2 w-2 bg-[#EB4724] rounded-full"></span>
+                </button>
 
                 {/* Profile Icon with Dropdown */}
                 <div className="relative">
@@ -251,15 +238,7 @@ export default function Header() {
                         <p className="text-xs text-gray-400">{user?.email}</p>
                       </div>
                     </div>
-                    {/* Cart Icon Mobile - Hide if admin */}
-                    {!isAdminUser && (
-                      <button className="relative p-2 text-[#651313]">
-                        <ShoppingCart className="h-6 w-6" />
-                        <span className="absolute top-0 right-0 flex h-4 w-4 items-center justify-center rounded-full bg-[#EB4724] text-[8px] font-bold text-white">
-                          0
-                        </span>
-                      </button>
-                    )}
+
                   </div>
                   <button
                     onClick={handleLogout}

@@ -19,11 +19,7 @@ export default function LoginPage() {
   // Redirect if already logged in
   useEffect(() => {
     if (isAuthenticated()) {
-      if (isAdminOrManager()) {
-        router.push("/dashboard");
-      } else {
-        router.push("/");
-      }
+      router.push("/dashboard");
     }
   }, [router]);
 
@@ -60,17 +56,8 @@ export default function LoginPage() {
         localStorage.setItem("user", JSON.stringify(res.data.user));
         setSuccess("Login successful! Redirecting...");
         setTimeout(() => {
-          // Check user role and redirect accordingly
-          const userRole = res.data.user?.role;
-          const roleName = typeof userRole === "object" ? userRole?.name : userRole;
-          const roleNameLower = roleName?.toString().toLowerCase();
-
-          // Admin and Manager go to dashboard, regular users to website
-          if (roleNameLower === "admin" || roleNameLower === "manager") {
-            router.push("/dashboard");
-          } else {
-            router.push("/");
-          }
+          // Redirect to dashboard
+          router.push("/dashboard");
         }, 1000);
       }
     } catch (err: any) {
@@ -105,17 +92,12 @@ export default function LoginPage() {
         phone: signupData.phone,
         password: signupData.password,
       });
-      setSuccess("Account created successfully! Please login.");
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+      setSuccess("Account created successfully! Redirecting...");
       setTimeout(() => {
-        setView("login");
-        setSignupData({
-          fullname: "",
-          email: "",
-          phone: "",
-          password: "",
-          confirmPassword: "",
-        });
-      }, 2000);
+        router.push("/dashboard");
+      }, 1000);
     } catch (err: any) {
       setError(err.response?.data?.message || "Signup failed. Please try again.");
     } finally {
