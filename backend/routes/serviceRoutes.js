@@ -8,7 +8,6 @@ const ServiceRoutes = express.Router();
 ServiceRoutes.post('/create', upload.any(), CreateService);
 ServiceRoutes.get('/', getALlServices);
 ServiceRoutes.get('/:_id', getServicesById);
-ServiceRoutes.put('/:id', upload.any(), updateServiceById);
 ServiceRoutes.patch('/:id', upload.any(), updateServiceById);
 ServiceRoutes.delete('/:id', deleteServiceById);
 

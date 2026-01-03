@@ -14,7 +14,7 @@ router.post("/", createCareer);
 router.get("/", getAllCareers);
 router.get("/active", getActiveCareers);
 router.get("/:id", getCareerById);
-router.put("/:id", updateCareer);
+router.patch("/:id", updateCareer);
 router.delete("/:id", deleteCareer);
 
 export default router;

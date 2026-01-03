@@ -13,7 +13,7 @@ const router = express.Router();
 
 // Create or update permissions for a role
 router.post("/", createOrUpdatePermission);
-router.put("/", createOrUpdatePermission);
+router.patch("/", createOrUpdatePermission);
 
 // Get all permissions
 router.get("/", getAllPermissions);

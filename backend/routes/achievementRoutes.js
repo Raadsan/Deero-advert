@@ -21,7 +21,7 @@ router.get("/:id", getAchievementById);
 
 // PATCH/PUT - update achievement (icon upload is optional)
 router.patch("/:id", upload.single("icon"), updateAchievement);
-router.put("/:id", upload.single("icon"), updateAchievement);
+
 
 // DELETE - achievement
 router.delete("/:id", deleteAchievement);
