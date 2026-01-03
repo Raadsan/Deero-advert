@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { Eye, EyeOff, Mail, Lock, User, Phone, ArrowLeft } from "lucide-react";
 import { loginUser, signupUser, forgotPassword } from "../../api/authApi";
 import { useRouter, useSearchParams } from "next/navigation";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 import { isAuthenticated, isAdminOrManager } from "@/utils/auth";
 
 type ViewType = "login" | "signup" | "forgot";
@@ -248,15 +250,31 @@ export default function LoginPage() {
                   </div>
                 </div>
                 <div className="bg-gray-50 rounded-xl px-4 py-3 flex items-center gap-2">
-                  <Phone className="text-gray-400 h-5 w-5 shrink-0" />
-                  <input
-                    type="tel"
-                    value={signupData.phone}
-                    onChange={(e) => setSignupData({ ...signupData, phone: e.target.value })}
-                    placeholder="Phone Number"
-                    className="bg-transparent w-full outline-none text-gray-700"
-                    required
-                  />
+                  <div className="relative w-full">
+                    <PhoneInput
+                      country={"so"}
+                      value={signupData.phone}
+                      onChange={(phone) => setSignupData({ ...signupData, phone })}
+                      inputStyle={{
+                        width: "100%",
+                        height: "50px",
+                        background: "#f9fafb",
+                        border: "none",
+                        borderRadius: "12px",
+                        paddingLeft: "48px",
+                        fontSize: "16px",
+                        color: "#374151"
+                      }}
+                      buttonStyle={{
+                        background: "transparent",
+                        border: "none",
+                        borderRadius: "12px 0 0 12px",
+                        paddingLeft: "8px"
+                      }}
+                      containerClass="!bg-gray-50 rounded-xl"
+                      placeholder="Phone Number"
+                    />
+                  </div>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div className="bg-gray-50 rounded-xl px-4 py-3 flex items-center gap-2">

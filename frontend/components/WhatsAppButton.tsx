@@ -8,7 +8,9 @@ export default function WhatsAppButton() {
   // Hide on login, signup, and admin pages
   const shouldHide = pathname?.startsWith("/login") ||
     pathname?.startsWith("/signup") ||
-    pathname?.startsWith("/admin");
+    pathname?.startsWith("/admin") ||
+    pathname?.startsWith("/management") ||
+    pathname?.startsWith("/dashboard");
 
   if (shouldHide) return null;
 

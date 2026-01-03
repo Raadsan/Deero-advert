@@ -87,7 +87,7 @@ export default function UserDomainsPage() {
                                     <th className="py-4 px-6 text-center text-white font-bold">Registration Date</th>
                                     <th className="py-4 px-6 text-center text-white font-bold">Next Due</th>
                                     <th className="py-4 px-6 text-center text-white font-bold">Auto Renew</th>
-                                    <th className="py-4 px-6 text-center text-white font-bold">Manage</th>
+                             
                                 </tr>
                             </thead>
                             <tbody>
@@ -126,11 +126,7 @@ export default function UserDomainsPage() {
                                                 <div className={`w-4 h-4 bg-white rounded-full shadow-sm transition-transform ${domain.autoRenew ? 'translate-x-4' : 'translate-x-0'}`} />
                                             </div>
                                         </td>
-                                        <td className="py-4 px-6 text-center">
-                                            <button className="text-gray-400 hover:text-[#651313] transition-colors p-2 rounded-full hover:bg-gray-100">
-                                                <EllipsisHorizontalIcon className="w-6 h-6" />
-                                            </button>
-                                        </td>
+                                        
                                     </tr>
                                 ))}
                             </tbody>
