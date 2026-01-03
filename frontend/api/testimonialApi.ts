@@ -26,7 +26,7 @@ export const addTestimonial = async (formData: FormData) => {
 };
 
 export const updateTestimonial = async (id: string, formData: FormData) => {
-    const response = await axios.put(`/testimonials/${id}`, formData, {
+    const response = await axios.patch(`/testimonials/${id}`, formData, {
         headers: {
             "Content-Type": "multipart/form-data",
         },

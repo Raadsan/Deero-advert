@@ -34,7 +34,7 @@ export const createService = async (formData: FormData) => {
 };
 
 export const updateService = async (id: string, formData: FormData) => {
-  const response = await axios.put(`/service/${id}`, formData, {
+  const response = await axios.patch(`/service/${id}`, formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },

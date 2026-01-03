@@ -22,7 +22,7 @@ export const getBlogById = (id: string) => {
 
 // ✏️ UPDATE BLOG (with FormData for file uploads)
 export const updateBlog = (id: string, formData: FormData) => {
-  return api.put(`/blogs/${id}`, formData, {
+  return api.patch(`/blogs/${id}`, formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },

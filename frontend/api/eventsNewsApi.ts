@@ -28,7 +28,7 @@ export const updateEventNews = (
     date: string;
   }
 ) => {
-  return api.put(`/events-news/${id}`, data);
+  return api.patch(`/events-news/${id}`, data);
 };
 
 // 🗑 DELETE Event / News

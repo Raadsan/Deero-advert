@@ -3,7 +3,7 @@ import api from "./axios";
 export interface Career {
     _id: string;
     title: string;
-    type: "Full-time" | "Part-time"  | "Internship";
+    type: "Full-time" | "Part-time" | "Internship";
     location: string;
     description: string;
     postedDate: string;
@@ -35,7 +35,7 @@ export const getCareerById = (id: string) => {
 
 // Update career
 export const updateCareer = (id: string, data: Partial<Career>) => {
-    return api.put(`/careers/${id}`, data);
+    return api.patch(`/careers/${id}`, data);
 };
 
 // Delete career
