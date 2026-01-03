@@ -40,7 +40,7 @@ export const createOrUpdatePermission = async (req, res) => {
 
       const updated = await RolePermissions.findById(rolePermission._id)
         .populate("role", "name description")
-        .populate("menusAccess.menuId", "title icon url");
+        .populate("menusAccess.menuId", "title icon url isCollapsible subMenus");
 
       return res.json({
         success: true,
@@ -56,7 +56,7 @@ export const createOrUpdatePermission = async (req, res) => {
 
       const created = await RolePermissions.findById(rolePermission._id)
         .populate("role", "name description")
-        .populate("menusAccess.menuId", "title icon url");
+        .populate("menusAccess.menuId", "title icon url isCollapsible subMenus");
 
       return res.status(201).json({
         success: true,
@@ -75,7 +75,7 @@ export const getAllPermissions = async (req, res) => {
   try {
     const permissions = await RolePermissions.find()
       .populate("role", "name description")
-      .populate("menusAccess.menuId", "title icon url");
+      .populate("menusAccess.menuId", "title icon url isCollapsible subMenus");
 
     res.json({ success: true, permissions });
   } catch (err) {
@@ -110,7 +110,7 @@ export const getPermissionById = async (req, res) => {
   try {
     const permission = await RolePermissions.findById(req.params.id)
       .populate("role", "name description")
-      .populate("menusAccess.menuId", "title icon url");
+      .populate("menusAccess.menuId", "title icon url isCollapsible subMenus");
 
     if (!permission) {
       return res.status(404).json({ success: false, message: "Permission not found" });
@@ -165,7 +165,7 @@ export const addMenuAccess = async (req, res) => {
 
     const updated = await RolePermissions.findById(rolePermission._id)
       .populate("role", "name description")
-      .populate("menusAccess.menuId", "title icon url");
+      .populate("menusAccess.menuId", "title icon url isCollapsible subMenus");
 
     res.json({
       success: true,
@@ -200,7 +200,7 @@ export const removeMenuAccess = async (req, res) => {
 
     const updated = await RolePermissions.findById(rolePermission._id)
       .populate("role", "name description")
-      .populate("menusAccess.menuId", "title icon url");
+      .populate("menusAccess.menuId", "title icon url isCollapsible subMenus");
 
     res.json({
       success: true,

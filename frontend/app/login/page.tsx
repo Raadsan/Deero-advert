@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { Eye, EyeOff, Mail, Lock, User, Phone, ArrowLeft } from "lucide-react";
 import { loginUser, signupUser, forgotPassword } from "../../api/authApi";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { isAuthenticated, isAdminOrManager } from "@/utils/auth";
 
 type ViewType = "login" | "signup" | "forgot";
@@ -15,13 +15,15 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectUrl = searchParams.get("redirect") || "/dashboard";
 
   // Redirect if already logged in
   useEffect(() => {
     if (isAuthenticated()) {
-      router.push("/dashboard");
+      router.push(redirectUrl);
     }
-  }, [router]);
+  }, [router, redirectUrl]);
 
   // Login form
   const [loginData, setLoginData] = useState({
@@ -56,8 +58,8 @@ export default function LoginPage() {
         localStorage.setItem("user", JSON.stringify(res.data.user));
         setSuccess("Login successful! Redirecting...");
         setTimeout(() => {
-          // Redirect to dashboard
-          router.push("/dashboard");
+          // Redirect to dashboard or requested page
+          router.push(redirectUrl);
         }, 1000);
       }
     } catch (err: any) {
@@ -96,7 +98,7 @@ export default function LoginPage() {
       localStorage.setItem("user", JSON.stringify(res.data.user));
       setSuccess("Account created successfully! Redirecting...");
       setTimeout(() => {
-        router.push("/dashboard");
+        router.push(redirectUrl);
       }, 1000);
     } catch (err: any) {
       setError(err.response?.data?.message || "Signup failed. Please try again.");

@@ -52,7 +52,7 @@ export const updateMenu = async (
         subMenus?: Array<{ _id?: string; title: string; url: string }>;
     }
 ): Promise<MenuResponse> => {
-    const response = await api.put<MenuResponse>(`/menus/${id}`, data);
+    const response = await api.patch<MenuResponse>(`/menus/${id}`, data);
     return response.data;
 };
 

@@ -273,7 +273,13 @@ export default function RolePermissionsPage() {
                                                 {ma.subMenus.length > 0 && (
                                                     <div className="ml-4 space-y-1.5 mt-2">
                                                         {ma.subMenus.map((sm, smIndex) => {
-                                                            const subMenuTitle = getSubMenuTitle(ma.menuId?._id || "", sm.subMenuId);
+                                                            // Try to find the title in the already populated menu object first
+                                                            const populatedMenu = ma.menuId as any;
+                                                            const embeddedSubMenu = populatedMenu?.subMenus?.find((s: any) => s._id === sm.subMenuId);
+
+                                                            // Fallback to global lookup if not found
+                                                            const subMenuTitle = embeddedSubMenu?.title || getSubMenuTitle(ma.menuId?._id || "", sm.subMenuId);
+
                                                             return (
                                                                 <div
                                                                     key={`${sm._id || 'sub'}-${smIndex}`}

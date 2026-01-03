@@ -17,6 +17,23 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: '/user-domains',
+        destination: '/user/domains',
+        permanent: true,
+      },
+    ];
+  },
+  async rewrites() {
+    return [
+      {
+        source: '/my-domains',
+        destination: '/user/domains',
+      },
+    ];
+  },
 };
 
 export default nextConfig;

@@ -6,12 +6,24 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import { checkDomainAvailability, DomainCheckResult } from "../../api/domainApi";
 import { ExclamationCircleIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
+import { useRouter } from "next/navigation";
+import { isAuthenticated } from "@/utils/auth";
+import DomainPricingTable from "./DomainPricingTable";
 
-export default function HostingDomainSearch() {
-    const [activeTab, setActiveTab] = useState<'register' | 'transfer'>('register');
+export default function HostingDomainSearch({ transparent = false }: { transparent?: boolean }) {
+    const router = useRouter();
+    const [activeTab, setActiveTab] = useState<'register' | 'transfer' | 'renewal'>('register');
     const [query, setQuery] = useState("");
     const [results, setResults] = useState<DomainCheckResult[] | null>(null);
     const [loading, setLoading] = useState(false);
+
+    const handleAddToCart = () => {
+        if (isAuthenticated()) {
+            router.push("/dashboard");
+        } else {
+            router.push("/login?redirect=/dashboard");
+        }
+    };
 
     const handleSearch = async () => {
         if (!query.trim()) return;
@@ -29,7 +41,7 @@ export default function HostingDomainSearch() {
     };
 
     return (
-        <section className="bg-[#fcd7c3] py-16 px-4 sm:px-10 relative overflow-hidden">
+        <section className={`${transparent ? 'bg-transparent' : 'bg-[#fcd7c3]'} py-16 px-4 sm:px-10 relative overflow-hidden`}>
             {/* Background Decoration */}
             <div className="absolute top-0 right-0 opacity-10 pointer-events-none">
                 <div className="w-64 h-64 bg-white rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
@@ -63,6 +75,15 @@ export default function HostingDomainSearch() {
                                 }`}
                         >
                             Transfer Domain
+                        </button>
+                        <button
+                            onClick={() => setActiveTab('renewal')}
+                            className={`px-6 py-2 rounded-full text-sm font-bold transition-all duration-300 ${activeTab === 'renewal'
+                                ? 'bg-[#EB4724] text-white shadow-md'
+                                : 'text-[#651313] hover:bg-white/50'
+                                }`}
+                        >
+                            Renewal Domain
                         </button>
                     </div>
                 </div>
@@ -130,7 +151,10 @@ export default function HostingDomainSearch() {
                                                                 </div>
                                                                 <span className="font-semibold text-lg">{match.domain} is available!</span>
                                                             </div>
-                                                            <button className="whitespace-nowrap bg-[#EB4724] hover:bg-[#d13d1d] text-white px-6 py-2 rounded-lg font-bold transition-colors shadow-sm active:scale-95">
+                                                            <button
+                                                                onClick={handleAddToCart}
+                                                                className="whitespace-nowrap bg-[#EB4724] hover:bg-[#d13d1d] text-white px-6 py-2 rounded-lg font-bold transition-colors shadow-sm active:scale-95"
+                                                            >
                                                                 Add to Cart
                                                             </button>
                                                         </div>
@@ -161,7 +185,7 @@ export default function HostingDomainSearch() {
                                     </div>
                                 )}
                             </motion.div>
-                        ) : (
+                        ) : activeTab === 'transfer' ? (
                             <motion.div
                                 key="transfer"
                                 initial={{ opacity: 0, y: 10 }}
@@ -195,9 +219,42 @@ export default function HostingDomainSearch() {
                                     Transfer your domain to Deero Advert and get 1 year renewal for free!
                                 </p>
                             </motion.div>
+                        ) : (
+                            <motion.div
+                                key="renewal"
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -10 }}
+                                transition={{ duration: 0.3 }}
+                                className="space-y-6"
+                            >
+                                <div className="flex flex-col md:flex-row gap-4">
+                                    <div className="flex-1 relative">
+                                        <input
+                                            type="text"
+                                            placeholder="Enter domain to renew"
+                                            className="w-full px-6 py-4 rounded-xl border border-gray-200 focus:border-[#EB4724] focus:ring-2 focus:ring-[#EB4724]/10 focus:outline-none transition-all text-lg"
+                                        />
+                                        <ArrowPathIcon className="absolute right-4 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-400" />
+                                    </div>
+
+                                    <button className="bg-[#651313] text-white px-8 py-4 rounded-xl font-bold hover:bg-[#4d0e0e] transition-colors flex items-center justify-center gap-2 shadow-lg hover:shadow-xl active:scale-95 duration-200 whitespace-nowrap">
+                                        <ArrowPathIcon className="w-5 h-5" />
+                                        Renew
+                                    </button>
+                                </div>
+                                <p className="text-center text-sm text-gray-500">
+                                    Extend your domain registration and keep your online presence secure.
+                                </p>
+                            </motion.div>
                         )}
                     </AnimatePresence>
                 </div>
+
+                {/* Pricing Table - Only show when no results are active in Register tab */}
+                {activeTab === 'register' && !results && (
+                    <DomainPricingTable />
+                )}
             </div>
         </section>
     );

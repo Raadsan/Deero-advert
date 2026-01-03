@@ -1,28 +1,59 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { LayoutDashboard, Package, FileText, Settings, LogOut, X, Heart, ShoppingBag } from "lucide-react";
+import { LayoutDashboard, Package, FileText, Settings, LogOut, X, Heart, ShoppingBag, Globe, CreditCard, User } from "lucide-react";
 import Image from "next/image";
 import { logout } from "../../api/authApi";
+import { getUserMenus } from "../../api/menuApi";
+import { getUser } from "../../utils/auth";
 
-const sidebarLinks = [
-    { label: "Dashboard", href: "/user", icon: LayoutDashboard },
-    { label: "My Services", href: "/user/services", icon: Package },
-    { label: "My Orders", href: "/user/orders", icon: ShoppingBag },
-    { label: "Documents", href: "/user/documents", icon: FileText },
-    { label: "Favorites", href: "/user/favorites", icon: Heart },
-    { label: "Settings", href: "/user/settings", icon: Settings },
-];
+const iconMapping: { [key: string]: any } = {
+    "Dashboard": LayoutDashboard,
+    "My Domains": Globe,
+    "My Services": Package,
+    "My Orders": ShoppingBag,
+    "Documents": FileText,
+    "Favorites": Heart,
+    "Settings": Settings,
+    "Payments": CreditCard,
+    "Profile": User,
+};
 
 export default function UserSidebar({ isOpen, onClose }: { isOpen?: boolean; onClose?: () => void }) {
     const pathname = usePathname();
     const router = useRouter();
+    const [menuItems, setMenuItems] = useState<any[]>([]);
+
+    useEffect(() => {
+        const fetchMenus = async () => {
+            try {
+                const user = getUser();
+                if (user && user.role) {
+                    const roleId = typeof user.role === 'object' ? user.role._id : user.role;
+                    // If user.role is just a string name like 'user', we might need to look up the ID or the backend handles names? 
+                    // Assuming roleId is what we need. If it fails, we might need a fallback.
+                    // Actually api expects roleId.
+                    const response = await getUserMenus(roleId);
+                    if (response && response.menus) {
+                        setMenuItems(response.menus);
+                    }
+                }
+            } catch (error) {
+                console.error("Failed to fetch user menus:", error);
+            }
+        };
+
+        fetchMenus();
+    }, []);
 
     const handleLogout = () => {
         logout();
         router.push("/login");
     };
+
+    const displayLinks = menuItems.length > 0 ? menuItems : [];
 
     return (
         <>
@@ -63,20 +94,22 @@ export default function UserSidebar({ isOpen, onClose }: { isOpen?: boolean; onC
 
                     {/* Navigation Links */}
                     <ul className="flex-1 space-y-1.5 font-medium   py-5">
-                        {sidebarLinks.map((link) => {
-                            const Icon = link.icon;
-                            const isActive = pathname === link.href;
+                        {displayLinks.map((link) => {
+                            // Backend might return title/url/icon or similar. Adjust matching.
+                            // Assuming link has { title, url, icon }
+                            const Icon = iconMapping[link.title] || FileText;
+                            const isActive = pathname === link.url;
 
                             return (
-                                <li key={link.href}>
+                                <li key={link.url}>
                                     <Link
-                                        href={link.href}
+                                        href={link.url}
                                         onClick={onClose} // Auto-close on mobile nav
                                         className={`flex items-center rounded-lg px-4 py-3 transition-colors hover:bg-white/10 ${isActive ? "bg-[#EB4724] text-white shadow-md" : "text-white/80 hover:text-white"
                                             }`}
                                     >
                                         <Icon className="h-5 w-5 flex-shrink-0" />
-                                        <span className="ml-3 text-sm font-medium tracking-wide">{link.label}</span>
+                                        <span className="ml-3 text-sm font-medium tracking-wide">{link.title}</span>
                                     </Link>
                                 </li>
                             );
@@ -85,7 +118,7 @@ export default function UserSidebar({ isOpen, onClose }: { isOpen?: boolean; onC
 
                     {/* Bottom Actions */}
                     <div className="mt-auto border-t border-white/10 pt-4">
-                        <button 
+                        <button
                             onClick={handleLogout}
                             className="flex w-full items-center rounded-lg px-4 py-3 text-white/80 transition-colors hover:bg-white/10 hover:text-white"
                         >
