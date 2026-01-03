@@ -115,9 +115,10 @@ export default function DashboardContent() {
                 setUsersLoading(true);
                 const res = await getAllUsers();
                 const users = Array.isArray(res.data) ? res.data : [];
-                const regularUsers = users.filter((user: any) =>
-                    user.role === "user" || !user.role || user.role === undefined
-                );
+                const regularUsers = users.filter((user: any) => {
+                    const roleName = typeof user.role === 'object' ? user.role?.name : user.role;
+                    return roleName === "user";
+                });
                 const sortedUsers = [...regularUsers]
                     .sort((a, b) => {
                         const dateA = new Date(a.createdAt || a._id).getTime();
@@ -199,10 +200,95 @@ export default function DashboardContent() {
                         </div>
                     </div>
                     <div className="h-[300px] relative">
-                        {/* Placeholder for SVG chart logic - kept simple for brevity */}
-                        <div className="w-full h-full bg-gray-50 rounded-lg flex items-center justify-center text-gray-400 italic">
-                            Chart Visualisation
-                        </div>
+                        <svg viewBox="0 0 600 300" className="w-full h-full">
+                            {/* Gradient definitions */}
+                            <defs>
+                                <linearGradient id="revenueGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" stopColor="#EB4724" stopOpacity="0.3" />
+                                    <stop offset="100%" stopColor="#EB4724" stopOpacity="0.05" />
+                                </linearGradient>
+                                <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" stopColor="#651313" />
+                                    <stop offset="100%" stopColor="#EB4724" />
+                                </linearGradient>
+                            </defs>
+
+                            {/* Grid lines */}
+                            {[0, 1, 2, 3, 4].map((i) => (
+                                <line
+                                    key={i}
+                                    x1="50"
+                                    y1={50 + i * 50}
+                                    x2="550"
+                                    y2={50 + i * 50}
+                                    stroke="#f3f4f6"
+                                    strokeWidth="1"
+                                />
+                            ))}
+
+                            {/* Data points path */}
+                            <path
+                                d="M 50,200 Q 150,180 250,150 T 450,100 T 550,80"
+                                fill="none"
+                                stroke="url(#lineGradient)"
+                                strokeWidth="3"
+                                strokeLinecap="round"
+                            />
+
+                            {/* Area fill */}
+                            <path
+                                d="M 50,200 Q 150,180 250,150 T 450,100 T 550,80 L 550,250 L 50,250 Z"
+                                fill="url(#revenueGradient)"
+                            />
+
+                            {/* Data points circles */}
+                            {[
+                                { x: 50, y: 200 },
+                                { x: 150, y: 180 },
+                                { x: 250, y: 150 },
+                                { x: 350, y: 120 },
+                                { x: 450, y: 100 },
+                                { x: 550, y: 80 },
+                            ].map((point, i) => (
+                                <circle
+                                    key={i}
+                                    cx={point.x}
+                                    cy={point.y}
+                                    r="5"
+                                    fill="#EB4724"
+                                    stroke="white"
+                                    strokeWidth="2"
+                                />
+                            ))}
+
+                            {/* X-axis labels */}
+                            {["Jan", "Feb", "Mar", "Apr", "May", "Jun"].map((label, i) => (
+                                <text
+                                    key={i}
+                                    x={50 + i * 100}
+                                    y={280}
+                                    textAnchor="middle"
+                                    className="text-xs fill-gray-500"
+                                    fontSize="12"
+                                >
+                                    {label}
+                                </text>
+                            ))}
+
+                            {/* Y-axis labels */}
+                            {["$0", "$10k", "$20k", "$30k", "$40k"].map((label, i) => (
+                                <text
+                                    key={i}
+                                    x="30"
+                                    y={250 - i * 50}
+                                    textAnchor="end"
+                                    className="text-xs fill-gray-500"
+                                    fontSize="12"
+                                >
+                                    {label}
+                                </text>
+                            ))}
+                        </svg>
                     </div>
                 </div>
 
@@ -239,7 +325,18 @@ export default function DashboardContent() {
                         { label: "Fullname", key: "fullname", render: (row: any) => row.fullname },
                         { label: "Email", key: "email" },
                         { label: "Phone", key: "phone" },
-                        { label: "Role", key: "role", render: (row: any) => <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">{row.role || "user"}</span> }
+                        {
+                            label: "Role",
+                            key: "role",
+                            render: (row: any) => {
+                                const roleName = typeof row.role === 'object' ? row.role?.name : row.role;
+                                return (
+                                    <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">
+                                        {roleName || "user"}
+                                    </span>
+                                );
+                            }
+                        }
                     ]}
                     data={topUsers}
                     showAddButton={false}
