@@ -19,6 +19,7 @@ export default function AdminServicesPage() {
   const [rows, setRows] = useState<any[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const truncate = (s: string, n = 80) => (s?.length > n ? s.slice(0, n) + "..." : s);
   const [formData, setFormData] = useState({
     serviceTitle: "",
     serviceIcon: null as File | null,
@@ -293,7 +294,10 @@ export default function AdminServicesPage() {
     {
       label: "Features",
       key: "features",
-      render: (r: any) => (Array.isArray(r.features) ? r.features.join(", ") : r.features),
+      render: (r: any) => {
+        const text = Array.isArray(r.features) ? r.features.join(", ") : (r.features || "");
+        return <span title={text}>{truncate(text, 100)}</span>;
+      },
     },
     {
       label: "Actions",

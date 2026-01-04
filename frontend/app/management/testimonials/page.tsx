@@ -14,6 +14,7 @@ import {
 
 export default function TestimonialsPage() {
   const [data, setData] = useState<any[]>([]);
+  const truncate = (s: string, n = 120) => (s?.length > n ? s.slice(0, n) + "..." : s);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -171,7 +172,7 @@ export default function TestimonialsPage() {
       label: "Message",
       key: "message",
       width: "40%",
-      render: (row: any) => <p className="line-clamp-2 text-gray-600 italic">"{row.message}"</p>,
+      render: (row: any) => <p className="text-gray-600 italic">"{truncate(row.message, 150)}"</p>,
     },
     {
       label: "Rating",
