@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { MagnifyingGlassIcon, ArrowPathIcon } from "@heroicons/react/24/outline";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -9,20 +9,39 @@ import { ExclamationCircleIcon, CheckCircleIcon } from "@heroicons/react/24/outl
 import { useRouter } from "next/navigation";
 import { isAuthenticated } from "@/utils/auth";
 import DomainPricingTable from "./DomainPricingTable";
+import { useCart } from "@/context/CartContext";
 
 export default function HostingDomainSearch({ transparent = false }: { transparent?: boolean }) {
+    const { toggleCartItem, isInCart } = useCart();
     const router = useRouter();
     const [activeTab, setActiveTab] = useState<'register' | 'transfer' | 'renewal'>('register');
     const [query, setQuery] = useState("");
     const [results, setResults] = useState<DomainCheckResult[] | null>(null);
     const [loading, setLoading] = useState(false);
 
-    const handleAddToCart = () => {
-        if (isAuthenticated()) {
-            router.push("/dashboard");
-        } else {
-            router.push("/login?redirect=/dashboard");
-        }
+    useEffect(() => {
+        const handleHashChange = () => {
+            const hash = window.location.hash;
+            if (hash === '#register') setActiveTab('register');
+            if (hash === '#transfer') setActiveTab('transfer');
+            if (hash === '#renewal') setActiveTab('renewal');
+        };
+
+        handleHashChange(); // Initial check
+        window.addEventListener('hashchange', handleHashChange);
+        return () => window.removeEventListener('hashchange', handleHashChange);
+    }, []);
+
+    const handleAddToCart = (domain: string, price: string) => {
+        toggleCartItem({
+            id: Math.random().toString(36).substr(2, 9),
+            type: 'domain',
+            title: 'Domain Registration',
+            subtitle: domain,
+            price: parseFloat(price.replace('$', '')),
+            options: '1 Year',
+            renewalPrice: parseFloat(price.replace('$', ''))
+        });
     };
 
     const handleSearch = async () => {
@@ -41,7 +60,7 @@ export default function HostingDomainSearch({ transparent = false }: { transpare
     };
 
     return (
-        <section className={`${transparent ? 'bg-transparent' : 'bg-[#fcd7c3]'} py-16 px-4 sm:px-10 relative overflow-hidden`}>
+        <section id="domains" className={`${transparent ? 'bg-transparent' : 'bg-[#fcd7c3]'} py-16 px-4 sm:px-10 relative overflow-hidden`}>
             {/* Background Decoration */}
             <div className="absolute top-0 right-0 opacity-10 pointer-events-none">
                 <div className="w-64 h-64 bg-white rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
@@ -152,10 +171,13 @@ export default function HostingDomainSearch({ transparent = false }: { transpare
                                                                 <span className="font-semibold text-lg">{match.domain} is available!</span>
                                                             </div>
                                                             <button
-                                                                onClick={handleAddToCart}
-                                                                className="whitespace-nowrap bg-[#EB4724] hover:bg-[#d13d1d] text-white px-6 py-2 rounded-lg font-bold transition-colors shadow-sm active:scale-95"
+                                                                onClick={() => handleAddToCart(match.domain, match.price)}
+                                                                className={`whitespace-nowrap px-6 py-2 rounded-lg font-bold transition-colors shadow-sm active:scale-95 ${isInCart(match.domain)
+                                                                        ? 'bg-gray-100 text-[#651313] hover:bg-gray-200'
+                                                                        : 'bg-[#EB4724] text-white hover:bg-[#d13d1d]'
+                                                                    }`}
                                                             >
-                                                                Add to Cart
+                                                                {isInCart(match.domain) ? 'Remove from Cart' : 'Add to Cart'}
                                                             </button>
                                                         </div>
                                                     );
@@ -166,10 +188,10 @@ export default function HostingDomainSearch({ transparent = false }: { transpare
 
                                         {/* Other Extensions Grid */}
                                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                                            {results.map((res) => {
+                                            {results.map((res, idx) => {
                                                 const ext = res.domain.substring(res.domain.lastIndexOf('.'));
                                                 return (
-                                                    <div key={res.domain} className="bg-gray-50 p-4 rounded-xl text-center border border-gray-100 hover:border-[#EB4724]/30 transition-all flex flex-col items-center justify-center gap-3">
+                                                    <div key={`${res.domain}-${idx}`} className="bg-gray-50 p-4 rounded-xl text-center border border-gray-100 hover:border-[#EB4724]/30 transition-all flex flex-col items-center justify-center gap-3">
                                                         <div>
                                                             <p className="text-xl font-bold text-[#651313]">{ext}</p>
                                                             {res.available ? (

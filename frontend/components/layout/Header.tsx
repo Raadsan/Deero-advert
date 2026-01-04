@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { Bell, User, LogOut, ShoppingCart } from "lucide-react";
+import { useCart } from "@/context/CartContext";
 import { isAuthenticated, getUser, clearAuth, isAdmin } from "@/utils/auth";
 import { logout as apiLogout } from "../../api/authApi";
 
@@ -18,6 +19,7 @@ const navLinks = [
 ];
 
 export default function Header() {
+  const { cartItems } = useCart();
   const [open, setOpen] = useState(false);
   const pathname = usePathname() || "";
   const [hash, setHash] = useState("");
@@ -126,56 +128,23 @@ export default function Header() {
 
           {/* Client Area - Right */}
           <div className="hidden md:flex items-center gap-6 pr-25">
+            {/* Shopping Cart */}
+            <Link href="/cart" className="relative p-2 text-[#651313] hover:bg-gray-100 rounded-full transition">
+              <ShoppingCart className="h-6 w-6" />
+              {cartItems.length > 0 && (
+                <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#EB4724] text-[10px] font-bold text-white ring-2 ring-white">
+                  {cartItems.length}
+                </span>
+              )}
+            </Link>
+
             {isLoggedIn ? (
-              <div className="flex items-center gap-4">
-                {/* Notification Bell */}
-                <button className="relative p-2 text-[#651313] hover:bg-gray-100 rounded-full transition">
-                  <Bell className="h-6 w-6" />
-                  <span className="absolute top-1.5 right-1.5 h-2 w-2 bg-[#EB4724] rounded-full"></span>
-                </button>
-
-                {/* Profile Icon with Dropdown */}
-                <div className="relative">
-                  <button
-                    onClick={() => setShowProfileDropdown(!showProfileDropdown)}
-                    className="flex h-10 w-10 items-center justify-center rounded-full bg-[#651313] text-white hover:ring-2 hover:ring-[#EB4724] transition"
-                  >
-                    {user?.fullname ? (
-                      <span className="text-sm font-bold">
-                        {user.fullname.charAt(0).toUpperCase()}
-                      </span>
-                    ) : (
-                      <User className="h-5 w-5" />
-                    )}
-                  </button>
-
-                  {showProfileDropdown && (
-                    <>
-                      <div
-                        className="fixed inset-0 z-10"
-                        onClick={() => setShowProfileDropdown(false)}
-                      />
-                      <div className="absolute right-0 mt-3 w-48 rounded-xl border border-gray-100 bg-white p-2 shadow-xl z-20">
-                        <div className="px-3 py-2 border-b border-gray-50 mb-1">
-                          <p className="text-sm font-bold text-[#651313] truncate">
-                            {user?.fullname || "User"}
-                          </p>
-                          <p className="text-xs text-gray-400 truncate">
-                            {user?.email || ""}
-                          </p>
-                        </div>
-                        <button
-                          onClick={handleLogout}
-                          className="w-full flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition"
-                        >
-                          <LogOut className="h-4 w-4" />
-                          Logout
-                        </button>
-                      </div>
-                    </>
-                  )}
-                </div>
-              </div>
+              <Link
+                href={isAdminUser ? "/admin" : "/dashboard"}
+                className="rounded-full bg-[#EB4724] px-6 py-2.5 font-semibold text-white transition hover:opacity-90"
+              >
+                Dashboard
+              </Link>
             ) : (
               <Link
                 href="/login"
@@ -187,22 +156,32 @@ export default function Header() {
           </div>
 
           {/* Mobile menu toggle */}
-          <button
-            type="button"
-            aria-label="Toggle navigation"
-            className="md:hidden ml-4 p-2 rounded-md text-[#651313] transition hover:bg-[#651313]/5"
-            onClick={() => setOpen((prev) => !prev)}
-          >
-            {open ? (
-              <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M6 18L18 6M6 6l12 12" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            ) : (
-              <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M4 6h16M4 12h16M4 18h16" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            )}
-          </button>
+          <div className="md:hidden flex items-center gap-2">
+            <Link href="/cart" className="relative p-2 text-[#651313] hover:bg-gray-100 rounded-full transition">
+              <ShoppingCart className="h-6 w-6" />
+              {cartItems.length > 0 && (
+                <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#EB4724] text-[10px] font-bold text-white ring-2 ring-white">
+                  {cartItems.length}
+                </span>
+              )}
+            </Link>
+            <button
+              type="button"
+              aria-label="Toggle navigation"
+              className="p-2 rounded-md text-[#651313] transition hover:bg-[#651313]/5"
+              onClick={() => setOpen((prev) => !prev)}
+            >
+              {open ? (
+                <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M6 18L18 6M6 6l12 12" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              ) : (
+                <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M4 6h16M4 12h16M4 18h16" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              )}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Menu */}

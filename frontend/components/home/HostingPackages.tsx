@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { CheckIcon } from "@heroicons/react/24/outline";
 import { motion } from "framer-motion";
+import { useCart } from "@/context/CartContext";
+import { useRouter } from "next/navigation";
 
 const plans = [
     {
@@ -86,7 +88,22 @@ const itemVariants = {
 };
 
 export default function HostingPackages() {
+    const { toggleCartItem, isInCart } = useCart();
+    const router = useRouter();
     const [isYearly, setIsYearly] = useState(false);
+
+    const handleChoosePlan = (plan: any) => {
+        const price = isYearly ? plan.yearlyPrice : plan.monthlyPrice;
+        toggleCartItem({
+            id: Math.random().toString(36).substr(2, 9),
+            type: 'hosting',
+            title: 'Deero Web Hosting',
+            subtitle: `${plan.name} Plan`,
+            price: price,
+            options: `Billing Cycle: ${isYearly ? 'Yearly' : 'Monthly'}`,
+            renewalPrice: price
+        });
+    };
 
     return (
         <section className="bg-white py-12 px-4 sm:px-10">
@@ -159,8 +176,14 @@ export default function HostingPackages() {
                                 ))}
                             </ul>
 
-                            <button className={`${plan.buttonColor} text-white font-bold py-4 rounded-full shadow-lg hover:brightness-110 active:scale-95 transition-all uppercase tracking-widest text-xs`}>
-                                Choose Plan
+                            <button
+                                onClick={() => handleChoosePlan(plan)}
+                                className={`${isInCart(`${plan.name} Plan`)
+                                        ? 'bg-white text-[#651313] border-2 border-[#651313]'
+                                        : plan.buttonColor + ' text-white'
+                                    } font-bold py-4 rounded-full shadow-lg hover:brightness-110 active:scale-95 transition-all uppercase tracking-widest text-xs`}
+                            >
+                                {isInCart(`${plan.name} Plan`) ? 'Remove Plan' : 'Choose Plan'}
                             </button>
                         </motion.div>
                     ))}

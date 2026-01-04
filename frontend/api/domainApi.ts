@@ -24,7 +24,9 @@ export const checkDomainAvailability = async (query: string): Promise<DomainChec
     ];
 
     const results = await Promise.all(extensions.map(async (item) => {
-        const domainName = query.includes('.') ? (item.ext === '.com' ? query : query.split('.')[0] + item.ext) : query + item.ext;
+        // Correctly strip any existing extension to get the base name
+        const baseName = query.includes('.') ? query.substring(0, query.lastIndexOf('.')) : query;
+        const domainName = (baseName + item.ext).toLowerCase();
 
         try {
             // Using rdap.org as a redirector/bootstrap
