@@ -8,7 +8,7 @@ import { getAllUsers } from "@/api/usersApi";
 import { getAllAchievements } from "@/api/achievementApi";
 import { getAllEventsNews } from "@/api/eventsNewsApi";
 import { getMajorClients } from "@/api/majorClientApi";
-import DataTable from "@/components/admin/DataTable";
+import DataTable from "@/components/layout/DataTable";
 
 export default function DashboardContent() {
     const [stats, setStats] = useState([
@@ -315,33 +315,30 @@ export default function DashboardContent() {
                 </div>
             </div>
 
-            {usersLoading ? (
-                <div className="rounded-xl border border-gray-100 bg-white p-6 animate-pulse h-64" />
-            ) : (
-                <DataTable
-                    title="Top 10 Regular Users"
-                    columns={[
-                        { label: "#", key: "rank", width: "60px", render: (_: any, index: number) => index + 1 },
-                        { label: "Fullname", key: "fullname", render: (row: any) => row.fullname },
-                        { label: "Email", key: "email" },
-                        { label: "Phone", key: "phone" },
-                        {
-                            label: "Role",
-                            key: "role",
-                            render: (row: any) => {
-                                const roleName = typeof row.role === 'object' ? row.role?.name : row.role;
-                                return (
-                                    <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">
-                                        {roleName || "user"}
-                                    </span>
-                                );
-                            }
+            <DataTable
+                title="Top 10 Regular Users"
+                columns={[
+                    { label: "#", key: "rank", width: "60px", render: (_: any, index: number) => index + 1 },
+                    { label: "Fullname", key: "fullname", render: (row: any) => row.fullname },
+                    { label: "Email", key: "email" },
+                    { label: "Phone", key: "phone" },
+                    {
+                        label: "Role",
+                        key: "role",
+                        render: (row: any) => {
+                            const roleName = typeof row.role === 'object' ? row.role?.name : row.role;
+                            return (
+                                <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">
+                                    {roleName || "user"}
+                                </span>
+                            );
                         }
-                    ]}
-                    data={topUsers}
-                    showAddButton={false}
-                />
-            )}
+                    }
+                ]}
+                data={topUsers}
+                showAddButton={false}
+                loading={usersLoading}
+            />
         </div>
     );
 }

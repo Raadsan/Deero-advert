@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import DataTable from "@/components/admin/DataTable";
-import Modal from "@/components/admin/Modal";
+import DataTable from "@/components/layout/DataTable";
+import Modal from "@/components/layout/Modal";
 import { Send, Trash2, Mail, Users, Megaphone } from "lucide-react";
 import {
     getAllAnnouncements,

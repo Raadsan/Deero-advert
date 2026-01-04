@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import DataTable from "@/components/admin/DataTable";
-import Modal from "@/components/admin/Modal";
+import DataTable from "@/components/layout/DataTable";
+import Modal from "@/components/layout/Modal";
 import { Pencil, Trash2, UserPlus } from "lucide-react";
 import {
   getAllUsers,
@@ -27,34 +27,43 @@ export default function UsersPage() {
   });
   const [isEditing, setIsEditing] = useState(false);
 
-  // Fetch users from backend
-  useEffect(() => {
-    fetchUsers();
-    fetchRoles();
-  }, []);
-
-  const fetchRoles = async () => {
+  // Fetch users and roles from backend
+  const fetchData = async () => {
+    setLoading(true);
     try {
-      const res = await getAllRoles();
-      if (res.roles) {
-        setRoles(res.roles);
-      } else if (Array.isArray(res)) {
-        // handle case where api might return array directly
-        setRoles(res);
+      const [userRes, roleRes] = await Promise.all([
+        getAllUsers(),
+        getAllRoles()
+      ]);
+
+      // Handle users data structure (direct array or nested in data)
+      const users = Array.isArray(userRes.data) ? userRes.data : (userRes.data?.data || []);
+      setData(users);
+
+      // Handle roles data structure
+      if (roleRes.roles) {
+        setRoles(roleRes.roles);
+      } else if (Array.isArray(roleRes)) {
+        setRoles(roleRes);
       }
     } catch (error) {
-      console.error("Failed to fetch roles", error);
+      console.error("Failed to fetch users or roles", error);
+    } finally {
+      setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const fetchUsers = async () => {
     try {
       const res = await getAllUsers();
-      setData(res.data);
+      const users = Array.isArray(res.data) ? res.data : (res.data?.data || []);
+      setData(users);
     } catch (error) {
       console.error(error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -114,7 +123,6 @@ export default function UsersPage() {
     setFormData({ fullname: "", email: "", password: "", phone: "", role: "", id: "" });
   };
 
-  if (loading) return <p className="text-gray-500">Loading users...</p>;
 
   const columns = [
     {
@@ -123,8 +131,8 @@ export default function UsersPage() {
       render: (row: any) => (
         <div className="flex items-center gap-2">
           <div className="h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center text-[#651313] font-bold text-xs uppercase border border-gray-200">
-            {row.fullname.charAt(0)}
-            {row.fullname.split(" ")[1]?.charAt(0)}
+            {row.fullname?.charAt(0) || '?'}
+            {row.fullname?.split(" ")[1]?.charAt(0) || ''}
           </div>
           <span className="font-medium text-gray-900">{row.fullname}</span>
         </div>
@@ -187,6 +195,7 @@ export default function UsersPage() {
         columns={columns}
         data={data}
         onAddClick={() => setIsModalOpen(true)}
+        loading={loading}
       />
 
       <Modal

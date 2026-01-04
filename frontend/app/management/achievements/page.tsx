@@ -2,14 +2,15 @@
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import DataTable from "@/components/admin/DataTable";
-import Modal from "@/components/admin/Modal";
+import DataTable from "@/components/layout/DataTable";
+import Modal from "@/components/layout/Modal";
 import { Pencil, Trash2, Camera } from "lucide-react";
 import {
   getAllAchievements,
   createAchievement,
   updateAchievement,
   deleteAchievement,
+  Achievement,
 } from "../../../api/achievementApi";
 
 export default function AchievementsPage() {
@@ -29,13 +30,14 @@ export default function AchievementsPage() {
     setLoading(true);
     try {
       const res = await getAllAchievements();
-      const achievements = Array.isArray(res.data.data) ? res.data.data : res.data;
+      // Safely access the array from the response
+      const achievements = Array.isArray(res.data?.data) ? res.data.data : [];
       setData(
-        achievements.map((a: any) => ({
+        achievements.map((a: Achievement) => ({
           id: a._id,
           title: a.title,
           count: a.count,
-          icon: a.icon.startsWith("/") ? a.icon : `/${a.icon}`,
+          icon: a.icon?.startsWith("/") ? a.icon : `/${a.icon}`,
         }))
       );
     } catch (err) {
@@ -252,8 +254,8 @@ export default function AchievementsPage() {
                   {formData.icon
                     ? formData.icon.name
                     : editingId
-                    ? "Click to change icon (required)"
-                    : "Click to upload icon"}
+                      ? "Click to change icon (required)"
+                      : "Click to upload icon"}
                 </p>
                 {formData.icon && (
                   <button

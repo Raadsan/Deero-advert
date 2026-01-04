@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import DataTable from "../../../components/admin/DataTable";
-import Modal from "../../../components/admin/Modal";
+import DataTable from "@/components/layout/DataTable";
+import Modal from "@/components/layout/Modal";
 import { Pencil, Trash2 } from "lucide-react";
 import { getAllEventsNews, createEventNews, updateEventNews, deleteEventNews } from "../../../api/eventsNewsApi";
 
@@ -136,8 +136,8 @@ export default function EventsNewsPage() {
             render: (row: EventNewsItem) => (
                 <span
                     className={`px-3 py-1 rounded-full text-xs font-semibold uppercase ${row.type === "event"
-                            ? "bg-blue-100 text-blue-700 border border-blue-200"
-                            : "bg-green-100 text-green-700 border border-green-200"
+                        ? "bg-blue-100 text-blue-700 border border-blue-200"
+                        : "bg-green-100 text-green-700 border border-green-200"
                         }`}
                 >
                     {row.type}

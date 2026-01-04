@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import DataTable from "@/components/admin/DataTable";
-import Modal from "@/components/admin/Modal";
+import DataTable from "@/components/layout/DataTable";
+import Modal from "@/components/layout/Modal";
 import { Pencil, Trash2, Camera, Star as StarIcon } from "lucide-react";
 import {
   getAllTestimonials,
@@ -31,15 +31,16 @@ export default function TestimonialsPage() {
     setLoading(true);
     try {
       const res = await getAllTestimonials();
-      const testimonials = Array.isArray(res.data.data) ? res.data.data : res.data;
+      const items = Array.isArray(res.data) ? res.data : (res.data?.data || []);
+
       setData(
-        testimonials.map((t: any) => ({
+        items.map((t: any) => ({
           id: t._id,
           clientName: t.clientName,
           clientTitle: t.clientTitle,
-          clientImage: t.clientImage.startsWith("/")
+          clientImage: t.clientImage && typeof t.clientImage === 'string' && t.clientImage.startsWith("/")
             ? t.clientImage
-            : `/${t.clientImage}`,
+            : t.clientImage ? `/${t.clientImage}` : "",
           message: t.message,
           rating: t.rating || 5,
         }))

@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import UserSidebar from "@/components/user/UserSidebar";
-import UserHeader from "@/components/user/UserHeader";
+import UnifiedSidebar from "@/components/layout/UnifiedSidebar";
+import UnifiedHeader from "@/components/layout/UnifiedHeader";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 
 export default function UserLayout({
@@ -15,10 +15,10 @@ export default function UserLayout({
     return (
         <ProtectedRoute requiredRole="user">
             <div className="min-h-screen bg-gray-50 font-sans">
-                <UserSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+                <UnifiedSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
                 <div className="min-h-screen transition-all sm:ml-64">
-                    <UserHeader onMenuClick={() => setSidebarOpen(true)} />
+                    <UnifiedHeader onMenuClick={() => setSidebarOpen(true)} />
                     <main className="p-4 sm:p-6 lg:p-8">
                         {children}
                     </main>

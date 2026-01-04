@@ -18,12 +18,19 @@ import {
     ChevronDown,
     ChevronRight,
     Folder,
-    LucideIcon
+    LucideIcon,
+    Package,
+    Heart,
+    ShoppingBag,
+    Globe,
+    CreditCard,
+    User
 } from "lucide-react";
 import Image from "next/image";
 import { logout } from "../../api/authApi";
 import { useEffect, useState } from "react";
 import { getUserMenus } from "../../api/menuApi";
+import { getUser } from "../../utils/auth";
 import { Menu } from "../../types/menu";
 
 // Icon mapping from string names to Lucide components
@@ -37,21 +44,48 @@ const iconMap: Record<string, LucideIcon> = {
     "bar-chart": BarChart3,
     barchart: BarChart3,
     briefcase: Briefcase,
+    career: Briefcase,
     newspaper: Newspaper,
+    news: Newspaper,
+    blogs: Newspaper,
     award: Award,
+    achievements: Award,
     "message-square": MessageSquare,
     messagesquare: MessageSquare,
+    testimonials: MessageSquare,
     calendar: Calendar,
+    "events-news": Calendar,
     folder: Folder,
+    package: Package,
+    services: Package,
+    "shopping-bag": ShoppingBag,
+    shoppingbag: ShoppingBag,
+    globe: Globe,
+    heart: Heart,
+    "credit-card": CreditCard,
+    creditcard: CreditCard,
+    user: User,
+    profile: User,
+    "my domains": Globe,
+    "my services": Package,
+    "my orders": ShoppingBag,
+    documents: FileText,
+    favorites: Heart,
+    payments: CreditCard,
+    roles: Users,
+    "role-permissions": Settings,
+    menus: Settings,
+    announcements: Calendar,
+    "major-clients": Users,
 };
 
-export default function Sidebar({ isOpen, onClose }: { isOpen?: boolean; onClose?: () => void }) {
+export default function UnifiedSidebar({ isOpen, onClose }: { isOpen?: boolean; onClose?: () => void }) {
     const pathname = usePathname();
     const router = useRouter();
     const [menus, setMenus] = useState<Menu[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [expandedMenus, setExpandedMenus] = useState<Set<string>>(new Set());
+    const [expandedMenuId, setExpandedMenuId] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchMenus = async () => {
@@ -59,15 +93,13 @@ export default function Sidebar({ isOpen, onClose }: { isOpen?: boolean; onClose
                 setLoading(true);
                 setError(null);
 
-                // Get user from localStorage
-                const userStr = localStorage.getItem("user");
-                if (!userStr) {
+                const user = getUser();
+                if (!user) {
                     setError("User not found. Please login again.");
                     setLoading(false);
                     return;
                 }
 
-                const user = JSON.parse(userStr);
                 const roleId = user.role?._id || user.role;
 
                 if (!roleId) {
@@ -76,13 +108,13 @@ export default function Sidebar({ isOpen, onClose }: { isOpen?: boolean; onClose
                     return;
                 }
 
-                // Fetch menus from API
-                const response = await getUserMenus(roleId);
+                // Try to get menus for this role
+                const response = await getUserMenus(typeof roleId === 'object' ? roleId._id : roleId);
 
-                if (response.success) {
+                if (response && response.menus) {
                     setMenus(response.menus);
                 } else {
-                    setError("Failed to load menus");
+                    setMenus([]);
                 }
             } catch (err: any) {
                 console.error("Error fetching menus:", err);
@@ -95,34 +127,37 @@ export default function Sidebar({ isOpen, onClose }: { isOpen?: boolean; onClose
         fetchMenus();
     }, []);
 
+    // Auto-expand the active menu section
+    useEffect(() => {
+        if (menus.length > 0 && pathname) {
+            const activeMenu = menus.find(menu =>
+                menu.isCollapsible && menu.subMenus.some(sub => pathname === sub.url)
+            );
+            if (activeMenu) {
+                setExpandedMenuId(activeMenu._id);
+            }
+        }
+    }, [menus, pathname]);
+
     const handleLogout = () => {
         logout();
         router.push("/login");
     };
 
     const toggleMenu = (menuId: string) => {
-        setExpandedMenus(prev => {
-            const newSet = new Set(prev);
-            if (newSet.has(menuId)) {
-                newSet.delete(menuId);
-            } else {
-                newSet.add(menuId);
-            }
-            return newSet;
-        });
+        setExpandedMenuId(prev => (prev === menuId ? null : menuId));
     };
 
     const getIcon = (iconName?: string): LucideIcon => {
         if (!iconName) return Folder;
         const normalizedName = iconName.toLowerCase().replace(/\s+/g, "-");
-        return iconMap[normalizedName] || Folder;
+        return iconMap[normalizedName] || iconMap[iconName.toLowerCase()] || Folder;
     };
 
     const isMenuActive = (menu: Menu): boolean => {
         if (!menu.isCollapsible && menu.url) {
             return pathname === menu.url;
         }
-        // Check if any submenu is active
         return menu.subMenus.some(sub => pathname === sub.url);
     };
 
@@ -154,7 +189,6 @@ export default function Sidebar({ isOpen, onClose }: { isOpen?: boolean; onClose
                                 priority
                             />
                         </div>
-                        {/* Close button for mobile */}
                         <button
                             onClick={onClose}
                             className="rounded-lg p-1 text-white/70 hover:bg-white/10 sm:hidden"
@@ -173,12 +207,11 @@ export default function Sidebar({ isOpen, onClose }: { isOpen?: boolean; onClose
                             <li className="px-4 py-3 text-white/60 text-sm">No menus available</li>
                         ) : (
                             menus.map((menu, index) => {
-                                const Icon = getIcon(menu.icon);
+                                const Icon = getIcon(menu.icon || menu.title);
                                 const isActive = isMenuActive(menu);
-                                const isExpanded = expandedMenus.has(menu._id);
+                                const isExpanded = expandedMenuId === menu._id;
 
                                 if (!menu.isCollapsible && menu.url) {
-                                    // Simple link menu
                                     return (
                                         <li key={`${menu._id}-${index}`}>
                                             <Link
@@ -198,7 +231,6 @@ export default function Sidebar({ isOpen, onClose }: { isOpen?: boolean; onClose
                                     );
                                 }
 
-                                // Collapsible menu with submenus
                                 return (
                                     <li key={`${menu._id}-${index}`}>
                                         <button
@@ -221,7 +253,6 @@ export default function Sidebar({ isOpen, onClose }: { isOpen?: boolean; onClose
                                             )}
                                         </button>
 
-                                        {/* Submenus */}
                                         {isExpanded && menu.subMenus.length > 0 && (
                                             <ul className="mt-1 ml-4 space-y-1">
                                                 {menu.subMenus.map((submenu, subIndex) => {
@@ -249,7 +280,6 @@ export default function Sidebar({ isOpen, onClose }: { isOpen?: boolean; onClose
                         )}
                     </ul>
 
-                    {/* Bottom Actions */}
                     <div className="mt-auto border-t border-white/10 pt-4">
                         <button
                             onClick={handleLogout}

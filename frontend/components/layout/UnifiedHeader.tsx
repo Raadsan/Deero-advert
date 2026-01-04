@@ -5,17 +5,24 @@ import { useRouter } from "next/navigation";
 import { Bell, Search, Menu, LogOut, User } from "lucide-react";
 import { logout } from "../../api/authApi";
 
-export default function UserHeader({ onMenuClick }: { onMenuClick: () => void }) {
+export default function UnifiedHeader({ onMenuClick }: { onMenuClick: () => void }) {
     const router = useRouter();
     const [user, setUser] = useState<any>(null);
     const [showDropdown, setShowDropdown] = useState(false);
+    const [portalTitle, setPortalTitle] = useState("Portal");
 
     useEffect(() => {
-        // Get user from localStorage
         const userData = localStorage.getItem("user");
         if (userData) {
             try {
-                setUser(JSON.parse(userData));
+                const parsedUser = JSON.parse(userData);
+                setUser(parsedUser);
+
+                const role = parsedUser.role;
+                const roleName = (typeof role === 'object' && role?.name) ? role.name.toLowerCase() : 'user';
+
+                // Unified title for all portals
+                setPortalTitle("Portal Dashboard");
             } catch (e) {
                 console.error("Error parsing user data", e);
             }
@@ -25,8 +32,9 @@ export default function UserHeader({ onMenuClick }: { onMenuClick: () => void })
     const handleLogout = () => {
         logout();
         setShowDropdown(false);
-        router.push("/");
+        router.push("/login"); // Consistent logout redirect
     };
+
     return (
         <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-gray-200 bg-white px-4 shadow-sm sm:px-6 lg:px-8">
             <div className="flex items-center gap-4">
@@ -39,7 +47,7 @@ export default function UserHeader({ onMenuClick }: { onMenuClick: () => void })
                     <Menu className="h-6 w-6" />
                 </button>
                 <div className="hidden md:block">
-                    <h1 className="text-xl font-bold text-[#651313]">My Dashboard</h1>
+                    <h1 className="text-xl font-bold text-[#651313]">{portalTitle}</h1>
                 </div>
             </div>
 
@@ -75,7 +83,6 @@ export default function UserHeader({ onMenuClick }: { onMenuClick: () => void })
                         )}
                     </button>
 
-                    {/* Dropdown Menu */}
                     {showDropdown && (
                         <>
                             <div
@@ -84,7 +91,7 @@ export default function UserHeader({ onMenuClick }: { onMenuClick: () => void })
                             />
                             <div className="absolute right-0 mt-2 w-48 rounded-lg border border-gray-200 bg-white shadow-lg z-20">
                                 <div className="p-3 border-b border-gray-100">
-                                    <p className="text-sm font-semibold text-gray-900">{user?.fullname || "User"}</p>
+                                    <p className="text-sm font-semibold text-gray-900">{user?.fullname || portalTitle.split(" ")[0]}</p>
                                     <p className="text-xs text-gray-500">{user?.email || ""}</p>
                                 </div>
                                 <button
@@ -102,4 +109,3 @@ export default function UserHeader({ onMenuClick }: { onMenuClick: () => void })
         </header>
     );
 }
-

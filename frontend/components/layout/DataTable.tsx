@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 // Removed ThemeContext dependency for now as it wasn't requested/verified to exist in this context,
 // and we want to enforce brand colors.
 
-const DataTable = ({ title, columns, data = [], onAddClick, showAddButton = true }: any) => {
+const DataTable = ({ title, columns, data = [], onAddClick, showAddButton = true, loading = false }: any) => {
     const [search, setSearch] = useState("");
     const [filteredData, setFilteredData] = useState<any[]>(data);
     const [entriesPerPage, setEntriesPerPage] = useState(10);
@@ -97,42 +97,53 @@ const DataTable = ({ title, columns, data = [], onAddClick, showAddButton = true
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
-                        {filteredData.slice(startIdx, endIdx).map((row: any, idx: number) => (
-                            <tr
-                                key={row._id || row.id || idx}
-                                className={`group transition-colors ${idx % 2 === 0
-                                    ? "bg-white"
-                                    : "bg-gray-50/50"
-                                    }`}
-                            >
-                                {columns.map((col: any, i: number) => {
-                                    const rawValue = col.render
-                                        ? col.render(row, idx)
-                                        : col.key
-                                            ? col.key.split(".").reduce((obj: any, key: any) => obj?.[key], row)
-                                            : undefined;
-
-                                    let cellContent = rawValue;
-
-                                    if (rawValue === undefined || rawValue === null || rawValue === "") {
-                                        cellContent = <span className="text-gray-400">-</span>;
-                                    } else if (Array.isArray(rawValue)) {
-                                        cellContent = rawValue.join(", ");
-                                    }
-
-                                    return (
-                                        <td
-                                            key={col.key || i}
-                                            className="px-5 py-4 text-gray-600 font-medium"
-                                            style={col.width ? { width: col.width, minWidth: col.width } : {}}
-                                        >
-                                            {cellContent}
+                        {loading ? (
+                            [1, 2, 3, 4, 5].map((i) => (
+                                <tr key={i} className="animate-pulse">
+                                    {columns.map((_: any, j: number) => (
+                                        <td key={j} className="px-5 py-4">
+                                            <div className="h-4 bg-gray-200 rounded w-full"></div>
                                         </td>
-                                    );
-                                })}
-                            </tr>
-                        ))}
-                        {filteredData.length === 0 && (
+                                    ))}
+                                </tr>
+                            ))
+                        ) : filteredData.length > 0 ? (
+                            filteredData.slice(startIdx, endIdx).map((row: any, idx: number) => (
+                                <tr
+                                    key={row._id || row.id || idx}
+                                    className={`group transition-colors ${idx % 2 === 0
+                                        ? "bg-white"
+                                        : "bg-gray-50/50"
+                                        }`}
+                                >
+                                    {columns.map((col: any, i: number) => {
+                                        const rawValue = col.render
+                                            ? col.render(row, idx)
+                                            : col.key
+                                                ? col.key.split(".").reduce((obj: any, key: any) => obj?.[key], row)
+                                                : undefined;
+
+                                        let cellContent = rawValue;
+
+                                        if (rawValue === undefined || rawValue === null || rawValue === "") {
+                                            cellContent = <span className="text-gray-400">-</span>;
+                                        } else if (Array.isArray(rawValue)) {
+                                            cellContent = rawValue.join(", ");
+                                        }
+
+                                        return (
+                                            <td
+                                                key={col.key || i}
+                                                className="px-5 py-4 text-gray-600 font-medium"
+                                                style={col.width ? { width: col.width, minWidth: col.width } : {}}
+                                            >
+                                                {cellContent}
+                                            </td>
+                                        );
+                                    })}
+                                </tr>
+                            ))
+                        ) : (
                             <tr>
                                 <td
                                     colSpan={columns.length}

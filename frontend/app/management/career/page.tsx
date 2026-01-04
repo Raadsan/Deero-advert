@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import DataTable from "../../../components/admin/DataTable";
-import Modal from "../../../components/admin/Modal";
+import DataTable from "@/components/layout/DataTable";
+import Modal from "@/components/layout/Modal";
 import { Pencil, Trash2, CheckCircle, XCircle } from "lucide-react";
 import { getAllCareers, createCareer, updateCareer, deleteCareer, Career } from "../../../api/careerApi";
 
@@ -187,8 +187,8 @@ export default function CareersPage() {
                 return (
                     <span
                         className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold ${isActive
-                                ? "bg-green-100 text-green-700"
-                                : "bg-red-100 text-red-700"
+                            ? "bg-green-100 text-green-700"
+                            : "bg-red-100 text-red-700"
                             }`}
                     >
                         {isActive ? (
@@ -300,7 +300,7 @@ export default function CareersPage() {
                         >
                             <option value="Full-time">Full-time</option>
                             <option value="Part-time">Part-time</option>
-             
+
                             <option value="Internship">Internship</option>
                         </select>
                     </div>

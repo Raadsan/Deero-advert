@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import DataTable from "@/components/admin/DataTable";
+import DataTable from "@/components/layout/DataTable";
+import Modal from "@/components/layout/Modal";
 import { getAllMenus, createMenu, updateMenu, deleteMenu } from "@/api/menuApi";
 import { Menu } from "@/types/menu";
 import { Trash2, Edit, Plus, ChevronDown, ChevronRight } from "lucide-react";
@@ -165,8 +166,8 @@ export default function MenusPage() {
                             key: "isCollapsible",
                             render: (row: Menu) => (
                                 <span className={`px-2 py-1 rounded-full text-xs font-medium ${row.isCollapsible
-                                        ? "bg-purple-100 text-purple-700"
-                                        : "bg-blue-100 text-blue-700"
+                                    ? "bg-purple-100 text-purple-700"
+                                    : "bg-blue-100 text-blue-700"
                                     }`}>
                                     {row.isCollapsible ? "Collapsible" : "Direct Link"}
                                 </span>

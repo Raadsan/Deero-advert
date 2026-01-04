@@ -142,20 +142,20 @@ export default function RolePermissionsPage() {
 
     const getRoleColor = (roleName: string) => {
         const colors: Record<string, string> = {
-            admin: "from-purple-500 to-purple-700",
-            manager: "from-blue-500 to-blue-700",
-            user: "from-green-500 to-green-700",
+            admin: "from-[#651313] to-[#911b1b]",
+            manager: "from-[#EB4724] to-[#f06e52]",
+            user: "from-gray-700 to-gray-900",
         };
         return colors[roleName.toLowerCase()] || "from-gray-500 to-gray-700";
     };
 
     const getRoleBadgeColor = (roleName: string) => {
         const colors: Record<string, string> = {
-            admin: "bg-purple-100 text-purple-700 border-purple-200",
-            manager: "bg-blue-100 text-blue-700 border-blue-200",
-            user: "bg-green-100 text-green-700 border-green-200",
+            admin: "bg-red-50 text-red-700 border-red-100",
+            manager: "bg-orange-50 text-orange-700 border-orange-100",
+            user: "bg-gray-50 text-gray-700 border-gray-100",
         };
-        return colors[roleName.toLowerCase()] || "bg-gray-100 text-gray-700 border-gray-200";
+        return colors[roleName.toLowerCase()] || "bg-gray-50 text-gray-700 border-gray-100";
     };
 
     return (
@@ -210,7 +210,7 @@ export default function RolePermissionsPage() {
                             className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100"
                         >
                             {/* Role Header with Gradient */}
-                            <div className={`bg-gradient-to-br ${getRoleColor(perm.role.name)} p-6 relative overflow-hidden`}>
+                            <div className={`bg-gradient-to-br ${getRoleColor(perm.role.name)} p-4 relative overflow-hidden`}>
                                 <div className="absolute top-0 right-0 opacity-10">
                                     <Lock className="h-32 w-32 transform rotate-12" />
                                 </div>
@@ -247,7 +247,7 @@ export default function RolePermissionsPage() {
                             </div>
 
                             {/* Permissions Content */}
-                            <div className="p-6">
+                            <div className="p-4">
                                 <div className="flex items-center justify-between mb-4">
                                     <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
                                         Accessible Menus
@@ -257,10 +257,10 @@ export default function RolePermissionsPage() {
                                     </span>
                                 </div>
 
-                                <div className="space-y-3">
+                                <div className="space-y-2">
                                     {perm.menusAccess.length > 0 ? (
                                         perm.menusAccess.map((ma, maIndex) => (
-                                            <div key={`${ma._id || 'menu'}-${maIndex}`} className="bg-gradient-to-br from-gray-50 to-white rounded-xl p-4 border border-gray-200 hover:border-[#EB4724] transition-colors">
+                                            <div key={`${ma._id || 'menu'}-${maIndex}`} className="bg-gradient-to-br from-gray-50 to-white rounded-lg p-2.5 border border-gray-100 hover:border-[#EB4724]/30 transition-colors">
                                                 {/* Main Menu */}
                                                 <div className="flex items-center gap-2 mb-2">
                                                     <div className="w-2 h-2 rounded-full bg-[#651313]"></div>
@@ -294,8 +294,8 @@ export default function RolePermissionsPage() {
                                                 )}
 
                                                 {ma.subMenus.length === 0 && ma.menuId && ma.menuId.isCollapsible && (
-                                                    <div className="ml-4 mt-1">
-                                                        <span className="text-xs text-gray-400 italic">All submenus</span>
+                                                    <div className="ml-4 mt-2 flex flex-col">
+                                                        <span className="text-gray-400 text-[10px] mt-1 font-normal">No submenus</span>
                                                     </div>
                                                 )}
                                             </div>
@@ -305,8 +305,7 @@ export default function RolePermissionsPage() {
                                             <X className="h-12 w-12 text-gray-300 mx-auto mb-2" />
                                             <p className="text-sm text-gray-400">No menus assigned</p>
                                         </div>
-                                    )
-                                    }
+                                    )}
                                 </div>
                             </div>
                         </div>

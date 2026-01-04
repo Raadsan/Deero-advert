@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import DataTable from "../../../components/admin/DataTable";
-import Modal from "../../../components/admin/Modal";
+import DataTable from "@/components/layout/DataTable";
+import Modal from "@/components/layout/Modal";
 import { Pencil, Trash2, Camera, Plus, X } from "lucide-react";
 import { getAllServices, createService, updateService, deleteService } from "../../../api/serviceApi";
 
@@ -31,7 +31,7 @@ export default function AdminServicesPage() {
     setLoading(true);
     try {
       const res = await getAllServices();
-      const data: Service[] = Array.isArray(res.data.data) ? res.data.data : res.data;
+      const data: Service[] = Array.isArray(res.data?.data) ? res.data.data : [];
 
       const flattened: any[] = [];
 
@@ -237,8 +237,8 @@ export default function AdminServicesPage() {
     try {
       // Fetch full service data to get packages
       const res = await getAllServices();
-      const services: Service[] = Array.isArray(res.data.data) ? res.data.data : res.data;
-      const service = services.find((s) => s._id === row.serviceId);
+      const services = Array.isArray(res.data?.data) ? res.data.data : [];
+      const service = services.find((s: any) => s._id === row.serviceId);
 
       if (service) {
         setEditingId(service._id);
@@ -248,7 +248,7 @@ export default function AdminServicesPage() {
           price: pkg.price || "",
           features: Array.isArray(pkg.features) ? pkg.features : [],
         }));
-        
+
         setFormData({
           serviceTitle: service.serviceTitle,
           serviceIcon: null,
@@ -401,8 +401,8 @@ export default function AdminServicesPage() {
                   {formData.serviceIcon
                     ? formData.serviceIcon.name
                     : editingId
-                    ? "Click to change icon (optional)"
-                    : "Click to upload icon"}
+                      ? "Click to change icon (optional)"
+                      : "Click to upload icon"}
                 </p>
                 {formData.serviceIcon && (
                   <button

@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import DataTable from "@/components/admin/DataTable";
+import DataTable from "@/components/layout/DataTable";
+import Modal from "@/components/layout/Modal";
 import { getAllRoles, createRole, updateRole, deleteRole, Role } from "@/api/roleApi";
 import { Trash2, Edit, Plus } from "lucide-react";
 
@@ -87,71 +88,62 @@ export default function RolesPage() {
                 </button>
             </div>
 
-            {loading ? (
-                <div className="bg-white rounded-lg shadow p-6">
-                    <div className="animate-pulse space-y-4">
-                        {[1, 2, 3].map((i) => (
-                            <div key={i} className="h-12 bg-gray-200 rounded"></div>
-                        ))}
-                    </div>
-                </div>
-            ) : (
-                <DataTable
-                    title="System Roles"
-                    columns={[
-                        {
-                            label: "Name",
-                            key: "name",
-                            render: (row: Role) => (
-                                <span className="font-medium text-gray-900 capitalize">{row.name}</span>
-                            ),
-                        },
-                        {
-                            label: "Description",
-                            key: "description",
-                            render: (row: Role) => (
-                                <span className="text-gray-600">{row.description || "-"}</span>
-                            ),
-                        },
-                        {
-                            label: "Created",
-                            key: "createdAt",
-                            render: (row: Role) => (
-                                <span className="text-gray-600">
-                                    {row.createdAt
-                                        ? new Date(row.createdAt).toLocaleDateString()
-                                        : "-"}
-                                </span>
-                            ),
-                        },
-                        {
-                            label: "Actions",
-                            key: "actions",
-                            width: "150px",
-                            render: (row: Role) => (
-                                <div className="flex items-center gap-2">
-                                    <button
-                                        onClick={() => handleEdit(row)}
-                                        className="rounded p-2 text-blue-600 hover:bg-blue-50 transition-colors"
-                                        title="Edit"
-                                    >
-                                        <Edit className="h-4 w-4" />
-                                    </button>
-                                    <button
-                                        onClick={() => handleDelete(row._id)}
-                                        className="rounded p-2 text-red-600 hover:bg-red-50 transition-colors"
-                                        title="Delete"
-                                    >
-                                        <Trash2 className="h-4 w-4" />
-                                    </button>
-                                </div>
-                            ),
-                        },
-                    ]}
-                    data={roles}
-                    showAddButton={false}
-                />
-            )}
+            <DataTable
+                title="System Roles"
+                columns={[
+                    {
+                        label: "Name",
+                        key: "name",
+                        render: (row: Role) => (
+                            <span className="font-medium text-gray-900 capitalize">{row.name}</span>
+                        ),
+                    },
+                    {
+                        label: "Description",
+                        key: "description",
+                        render: (row: Role) => (
+                            <span className="text-gray-600">{row.description || "-"}</span>
+                        ),
+                    },
+                    {
+                        label: "Created",
+                        key: "createdAt",
+                        render: (row: Role) => (
+                            <span className="text-gray-600">
+                                {row.createdAt
+                                    ? new Date(row.createdAt).toLocaleDateString()
+                                    : "-"}
+                            </span>
+                        ),
+                    },
+                    {
+                        label: "Actions",
+                        key: "actions",
+                        width: "150px",
+                        render: (row: Role) => (
+                            <div className="flex items-center gap-2">
+                                <button
+                                    onClick={() => handleEdit(row)}
+                                    className="rounded p-2 text-blue-600 hover:bg-blue-50 transition-colors"
+                                    title="Edit"
+                                >
+                                    <Edit className="h-4 w-4" />
+                                </button>
+                                <button
+                                    onClick={() => handleDelete(row._id)}
+                                    className="rounded p-2 text-red-600 hover:bg-red-50 transition-colors"
+                                    title="Delete"
+                                >
+                                    <Trash2 className="h-4 w-4" />
+                                </button>
+                            </div>
+                        ),
+                    },
+                ]}
+                data={roles}
+                showAddButton={false}
+                loading={loading}
+            />
 
             {/* Modal */}
             {showModal && (
