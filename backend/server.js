@@ -1,5 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
+dotenv.config();
+
 import cors from "cors";
 import connectDB from "./config/db.js";
 import blogsRoute from "./routes/blogsRoute.js"; // <-- import blogs route
@@ -17,11 +19,11 @@ import eventsNewsRoutes from "./routes/eventNewsroutes.js";
 import careerRoutes from "./routes/careerRoutes.js";
 import clientRoute from "./routes/majorclientRoute.js";
 import announcementRoute from "./routes/AnnouncementRoute.js";
+import domainRoute from "./routes/domainRoute.js";
+import transactionRoute from "./routes/transactionRoute.js";
 
 import path from "path";
 import { fileURLToPath } from "url";
-
-dotenv.config();
 
 // Connect Database
 connectDB();
@@ -52,6 +54,8 @@ app.use("/api/events-news", eventsNewsRoutes);
 app.use("/api/careers", careerRoutes);
 app.use("/api/majorclients", clientRoute);
 app.use("/api/announcements", announcementRoute);
+app.use("/api/domains", domainRoute);
+app.use("/api/transactions", transactionRoute);
 app.use(multerErrorHandler);
 const PORT = process.env.PORT || 5000;
 
