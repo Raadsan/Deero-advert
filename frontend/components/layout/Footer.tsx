@@ -57,9 +57,9 @@ export default function Footer() {
                                 { label: "Graphic Design", sectionId: "graphic-design" },
                                 { label: "Digital Marketing", sectionId: "digital-marketing" },
                                 { label: "Web Solutions", sectionId: "web-solutions" },
-                                { label: "Motion Graphics", sectionId: "digital-consulting" }, // uses Commercial Content Creation section
+                                { label: "Motion Graphics", sectionId: "motion-graphics" },
                                 { label: "Event Branding", sectionId: "event-branding" },
-                                { label: "Digital Consulting", sectionId: "business-growth" },
+                                { label: "Digital Consulting", sectionId: "digital-consulting" },
                             ].map((item) => (
                                 <li key={item.label}>
                                     {item.sectionId ? (
