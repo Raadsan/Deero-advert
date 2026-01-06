@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import { motion, AnimatePresence } from "framer-motion";
 
 type Slide = {
   title: string;
@@ -77,40 +78,59 @@ export default function Hero() {
           type="button"
           aria-label="Previous slide"
           onClick={prev}
-          className="absolute left-3 top-1/2 hidden -translate-y-1/2 text-white transition hover:scale-110 lg:inline-flex"
+          className="absolute left-3 top-1/2 hidden -translate-y-1/2 text-white transition hover:scale-110 lg:inline-flex z-20"
         >
           <ChevronLeftIcon className="h-8 w-8" />
         </button>
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between w-full gap-10 ">
           <div className="space-y-6 lg:w-1/2">
-
-            <h1 className="text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">
-              {slide.title}
-            </h1>
-            <p className="max-w-2xl text-lg leading-8 text-white/90">
-              {slide.description}
-            </p>
-            <div className="flex items-center gap-4 ">
-              <button 
-                onClick={handleSeeMore}
-                className="rounded-md bg-[#c88a66] px-10 py-3 pl-8 text-base font-semibold text-white shadow transition hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={active}
+                initial={{ opacity: 0, y: 80 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 80 }}
+                transition={{ duration: 0.8 }}
+                className="space-y-6"
               >
-                See More
-              </button>
-            </div>
+                <h1 className="text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">
+                  {slide.title}
+                </h1>
+                <p className="max-w-2xl text-lg leading-8 text-white/90">
+                  {slide.description}
+                </p>
+                <div className="flex items-center gap-4">
+                  <button
+                    onClick={handleSeeMore}
+                    className="rounded-md bg-[#c88a66] px-10 py-3 pl-8 text-base font-semibold text-white shadow transition hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                  >
+                    See More
+                  </button>
+                </div>
+              </motion.div>
+            </AnimatePresence>
           </div>
 
-          <div className="relative lg:w-1/2 flex justify-center items-center  ">
-            <div className="relative z-10">
-              <Image
-                src={slide.image}
-                alt={slide.title}
-                width={620}
-                height={420}
-                className="h-auto w-full max-w-[520px] object-contain"
-                priority
-              />
-            </div>
+          <div className="relative lg:w-1/2 flex justify-center items-center">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={active}
+                initial={{ opacity: 0, y: -80 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -80 }}
+                transition={{ duration: 0.8 }}
+                className="relative z-10"
+              >
+                <Image
+                  src={slide.image}
+                  alt={slide.title}
+                  width={620}
+                  height={420}
+                  className="h-auto w-full max-w-[520px] object-contain"
+                  priority
+                />
+              </motion.div>
+            </AnimatePresence>
           </div>
         </div>
 
@@ -119,7 +139,7 @@ export default function Hero() {
           type="button"
           aria-label="Next slide"
           onClick={next}
-          className="absolute right-3 top-1/2 hidden -translate-y-1/2 text-white transition hover:scale-110 lg:inline-flex"
+          className="absolute right-3 top-1/2 hidden -translate-y-1/2 text-white transition hover:scale-110 lg:inline-flex z-20"
         >
           <ChevronRightIcon className="h-8 w-8" />
         </button>
@@ -132,7 +152,7 @@ export default function Hero() {
             type="button"
             aria-label={`Go to slide ${idx + 1}`}
             onClick={() => goTo(idx)}
-            className={`h-2 rounded-full transition ${active === idx ? "w-6 bg-white" : "w-2 bg-white/60 hover:bg-white"
+            className={`h-2 rounded-full transition-all duration-300 ${active === idx ? "w-6 bg-white" : "w-2 bg-white/60 hover:bg-white"
               }`}
           />
         ))}
