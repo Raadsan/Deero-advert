@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { MagnifyingGlassIcon, ArrowPathIcon } from "@heroicons/react/24/outline";
 import { motion, AnimatePresence } from "framer-motion";
 
-import { checkDomainAvailability, DomainCheckResult } from "../../api/domainApi";
+import { checkDomainAvailability, DomainCheckResult } from "../../api/domainCheckerApi";
 import { ExclamationCircleIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import { isAuthenticated } from "@/utils/auth";

@@ -6,7 +6,8 @@ import { sendWaafiPayment } from "../utils/waafiPayment.js";
 
 export const createTransaction = async (req, res) => {
   try {
-    const { domainId, userId, amount, description, accountNo } = req.body;
+    const { domainId, userId, amount, description, accountNo, paymentMethod } = req.body;
+    console.log("Create Transaction Request Body:", JSON.stringify(req.body, null, 2));
 
     const domain = await Domain.findById(domainId);
     if (!domain) return res.status(404).json({ message: "Domain not found" });
@@ -21,34 +22,52 @@ export const createTransaction = async (req, res) => {
       type: "register",
       amount,
       status: "pending",
-      description
+      description,
+      paymentMethod: paymentMethod || (accountNo ? "waafi" : "mail-in")
     });
 
-    // Call WAAFI Pay API
-    const paymentResponse = await sendWaafiPayment({
-      transactionId: transaction._id.toString(),
-      accountNo,
-      amount,
-      description
-    });
+    let paymentResponse = { responseCode: "W000" }; // Default success for non-waafi
 
- 
-    // "2001" is RCS_SUCCESS in WaafiPay
-    if (paymentResponse.responseCode === "2001") {
-      transaction.status = "completed";
+    if (accountNo) {
+      // Call WAAFI Pay API
+      paymentResponse = await sendWaafiPayment({
+        transactionId: transaction._id.toString(),
+        accountNo,
+        amount,
+        description
+      });
+    }
+
+
+    // If it was a Waafi payment, check for Success (2001). 
+    // If it was a Mail-in payment (no accountNo), it stays "pending".
+    if (accountNo) {
+      if (paymentResponse.responseCode === "2001") {
+        transaction.status = "completed";
+      } else {
+        transaction.status = "failed";
+      }
     } else {
-      transaction.status = "failed";
+      // Mail-in payments stay pending until admin approval
+      transaction.status = "pending";
     }
 
     // Save referenceId from WAAFI and updated status
     transaction.paymentReferenceId = paymentResponse.referenceId || transaction._id.toString();
     await transaction.save();
 
+    if (transaction.status === "failed") {
+      return res.status(400).json({
+        success: false,
+        message: `Payment failed: ${paymentResponse.responseMsg || "Unknown error"}`,
+        transaction,
+        paymentResponse
+      });
+    }
+
     res.json({
       success: true,
-      message: (paymentResponse.responseCode === "2001")
-        ? "Payment successful and transaction completed"
-        : `Payment failed: ${paymentResponse.responseMsg || "Unknown error"}`,
+      message: "Transaction completed successfully",
       transaction,
       paymentResponse
     });

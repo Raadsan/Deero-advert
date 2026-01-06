@@ -1,26 +1,165 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
     User, Mail, Phone, Building2, MapPin, Globe,
-    Lock, RefreshCw, ChevronDown, CheckCircle2
+    Lock, RefreshCw, ChevronDown, CheckCircle2,
+    Loader2, AlertCircle
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "@/context/CartContext";
+import { loginUser, signupUser } from "@/api/authApi";
+import { registerDomain } from "@/api/domainApi";
+import { createTransaction } from "@/api/transactionApi";
 
 export default function CheckoutForm() {
-    const { cartTotal } = useCart();
+    const { cartItems, cartTotal, clearCart } = useCart();
+    const router = useRouter();
     const [paymentMethod, setPaymentMethod] = useState<'mail' | 'waafi'>('mail');
     const [isExistingCustomer, setIsExistingCustomer] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
+    // Form states
+    const [formData, setFormData] = useState({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        companyName: "",
+        streetAddress: "",
+        streetAddress2: "",
+        city: "",
+        state: "",
+        password: "",
+        confirmPassword: "",
+        waafiPhone: ""
+    });
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (cartItems.length === 0) {
+            setError("Your cart is empty");
+            return;
+        }
+
+        setLoading(true);
+        setError(null);
+
+        console.log("Checkout Submission Started", { formData, cartItems });
+
+        try {
+            let userId: string;
+            let userToken: string;
+            let userData: any;
+
+            if (isExistingCustomer) {
+                // Login existing customer
+                const loginRes = await loginUser({
+                    email: formData.email,
+                    password: formData.password
+                });
+                userId = loginRes.data.user._id || loginRes.data.user.id;
+                userToken = loginRes.data.token;
+                userData = loginRes.data.user;
+            } else {
+                // Register new customer
+                if (formData.password !== formData.confirmPassword) {
+                    setError("Passwords do not match");
+                    setLoading(false);
+                    return;
+                }
+                const signupRes = await signupUser({
+                    fullname: `${formData.firstName} ${formData.lastName}`,
+                    email: formData.email,
+                    phone: formData.phone,
+                    password: formData.password,
+                    companyName: formData.companyName,
+                    streetAddress: formData.streetAddress,
+                    streetAddress2: formData.streetAddress2,
+                    city: formData.city,
+                    state: formData.state,
+                });
+                userId = signupRes.data.user._id || signupRes.data.user.id;
+                userToken = signupRes.data.token;
+                userData = signupRes.data.user;
+            }
+
+            console.log("DEBUG: Auth Success, user:", userData);
+
+            // Save auth to localStorage (mimic auth utility behavior)
+            localStorage.setItem("user", JSON.stringify(userData));
+            localStorage.setItem("token", userToken);
+
+            // Process each item in cart
+            for (const item of cartItems) {
+                if (item.type === 'domain') {
+                    // 1. Register Domain
+                    const domainRes = await registerDomain({
+                        domainName: item.subtitle, // subtitle contains the domain name like 'example.com'
+                        userId: userId,
+                        price: item.price
+                    });
+
+                    const domainId = domainRes.data.domain._id;
+
+                    // 2. Create Transaction
+                    await createTransaction({
+                        domainId: domainId,
+                        userId: userId,
+                        type: "register",
+                        amount: item.price,
+                        description: `Domain Registration: ${item.subtitle}`,
+                        paymentMethod: paymentMethod,
+                        accountNo: paymentMethod === 'waafi' ? formData.waafiPhone : undefined
+                    });
+                }
+                // Handle hosting types here if needed
+            }
+
+            // Success!
+            clearCart();
+            router.push("/dashboard?success=true");
+
+        } catch (err: any) {
+            console.error("Checkout error:", err);
+            const data = err.response?.data;
+            const message = data?.message || data?.error || err.message || "An error occurred during checkout";
+
+            // If they have multiple errors (e.g. validation), join them
+            let detailedError = message;
+            if (data?.errors && typeof data.errors === 'object') {
+                detailedError += ": " + Object.values(data.errors).join(", ");
+            }
+
+            setError(detailedError);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
-        <div className="space-y-8">
+        <form onSubmit={handleSubmit} className="space-y-8">
+            {error && (
+                <div className="bg-red-50 border border-red-200 text-red-700 p-4 rounded-xl flex items-center gap-3 animate-in fade-in slide-in-from-top-2">
+                    <AlertCircle className="w-5 h-5 flex-shrink-0" />
+                    <p className="text-sm font-medium">{error}</p>
+                </div>
+            )}
+
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-[#f8fafc] p-6 rounded-2xl border border-gray-100 gap-4">
                 <div>
                     <h2 className="text-2xl font-bold text-[#651313]">Checkout</h2>
                     <p className="text-gray-500 text-sm mt-1">Please enter your personal details and billing information to checkout.</p>
                 </div>
                 <button
+                    type="button"
                     onClick={() => setIsExistingCustomer(!isExistingCustomer)}
                     className={`${isExistingCustomer ? 'bg-[#ffc107] hover:bg-[#e0a800]' : 'bg-[#0e94a8] hover:bg-[#0c7d8e]'} text-[#1a1a1a] sm:text-white px-6 py-2.5 rounded-lg font-bold transition-all shadow-sm active:scale-95 whitespace-nowrap`}
                     style={{ color: isExistingCustomer ? '#000' : '#fff' }}
@@ -52,6 +191,10 @@ export default function CheckoutForm() {
                                     </div>
                                     <input
                                         type="text"
+                                        name="firstName"
+                                        required
+                                        value={formData.firstName}
+                                        onChange={handleInputChange}
                                         placeholder="First Name"
                                         className="w-full pl-12 pr-4 py-4 bg-white border border-gray-200 rounded-xl focus:border-[#EB4724] focus:ring-4 focus:ring-[#EB4724]/5 outline-none transition-all placeholder:text-gray-400"
                                     />
@@ -62,6 +205,10 @@ export default function CheckoutForm() {
                                     </div>
                                     <input
                                         type="text"
+                                        name="lastName"
+                                        required
+                                        value={formData.lastName}
+                                        onChange={handleInputChange}
                                         placeholder="Last Name"
                                         className="w-full pl-12 pr-4 py-4 bg-white border border-gray-200 rounded-xl focus:border-[#EB4724] focus:ring-4 focus:ring-[#EB4724]/5 outline-none transition-all placeholder:text-gray-400"
                                     />
@@ -72,6 +219,11 @@ export default function CheckoutForm() {
                                     </div>
                                     <input
                                         type="email"
+                                        name="email"
+                                        required
+                                        autoComplete="off"
+                                        value={formData.email}
+                                        onChange={handleInputChange}
                                         placeholder="Email Address"
                                         className="w-full pl-12 pr-4 py-4 bg-white border border-gray-200 rounded-xl focus:border-[#EB4724] focus:ring-4 focus:ring-[#EB4724]/5 outline-none transition-all placeholder:text-gray-400"
                                     />
@@ -82,6 +234,10 @@ export default function CheckoutForm() {
                                     </div>
                                     <input
                                         type="tel"
+                                        name="phone"
+                                        required
+                                        value={formData.phone}
+                                        onChange={handleInputChange}
                                         placeholder="Phone Number"
                                         className="w-full pl-12 pr-4 py-4 bg-white border border-gray-200 rounded-xl focus:border-[#EB4724] focus:ring-4 focus:ring-[#EB4724]/5 outline-none transition-all placeholder:text-gray-400"
                                     />
@@ -103,6 +259,9 @@ export default function CheckoutForm() {
                                     </div>
                                     <input
                                         type="text"
+                                        name="companyName"
+                                        value={formData.companyName}
+                                        onChange={handleInputChange}
                                         placeholder="Company Name (Optional)"
                                         className="w-full pl-12 pr-4 py-4 bg-white border border-gray-200 rounded-xl focus:border-[#EB4724] focus:ring-4 focus:ring-[#EB4724]/5 outline-none transition-all placeholder:text-gray-400"
                                     />
@@ -113,6 +272,9 @@ export default function CheckoutForm() {
                                     </div>
                                     <input
                                         type="text"
+                                        name="streetAddress"
+                                        value={formData.streetAddress}
+                                        onChange={handleInputChange}
                                         placeholder="Street Address"
                                         className="w-full pl-12 pr-4 py-4 bg-white border border-gray-200 rounded-xl focus:border-[#EB4724] focus:ring-4 focus:ring-[#EB4724]/5 outline-none transition-all placeholder:text-gray-400"
                                     />
@@ -123,6 +285,9 @@ export default function CheckoutForm() {
                                     </div>
                                     <input
                                         type="text"
+                                        name="streetAddress2"
+                                        value={formData.streetAddress2}
+                                        onChange={handleInputChange}
                                         placeholder="Street Address 2"
                                         className="w-full pl-12 pr-4 py-4 bg-white border border-gray-200 rounded-xl focus:border-[#EB4724] focus:ring-4 focus:ring-[#EB4724]/5 outline-none transition-all placeholder:text-gray-400"
                                     />
@@ -135,6 +300,9 @@ export default function CheckoutForm() {
                                         </div>
                                         <input
                                             type="text"
+                                            name="city"
+                                            value={formData.city}
+                                            onChange={handleInputChange}
                                             placeholder="City"
                                             className="w-full pl-12 pr-4 py-4 bg-white border border-gray-200 rounded-xl focus:border-[#EB4724] focus:ring-4 focus:ring-[#EB4724]/5 outline-none transition-all placeholder:text-gray-400"
                                         />
@@ -145,6 +313,9 @@ export default function CheckoutForm() {
                                         </div>
                                         <input
                                             type="text"
+                                            name="state"
+                                            value={formData.state}
+                                            onChange={handleInputChange}
                                             placeholder="State"
                                             className="w-full pl-12 pr-4 py-4 bg-white border border-gray-200 rounded-xl focus:border-[#EB4724] focus:ring-4 focus:ring-[#EB4724]/5 outline-none transition-all placeholder:text-gray-400"
                                         />
@@ -155,8 +326,10 @@ export default function CheckoutForm() {
                                         </div>
                                         <input
                                             type="text"
-                                            defaultValue="abdulahimuse46@g"
-                                            className="w-full pl-12 pr-4 py-4 bg-white border border-gray-200 rounded-xl focus:border-[#EB4724] focus:ring-4 focus:ring-[#EB4724]/5 outline-none transition-all text-gray-500"
+                                            readOnly
+                                            value={formData.email}
+                                            placeholder="Email"
+                                            className="w-full pl-12 pr-4 py-4 bg-[#f8fafc] border border-gray-200 rounded-xl outline-none transition-all text-gray-500"
                                         />
                                     </div>
                                 </div>
@@ -187,9 +360,13 @@ export default function CheckoutForm() {
                                     </div>
                                     <input
                                         type="password"
+                                        name="password"
+                                        required
+                                        autoComplete="new-password"
+                                        value={formData.password}
+                                        onChange={handleInputChange}
                                         placeholder="Password"
-                                        defaultValue="•••••"
-                                        className="w-full pl-12 pr-4 py-4 bg-[#f1f5f9]/50 border border-gray-100 rounded-xl focus:border-[#EB4724] outline-none transition-all placeholder:text-gray-400"
+                                        className="w-full pl-12 pr-4 py-4 bg-white border border-gray-200 rounded-xl focus:border-[#EB4724] focus:ring-4 focus:ring-[#EB4724]/5 outline-none transition-all placeholder:text-gray-400"
                                     />
                                 </div>
                                 <div className="relative group">
@@ -198,6 +375,11 @@ export default function CheckoutForm() {
                                     </div>
                                     <input
                                         type="password"
+                                        name="confirmPassword"
+                                        required
+                                        autoComplete="new-password"
+                                        value={formData.confirmPassword}
+                                        onChange={handleInputChange}
                                         placeholder="Confirm Password"
                                         className="w-full pl-12 pr-4 py-4 bg-white border border-gray-200 rounded-xl focus:border-[#EB4724] focus:ring-4 focus:ring-[#EB4724]/5 outline-none transition-all placeholder:text-gray-400"
                                     />
@@ -205,16 +387,16 @@ export default function CheckoutForm() {
                             </div>
 
                             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-                                <button className="flex items-center gap-2 px-6 py-2 border border-gray-200 rounded-lg text-sm font-bold text-gray-600 hover:bg-gray-50 transition-colors">
+                                <button type="button" className="flex items-center gap-2 px-6 py-2 border border-gray-200 rounded-lg text-sm font-bold text-gray-600 hover:bg-gray-50 transition-colors">
                                     <RefreshCw className="w-4 h-4" />
                                     Generate Password
                                 </button>
                                 <div className="text-xs text-gray-500 font-medium">
-                                    Password Strength: <span className="text-gray-400">Enter a Password</span>
+                                    Password Strength: <span className="text-gray-400">{formData.password ? 'Secure' : 'Enter a Password'}</span>
                                 </div>
                             </div>
                             <div className="h-1 bg-gray-100 rounded-full overflow-hidden">
-                                <div className="w-0 h-full bg-[#EB4724]"></div>
+                                <div className={`h-full transition-all duration-300 ${formData.password ? 'w-full bg-green-500' : 'w-0'}`}></div>
                             </div>
                         </section>
                     </motion.div>
@@ -240,6 +422,11 @@ export default function CheckoutForm() {
                                     </div>
                                     <input
                                         type="email"
+                                        name="email"
+                                        required
+                                        autoComplete="username"
+                                        value={formData.email}
+                                        onChange={handleInputChange}
                                         placeholder="Email Address"
                                         className="w-full pl-12 pr-4 py-4 bg-white border border-gray-200 rounded-xl focus:border-[#EB4724] focus:ring-4 focus:ring-[#EB4724]/5 outline-none transition-all placeholder:text-gray-400"
                                     />
@@ -250,16 +437,15 @@ export default function CheckoutForm() {
                                     </div>
                                     <input
                                         type="password"
+                                        name="password"
+                                        required
+                                        autoComplete="current-password"
+                                        value={formData.password}
+                                        onChange={handleInputChange}
                                         placeholder="Password"
                                         className="w-full pl-12 pr-4 py-4 bg-white border border-gray-200 rounded-xl focus:border-[#EB4724] focus:ring-4 focus:ring-[#EB4724]/5 outline-none transition-all placeholder:text-gray-400"
                                     />
                                 </div>
-                            </div>
-
-                            <div className="flex justify-center">
-                                <button className="bg-[#a26868] hover:bg-[#8e5a5a] text-white px-12 py-3 rounded-lg font-bold transition-all shadow-md active:scale-95">
-                                    Login
-                                </button>
                             </div>
                         </section>
                     </motion.div>
@@ -324,6 +510,26 @@ export default function CheckoutForm() {
                             <span className="text-[#651313] font-medium group-hover:text-[#EB4724] transition-colors">Waafi Payment( EVC, Zaad, Sahal, Jeeb)</span>
                         </label>
                     </div>
+
+                    {paymentMethod === 'waafi' && (
+                        <div className="mt-4 animate-in fade-in slide-in-from-top-2">
+                            <div className="relative group">
+                                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#EB4724] transition-colors">
+                                    <Phone className="w-5 h-5" />
+                                </div>
+                                <input
+                                    type="tel"
+                                    name="waafiPhone"
+                                    required
+                                    value={formData.waafiPhone}
+                                    onChange={handleInputChange}
+                                    placeholder="Enter Waafi/EVC Number (e.g. 61xxxxxxx)"
+                                    className="w-full pl-12 pr-4 py-4 bg-white border border-gray-200 rounded-xl focus:border-[#EB4724] focus:ring-4 focus:ring-[#EB4724]/5 outline-none transition-all placeholder:text-gray-400"
+                                />
+                            </div>
+                            <p className="text-xs text-gray-500 mt-2">You will receive a prompt on your phone to authorize the payment.</p>
+                        </div>
+                    )}
                 </div>
             </section>
 
@@ -336,14 +542,26 @@ export default function CheckoutForm() {
                 <textarea
                     placeholder="You can enter any additional notes or information you want included with your order here..."
                     className="w-full h-32 p-6 bg-white border border-gray-200 rounded-2xl focus:border-[#EB4724] focus:ring-4 focus:ring-[#EB4724]/5 outline-none transition-all placeholder:text-gray-300 resize-none"
+                    name="notes"
+                    onChange={handleInputChange}
                 ></textarea>
             </section>
 
             <div className="flex justify-center pt-4">
-                <button className="w-full max-w-md bg-[#651313] text-white py-5 rounded-2xl font-black text-xl hover:bg-[#4d0e0e] transition-all shadow-xl hover:shadow-2xl active:scale-95 duration-200">
-                    COMPLETE ORDER
+                <button
+                    disabled={loading}
+                    className="w-full max-w-md bg-[#651313] disabled:opacity-50 disabled:cursor-not-allowed text-white py-5 rounded-2xl font-black text-xl hover:bg-[#4d0e0e] transition-all shadow-xl hover:shadow-2xl active:scale-95 duration-200 flex items-center justify-center gap-3"
+                >
+                    {loading ? (
+                        <>
+                            <Loader2 className="w-6 h-6 animate-spin" />
+                            PROCESSING...
+                        </>
+                    ) : (
+                        'COMPLETE ORDER'
+                    )}
                 </button>
             </div>
-        </div>
+        </form>
     );
 }

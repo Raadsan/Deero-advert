@@ -7,6 +7,12 @@ import User from "../models/UserModel.js";
 export const registerDomain = async (req, res) => {
   try {
     const { userId, domainName } = req.body;
+    console.log("Register Domain Request Body:", JSON.stringify(req.body, null, 2));
+
+    if (!userId || !domainName) {
+      console.log("Register Domain Validation Failed: userId or domainName missing");
+      return res.status(400).json({ message: "userId and domainName are required" });
+    }
 
     const user = await User.findById(userId);
     if (!user) return res.status(404).json({ message: "User not found" });
@@ -37,15 +43,6 @@ export const registerDomain = async (req, res) => {
 
     await domain.save();
 
-    // Record transaction
-    await Transaction.create({
-      domain: domain._id,
-      user: userId,
-      type: "register",
-      amount: domain.price,
-      status: "completed",
-    });
-
     const populatedDomain = await Domain.findById(domain._id).populate("user", "fullname email");
 
     res.json({ message: "Domain registered successfully", domain: populatedDomain });
@@ -72,14 +69,6 @@ export const transferDomain = async (req, res) => {
     domain.status = "transferred";
     await domain.save();
 
-    await Transaction.create({
-      domain: domain._id,
-      user: newUserId,
-      type: "transfer",
-      amount: domain.price,
-      status: "completed",
-    });
-
     const populatedDomain = await Domain.findById(domain._id).populate("user", "fullname email");
 
     res.json({ message: "Domain transferred successfully", domain: populatedDomain });
@@ -102,14 +91,6 @@ export const renewDomain = async (req, res) => {
     domain.expiryDate.setFullYear(domain.expiryDate.getFullYear() + 1);
     await domain.save();
 
-    await Transaction.create({
-      domain: domain._id,
-      user: domain.user,
-      type: "renew",
-      amount: domain.price,
-      status: "completed",
-    });
-
     const populatedDomain = await Domain.findById(domain._id).populate("user", "fullname email");
 
     res.json({ message: "Domain renewed successfully", domain: populatedDomain });
@@ -129,6 +110,23 @@ export const getAllDomains = async (req, res) => {
     res.json({ success: true, domains });
   } catch (err) {
     console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// Get Domains by User
+export const getDomainsByUser = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    console.log("Fetching domains for userId:", userId);
+    const domains = await Domain.find({ user: userId })
+      .populate("user", "fullname email")
+      .sort({ createdAt: -1 });
+
+    console.log(`Found ${domains.length} domains for userId: ${userId}`);
+    res.json({ success: true, domains });
+  } catch (err) {
+    console.error("Get domains by user error:", err);
     res.status(500).json({ message: "Server error" });
   }
 };

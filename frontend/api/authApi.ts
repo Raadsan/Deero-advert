@@ -6,7 +6,18 @@ export const loginUser = (data: { email: string; password: string }) => {
 };
 
 // Signup
-export const signupUser = (data: { fullname: string; email: string; phone: string; password: string }) => {
+export const signupUser = (data: {
+  fullname: string;
+  email: string;
+  phone: string;
+  password: string;
+  companyName?: string;
+  streetAddress?: string;
+  streetAddress2?: string;
+  city?: string;
+  state?: string;
+  country?: string;
+}) => {
   return api.post("/users/signup", data);
 };
 

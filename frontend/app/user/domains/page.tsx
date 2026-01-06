@@ -2,75 +2,70 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { isAuthenticated } from "@/utils/auth";
+import { isAuthenticated, getUser, getUserId } from "@/utils/auth";
+import { getDomainsByUser } from "@/api/domainApi";
+import { Domain } from "@/types/domain";
 
-import HostingDomainSearch from "@/components/hosting/HostingDomainSearch";
 import { motion } from "framer-motion";
-import { CheckCircleIcon, ExclamationTriangleIcon, EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
-
-// Mock data for user domains
-const mockDomains = [
-    {
-        id: 1,
-        domain: "mybusiness.com",
-        status: "Active",
-        registrationDate: "2024-01-15",
-        nextDue: "2025-01-15",
-        autoRenew: true,
-    },
-    {
-        id: 2,
-        domain: "project-x.net",
-        status: "Expiring Soon",
-        registrationDate: "2023-05-20",
-        nextDue: "2024-05-20",
-        autoRenew: false,
-    },
-    {
-        id: 3,
-        domain: "startup-idea.org",
-        status: "Active",
-        registrationDate: "2023-11-01",
-        nextDue: "2024-11-01",
-        autoRenew: true,
-    },
-];
+import { CheckCircleIcon, ExclamationTriangleIcon, EllipsisHorizontalIcon, GlobeAltIcon } from "@heroicons/react/24/outline";
 
 export default function UserDomainsPage() {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(true);
+    const [domains, setDomains] = useState<Domain[]>([]);
 
     useEffect(() => {
-        if (!isAuthenticated()) {
-            router.push("/login?redirect=/my-domains");
-        } else {
-            setIsLoading(false);
-        }
+        const fetchDomains = async () => {
+            if (!isAuthenticated()) {
+                router.push("/login?redirect=/user/domains");
+                return;
+            }
+
+            try {
+                const userId = getUserId();
+                if (userId) {
+                    const response = await getDomainsByUser(userId);
+                    if (response.data.success) {
+                        setDomains(response.data.domains);
+                    }
+                }
+            } catch (error) {
+                console.error("Error fetching domains:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchDomains();
     }, [router]);
 
     if (isLoading) {
-        return null;
+        return (
+            <div className="flex items-center justify-center min-h-[400px]">
+                <div className="w-12 h-12 border-4 border-[#651313]/20 border-t-[#651313] rounded-full animate-spin"></div>
+            </div>
+        );
     }
 
     return (
-        <div className="text-[#1a1a1a] rounded-xl overflow-hidden">
-            {/* <div className="flex flex-col gap-2 mb-8">
-                <h1 className="text-3xl font-bold tracking-tight text-[#651313]">My Domains</h1>
-                <p className="text-gray-600">Manage, renew, and transfer your domains.</p>
-            </div> */}
-
-            {/* Domain Search Section */}
-            <HostingDomainSearch transparent={true} />
-
-            <section className="mt-8 py-8 px-4 sm:px-8 relative overflow-hidden">
-                <div className="mx-auto max-w-4xl relative z-10">
-                    <div className="text-center mb-10">
-                        <h2 className="text-3xl font-bold text-[#651313] mb-4">
-                            Manage Your Domains
-                        </h2>
-                        <p className="text-[#651313]/80 mb-8 max-w-lg mx-auto">
-                            View and manage all your registered domain names in one place.
-                        </p>
+        <div className="text-[#1a1a1a] rounded-xl overflow-hidden min-h-full">
+            <section className="py-8 px-4 sm:px-8 relative overflow-hidden">
+                <div className="mx-auto max-w-5xl relative z-10">
+                    <div className="text-left mb-10 border-b border-gray-100 pb-6 flex items-end justify-between">
+                        <div>
+                            <h2 className="text-3xl font-bold text-[#651313] mb-2">
+                                My Domains
+                            </h2>
+                            <p className="text-[#651313]/70 font-medium">
+                                View and manage all your registered domain names.
+                            </p>
+                        </div>
+                        <button
+                            onClick={() => router.push("/#search")}
+                            className="px-5 py-2.5 bg-[#651313] text-white text-sm font-bold rounded-xl hover:bg-[#831a1a] transition-all shadow-md active:scale-95"
+                        >
+                            Register New Domain
+                        </button>
                     </div>
 
                     <motion.div
@@ -79,58 +74,75 @@ export default function UserDomainsPage() {
                         transition={{ duration: 0.5 }}
                         className="overflow-x-auto"
                     >
-                        <table className="w-full bg-white rounded-xl shadow-xl border border-white/40 overflow-hidden">
-                            <thead>
-                                <tr className="bg-[#651313] border-b border-[#651313]">
-                                    <th className="py-4 px-6 text-left text-white font-bold">Domain Name</th>
-                                    <th className="py-4 px-6 text-center text-white font-bold">Status</th>
-                                    <th className="py-4 px-6 text-center text-white font-bold">Registration Date</th>
-                                    <th className="py-4 px-6 text-center text-white font-bold">Next Due</th>
-                                    <th className="py-4 px-6 text-center text-white font-bold">Auto Renew</th>
-                             
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {mockDomains.map((domain, index) => (
-                                    <tr
-                                        key={domain.id}
-                                        className={`hover:bg-gray-50 transition-colors ${index !== mockDomains.length - 1 ? "border-b border-gray-100" : ""
-                                            }`}
-                                    >
-                                        <td className="py-4 px-6 font-bold text-[#651313] text-lg">
-                                            {domain.domain}
-                                        </td>
-                                        <td className="py-4 px-6 text-center">
-                                            <span
-                                                className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide ${domain.status === "Active"
-                                                    ? "bg-green-100 text-green-700"
-                                                    : "bg-orange-100 text-orange-700"
-                                                    }`}
-                                            >
-                                                {domain.status === "Active" ? (
-                                                    <CheckCircleIcon className="w-4 h-4" />
-                                                ) : (
-                                                    <ExclamationTriangleIcon className="w-4 h-4" />
-                                                )}
-                                                {domain.status}
-                                            </span>
-                                        </td>
-                                        <td className="py-4 px-6 text-center text-gray-600 font-medium">
-                                            {domain.registrationDate}
-                                        </td>
-                                        <td className="py-4 px-6 text-center text-gray-600 font-medium">
-                                            {domain.nextDue}
-                                        </td>
-                                        <td className="py-4 px-6 text-center">
-                                            <div className={`mx-auto w-10 h-6 rounded-full p-1 transition-colors ${domain.autoRenew ? 'bg-[#EB4724]' : 'bg-gray-300'}`}>
-                                                <div className={`w-4 h-4 bg-white rounded-full shadow-sm transition-transform ${domain.autoRenew ? 'translate-x-4' : 'translate-x-0'}`} />
-                                            </div>
-                                        </td>
-                                        
+                        {domains.length > 0 ? (
+                            <table className="w-full bg-white rounded-xl shadow-xl border border-white/40 overflow-hidden">
+                                <thead>
+                                    <tr className="bg-[#651313] border-b border-[#651313]">
+                                        <th className="py-4 px-6 text-left text-white font-bold">Domain Name</th>
+                                        <th className="py-4 px-6 text-center text-white font-bold">Status</th>
+                                        <th className="py-4 px-6 text-center text-white font-bold">Registration Date</th>
+                                        <th className="py-4 px-6 text-center text-white font-bold">Expiry Date</th>
+                                        <th className="py-4 px-6 text-center text-white font-bold">Actions</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    {domains.map((domain, index) => (
+                                        <tr
+                                            key={domain._id}
+                                            className={`hover:bg-gray-50 transition-colors ${index !== domains.length - 1 ? "border-b border-gray-100" : ""
+                                                }`}
+                                        >
+                                            <td className="py-4 px-6">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="p-2 bg-[#EB4724]/10 rounded-lg">
+                                                        <GlobeAltIcon className="w-5 h-5 text-[#EB4724]" />
+                                                    </div>
+                                                    <span className="font-bold text-[#651313] text-lg">{domain.name}</span>
+                                                </div>
+                                            </td>
+                                            <td className="py-4 px-6 text-center">
+                                                <span
+                                                    className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide ${domain.status === "registered"
+                                                        ? "bg-green-100 text-green-700"
+                                                        : "bg-orange-100 text-orange-700"
+                                                        }`}
+                                                >
+                                                    {domain.status === "registered" ? (
+                                                        <CheckCircleIcon className="w-4 h-4" />
+                                                    ) : (
+                                                        <ExclamationTriangleIcon className="w-4 h-4" />
+                                                    )}
+                                                    {domain.status}
+                                                </span>
+                                            </td>
+                                            <td className="py-4 px-6 text-center text-gray-600 font-medium">
+                                                {domain.registrationDate ? new Date(domain.registrationDate).toLocaleDateString() : 'N/A'}
+                                            </td>
+                                            <td className="py-4 px-6 text-center text-gray-600 font-medium">
+                                                {domain.expiryDate ? new Date(domain.expiryDate).toLocaleDateString() : 'N/A'}
+                                            </td>
+                                            <td className="py-4 px-6 text-center">
+                                                <button className="p-2 text-gray-400 hover:text-[#651313] transition-colors">
+                                                    <EllipsisHorizontalIcon className="w-6 h-6" />
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        ) : (
+                            <div className="text-center py-20 bg-white rounded-xl shadow-xl border border-white/40">
+                                <GlobeAltIcon className="w-16 h-16 text-gray-200 mx-auto mb-4" />
+                                <h3 className="text-xl font-bold text-gray-900 mb-2">No domains found</h3>
+                                <p className="text-gray-500 mb-6 font-medium">You haven't registered any domains yet.</p>
+                                <button
+                                    onClick={() => router.push("/#search")}
+                                    className="px-6 py-2 bg-[#EB4724] text-white font-bold rounded-lg hover:bg-[#d63d1f] transition-all duration-300"
+                                >
+                                    Search for a Domain
+                                </button>
+                            </div>
+                        )}
                     </motion.div>
                 </div>
             </section>

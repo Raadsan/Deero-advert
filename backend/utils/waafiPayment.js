@@ -13,6 +13,9 @@ export const sendWaafiPayment = async ({ transactionId, accountNo, amount, descr
   const formattedAmount = Number(amount).toFixed(2);
 
   // Ensure accountNo starts with 252 (remove + if present)
+  if (!accountNo) {
+    return { responseCode: "9999", responseMsg: "No account number provided" };
+  }
   let cleanAccountNo = accountNo.toString().replace(/\+/g, '').trim();
   if (!cleanAccountNo.startsWith('252') && cleanAccountNo.length === 9) {
     cleanAccountNo = '252' + cleanAccountNo;

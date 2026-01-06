@@ -27,6 +27,13 @@ const userSchema = new mongoose.Schema(
       trim: true,
     },
 
+    companyName: { type: String, trim: true },
+    streetAddress: { type: String, trim: true },
+    streetAddress2: { type: String, trim: true },
+    city: { type: String, trim: true },
+    state: { type: String, trim: true },
+    country: { type: String, trim: true, default: "Somalia" },
+
     role: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Role",

@@ -1,6 +1,6 @@
 // routes/domainRoutes.js
 import express from "express";
-import { registerDomain, transferDomain, renewDomain, getAllDomains } from "../controllers/domainController.js";
+import { registerDomain, transferDomain, renewDomain, getAllDomains, getDomainsByUser } from "../controllers/domainController.js";
 
 const router = express.Router();
 
@@ -15,5 +15,8 @@ router.post("/renew", renewDomain);
 
 // Get All Domains
 router.get("/", getAllDomains);
+
+// Get User Domains
+router.get("/user/:userId", getDomainsByUser);
 
 export default router;

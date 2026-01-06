@@ -3,10 +3,10 @@
 import { motion } from "framer-motion";
 
 const pricingData = [
-    { domain: ".com", newPrice: "$14.99 USD", transfer: "$14.99 USD", renewal: "$14.99 USD" },
-    { domain: ".net", newPrice: "$14.99 USD", transfer: "$14.99 USD", renewal: "$14.99 USD" },
-    { domain: ".org", newPrice: "$14.99 USD", transfer: "$14.99 USD", renewal: "$14.99 USD" },
-    { domain: ".info", newPrice: "$14.99 USD", transfer: "$14.99 USD", renewal: "$14.99 USD" },
+    { domain: ".com", newPrice: "$0.01 USD", transfer: "$0.01 USD", renewal: "$0.01 USD" },
+    { domain: ".net", newPrice: "$0.01 USD", transfer: "$0.01 USD", renewal: "$0.01 USD" },
+    { domain: ".org", newPrice: "$0.01 USD", transfer: "$0.01 USD", renewal: "$0.01 USD" },
+    { domain: ".info", newPrice: "$0.01 USD", transfer: "$0.01 USD", renewal: "$0.01 USD" },
 ];
 
 export default function DomainPricingTable() {

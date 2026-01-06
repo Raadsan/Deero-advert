@@ -9,9 +9,20 @@ import jwt from "jsonwebtoken";
  */
 export const signup = async (req, res) => {
   try {
-    const { fullname, email, password, phone, role } = req.body;
+    const {
+      fullname, email, password, phone, role,
+      companyName, streetAddress, streetAddress2, city, state, country
+    } = req.body;
+
+    console.log("Signup Request Body:", JSON.stringify(req.body, null, 2));
 
     if (!fullname || !email || !password || !phone) {
+      console.log("Signup Validation Error: Missing required fields", {
+        fullname: !!fullname,
+        email: !!email,
+        password: !!password,
+        phone: !!phone
+      });
       return res.status(400).json({ message: "All fields are required" });
     }
 
@@ -61,6 +72,12 @@ export const signup = async (req, res) => {
       email: email.toLowerCase(),
       password: hashedPassword,
       phone,
+      companyName,
+      streetAddress,
+      streetAddress2,
+      city,
+      state,
+      country: country || "Somalia",
       role: roleId,
     });
 
@@ -73,7 +90,16 @@ export const signup = async (req, res) => {
     res.status(201).json({
       message: "Account created successfully",
       token,
-      user: { id: user._id, fullname: user.fullname, email: user.email, phone, role: user.role }
+      user: {
+        id: user._id,
+        fullname: user.fullname,
+        email: user.email,
+        phone: user.phone,
+        companyName: user.companyName,
+        streetAddress: user.streetAddress,
+        city: user.city,
+        role: user.role
+      }
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -86,6 +112,7 @@ export const signup = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
+    console.log("Login Request Body:", { email, password: !!password });
     if (!email || !password) return res.status(400).json({ message: "Email and password are required" });
 
     const user = await User.findOne({ email: email.toLowerCase() }).populate("role");
