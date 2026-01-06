@@ -21,6 +21,7 @@ import clientRoute from "./routes/majorclientRoute.js";
 import announcementRoute from "./routes/AnnouncementRoute.js";
 import domainRoute from "./routes/domainRoute.js";
 import transactionRoute from "./routes/transactionRoute.js";
+import subscriberRoutes from "./routes/subscriberRoute.js";
 
 import path from "path";
 import { fileURLToPath } from "url";
@@ -56,6 +57,7 @@ app.use("/api/majorclients", clientRoute);
 app.use("/api/announcements", announcementRoute);
 app.use("/api/domains", domainRoute);
 app.use("/api/transactions", transactionRoute);
+app.use("/api/subscribers", subscriberRoutes);
 app.use(multerErrorHandler);
 const PORT = process.env.PORT || 5000;
 

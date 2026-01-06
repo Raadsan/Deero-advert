@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { EnvelopeIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
+import { EnvelopeIcon, CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
+import { subscribeEmail } from "@/api/subscriberApi";
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -21,17 +22,38 @@ const itemVariants = {
 
 export default function NewsletterSection() {
     const [email, setEmail] = useState("");
-    const [isSubmitted, setIsSubmitted] = useState(false);
+    const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+    const [message, setMessage] = useState("");
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (email) {
-            setIsSubmitted(true);
-            // Here you would typically send the email to your backend
+        if (!email) return;
+
+        setStatus("loading");
+        setMessage("");
+
+        try {
+            const response = await subscribeEmail({ email });
+            setStatus("success");
+            setMessage(response.data.message || "Thank you for subscribing!");
+            setEmail("");
+
+            // Reset status after 5 seconds
             setTimeout(() => {
-                setIsSubmitted(false);
-                setEmail("");
-            }, 3000);
+                setStatus("idle");
+                setMessage("");
+            }, 5000);
+        } catch (error: any) {
+            setStatus("error");
+            setMessage(
+                error.response?.data?.message ||
+                "Something went wrong. Please try again later."
+            );
+
+            // Reset status after 5 seconds
+            setTimeout(() => {
+                setStatus("idle");
+            }, 5000);
         }
     };
 
@@ -60,7 +82,7 @@ export default function NewsletterSection() {
                             Stay Updated with Our Newsletter
                         </h2>
                         <p className="text-white/80 text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
-                            Get the latest updates on our creative campaigns, industry insights, 
+                            Get the latest updates on our creative campaigns, industry insights,
                             and exclusive offers delivered straight to your inbox.
                         </p>
                     </motion.div>
@@ -77,16 +99,19 @@ export default function NewsletterSection() {
                                 onChange={(e) => setEmail(e.target.value)}
                                 placeholder="Enter your email address"
                                 required
-                                className="w-full px-6 py-4 pr-12 rounded-xl bg-transparent border-none text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#EB4724] focus:border-transparent transition-all duration-300"
+                                disabled={status === "loading"}
+                                className="w-full px-6 py-4 pr-12 rounded-xl bg-transparent border-none text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#EB4724] focus:border-transparent transition-all duration-300 disabled:opacity-50"
                             />
                             <EnvelopeIcon className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                         </div>
                         <button
                             type="submit"
-                            disabled={isSubmitted}
-                            className="px-8 py-4 bg-[#EB4724] text-white font-bold rounded-xl hover:bg-[#d63d1f] active:scale-95 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed whitespace-nowrap flex items-center justify-center gap-2"
+                            disabled={status === "loading"}
+                            className="px-8 py-4 bg-[#EB4724] text-white font-bold rounded-xl hover:bg-[#d63d1f] active:scale-95 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed whitespace-nowrap flex items-center justify-center gap-2 min-w-[160px]"
                         >
-                            {isSubmitted ? (
+                            {status === "loading" ? (
+                                <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                            ) : status === "success" ? (
                                 <>
                                     <CheckCircleIcon className="w-5 h-5" />
                                     <span>Subscribed!</span>
@@ -97,14 +122,20 @@ export default function NewsletterSection() {
                         </button>
                     </motion.form>
 
-                    {isSubmitted && (
+                    {message && (
                         <motion.div
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             className="mt-6 text-center"
                         >
-                            <p className="text-[#EB4724] font-medium text-sm">
-                                Thank you for subscribing! Check your email for confirmation.
+                            <p className={`font-medium text-sm flex items-center justify-center gap-2 ${status === "success" ? "text-green-400" : "text-[#EB4724]"
+                                }`}>
+                                {status === "success" ? (
+                                    <CheckCircleIcon className="w-5 h-5" />
+                                ) : (
+                                    <XCircleIcon className="w-5 h-5" />
+                                )}
+                                {message}
                             </p>
                         </motion.div>
                     )}
