@@ -32,7 +32,7 @@ export const createTransaction = async (req, res) => {
       description
     });
 
-    // Update status based on responseCode from WaafiPay
+ 
     // "2001" is RCS_SUCCESS in WaafiPay
     if (paymentResponse.responseCode === "2001") {
       transaction.status = "completed";
