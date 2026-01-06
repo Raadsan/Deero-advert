@@ -48,12 +48,14 @@ interface ServicesContentProps {
     showTitle?: boolean;
     showViewMore?: boolean;
     paddingClasses?: string;
+    filterSlug?: string;
 }
 
 export default function ServicesContent({
     showTitle = true,
     showViewMore = false,
-    paddingClasses = "py-16 px-4 sm:px-10"
+    paddingClasses = "py-16 px-4 sm:px-10",
+    filterSlug
 }: ServicesContentProps) {
     const pathname = usePathname();
     const router = useRouter();
@@ -145,12 +147,7 @@ export default function ServicesContent({
 
     const handleServiceClick = (service: Service) => {
         const slug = getServiceSlug(service.serviceTitle || "service");
-        if (isServicesPage) {
-            scrollToSection(slug);
-        } else {
-            // On homepage, navigate to the services page with hash
-            router.push(`/services#${slug}`);
-        }
+        router.push(`/services/${slug}`);
     };
 
     return (
@@ -184,15 +181,16 @@ export default function ServicesContent({
                                     name={service.serviceTitle || "Service"}
                                     icon={service.serviceIcon ? (service.serviceIcon.startsWith("http") ? service.serviceIcon : `${API_URL}/${(service.serviceIcon.startsWith("/") ? service.serviceIcon.substring(1) : service.serviceIcon).replace(/\\/g, '/')}`) : "/logo deero-02 .svg"}
                                     index={index}
-                                    active={false}
+                                    active={filterSlug ? getServiceSlug(service.serviceTitle || "") === filterSlug : false}
                                     itemVariants={itemVariants}
                                     onClick={() => handleServiceClick(service)}
                                 />
                             ))}
                         </div>
 
-                        {/* All Services Sections - ONLY ON SERVICES PAGE */}
-                        {isServicesPage && groupedServices
+                        {/* Filtered or All Services Sections */}
+                        {(isServicesPage || filterSlug) && groupedServices
+                            .filter(service => !filterSlug || getServiceSlug(service.serviceTitle || "") === filterSlug)
                             .map((service) => (
                                 service.packages && service.packages.length > 0 && (
                                     <motion.div
