@@ -1,12 +1,8 @@
 import api from "./axios";
 
-// ➕ CREATE DOMAIN PRICE (FormData)
-export const createDomainPrice = (formData: FormData) => {
-  return api.post("/domain-prices", formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
+// ➕ CREATE DOMAIN PRICE (JSON)
+export const createDomainPrice = (data: any) => {
+  return api.post("/domain-prices", data);
 };
 
 // 📄 GET ALL DOMAIN PRICES
@@ -19,13 +15,9 @@ export const getDomainPriceById = (id: string) => {
   return api.get(`/domain-prices/${id}`);
 };
 
-// ✏️ UPDATE DOMAIN PRICE (FormData)
-export const updateDomainPrice = (id: string, formData: FormData) => {
-  return api.put(`/domain-prices/${id}`, formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
+// ✏️ UPDATE DOMAIN PRICE (JSON)
+export const updateDomainPrice = (id: string, data: any) => {
+  return api.put(`/domain-prices/${id}`, data);
 };
 
 // 🗑 DELETE DOMAIN PRICE
