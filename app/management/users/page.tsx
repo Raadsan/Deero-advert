@@ -203,7 +203,7 @@ export default function UsersPage() {
         onClose={closeModal}
         title={isEditing ? "Edit User" : "Add New User"}
       >
-        <form onSubmit={handleSubmit} className="space-y-2">
+        <form onSubmit={handleSubmit} className="space-y-2" autoComplete="off">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="space-y-0.5">
               <label className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">
@@ -232,6 +232,7 @@ export default function UsersPage() {
                 onChange={handleInputChange}
                 className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#EB4724] focus:border-[#EB4724] transition-all"
                 placeholder="john@example.com"
+                autoComplete="off"
               />
             </div>
 
@@ -260,6 +261,7 @@ export default function UsersPage() {
                 onChange={handleInputChange}
                 className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#EB4724] focus:border-[#EB4724] transition-all"
                 placeholder="••••••••"
+                autoComplete="new-password"
                 required={!isEditing}
               />
             </div>
