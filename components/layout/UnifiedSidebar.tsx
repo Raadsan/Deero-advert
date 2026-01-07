@@ -77,6 +77,7 @@ const iconMap: Record<string, LucideIcon> = {
     menus: Settings,
     announcements: Calendar,
     "major-clients": Users,
+    domains: Globe,
 };
 
 export default function UnifiedSidebar({ isOpen, onClose }: { isOpen?: boolean; onClose?: () => void }) {
