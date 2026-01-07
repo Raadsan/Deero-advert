@@ -120,7 +120,7 @@ export default function DomainsPage() {
                         ),
                     },
                     {
-                        label: "Full Name",
+                        label: "User Name",
                         key: "fullname",
                         render: (row: Domain) => (
                             <span className="text-gray-900 font-medium">{getUserName(row.user)}</span>
