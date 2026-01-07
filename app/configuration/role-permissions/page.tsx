@@ -259,47 +259,54 @@ export default function RolePermissionsPage() {
 
                                 <div className="space-y-2">
                                     {perm.menusAccess.length > 0 ? (
-                                        perm.menusAccess.map((ma, maIndex) => (
-                                            <div key={`${ma._id || 'menu'}-${maIndex}`} className="bg-gradient-to-br from-gray-50 to-white rounded-lg p-2.5 border border-gray-100 hover:border-[#EB4724]/30 transition-colors">
-                                                {/* Main Menu */}
-                                                <div className="flex items-center gap-2 mb-2">
-                                                    <div className="w-2 h-2 rounded-full bg-[#651313]"></div>
-                                                    <span className="font-semibold text-gray-900">
-                                                        {ma.menuId?.title || "Unknown"}
-                                                    </span>
-                                                </div>
+                                        perm.menusAccess.map((ma, maIndex) => {
+                                            // Calculate valid submenus (filtering out raw IDs)
+                                            const validSubMenus = ma.subMenus.reduce((acc: any[], sm) => {
+                                                const populatedMenu = ma.menuId as any;
+                                                const embeddedSubMenu = populatedMenu?.subMenus?.find((s: any) => s._id === sm.subMenuId);
+                                                const title = embeddedSubMenu?.title || getSubMenuTitle(ma.menuId?._id || "", sm.subMenuId);
 
-                                                {/* Submenus */}
-                                                {ma.subMenus.length > 0 && (
-                                                    <div className="ml-4 space-y-1.5 mt-2">
-                                                        {ma.subMenus.map((sm, smIndex) => {
-                                                            // Try to find the title in the already populated menu object first
-                                                            const populatedMenu = ma.menuId as any;
-                                                            const embeddedSubMenu = populatedMenu?.subMenus?.find((s: any) => s._id === sm.subMenuId);
+                                                // Only include if title resolves (is not the ID itself)
+                                                if (title && title !== sm.subMenuId) {
+                                                    acc.push({ ...sm, displayTitle: title });
+                                                }
+                                                return acc;
+                                            }, []);
 
-                                                            // Fallback to global lookup if not found
-                                                            const subMenuTitle = embeddedSubMenu?.title || getSubMenuTitle(ma.menuId?._id || "", sm.subMenuId);
+                                            return (
+                                                <div key={`${ma._id || 'menu'}-${maIndex}`} className="bg-gradient-to-br from-gray-50 to-white rounded-lg p-2.5 border border-gray-100 hover:border-[#EB4724]/30 transition-colors">
+                                                    {/* Main Menu */}
+                                                    <div className="flex items-center gap-2 mb-2">
+                                                        <div className="w-2 h-2 rounded-full bg-[#651313]"></div>
+                                                        <span className="font-semibold text-gray-900">
+                                                            {ma.menuId?.title || "Unknown"}
+                                                        </span>
+                                                    </div>
 
-                                                            return (
+                                                    {/* Submenus */}
+                                                    {validSubMenus.length > 0 ? (
+                                                        <div className="ml-4 space-y-1.5 mt-2">
+                                                            {validSubMenus.map((sm: any, smIndex: number) => (
                                                                 <div
                                                                     key={`${sm._id || 'sub'}-${smIndex}`}
                                                                     className="flex items-center gap-2 text-sm"
                                                                 >
                                                                     <Check className="h-3 w-3 text-green-600" />
-                                                                    <span className="text-gray-700">{subMenuTitle}</span>
+                                                                    <span className="text-gray-700">{sm.displayTitle}</span>
                                                                 </div>
-                                                            );
-                                                        })}
-                                                    </div>
-                                                )}
-
-                                                {ma.subMenus.length === 0 && ma.menuId && ma.menuId.isCollapsible && (
-                                                    <div className="ml-4 mt-2 flex flex-col">
-                                                        <span className="text-gray-400 text-[10px] mt-1 font-normal">No submenus</span>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        ))
+                                                            ))}
+                                                        </div>
+                                                    ) : (
+                                                        // Show "No submenus assigned" if Collapsible and no valid submenus
+                                                        ma.menuId && ma.menuId.isCollapsible && (
+                                                            <div className="ml-4 mt-2 flex flex-col">
+                                                                <span className="text-gray-400 text-[10px] mt-1 font-normal">No submenus assigned</span>
+                                                            </div>
+                                                        )
+                                                    )}
+                                                </div>
+                                            );
+                                        })
                                     ) : (
                                         <div className="text-center py-8">
                                             <X className="h-12 w-12 text-gray-300 mx-auto mb-2" />
