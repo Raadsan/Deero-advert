@@ -140,7 +140,7 @@ export default function Header() {
 
             {isLoggedIn ? (
               <Link
-                href={isAdminUser ? "/admin" : "/dashboard"}
+                href={ "/dashboard" }
                 className="rounded-full bg-[#EB4724] px-6 py-2.5 font-semibold text-white transition hover:opacity-90"
               >
                 Dashboard

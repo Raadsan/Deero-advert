@@ -127,7 +127,7 @@ export default function DashboardContent() {
                             color: "bg-orange-100 text-orange-700",
                         },
                         {
-                            title: "Total Spent",
+                            title: "Total Peyments",
                             value: `$${totalSpent.toLocaleString()}`,
                             change: "Completed orders",
                             icon: CreditCard,

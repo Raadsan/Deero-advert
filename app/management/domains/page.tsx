@@ -79,9 +79,18 @@ export default function DomainsPage() {
         if (!user) return "-";
         if (typeof user === 'string') {
             const foundUser = users.find(u => u._id === user);
-            return foundUser ? foundUser.name : "Unknown User";
+            return foundUser ? (foundUser.name || (foundUser as any).fullname) : "Unknown User";
         }
-        return user.name || user.email || "Unknown User";
+        return user.fullname || user.name || user.email || "Unknown User";
+    };
+
+    const getUserEmail = (user: any) => {
+        if (!user) return "-";
+        if (typeof user === 'string') {
+            const foundUser = users.find(u => u._id === user);
+            return foundUser ? foundUser.email : "-";
+        }
+        return user.email || "-";
     };
 
     return (
@@ -111,10 +120,17 @@ export default function DomainsPage() {
                         ),
                     },
                     {
-                        label: "User",
-                        key: "user",
+                        label: "Full Name",
+                        key: "fullname",
                         render: (row: Domain) => (
-                            <span className="text-gray-700">{getUserName(row.user)}</span>
+                            <span className="text-gray-900 font-medium">{getUserName(row.user)}</span>
+                        ),
+                    },
+                    {
+                        label: "User Email",
+                        key: "useremail",
+                        render: (row: Domain) => (
+                            <span className="text-gray-500">{getUserEmail(row.user)}</span>
                         ),
                     },
                     {
