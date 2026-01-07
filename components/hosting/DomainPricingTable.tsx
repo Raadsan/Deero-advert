@@ -1,15 +1,42 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { getAllDomainPrices } from "@/api/domainPriceApi";
 
-const pricingData = [
-    { domain: ".com", newPrice: "$0.01 USD", transfer: "$0.01 USD", renewal: "$0.01 USD" },
-    { domain: ".net", newPrice: "$0.01 USD", transfer: "$0.01 USD", renewal: "$0.01 USD" },
-    { domain: ".org", newPrice: "$0.01 USD", transfer: "$0.01 USD", renewal: "$0.01 USD" },
-    { domain: ".info", newPrice: "$0.01 USD", transfer: "$0.01 USD", renewal: "$0.01 USD" },
-];
+interface DomainPrice {
+    _id: string;
+    tld: string;
+    newPrice: number;
+    transferPrice: number;
+    renewalPrice: number;
+}
 
 export default function DomainPricingTable() {
+    const [prices, setPrices] = useState<DomainPrice[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        fetchPrices();
+    }, []);
+
+    const fetchPrices = async () => {
+        try {
+            const response = await getAllDomainPrices();
+            // Handle potentially different response structures
+            const data = Array.isArray(response.data) ? response.data : response.data.prices || [];
+            setPrices(data);
+        } catch (error) {
+            console.error("Error fetching domain prices:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    if (loading) {
+        return <div className="mt-12 text-center text-gray-600">Loading pricing...</div>;
+    }
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -27,27 +54,35 @@ export default function DomainPricingTable() {
                     </tr>
                 </thead>
                 <tbody>
-                    {pricingData.map((item, index) => (
-                        <tr
-                            key={item.domain}
-                            className={`hover:bg-gray-50 transition-colors ${index !== pricingData.length - 1 ? "border-b border-gray-100" : ""
-                                }`}
-                        >
-                            <td className="py-4 px-6 font-bold text-[#651313]">{item.domain}</td>
-                            <td className="py-4 px-6 text-center">
-                                <div className="font-bold text-[#651313]">{item.newPrice}</div>
-                                <div className="text-xs text-[#EB4724] font-medium">1 Year</div>
-                            </td>
-                            <td className="py-4 px-6 text-center">
-                                <div className="font-bold text-[#651313]">{item.transfer}</div>
-                                <div className="text-xs text-[#EB4724] font-medium">1 Year</div>
-                            </td>
-                            <td className="py-4 px-6 text-center">
-                                <div className="font-bold text-[#651313]">{item.renewal}</div>
-                                <div className="text-xs text-[#EB4724] font-medium">1 Year</div>
+                    {prices.length > 0 ? (
+                        prices.map((item, index) => (
+                            <tr
+                                key={item._id || index}
+                                className={`hover:bg-gray-50 transition-colors ${index !== prices.length - 1 ? "border-b border-gray-100" : ""
+                                    }`}
+                            >
+                                <td className="py-4 px-6 font-bold text-[#651313]">{item.tld}</td>
+                                <td className="py-4 px-6 text-center">
+                                    <div className="font-bold text-[#651313]">${item.newPrice} USD</div>
+                                    <div className="text-xs text-[#EB4724] font-medium">1 Year</div>
+                                </td>
+                                <td className="py-4 px-6 text-center">
+                                    <div className="font-bold text-[#651313]">${item.transferPrice} USD</div>
+                                    <div className="text-xs text-[#EB4724] font-medium">1 Year</div>
+                                </td>
+                                <td className="py-4 px-6 text-center">
+                                    <div className="font-bold text-[#651313]">${item.renewalPrice} USD</div>
+                                    <div className="text-xs text-[#EB4724] font-medium">1 Year</div>
+                                </td>
+                            </tr>
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan={4} className="py-8 text-center text-gray-500">
+                                No pricing data available
                             </td>
                         </tr>
-                    ))}
+                    )}
                 </tbody>
             </table>
         </motion.div>
