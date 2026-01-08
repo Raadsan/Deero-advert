@@ -10,7 +10,7 @@ const teamMembers = [
         id: 1,
         name: "Abdirahman Ali Omar",
         title: "CEO & Founder",
-        image: "/home-images/1.jpeg",
+        image: "/home-images/33.jpg",
     },
     {
         id: 2,
@@ -22,25 +22,25 @@ const teamMembers = [
         id: 3,
         name: "Hassan Omar Farah",
         title: "Lead Developer",
-        image: "/home-images/1.jpeg",
+        image: "/home-images/22.jpg",
     },
     {
         id: 4,
         name: "Farah Nur Mohamed",
         title: "Marketing Head",
-        image: "/home-images/1.jpeg",
+        image: "/home-images/22.jpg",
     },
     {
         id: 5,
         name: "Abdulrahman Ali Mohamed",
         title: "Project Manager",
-        image: "/home-images/1.jpeg",
+        image: "/home-images/22.jpg",
     },
     {
         id: 6,
         name: "Mohammed Nur Mohamed",
         title: "Sales Executive",
-        image: "/home-images/1.jpeg",
+        image: "/home-images/22.jpg",
     },
 ];
 
@@ -144,7 +144,7 @@ function InnerSlider({ items }: { items: any[] }) {
                     >
                         {/* Blob Container */}
                         <div className="relative w-64 h-64 mb-6">
-                            <div className="absolute inset-0 bg-[#EB4724] rounded-[60%_40%_30%_70%/60%_30%_70%_40%] group-hover:rounded-[40%_60%_70%_30%/40%_40%_60%_60%] transition-all duration-700 ease-in-out group-hover:bg-[#651313] shadow-lg"></div>
+                            <div className="absolute inset-0 bg-[#EB4724] rounded-[60%_40%_30%_70%/60%_30%_70%_40%] group-hover:rounded-[40%_60%_70%_30%/40%_40%_60%_60%] transition-all duration-700 ease-in-out group-hover:bg-[#FBDAD3] shadow-lg"></div>
 
                             <div className="absolute inset-2 border-2 border-dashed border-white/30 rounded-[50%] group-hover:rotate-45 transition-transform duration-700"></div>
 
@@ -173,9 +173,9 @@ function InnerSlider({ items }: { items: any[] }) {
                         </div>
 
                         {/* Content */}
-                        <div className="text-center relative z-10 w-full px-4">
-                            <h3 className="text-lg font-bold text-[#651313] mb-1 whitespace-nowrap overflow-hidden text-ellipsis">{member.name}</h3>
-                            <p className="text-[#EB4724] font-medium text-sm uppercase tracking-wider">{member.title}</p>
+                        <div className="text-center relative z-10 w-full px-4 transition-all duration-500 group-hover:-translate-y-2 group-hover:scale-105">
+                            <h3 className="text-lg font-bold text-[#651313] mb-1 whitespace-nowrap overflow-hidden text-ellipsis group-hover:text-[#EB4724] transition-colors duration-300">{member.name}</h3>
+                            <p className="text-[#EB4724] font-medium text-sm uppercase tracking-wider group-hover:text-[#651313] transition-colors duration-300">{member.title}</p>
                         </div>
                     </div>
                 ))}
