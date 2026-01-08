@@ -6,6 +6,7 @@ import PortfolioSection from "@/components/home/PortfolioSection";
 import HostingPackages from "@/components/home/HostingPackages";
 import AchievementsSection from "@/components/home/AchievementsSection";
 import RecentBlogs from "@/components/home/RecentBlogs";
+import TeamSection from "@/components/home/TeamSection";
 import TestimonialsSection from "@/components/home/TestimonialsSection";
 import NewsletterSection from "@/components/home/NewsletterSection";
 import Footer from "@/components/layout/Footer";
@@ -22,6 +23,7 @@ export default function Home() {
         <HostingPackages />
         <AchievementsSection />
         <RecentBlogs />
+        <TeamSection />
         <TestimonialsSection />
         <NewsletterSection />
         <Footer />
