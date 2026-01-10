@@ -65,7 +65,7 @@ const itemVariants = {
     visible: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.5 } },
 };
 
-export default function PortfolioSection() {
+export default function PortfolioSection({ showHeader = true }: { showHeader?: boolean }) {
     const router = useRouter();
 
     const handlePortfolioClick = (title: string) => {
@@ -94,24 +94,26 @@ export default function PortfolioSection() {
                 className="mx-auto max-w-6xl"
             >
                 {/* Header Area */}
-                <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
-                    <motion.div variants={itemVariants}>
-                        <h2 className="text-4xl font-bold text-[#651313] mb-4 text-center justify-center">Our Portfolios</h2>
-                        {/* <p className="text-[#651313] max-w-md">
-                            Our portfolios speaks for itself, <br />
-                            Check out all project and see for yourself!
-                        </p> */}
-                    </motion.div>
-                    <motion.div variants={itemVariants}>
-                        <Link
-                            href="https://www.behance.net/deeroadvert"
-                            target="_blank"
-                            className="bg-[#EB4724] text-white px-10 py-3 rounded-full font-bold hover:bg-[#d13d1d] hover:scale-105 active:scale-95 transition-all uppercase tracking-wider text-sm shadow-md inline-block"
-                        >
-                            View More
-                        </Link>
-                    </motion.div>
-                </div>
+                {showHeader && (
+                    <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
+                        <motion.div variants={itemVariants}>
+                            <h2 className="text-4xl font-bold text-[#651313] mb-4 text-center justify-center">Our Portfolios</h2>
+                            {/* <p className="text-[#651313] max-w-md">
+                                Our portfolios speaks for itself, <br />
+                                Check out all project and see for yourself!
+                            </p> */}
+                        </motion.div>
+                        <motion.div variants={itemVariants}>
+                            <Link
+                                href="https://www.behance.net/deeroadvert"
+                                target="_blank"
+                                className="bg-[#EB4724] text-white px-10 py-3 rounded-full font-bold hover:bg-[#d13d1d] hover:scale-105 active:scale-95 transition-all uppercase tracking-wider text-sm shadow-md inline-block"
+                            >
+                                View More
+                            </Link>
+                        </motion.div>
+                    </div>
+                )}
 
                 {/* Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

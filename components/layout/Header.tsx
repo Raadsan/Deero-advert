@@ -13,7 +13,7 @@ const navLinks = [
   { label: "Home", href: "/" },
   { label: "Hosting", href: "/hosting" },
   { label: "Services", href: "/services" },
-  { label: "Portfolio", href: "https://www.behance.net/deeroadvert" },
+  { label: "Portfolio", href: "/portfolio" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];
@@ -140,7 +140,7 @@ export default function Header() {
 
             {isLoggedIn ? (
               <Link
-                href={ "/dashboard" }
+                href={"/dashboard"}
                 className="rounded-full bg-[#EB4724] px-6 py-2.5 font-semibold text-white transition hover:opacity-90"
               >
                 Dashboard
