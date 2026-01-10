@@ -40,10 +40,10 @@ export default function TeamsManagementPage() {
             const items = res.data.success ? res.data.teams : (Array.isArray(res.data) ? res.data : []);
 
             setData(
-                items.map((t: any) => ({
+                items.reverse().map((t: any) => ({
                     _id: t._id,
-                    name: t.name,
-                    position: t.position,
+                    name: t.name || t.fullname || "",
+                    position: t.position || t.title || "",
                     image: t.image?.startsWith("http")
                         ? t.image
                         : `${API_BASE_URL}/${t.image}`.replace(/([^:]\/)\/+/g, "$1"),
@@ -71,6 +71,12 @@ export default function TeamsManagementPage() {
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
+            // Add file size check (e.g., 50MB)
+            if (file.size > 50 * 1024 * 1024) {
+                alert("File is too large. Please select an image smaller than 50MB.");
+                e.target.value = ""; // clear input
+                return;
+            }
             setFormData((prev) => ({
                 ...prev,
                 image: file,

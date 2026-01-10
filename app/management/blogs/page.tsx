@@ -70,6 +70,12 @@ export default function AdminBlogsPage() {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, type: "avatar" | "featured") => {
     const file = e.target.files?.[0];
     if (file) {
+      // Add file size check (50MB)
+      if (file.size > 50 * 1024 * 1024) {
+        alert("File is too large. Please select an image smaller than 50MB.");
+        e.target.value = ""; // clear input
+        return;
+      }
       if (type === "avatar") {
         setForm((prev) => ({
           ...prev,

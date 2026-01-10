@@ -28,7 +28,7 @@ export default function TeamSection() {
                 }
 
                 if (teamsData.length > 0) {
-                    const formattedTeams = teamsData.map((member: any) => ({
+                    const formattedTeams = teamsData.reverse().map((member: any) => ({
                         ...member,
                         image: member.image?.startsWith("http")
                             ? member.image

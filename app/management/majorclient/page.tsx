@@ -61,14 +61,27 @@ export default function MajorClientsPage() {
     // Handle file input change (multiple files)
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
-            const newFiles = Array.from(e.target.files);
-            const newPreviews = newFiles.map((file) => URL.createObjectURL(file));
+            const selectedFiles = Array.from(e.target.files);
 
-            setFormData((prev) => ({
-                ...prev,
-                images: [...prev.images, ...newFiles],
-                imagePreviews: [...prev.imagePreviews, ...newPreviews],
-            }));
+            // Filter files larger than 50MB
+            const validFiles = selectedFiles.filter(file => file.size <= 50 * 1024 * 1024);
+            const invalidFiles = selectedFiles.filter(file => file.size > 50 * 1024 * 1024);
+
+            if (invalidFiles.length > 0) {
+                alert(`${invalidFiles.length} file(s) are too large and were skipped. Max size is 50MB.`);
+            }
+
+            if (validFiles.length > 0) {
+                const newPreviews = validFiles.map((file) => URL.createObjectURL(file));
+
+                setFormData((prev) => ({
+                    ...prev,
+                    images: [...prev.images, ...validFiles],
+                    imagePreviews: [...prev.imagePreviews, ...newPreviews],
+                }));
+            }
+
+            e.target.value = ""; // Clear input to allow re-selecting same files if needed
         }
     };
 
