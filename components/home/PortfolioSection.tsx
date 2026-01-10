@@ -70,7 +70,17 @@ export default function PortfolioSection() {
 
     const handlePortfolioClick = (title: string) => {
         if (title === "Digital Consulting") {
-            router.push("/services#business-growth");
+            router.push("/portfolio/digital-consulting");
+        } else if (title === "Graphic Design & Branding") {
+            router.push("/portfolio/graphic-design");
+        } else if (title === "Event Branding") {
+            router.push("/portfolio/event-branding");
+        } else if (title === "Digital Marketing") {
+            router.push("/portfolio/digital-marketing");
+        } else if (title === "Web Solutions") {
+            router.push("/portfolio/web-solutions");
+        } else if (title === "Motion Graphics") {
+            router.push("/portfolio/motion-graphics");
         }
     };
 
@@ -86,11 +96,11 @@ export default function PortfolioSection() {
                 {/* Header Area */}
                 <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
                     <motion.div variants={itemVariants}>
-                        <h2 className="text-4xl font-bold text-[#651313] mb-4">Our Portfolios</h2>
-                        <p className="text-[#651313] max-w-md">
+                        <h2 className="text-4xl font-bold text-[#651313] mb-4 text-center justify-center">Our Portfolios</h2>
+                        {/* <p className="text-[#651313] max-w-md">
                             Our portfolios speaks for itself, <br />
                             Check out all project and see for yourself!
-                        </p>
+                        </p> */}
                     </motion.div>
                     <motion.div variants={itemVariants}>
                         <Link
@@ -111,7 +121,7 @@ export default function PortfolioSection() {
                             variants={itemVariants}
                             whileHover={{ y: -8 }}
                             onClick={() => handlePortfolioClick(item.title)}
-                            className={`group relative bg-white rounded-xl overflow-hidden shadow-lg transition-all duration-300 ${item.title === "Digital Consulting" ? "cursor-pointer" : ""}`}
+                            className={`group relative bg-white rounded-none overflow-hidden shadow-lg transition-all duration-300 ${["Digital Consulting", "Graphic Design & Branding", "Event Branding", "Digital Marketing", "Web Solutions", "Motion Graphics"].includes(item.title) ? "cursor-pointer" : ""}`}
                         >
                             {/* Image Container */}
                             <div className="relative aspect-[4/3] overflow-hidden">
@@ -121,29 +131,15 @@ export default function PortfolioSection() {
                                     fill
                                     className="object-cover transition duration-500 group-hover:scale-110"
                                 />
-                                {/* Overlay / Decorative Ring Badge */}
-                                <div className="absolute inset-0 flex items-center justify-center p-4">
-                                    <div className="relative w-24 h-24 flex items-center justify-center">
-                                        {/* Outer Ring */}
-                                        <div className="absolute inset-0 border-2 border-[#EB4724] rounded-full"></div>
-                                        {/* Inner Circle */}
-                                        <div className="w-20 h-20 bg-[#651313]/90 rounded-full flex flex-col items-center justify-center text-white p-2">
-                                            <span className="text-xs font-bold leading-tight">{item.count}</span>
-                                            <span className="text-[10px] uppercase tracking-tighter opacity-80">{item.label}</span>
-                                        </div>
-                                        {/* Connecting Dots (Decorative) */}
-                                        <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-[#EB4724] rounded-full"></div>
-                                        <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-[#EB4724] rounded-full"></div>
-                                    </div>
+                                {/* Overlay / Decorative Ring Badge - Hidden initially, appears on hover */}
+                                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                                    {/* Moved Title */}
+                                    <h3 className="text-white font-bold text-xl text-center px-4 transform -translate-x-10 group-hover:translate-x-0 transition-transform duration-300 delay-100">
+                                        {item.title}
+                                    </h3>
                                 </div>
                             </div>
-
-                            {/* Title/Footer */}
-                            <div className="p-6 text-center border-t border-gray-100">
-                                <h3 className="text-[#EB4724] font-bold text-lg">{item.title}</h3>
-                            </div>
-                        </motion.div>
-                    ))}
+                        </motion.div>))}
                 </div>
             </motion.div>
         </section>

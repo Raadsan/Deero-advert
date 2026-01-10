@@ -8,20 +8,20 @@ import { getTestimonials, Testimonial } from "../../api/testimonialApi";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL?.replace("/api", "") || "http://localhost:5000";
 
-const ratings = [
-    {
-        platform: "Google",
-        logo: "https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg",
-        rating: "5/5",
-        stars: 5,
-    },
-    {
-        platform: "facebook",
-        logo: "https://www.vectorlogo.zone/logos/facebook/facebook-official.svg",
-        rating: "5/5",
-        stars: 5,
-    },
-];
+// const ratings = [
+//     {
+//         platform: "Google",
+//         logo: "https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg",
+//         rating: "5/5",
+//         stars: 5,
+//     },
+//     {
+//         platform: "facebook",
+//         logo: "https://www.vectorlogo.zone/logos/facebook/facebook-official.svg",
+//         rating: "5/5",
+//         stars: 5,
+//     },
+// ];
 
 
 
@@ -84,7 +84,7 @@ export default function TestimonialsSection() {
     return (
         <>
             {/* Top Ratings Bar Section - White Background */}
-            <section className="bg-white py-12 px-4 sm:px-10 overflow-hidden relative border-b border-gray-100">
+            {/* <section className="bg-white py-12 px-4 sm:px-10 overflow-hidden relative border-b border-gray-100">
                 <div className="mx-auto max-w-6xl">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         {ratings.map((item, index) => (
@@ -117,7 +117,7 @@ export default function TestimonialsSection() {
                         ))}
                     </div>
                 </div>
-            </section>
+            </section> */}
 
             {/* Testimonials Content Section - Grey Background */}
             <section className="bg-[#f8f9fa] py-24 px-4 sm:px-10 overflow-hidden min-h-[600px]">
