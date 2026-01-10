@@ -5,9 +5,7 @@ import { motion, Variants } from "framer-motion"; // Add Variants import
 import { useState, useEffect } from "react";
 
 import { getTeams } from "@/api/teamApi";
-
-// Base URL for images
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL?.replace("/api", "") || "http://localhost:5000";
+import { getImageUrl } from "@/utils/url";
 
 export default function TeamSection() {
     const [teams, setTeams] = useState<any[]>([]);
@@ -27,17 +25,13 @@ export default function TeamSection() {
                     teamsData = response.data;
                 }
 
-                if (teamsData.length > 0) {
-                    const formattedTeams = teamsData.reverse().map((member: any) => ({
-                        ...member,
-                        image: member.image?.startsWith("http")
-                            ? member.image
-                            : `${API_BASE_URL}/${member.image}`.replace(/([^:]\/)\/+/g, "$1"),
-                        name: member.name || member.fullname,
-                        title: member.position || member.title,
-                    }));
-                    setTeams(formattedTeams);
-                }
+                const formattedTeams = teamsData.reverse().map((member: any) => ({
+                    ...member,
+                    image: getImageUrl(member.image) || "/home-images/placeholder.png",
+                    name: member.name || member.fullname,
+                    title: member.position || member.title,
+                }));
+                setTeams(formattedTeams);
             } catch (error) {
                 console.error("Error fetching teams:", error);
             } finally {

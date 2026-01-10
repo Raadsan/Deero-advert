@@ -7,9 +7,9 @@ import { useState, useEffect } from "react";
 import ServiceCard from "./ServiceCard";
 import { getAllServices, Service } from "../../api/serviceApi";
 import { CheckIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
+import { getImageUrl } from "@/utils/url";
 
 const HEADER_OFFSET = 170; // match fixed header height
-const API_URL = process.env.NEXT_PUBLIC_API_URL?.replace("/api", "") || "http://localhost:5000";
 
 const scrollToSection = (sectionId: string | null) => {
     if (!sectionId) return;
@@ -179,7 +179,7 @@ export default function ServicesContent({
                                 <ServiceCard
                                     key={service._id}
                                     name={service.serviceTitle || "Service"}
-                                    icon={service.serviceIcon ? (service.serviceIcon.startsWith("http") ? service.serviceIcon : `${API_URL}/${(service.serviceIcon.startsWith("/") ? service.serviceIcon.substring(1) : service.serviceIcon).replace(/\\/g, '/')}`) : "/logo deero-02 .svg"}
+                                    icon={getImageUrl(service.serviceIcon) || "/logo deero-02 .svg"}
                                     index={index}
                                     active={filterSlug ? getServiceSlug(service.serviceTitle || "") === filterSlug : false}
                                     itemVariants={itemVariants}

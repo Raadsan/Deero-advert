@@ -12,9 +12,9 @@ import {
     updateTeam,
     deleteTeam,
 } from "../../../api/teamApi";
+import { getImageUrl } from "@/utils/url";
 
-// Base URL for images
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL?.replace("/api", "") || "http://localhost:5000";
+
 
 export default function TeamsManagementPage() {
     const [data, setData] = useState<any[]>([]);
@@ -44,9 +44,7 @@ export default function TeamsManagementPage() {
                     _id: t._id,
                     name: t.name || t.fullname || "",
                     position: t.position || t.title || "",
-                    image: t.image?.startsWith("http")
-                        ? t.image
-                        : `${API_BASE_URL}/${t.image}`.replace(/([^:]\/)\/+/g, "$1"),
+                    image: getImageUrl(t.image),
                 }))
             );
         } catch (err) {

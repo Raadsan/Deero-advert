@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion, animate, useInView } from "framer-motion";
 import { getAllAchievements, Achievement } from "../../api/achievementApi";
 import { getMajorClients } from "../../api/majorClientApi";
+import { getImageUrl } from "@/utils/url";
 
 function Counter({ value, duration = 2 }: { value: number; duration?: number }) {
     const [count, setCount] = useState(0);
@@ -41,7 +42,7 @@ const itemVariants = {
 };
 
 export default function AchievementsSection() {
-    const [dynamicAchievements, setDynamicAchievements] = useState<Achievement[]>([]);
+    const [achievements, setAchievements] = useState<Achievement[]>([]);
     const [loading, setLoading] = useState(true);
     const [currentIndex, setCurrentIndex] = useState(0);
     const visibleCount = 4;
@@ -55,9 +56,9 @@ export default function AchievementsSection() {
         const fetchData = async () => {
             try {
                 // Fetch Achievements
-                const achievementsData = await getAllAchievements();
-                if (achievementsData.data.success) {
-                    setDynamicAchievements(achievementsData.data.data);
+                const { data: achievementsRes } = await getAllAchievements();
+                if (achievementsRes.success) {
+                    setAchievements(achievementsRes.data);
                 }
 
                 // Fetch Major Clients
@@ -68,9 +69,7 @@ export default function AchievementsSection() {
                 const allimages = fetchedClients.flatMap((client: any) =>
                     client.images.map((img: string, idx: number) => ({
                         id: `${client._id}-${idx}`,
-                        image: img.startsWith("http")
-                            ? img
-                            : `${(process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api").replace("/api", "")}/uploads/${img}`,
+                        image: getImageUrl(`uploads/${img}`) || "/home-images/placeholder.png",
                         title: client.description
                     }))
                 );
@@ -114,7 +113,7 @@ export default function AchievementsSection() {
                             <div className="flex justify-center items-center py-10">
                                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#EB4724]"></div>
                             </div>
-                        ) : dynamicAchievements.length > 0 ? (
+                        ) : achievements.length > 0 ? (
                             <motion.div
                                 initial="hidden"
                                 whileInView="visible"
@@ -122,7 +121,7 @@ export default function AchievementsSection() {
                                 variants={containerVariants}
                                 className="grid grid-cols-2 md:grid-cols-4 gap-12"
                             >
-                                {dynamicAchievements.map((item) => {
+                                {achievements.map((item) => {
                                     return (
                                         <motion.div key={item._id} variants={itemVariants} className="flex flex-col items-center group">
                                             <div className="relative w-28 h-28 flex items-center justify-center mb-6">
@@ -132,7 +131,7 @@ export default function AchievementsSection() {
 
                                                 <div className="relative h-14 w-14">
                                                     <Image
-                                                        src={`${(process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:5000/api").replace("/api", "")}/uploads/${item.icon}`}
+                                                        src={getImageUrl(`uploads/${item.icon}`) || "/logo deero-02 .svg"}
                                                         alt={item.title}
                                                         fill
                                                         unoptimized

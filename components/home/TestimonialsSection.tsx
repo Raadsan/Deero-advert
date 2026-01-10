@@ -5,8 +5,9 @@ import NextImage from "next/image";
 import { StarIcon } from "@heroicons/react/24/solid";
 import { motion } from "framer-motion";
 import { getTestimonials, Testimonial } from "../../api/testimonialApi";
+import { getImageUrl } from "@/utils/url";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL?.replace("/api", "") || "http://localhost:5000";
+
 
 // const ratings = [
 //     {
@@ -190,7 +191,7 @@ export default function TestimonialsSection() {
                                                 <div className="mt-auto flex items-center gap-4 pt-6 border-t border-gray-100">
                                                     <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-white shadow-md flex-shrink-0 bg-gray-50">
                                                         <NextImage
-                                                            src={item.clientImage ? (item.clientImage.startsWith('http') || item.clientImage.startsWith('/') ? item.clientImage : `${API_URL}/uploads/${item.clientImage}`) : "/home-images/placeholder.png"}
+                                                            src={getImageUrl(`uploads/${item.clientImage}`) || "/home-images/placeholder.png"}
                                                             alt={item.clientName}
                                                             width={56}
                                                             height={56}

@@ -3,40 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-
-const blogs = [
-    {
-        id: 1,
-        title: "How Motion Graphics Can Help Your Brand Marketing?",
-        excerpt: "Here is the article rewritten to improve transition words and...",
-        author: "Deero Advert",
-        date: "July 8, 2023",
-        tags: ["Brand Marketing", "Motion Graphics"],
-        color: "bg-[#EB4724]",
-        image: "/home-images/blog1.png",
-    },
-    {
-        id: 2,
-        title: "Why every business needs a website?",
-        excerpt: "In this article, we will emphasize and explain the concept...",
-        author: "Deero Advert",
-        date: "April 22, 2023",
-        tags: ["Design", "Develop", "Website"],
-        color: "bg-[#4d0e0e]",
-        image: "/home-images/blog2.png",
-    },
-    {
-        id: 3,
-        title: "Why is branding essential for any business?",
-        excerpt: "In this section, we will emphasize and explain the concept...",
-        author: "Deero Advert",
-        date: "April 23, 2023",
-        tags: ["Branding", "Design", "Identity"],
-        color: "bg-[#9b7677]",
-        image: "/home-images/blog3.png",
-    },
-  
-];
+import { getAllBlogs } from "@/api/blogsApi";
+import { getImageUrl } from "@/utils/url";
+import { useState, useEffect } from "react";
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -54,6 +23,23 @@ const itemVariants = {
 };
 
 export default function RecentBlogs() {
+    const [blogs, setBlogs] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchBlogs = async () => {
+            try {
+                const res = await getAllBlogs();
+                const data = res.data.success ? res.data.data : (Array.isArray(res.data) ? res.data : []);
+                setBlogs(data.slice(0, 3));
+            } catch (err) {
+                console.error("Failed to fetch blogs", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchBlogs();
+    }, []);
     return (
         <section className="bg-[#fce5d8] py-20 px-4 sm:px-10 overflow-hidden">
             <motion.div
@@ -66,19 +52,23 @@ export default function RecentBlogs() {
                 <motion.h2 variants={itemVariants} className="text-3xl font-bold text-[#651313] text-center mb-16">Recent Blogs</motion.h2>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-                    {blogs.map((blog) => (
+                    {blogs.length === 0 && !loading && (
+                        <div className="col-span-full text-center text-gray-500 py-10">No blogs found.</div>
+                    )}
+                    {blogs.map((blog, idx) => (
                         <motion.div
-                            key={blog.id}
+                            key={blog._id || idx}
                             variants={itemVariants}
                             whileHover={{ y: -10 }}
                             className="bg-white rounded-xl overflow-hidden shadow-xl flex flex-col group transition-all duration-300"
                         >
-                            {/* Top Card Area with Icon */}
-                            <div className={`${blog.color} h-48 relative overflow-hidden`}>
+                            {/* Top Card Area with Image */}
+                            <div className={`${['bg-[#EB4724]', 'bg-[#4d0e0e]', 'bg-[#9b7677]'][idx % 3]} h-48 relative overflow-hidden`}>
                                 <Image
-                                    src={blog.image}
+                                    src={getImageUrl(blog.featuredImage || blog.featured_image) || "/home-images/blog1.png"}
                                     alt="Blog Cover"
                                     fill
+                                    unoptimized
                                     className="object-cover brightness-110 contrast-125 transition-transform duration-500 group-hover:scale-110"
                                 />
 
@@ -89,29 +79,50 @@ export default function RecentBlogs() {
                                     transition={{ delay: 0.4, duration: 0.4 }}
                                     className="absolute -bottom-8 left-6 bg-white rounded-md shadow-md py-2 px-4 flex items-center gap-3 w-fit pr-10 z-20"
                                 >
-                                    <div className="w-12 h-12 rounded-full bg-[#fce5d8] flex items-center justify-center border-2 border-[#EB4724]">
-                                        <Image src="/home-images/Deero Logo full.png" alt="Logo" width={44} height={44} className="object-contain p-1" />
+                                    <div className="w-12 h-12 rounded-full bg-[#fce5d8] flex items-center justify-center border-2 border-[#EB4724] overflow-hidden">
+                                        <Image
+                                            src={getImageUrl(blog.authorAvatar) || "/home-images/Deero Logo full.png"}
+                                            alt="Author"
+                                            width={44}
+                                            height={44}
+                                            className="object-cover"
+                                        />
                                     </div>
                                     <div className="flex flex-col">
-                                        <span className="text-[11px] font-bold text-[#EB4724] uppercase">{blog.author}</span>
-                                        <span className="text-[10px] text-gray-400 font-semibold">{blog.date}</span>
+                                        <span className="text-[11px] font-bold text-[#EB4724] uppercase">{blog.authorName || "Deero Advert"}</span>
+                                        <span className="text-[10px] text-gray-400 font-semibold">{new Date(blog.createdAt).toLocaleDateString()}</span>
                                     </div>
                                 </motion.div>
                             </div>
 
                             {/* Content Area */}
                             <div className="p-6 pt-12 flex-1 flex flex-col text-left">
-                                <h3 className="text-2xl font-bold text-[#EB4724] mb-4 min-h-[56px] flex items-center justify-start leading-tight">
+                                <h3 className="text-2xl font-bold text-[#EB4724] mb-4 min-h-[56px] flex items-center justify-start leading-tight line-clamp-2">
                                     {blog.title}
                                 </h3>
-                                <p className="text-gray-500 text-sm mb-6 flex-1 line-clamp-3">
-                                    {blog.excerpt}
-                                </p>
+                                <div
+                                    className="text-gray-500 text-sm mb-6 flex-1 line-clamp-3 overflow-hidden"
+                                    dangerouslySetInnerHTML={{ __html: blog.content }}
+                                />
                                 <div className="border-t border-gray-100 pt-6 mt-auto">
                                     <div className="flex flex-wrap justify-start gap-4 text-[11px] font-bold text-gray-400 uppercase tracking-widest">
-                                        {blog.tags.map((tag) => (
-                                            <span key={tag} className="hover:text-[#EB4724] cursor-pointer transition-colors">{tag}</span>
-                                        ))}
+                                        {(() => {
+                                            const tags = Array.isArray(blog.categories) ? blog.categories :
+                                                (typeof blog.categories === 'string' ? blog.categories.split(',').map((c: string) => c.trim()).filter(Boolean) :
+                                                    (blog.tags || ["Design", "Branding"]));
+
+                                            // Ensure we always have an array and handle any duplicates/empty
+                                            const uniqueTags = Array.from(new Set(tags)).filter(Boolean);
+
+                                            return uniqueTags.map((tag: any, tIdx: number) => (
+                                                <span
+                                                    key={`${blog._id}-${tag}-${tIdx}`}
+                                                    className="hover:text-[#EB4724] cursor-pointer transition-colors"
+                                                >
+                                                    {tag}
+                                                </span>
+                                            ));
+                                        })()}
                                     </div>
                                 </div>
                             </div>
