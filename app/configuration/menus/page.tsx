@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import DataTable from "@/components/layout/DataTable";
 import Modal from "@/components/layout/Modal";
+import DeleteConfirmModal from "@/components/layout/DeleteConfirmModal";
 import { getAllMenus, createMenu, updateMenu, deleteMenu } from "@/api/menuApi";
 import { Menu } from "@/types/menu";
 import { Trash2, Edit, Plus, ChevronDown, ChevronRight } from "lucide-react";
@@ -11,7 +12,10 @@ export default function MenusPage() {
     const [menus, setMenus] = useState<Menu[]>([]);
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [editingMenu, setEditingMenu] = useState<Menu | null>(null);
+    const [deletingId, setDeletingId] = useState<string | null>(null);
+    const [deletingName, setDeletingName] = useState("");
     const [formData, setFormData] = useState({
         title: "",
         icon: "",
@@ -68,14 +72,23 @@ export default function MenusPage() {
         setShowModal(true);
     };
 
-    const handleDelete = async (id: string) => {
-        if (confirm("Are you sure you want to delete this menu?")) {
-            try {
-                await deleteMenu(id);
-                fetchMenus();
-            } catch (error: any) {
-                alert(error.response?.data?.message || "Error deleting menu");
-            }
+    const handleDelete = (id: string, title: string) => {
+        setDeletingId(id);
+        setDeletingName(title);
+        setIsDeleteModalOpen(true);
+    };
+
+    const confirmDelete = async () => {
+        if (!deletingId) return;
+        try {
+            await deleteMenu(deletingId);
+            fetchMenus();
+        } catch (error: any) {
+            alert(error.response?.data?.message || "Error deleting menu");
+        } finally {
+            setIsDeleteModalOpen(false);
+            setDeletingId(null);
+            setDeletingName("");
         }
     };
 
@@ -196,7 +209,7 @@ export default function MenusPage() {
                                         <Edit className="h-4 w-4" />
                                     </button>
                                     <button
-                                        onClick={() => handleDelete(row._id)}
+                                        onClick={() => handleDelete(row._id, row.title)}
                                         className="rounded p-2 text-red-600 hover:bg-red-50 transition-colors"
                                         title="Delete"
                                     >
@@ -210,6 +223,13 @@ export default function MenusPage() {
                     showAddButton={false}
                 />
             )}
+
+            <DeleteConfirmModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={confirmDelete}
+                itemName={deletingName}
+            />
 
             {/* Modal */}
             {showModal && (

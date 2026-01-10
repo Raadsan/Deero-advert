@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import DataTable from "@/components/layout/DataTable";
 import Modal from "@/components/layout/Modal";
-import { Pencil, Trash2, Camera, Plus, X } from "lucide-react";
+import DeleteConfirmModal from "@/components/layout/DeleteConfirmModal";
+import { Edit, Trash2, Camera, Plus, X } from "lucide-react";
 import { getAllServices, createService, updateService, deleteService } from "../../../api/serviceApi";
 
 type Service = any;
@@ -18,7 +19,10 @@ export default function AdminServicesPage() {
   const [loading, setLoading] = useState(true);
   const [rows, setRows] = useState<any[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [deletingName, setDeletingName] = useState("");
   const truncate = (s: string, n = 80) => (s?.length > n ? s.slice(0, n) + "..." : s);
   const [formData, setFormData] = useState({
     serviceTitle: "",
@@ -222,14 +226,24 @@ export default function AdminServicesPage() {
   };
 
   // Handle delete
-  const handleDelete = async (row: any) => {
-    if (!confirm("Are you sure you want to delete this service?")) return;
+  const handleDelete = (row: any) => {
+    setDeletingId(row.serviceId);
+    setDeletingName(row.serviceTitle);
+    setIsDeleteModalOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!deletingId) return;
     try {
-      await deleteService(row.serviceId);
+      await deleteService(deletingId);
       fetchData();
     } catch (err) {
       console.error("Failed to delete service", err);
       alert("Failed to delete service");
+    } finally {
+      setIsDeleteModalOpen(false);
+      setDeletingId(null);
+      setDeletingName("");
     }
   };
 
@@ -307,14 +321,14 @@ export default function AdminServicesPage() {
         <div className="flex gap-2">
           <button
             onClick={() => handleEdit(r)}
-            className="p-2 rounded-lg hover:bg-orange-50 text-[#EB4724] transition-colors"
+            className="p-2 rounded-lg hover:bg-blue-50 text-blue-600 transition-colors"
             title="Edit"
           >
-            <Pencil className="h-4 w-4" />
+            <Edit className="h-4 w-4" />
           </button>
           <button
             onClick={() => handleDelete(r)}
-            className="p-2 rounded-lg hover:bg-red-50 text-red-500 transition-colors"
+            className="p-2 rounded-lg hover:bg-red-50 text-red-600 transition-colors"
             title="Delete"
           >
             <Trash2 className="h-4 w-4" />
@@ -344,6 +358,13 @@ export default function AdminServicesPage() {
           });
         }}
         loading={loading}
+      />
+
+      <DeleteConfirmModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={confirmDelete}
+        itemName={deletingName}
       />
 
       <Modal

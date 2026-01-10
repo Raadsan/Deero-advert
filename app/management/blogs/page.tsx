@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import DataTable from "@/components/layout/DataTable";
 import Modal from "@/components/layout/Modal";
-import { Pencil, Trash2, Camera } from "lucide-react";
+import DeleteConfirmModal from "@/components/layout/DeleteConfirmModal";
+import { Edit, Trash2, Camera } from "lucide-react";
 import {
   getAllBlogs,
   createBlog,
@@ -15,7 +16,10 @@ export default function AdminBlogsPage() {
   const [loading, setLoading] = useState(true);
   const [rows, setRows] = useState<any[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [editingBlogId, setEditingBlogId] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [deletingTitle, setDeletingTitle] = useState("");
   const [form, setForm] = useState({
     title: "",
     slug: "",
@@ -150,13 +154,23 @@ export default function AdminBlogsPage() {
   };
 
   // ✅ Delete blog
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this blog?")) return;
+  const handleDelete = (id: string, title: string) => {
+    setDeletingId(id);
+    setDeletingTitle(title);
+    setIsDeleteModalOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!deletingId) return;
     try {
-      await deleteBlog(id);
+      await deleteBlog(deletingId);
       fetchBlogs();
     } catch (err) {
       console.error("Failed to delete blog", err);
+    } finally {
+      setIsDeleteModalOpen(false);
+      setDeletingId(null);
+      setDeletingTitle("");
     }
   };
 
@@ -226,16 +240,16 @@ export default function AdminBlogsPage() {
       render: (r: any) => (
         <div className="flex gap-2">
           <button
-            className="p-2 rounded-lg hover:bg-orange-50 text-[#EB4724] transition-colors"
+            className="p-2 rounded-lg hover:bg-blue-50 text-blue-600 transition-colors"
             title="Edit"
             onClick={() => handleEdit(r)}
           >
-            <Pencil className="h-4 w-4" />
+            <Edit className="h-4 w-4" />
           </button>
           <button
-            className="p-2 rounded-lg hover:bg-red-50 text-red-500 transition-colors"
+            className="p-2 rounded-lg hover:bg-red-50 text-red-600 transition-colors"
             title="Delete"
-            onClick={() => handleDelete(r._id)}
+            onClick={() => handleDelete(r._id, r.title)}
           >
             <Trash2 className="h-4 w-4" />
           </button>
@@ -255,6 +269,13 @@ export default function AdminBlogsPage() {
         showAddButton
         onAddClick={() => setIsModalOpen(true)}
         loading={loading}
+      />
+
+      <DeleteConfirmModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={confirmDelete}
+        itemName={deletingTitle}
       />
 
       <Modal isOpen={isModalOpen} onClose={() => { setIsModalOpen(false); setEditingBlogId(null); setForm({ title: "", slug: "", content: "", authorName: "", authorAvatar: null, authorAvatarPreview: "", featuredImage: null, featuredImagePreview: "", categories: "", publishedDate: "" }); }} title={editingBlogId ? "Edit Blog" : "Add Blog"}>

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import DataTable from "@/components/layout/DataTable";
 import Modal from "@/components/layout/Modal";
+import DeleteConfirmModal from "@/components/layout/DeleteConfirmModal";
 import { Send, Trash2, Mail, Users, Megaphone } from "lucide-react";
 import {
     getAllAnnouncements,
@@ -18,6 +19,9 @@ export default function AnnouncementsPage() {
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [deletingId, setDeletingId] = useState<string | null>(null);
+    const [deletingTitle, setDeletingTitle] = useState("");
     const [formData, setFormData] = useState({
         title: "",
         message: "",
@@ -96,16 +100,25 @@ export default function AnnouncementsPage() {
         }
     };
 
-    const handleDelete = async (id: string) => {
-        if (confirm("Are you sure you want to delete this announcement?")) {
-            try {
-                const res = await deleteAnnouncement(id);
-                if (res.success) {
-                    fetchData();
-                }
-            } catch (error: any) {
-                alert(error.response?.data?.message || "Failed to delete announcement");
+    const handleDelete = (id: string, title: string) => {
+        setDeletingId(id);
+        setDeletingTitle(title);
+        setIsDeleteModalOpen(true);
+    };
+
+    const confirmDelete = async () => {
+        if (!deletingId) return;
+        try {
+            const res = await deleteAnnouncement(deletingId);
+            if (res.success) {
+                fetchData();
             }
+        } catch (error: any) {
+            alert(error.response?.data?.message || "Failed to delete announcement");
+        } finally {
+            setIsDeleteModalOpen(false);
+            setDeletingId(null);
+            setDeletingTitle("");
         }
     };
 
@@ -188,8 +201,8 @@ export default function AnnouncementsPage() {
             key: "actions",
             render: (row: Announcement) => (
                 <button
-                    onClick={() => handleDelete(row._id)}
-                    className="p-2 rounded-lg hover:bg-red-50 text-red-500 transition-colors"
+                    onClick={() => handleDelete(row._id, row.title)}
+                    className="p-2 rounded-lg hover:bg-red-50 text-red-600 transition-colors"
                 >
                     <Trash2 className="h-4 w-4" />
                 </button>
@@ -206,6 +219,13 @@ export default function AnnouncementsPage() {
                 loading={loading}
                 onAddClick={() => setIsModalOpen(true)}
                 addButtonLabel="New Announcement"
+            />
+
+            <DeleteConfirmModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={confirmDelete}
+                itemName={deletingTitle}
             />
 
             <Modal

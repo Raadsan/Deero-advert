@@ -3,13 +3,14 @@
 import { useState, useEffect } from "react";
 import DataTable from "@/components/layout/DataTable";
 import Modal from "@/components/layout/Modal";
+import DeleteConfirmModal from "@/components/layout/DeleteConfirmModal";
 import {
     getAllDomainPrices,
     createDomainPrice,
     updateDomainPrice,
     deleteDomainPrice
 } from "@/api/domainPriceApi";
-import { Pencil, Trash2 } from "lucide-react";
+import { Edit, Trash2 } from "lucide-react";
 
 interface DomainPrice {
     _id: string;
@@ -23,7 +24,10 @@ export default function DomainPricingManagement() {
     const [prices, setPrices] = useState<DomainPrice[]>([]);
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [currentPrice, setCurrentPrice] = useState<DomainPrice | null>(null);
+    const [deletingId, setDeletingId] = useState<string | null>(null);
+    const [deletingName, setDeletingName] = useState("");
 
     // Form state
     const [formData, setFormData] = useState({
@@ -101,15 +105,24 @@ export default function DomainPricingManagement() {
         }
     };
 
-    const handleDelete = async (id: string) => {
-        if (confirm("Are you sure you want to delete this domain pricing?")) {
-            try {
-                await deleteDomainPrice(id);
-                fetchPrices();
-            } catch (error) {
-                console.error("Error deleting domain price:", error);
-                alert("Failed to delete domain price");
-            }
+    const handleDelete = (id: string, tld: string) => {
+        setDeletingId(id);
+        setDeletingName(tld);
+        setIsDeleteModalOpen(true);
+    };
+
+    const confirmDelete = async () => {
+        if (!deletingId) return;
+        try {
+            await deleteDomainPrice(deletingId);
+            fetchPrices();
+        } catch (error) {
+            console.error("Error deleting domain price:", error);
+            alert("Failed to delete domain price");
+        } finally {
+            setIsDeleteModalOpen(false);
+            setDeletingId(null);
+            setDeletingName("");
         }
     };
 
@@ -144,10 +157,10 @@ export default function DomainPricingManagement() {
                         className="p-1.5 text-blue-600 hover:bg-blue-50 rounded transition-colors"
                         title="Edit"
                     >
-                        <Pencil className="w-4 h-4" />
+                        <Edit className="w-4 h-4" />
                     </button>
                     <button
-                        onClick={() => handleDelete(row._id)}
+                        onClick={() => handleDelete(row._id, row.tld)}
                         className="p-1.5 text-red-600 hover:bg-red-50 rounded transition-colors"
                         title="Delete"
                     >
@@ -167,6 +180,13 @@ export default function DomainPricingManagement() {
                 loading={loading}
                 showAddButton={true}
                 onAddClick={() => handleOpenModal()}
+            />
+
+            <DeleteConfirmModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={confirmDelete}
+                itemName={deletingName}
             />
 
             <Modal

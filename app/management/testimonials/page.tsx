@@ -4,7 +4,8 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import DataTable from "@/components/layout/DataTable";
 import Modal from "@/components/layout/Modal";
-import { Pencil, Trash2, Camera, Star as StarIcon } from "lucide-react";
+import DeleteConfirmModal from "@/components/layout/DeleteConfirmModal";
+import { Edit, Trash2, Camera, Star as StarIcon } from "lucide-react";
 import {
   getAllTestimonials,
   createTestimonial,
@@ -17,7 +18,10 @@ export default function TestimonialsPage() {
   const truncate = (s: string, n = 120) => (s?.length > n ? s.slice(0, n) + "..." : s);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [deletingName, setDeletingName] = useState("");
   const [formData, setFormData] = useState({
     clientName: "",
     clientTitle: "",
@@ -123,13 +127,23 @@ export default function TestimonialsPage() {
   };
 
   // ✅ Delete testimonial
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this testimonial?")) return;
+  const handleDelete = (id: string, name: string) => {
+    setDeletingId(id);
+    setDeletingName(name);
+    setIsDeleteModalOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!deletingId) return;
     try {
-      await deleteTestimonial(id);
+      await deleteTestimonial(deletingId);
       fetchTestimonials();
     } catch (err) {
       console.error("Failed to delete testimonial", err);
+    } finally {
+      setIsDeleteModalOpen(false);
+      setDeletingId(null);
+      setDeletingName("");
     }
   };
 
@@ -196,16 +210,16 @@ export default function TestimonialsPage() {
       render: (row: any) => (
         <div className="flex gap-2">
           <button
-            className="p-2 rounded-lg hover:bg-orange-50 text-[#EB4724] transition-colors"
+            className="p-2 rounded-lg hover:bg-blue-50 text-blue-600 transition-colors"
             title="Edit"
             onClick={() => handleEdit(row)}
           >
-            <Pencil className="h-4 w-4" />
+            <Edit className="h-4 w-4" />
           </button>
           <button
-            className="p-2 rounded-lg hover:bg-red-50 text-red-500 transition-colors"
+            className="p-2 rounded-lg hover:bg-red-50 text-red-600 transition-colors"
             title="Delete"
-            onClick={() => handleDelete(row.id)}
+            onClick={() => handleDelete(row.id, row.clientName)}
           >
             <Trash2 className="h-4 w-4" />
           </button>
@@ -223,6 +237,13 @@ export default function TestimonialsPage() {
         showAddButton
         onAddClick={() => setIsModalOpen(true)}
         loading={loading}
+      />
+
+      <DeleteConfirmModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={confirmDelete}
+        itemName={deletingName}
       />
 
       <Modal

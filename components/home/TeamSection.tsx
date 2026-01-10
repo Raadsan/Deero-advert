@@ -9,100 +9,14 @@ import { getTeams } from "@/api/teamApi";
 // Base URL for images
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL?.replace("/api", "") || "http://localhost:5000";
 
-// Mock Data
-// const teamMembers = [
-//     {
-//         id: 1,
-//         name: "Abdirahman Ali Omar",
-//         title: "CEO & Founder",
-//         image: "/home-images/33.jpg",
-//     },
-//     {
-//         id: 2,
-//         name: "Abdinajib Abdullahi Muse",
-//         title: "Senior Designer",
-//         image: "/home-images/1.jpeg",
-//     },
-//     {
-//         id: 3,
-//         name: "Hassan Omar Farah",
-//         title: "Lead Developer",
-//         image: "/home-images/22.jpg",
-//     },
-//     {
-//         id: 4,
-//         name: "Farah Nur Mohamed",
-//         title: "Marketing Head",
-//         image: "/home-images/22.jpg",
-//     },
-//     {
-//         id: 5,
-//         name: "Abdulrahman Ali Mohamed",
-//         title: "Project Manager",
-//         image: "/home-images/22.jpg",
-//     },
-//     {
-//         id: 6,
-//         name: "Mohammed Nur Mohamed",
-//         title: "Sales Executive",
-//         image: "/home-images/22.jpg",
-//     },
-// ];
-
-const containerVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-        opacity: 1,
-        transition: {
-            staggerChildren: 0.2,
-        },
-    },
-};
-
-const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-};
-
-const mockTeamMembers = [
-    {
-        id: 1,
-        name: "Abdirahman Ali Omar",
-        title: "CEO & Founder",
-        image: "/home-images/33.jpg",
-    },
-    {
-        id: 2,
-        name: "Abdinajib Abdullahi Muse",
-        title: "Senior Designer",
-        image: "/home-images/1.jpeg",
-    },
-    {
-        id: 3,
-        name: "Hassan Omar Farah",
-        title: "Lead Developer",
-        image: "/home-images/22.jpg",
-    },
-    {
-        id: 4,
-        name: "Farah Nur Mohamed",
-        title: "Marketing Head",
-        image: "/home-images/22.jpg",
-    },
-];
-
-// Mock Data is above
 export default function TeamSection() {
     const [teams, setTeams] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        console.log("TeamSection mounted.");
         const fetchTeams = async () => {
             try {
-                console.log("Fetching teams from /teams via getTeams...");
                 const response = await getTeams();
-                console.log("Team API Raw Response Data:", response.data);
 
                 let teamsData = [];
                 if (response.data && response.data.success && Array.isArray(response.data.teams)) {
@@ -113,8 +27,6 @@ export default function TeamSection() {
                     teamsData = response.data;
                 }
 
-                console.log("Parsed teamsData:", teamsData);
-
                 if (teamsData.length > 0) {
                     const formattedTeams = teamsData.map((member: any) => ({
                         ...member,
@@ -124,15 +36,10 @@ export default function TeamSection() {
                         name: member.name || member.fullname,
                         title: member.position || member.title,
                     }));
-                    console.log("Formatted teams for slider:", formattedTeams);
                     setTeams(formattedTeams);
-                } else {
-                    console.log("Zero team members returned, using mock data.");
-                    setTeams(mockTeamMembers);
                 }
             } catch (error) {
-                console.error("Critical error fetching teams, falling back to mock data:", error);
-                setTeams(mockTeamMembers);
+                console.error("Error fetching teams:", error);
             } finally {
                 setLoading(false);
             }

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import DataTable from "@/components/layout/DataTable";
 import Modal from "@/components/layout/Modal";
+import DeleteConfirmModal from "@/components/layout/DeleteConfirmModal";
 import { getAllRoles, createRole, updateRole, deleteRole, Role } from "@/api/roleApi";
 import { Trash2, Edit, Plus } from "lucide-react";
 
@@ -10,7 +11,10 @@ export default function RolesPage() {
     const [roles, setRoles] = useState<Role[]>([]);
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [editingRole, setEditingRole] = useState<Role | null>(null);
+    const [deletingId, setDeletingId] = useState<string | null>(null);
+    const [deletingName, setDeletingName] = useState("");
     const [formData, setFormData] = useState({ name: "", description: "" });
 
     useEffect(() => {
@@ -55,14 +59,23 @@ export default function RolesPage() {
         setShowModal(true);
     };
 
-    const handleDelete = async (id: string) => {
-        if (confirm("Are you sure you want to delete this role?")) {
-            try {
-                await deleteRole(id);
-                fetchRoles();
-            } catch (error: any) {
-                alert(error.response?.data?.message || "Error deleting role");
-            }
+    const handleDelete = (id: string, name: string) => {
+        setDeletingId(id);
+        setDeletingName(name);
+        setIsDeleteModalOpen(true);
+    };
+
+    const confirmDelete = async () => {
+        if (!deletingId) return;
+        try {
+            await deleteRole(deletingId);
+            fetchRoles();
+        } catch (error: any) {
+            alert(error.response?.data?.message || "Error deleting role");
+        } finally {
+            setIsDeleteModalOpen(false);
+            setDeletingId(null);
+            setDeletingName("");
         }
     };
 
@@ -124,14 +137,14 @@ export default function RolesPage() {
                             <div className="flex items-center gap-2">
                                 <button
                                     onClick={() => handleEdit(row)}
-                                    className="rounded p-2 text-blue-600 hover:bg-blue-50 transition-colors"
+                                    className="p-2 rounded-lg text-blue-600 hover:bg-blue-50 transition-colors"
                                     title="Edit"
                                 >
                                     <Edit className="h-4 w-4" />
                                 </button>
                                 <button
-                                    onClick={() => handleDelete(row._id)}
-                                    className="rounded p-2 text-red-600 hover:bg-red-50 transition-colors"
+                                    onClick={() => handleDelete(row._id, row.name)}
+                                    className="p-2 rounded-lg text-red-600 hover:bg-red-50 transition-colors"
                                     title="Delete"
                                 >
                                     <Trash2 className="h-4 w-4" />
@@ -143,6 +156,13 @@ export default function RolesPage() {
                 data={roles}
                 showAddButton={false}
                 loading={loading}
+            />
+
+            <DeleteConfirmModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={confirmDelete}
+                itemName={deletingName}
             />
 
             {/* Modal */}

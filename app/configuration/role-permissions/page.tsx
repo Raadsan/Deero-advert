@@ -10,6 +10,7 @@ import {
 import { getAllRoles, Role } from "@/api/roleApi";
 import { getAllMenus } from "@/api/menuApi";
 import { Menu } from "@/types/menu";
+import DeleteConfirmModal from "@/components/layout/DeleteConfirmModal";
 import { Trash2, Edit, Plus, Save, Shield, Lock, Check, X } from "lucide-react";
 
 export default function RolePermissionsPage() {
@@ -18,7 +19,10 @@ export default function RolePermissionsPage() {
     const [menus, setMenus] = useState<Menu[]>([]);
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [selectedRole, setSelectedRole] = useState<string>("");
+    const [deletingId, setDeletingId] = useState<string | null>(null);
+    const [deletingName, setDeletingName] = useState("");
     const [selectedMenus, setSelectedMenus] = useState<{
         [menuId: string]: {
             enabled: boolean;
@@ -80,14 +84,23 @@ export default function RolePermissionsPage() {
         setShowModal(true);
     };
 
-    const handleDelete = async (id: string) => {
-        if (confirm("Are you sure you want to delete these permissions?")) {
-            try {
-                await deleteRolePermissions(id);
-                fetchData();
-            } catch (error: any) {
-                alert(error.response?.data?.message || "Error deleting permissions");
-            }
+    const handleDelete = (perm: RolePermission) => {
+        setDeletingId(perm._id);
+        setDeletingName(`Permissions for ${perm.role.name}`);
+        setIsDeleteModalOpen(true);
+    };
+
+    const confirmDelete = async () => {
+        if (!deletingId) return;
+        try {
+            await deleteRolePermissions(deletingId);
+            fetchData();
+        } catch (error: any) {
+            alert(error.response?.data?.message || "Error deleting permissions");
+        } finally {
+            setIsDeleteModalOpen(false);
+            setDeletingId(null);
+            setDeletingName("");
         }
     };
 
@@ -229,7 +242,7 @@ export default function RolePermissionsPage() {
                                                 <Edit className="h-4 w-4" />
                                             </button>
                                             <button
-                                                onClick={() => handleDelete(perm._id)}
+                                                onClick={() => handleDelete(perm)}
                                                 className="rounded-lg p-2 bg-white/20 backdrop-blur-sm text-white hover:bg-red-500 transition-colors"
                                                 title="Delete"
                                             >
@@ -344,6 +357,13 @@ export default function RolePermissionsPage() {
                     )}
                 </div>
             )}
+
+            <DeleteConfirmModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={confirmDelete}
+                itemName={deletingName}
+            />
 
             {/* Enhanced Modal */}
             {showModal && (

@@ -30,8 +30,9 @@ import Image from "next/image";
 import { logout } from "../../api/authApi";
 import { useEffect, useState } from "react";
 import { getUserMenus } from "../../api/menuApi";
-import { getUser } from "../../utils/auth";
+import { getUser, isAdminOrManager } from "../../utils/auth";
 import { Menu } from "../../types/menu";
+import { Users as UsersIcon } from "lucide-react"; // Rename to avoid confusion with the mapping
 
 // Icon mapping from string names to Lucide components
 const iconMap: Record<string, LucideIcon> = {
@@ -78,6 +79,7 @@ const iconMap: Record<string, LucideIcon> = {
     announcements: Calendar,
     "major-clients": Users,
     domains: Globe,
+    teams: Users,
 };
 
 export default function UnifiedSidebar({ isOpen, onClose }: { isOpen?: boolean; onClose?: () => void }) {
@@ -278,6 +280,25 @@ export default function UnifiedSidebar({ isOpen, onClose }: { isOpen?: boolean; 
                                     </li>
                                 );
                             })
+                        )}
+
+                        {/* Static Teams Link for Admin/Manager as requested */}
+                        {!loading && isAdminOrManager() && !menus.some(m => m.url === '/management/teams' || m.subMenus?.some(s => s.url === '/management/teams')) && (
+                            <li>
+                                <Link
+                                    href="/management/teams"
+                                    onClick={onClose}
+                                    className={`flex items-center rounded-lg px-4 py-3 transition-colors hover:bg-white/10 ${pathname === '/management/teams'
+                                        ? "bg-[#EB4724] text-white shadow-md"
+                                        : "text-white/80 hover:text-white"
+                                        }`}
+                                >
+                                    <UsersIcon className="h-5 w-5 flex-shrink-0" />
+                                    <span className="ml-3 text-sm font-medium tracking-wide">
+                                        Manage Teams
+                                    </span>
+                                </Link>
+                            </li>
                         )}
                     </ul>
 

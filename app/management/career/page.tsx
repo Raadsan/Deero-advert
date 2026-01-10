@@ -3,14 +3,18 @@
 import { useEffect, useState } from "react";
 import DataTable from "@/components/layout/DataTable";
 import Modal from "@/components/layout/Modal";
-import { Pencil, Trash2, CheckCircle, XCircle } from "lucide-react";
+import DeleteConfirmModal from "@/components/layout/DeleteConfirmModal";
+import { Edit, Trash2, CheckCircle, XCircle } from "lucide-react";
 import { getAllCareers, createCareer, updateCareer, deleteCareer, Career } from "../../../api/careerApi";
 
 export default function CareersPage() {
     const [loading, setLoading] = useState(true);
     const [rows, setRows] = useState<Career[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [editingId, setEditingId] = useState<string | null>(null);
+    const [deletingId, setDeletingId] = useState<string | null>(null);
+    const [deletingName, setDeletingName] = useState("");
     const [formData, setFormData] = useState({
         title: "",
         type: "Full-time" as Career["type"],
@@ -105,14 +109,24 @@ export default function CareersPage() {
     };
 
     // Handle delete
-    const handleDelete = async (row: Career) => {
-        if (!confirm(`Are you sure you want to delete "${row.title}"?`)) return;
+    const handleDelete = (row: Career) => {
+        setDeletingId(row._id);
+        setDeletingName(row.title);
+        setIsDeleteModalOpen(true);
+    };
+
+    const confirmDelete = async () => {
+        if (!deletingId) return;
         try {
-            await deleteCareer(row._id);
+            await deleteCareer(deletingId);
             fetchData();
         } catch (err) {
             console.error("Failed to delete career", err);
             alert("Failed to delete job posting");
+        } finally {
+            setIsDeleteModalOpen(false);
+            setDeletingId(null);
+            setDeletingName("");
         }
     };
 
@@ -214,14 +228,14 @@ export default function CareersPage() {
                 <div className="flex gap-2">
                     <button
                         onClick={() => handleEdit(row)}
-                        className="p-2 rounded-lg hover:bg-orange-50 text-[#EB4724] transition-colors"
+                        className="p-2 rounded-lg hover:bg-blue-50 text-blue-600 transition-colors"
                         title="Edit"
                     >
-                        <Pencil className="h-4 w-4" />
+                        <Edit className="h-4 w-4" />
                     </button>
                     <button
                         onClick={() => handleDelete(row)}
-                        className="p-2 rounded-lg hover:bg-red-50 text-red-500 transition-colors"
+                        className="p-2 rounded-lg hover:bg-red-50 text-red-600 transition-colors"
                         title="Delete"
                     >
                         <Trash2 className="h-4 w-4" />
@@ -251,6 +265,13 @@ export default function CareersPage() {
                     });
                 }}
                 loading={loading}
+            />
+
+            <DeleteConfirmModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={confirmDelete}
+                itemName={deletingName}
             />
 
             <Modal

@@ -3,7 +3,8 @@
 import React, { useState, useEffect } from "react";
 import DataTable from "@/components/layout/DataTable";
 import Modal from "@/components/layout/Modal";
-import { Pencil, Trash2, UserPlus } from "lucide-react";
+import DeleteConfirmModal from "@/components/layout/DeleteConfirmModal";
+import { Edit, Trash2, UserPlus } from "lucide-react";
 import {
   getAllUsers,
   createUser,
@@ -17,6 +18,9 @@ export default function UsersPage() {
   const [roles, setRoles] = useState<any[]>([]); // roles state
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [deletingName, setDeletingName] = useState("");
   const [formData, setFormData] = useState({
     fullname: "",
     email: "",
@@ -92,15 +96,24 @@ export default function UsersPage() {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (confirm("Are you sure you want to delete this user?")) {
-      try {
-        await deleteUser(id);
-        fetchUsers();
-      } catch (err) {
-        const error = err as any; // <-- cast to any
-        alert(error.response?.data?.message || "Failed to delete user");
-      }
+  const handleDelete = (id: string, name: string) => {
+    setDeletingId(id);
+    setDeletingName(name);
+    setIsDeleteModalOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!deletingId) return;
+    try {
+      await deleteUser(deletingId);
+      await fetchUsers();
+    } catch (err) {
+      const error = err as any;
+      alert(error.response?.data?.message || "Failed to delete user");
+    } finally {
+      setIsDeleteModalOpen(false);
+      setDeletingId(null);
+      setDeletingName("");
     }
   };
 
@@ -170,16 +183,16 @@ export default function UsersPage() {
       render: (row: any) => (
         <div className="flex gap-2">
           <button
-            className="p-2 rounded-lg hover:bg-orange-50 text-[#EB4724] transition-colors"
+            className="p-2 rounded-lg hover:bg-blue-50 text-blue-600 transition-colors"
             title="Edit"
             onClick={() => handleEdit(row)}
           >
-            <Pencil className="h-4 w-4" />
+            <Edit className="h-4 w-4" />
           </button>
           <button
-            className="p-2 rounded-lg hover:bg-red-50 text-red-500 transition-colors"
+            className="p-2 rounded-lg hover:bg-red-50 text-red-600 transition-colors"
             title="Delete"
-            onClick={() => handleDelete(row._id)}
+            onClick={() => handleDelete(row._id, row.fullname)}
           >
             <Trash2 className="h-4 w-4" />
           </button>
@@ -196,6 +209,13 @@ export default function UsersPage() {
         data={data}
         onAddClick={() => setIsModalOpen(true)}
         loading={loading}
+      />
+
+      <DeleteConfirmModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={confirmDelete}
+        itemName={deletingName}
       />
 
       <Modal

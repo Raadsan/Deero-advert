@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import DataTable from "@/components/layout/DataTable";
 import Modal from "@/components/layout/Modal";
+import DeleteConfirmModal from "@/components/layout/DeleteConfirmModal";
 import { Trash2, Camera, X } from "lucide-react";
 import {
     getMajorClients,
@@ -15,6 +16,9 @@ export default function MajorClientsPage() {
     const [data, setData] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [deletingId, setDeletingId] = useState<string | null>(null);
+    const [deletingName, setDeletingName] = useState("");
     const [formData, setFormData] = useState({
         description: "",
         images: [] as File[],
@@ -110,13 +114,24 @@ export default function MajorClientsPage() {
     };
 
     // ✅ Delete client
-    const handleDelete = async (id: string) => {
-        if (!confirm("Are you sure you want to delete this major client?")) return;
+    const handleDelete = (id: string, description: string) => {
+        setDeletingId(id);
+        const namePreview = description?.length > 40 ? description.slice(0, 40) + "..." : description;
+        setDeletingName(namePreview || "Major Client");
+        setIsDeleteModalOpen(true);
+    };
+
+    const confirmDelete = async () => {
+        if (!deletingId) return;
         try {
-            await deleteMajorClient(id);
+            await deleteMajorClient(deletingId);
             fetchClients();
         } catch (err) {
             console.error("Failed to delete client", err);
+        } finally {
+            setIsDeleteModalOpen(false);
+            setDeletingId(null);
+            setDeletingName("");
         }
     };
 
@@ -172,9 +187,9 @@ export default function MajorClientsPage() {
                 <div className="flex gap-2">
                     {/* Edit button omitted since backend doesn't support update yet */}
                     <button
-                        className="p-2 rounded-lg hover:bg-red-50 text-red-500 transition-colors"
+                        className="p-2 rounded-lg hover:bg-red-50 text-red-600 transition-colors"
                         title="Delete"
-                        onClick={() => handleDelete(row.id)}
+                        onClick={() => handleDelete(row.id, row.description)}
                     >
                         <Trash2 className="h-4 w-4" />
                     </button>
@@ -192,6 +207,13 @@ export default function MajorClientsPage() {
                 showAddButton
                 onAddClick={() => setIsModalOpen(true)}
                 loading={loading}
+            />
+
+            <DeleteConfirmModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={confirmDelete}
+                itemName={deletingName}
             />
 
             <Modal
