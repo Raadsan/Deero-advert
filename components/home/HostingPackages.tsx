@@ -93,7 +93,7 @@ export default function HostingPackages() {
     const [isYearly, setIsYearly] = useState(false);
 
     const handleChoosePlan = (plan: any) => {
-        const price = isYearly ? plan.yearlyPrice : plan.monthlyPrice;
+        const price = isYearly ? Number((plan.yearlyPrice * 12).toFixed(2)) : plan.monthlyPrice;
         toggleCartItem({
             id: Math.random().toString(36).substr(2, 9),
             type: 'hosting',
@@ -160,10 +160,10 @@ export default function HostingPackages() {
                             <div className="mb-2 text-[#651313]/60 text-xs font-semibold">From only</div>
                             <div className="flex items-baseline mb-6">
                                 <span className="text-4xl font-bold text-[#651313]">
-                                    ${isYearly ? plan.yearlyPrice : plan.monthlyPrice}
+                                    ${isYearly ? (plan.yearlyPrice * 12).toFixed(2) : plan.monthlyPrice}
                                 </span>
                                 <span className="text-[#651313]/60 text-xs ml-1 font-semibold">
-                                    /{isYearly ? 'month' : 'month'}
+                                    /{isYearly ? 'year' : 'month'}
                                 </span>
                             </div>
 
@@ -179,8 +179,8 @@ export default function HostingPackages() {
                             <button
                                 onClick={() => handleChoosePlan(plan)}
                                 className={`${isInCart(`${plan.name} Plan`)
-                                        ? 'bg-white text-[#651313] border-2 border-[#651313]'
-                                        : plan.buttonColor + ' text-white'
+                                    ? 'bg-white text-[#651313] border-2 border-[#651313]'
+                                    : plan.buttonColor + ' text-white'
                                     } font-bold py-4 rounded-full shadow-lg hover:brightness-110 active:scale-95 transition-all uppercase tracking-widest text-xs`}
                             >
                                 {isInCart(`${plan.name} Plan`) ? 'Remove Plan' : 'Choose Plan'}
