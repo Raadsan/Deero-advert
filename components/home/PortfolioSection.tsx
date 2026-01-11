@@ -107,7 +107,7 @@ export default function PortfolioSection({ showHeader = true, limit }: { showHea
                                 href="/portfolio"
                                 className="bg-[#EB4724] text-white px-10 py-3 rounded-full font-bold hover:bg-[#d13d1d] hover:scale-105 active:scale-95 transition-all uppercase tracking-wider text-sm shadow-md inline-block"
                             >
-                                See More
+                                View More
                             </Link>
                         </motion.div>
                     </div>

@@ -46,7 +46,7 @@ export default function AboutContent() {
                 {/* Vision & Mission Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-24">
                     {/* Vision Card */}
-                    <div className="group bg-[#4d0e0e] rounded-2xl p-10 md:p-12 text-center text-white flex flex-col items-center space-y-6 shadow-xl transition hover:-translate-y-2 hover:bg-[#f6f6f6] hover:text-[#1a1a1a] duration-300">
+                    <div className="group bg-[#4d0e0e] rounded-2xl p-10 md:p-12 text-center text-white flex flex-col items-center space-y-6 shadow-xl transition hover:-translate-y-2 hover:bg-[#F7B5A7] hover:text-[#1a1a1a] duration-300">
                         <div className="relative w-24 h-24 md:w-28 md:h-28">
                             <Image
                                 src="/home-images/Vis-01.svg"
@@ -62,7 +62,7 @@ export default function AboutContent() {
                     </div>
 
                     {/* Mission Card */}
-                    <div className="group bg-[#4d0e0e] rounded-2xl p-10 md:p-12 text-center text-white flex flex-col items-center space-y-6 shadow-xl transition hover:-translate-y-2 hover:bg-[#f6f6f6] hover:text-[#1a1a1a] duration-300">
+                    <div className="group bg-[#4d0e0e] rounded-2xl p-10 md:p-12 text-center text-white flex flex-col items-center space-y-6 shadow-xl transition hover:-translate-y-2 hover:bg-[#F7B5A7] hover:text-[#1a1a1a] duration-300">
                         <div className="relative w-24 h-24 md:w-28 md:h-28">
                             <Image
                                 src="/home-images/Mis-01.svg"
