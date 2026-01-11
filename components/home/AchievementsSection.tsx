@@ -67,11 +67,15 @@ export default function AchievementsSection() {
 
                 // Extract all images from all clients (flattening the array if multiple images per client)
                 const allimages = fetchedClients.flatMap((client: any) =>
-                    client.images.map((img: string, idx: number) => ({
-                        id: `${client._id}-${idx}`,
-                        image: getImageUrl(`uploads/${img}`) || "/home-images/placeholder.png",
-                        title: client.description
-                    }))
+                    client.images.map((img: string, idx: number) => {
+                        const imageUrl = getImageUrl(img);
+
+                        return {
+                            id: `${client._id}-${idx}`,
+                            image: imageUrl || "/logo deero-02 .svg",
+                            title: client.description
+                        };
+                    })
                 );
 
                 setMajorClients(allimages);
@@ -131,11 +135,15 @@ export default function AchievementsSection() {
 
                                                 <div className="relative h-14 w-14">
                                                     <Image
-                                                        src={getImageUrl(`uploads/${item.icon}`) || "/logo deero-02 .svg"}
-                                                        alt={item.title}
+                                                        src={getImageUrl(item.icon) || "/logo deero-02 .svg"}
+                                                        alt={item.title || "Achievement Icon"}
                                                         fill
                                                         unoptimized
                                                         className="object-contain"
+                                                        onError={(e) => {
+                                                            const target = e.target as HTMLImageElement;
+                                                            target.src = "/logo deero-02 .svg";
+                                                        }}
                                                     />
                                                 </div>
                                             </div>
@@ -199,6 +207,10 @@ export default function AchievementsSection() {
                                                         unoptimized
                                                         fill
                                                         className="object-contain"
+                                                        onError={(e) => {
+                                                            const target = e.target as HTMLImageElement;
+                                                            target.src = "/logo deero-02 .svg";
+                                                        }}
                                                     />
                                                 </div>
                                             </div>

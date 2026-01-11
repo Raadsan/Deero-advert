@@ -65,11 +65,15 @@ export default function RecentBlogs() {
                             {/* Top Card Area with Image */}
                             <div className={`${['bg-[#EB4724]', 'bg-[#4d0e0e]', 'bg-[#9b7677]'][idx % 3]} h-48 relative overflow-hidden`}>
                                 <Image
-                                    src={getImageUrl(blog.featuredImage || blog.featured_image) || "/home-images/blog1.png"}
-                                    alt="Blog Cover"
+                                    src={getImageUrl(blog.featuredImage || blog.featured_image) || "/logo deero-02 .svg"}
+                                    alt={blog.title || "Blog Cover"}
                                     fill
                                     unoptimized
                                     className="object-cover brightness-110 contrast-125 transition-transform duration-500 group-hover:scale-110"
+                                    onError={(e) => {
+                                        const target = e.target as HTMLImageElement;
+                                        target.src = "/logo deero-02 .svg";
+                                    }}
                                 />
 
                                 {/* Float Badge */}
@@ -81,11 +85,15 @@ export default function RecentBlogs() {
                                 >
                                     <div className="w-12 h-12 rounded-full bg-[#fce5d8] flex items-center justify-center border-2 border-[#EB4724] overflow-hidden">
                                         <Image
-                                            src={getImageUrl(blog.authorAvatar) || "/home-images/Deero Logo full.png"}
-                                            alt="Author"
+                                            src={getImageUrl(blog.authorAvatar) || "/logo deero-02 .svg"}
+                                            alt={blog.authorName || "Author"}
                                             width={44}
                                             height={44}
                                             className="object-cover"
+                                            onError={(e) => {
+                                                const target = e.target as HTMLImageElement;
+                                                target.src = "/logo deero-02 .svg";
+                                            }}
                                         />
                                     </div>
                                     <div className="flex flex-col">

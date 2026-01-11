@@ -149,11 +149,15 @@ function InnerSlider({ items }: { items: any[] }) {
                             {/* Image */}
                             <div className="absolute inset-4 rounded-full overflow-hidden border-4 border-white shadow-sm bg-white">
                                 <Image
-                                    src={member.image}
-                                    alt={member.name}
+                                    src={member.image || "/logo deero-02 .svg"}
+                                    alt={member.name || "Team Member"}
                                     fill
                                     unoptimized
                                     className="object-cover object-top transition-transform duration-500 group-hover:scale-110"
+                                    onError={(e) => {
+                                        const target = e.target as HTMLImageElement;
+                                        target.src = "/logo deero-02 .svg";
+                                    }}
                                 />
                             </div>
 

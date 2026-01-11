@@ -5,16 +5,40 @@ import Footer from "@/components/layout/Footer";
 import Image from "next/image";
 import { motion } from "framer-motion";
 
-const motionImages = [
-    { src: "/Motion Graphics/download.jpg", alt: "Motion Graphics 1" },
-    { src: "/Motion Graphics/download (1).jpg", alt: "Motion Graphics 2" },
-    { src: "/Motion Graphics/download (2).jpg", alt: "Motion Graphics 3" },
-    { src: "/Motion Graphics/download (3).jpg", alt: "Motion Graphics 4" },
-    { src: "/Motion Graphics/download (4).jpg", alt: "Motion Graphics 5" },
-    { src: "/Motion Graphics/download (7).jpg", alt: "Motion Graphics 6" },
-];
+import { useState, useEffect } from "react";
+import { getPortfolios } from "@/api/portfolioApi";
+import { getImageUrl } from "@/utils/url";
 
 export default function MotionGraphicsPage() {
+    const [gallery, setGallery] = useState<string[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchGallery = async () => {
+            try {
+                setLoading(true);
+                const response = await getPortfolios();
+                const data = response.data;
+
+                if (data.success) {
+                    const portfolios = Array.isArray(data.portfolios) ? data.portfolios :
+                        (data.portfolio ? (Array.isArray(data.portfolio) ? data.portfolio : [data.portfolio]) : []);
+
+                    const target = portfolios.find((p: any) => p.title === "Motion Graphics");
+                    if (target && target.gallery) {
+                        setGallery(target.gallery);
+                    }
+                }
+            } catch (error) {
+                console.error("Error fetching motion graphics gallery:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchGallery();
+    }, []);
+
     return (
         <div className="bg-white min-h-screen text-[#1a1a1a]">
             <Header />
@@ -30,25 +54,38 @@ export default function MotionGraphicsPage() {
                         </motion.h1>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {motionImages.map((img, index) => (
-                                <motion.div
-                                    key={index}
-                                    initial={{ opacity: 0, scale: 0.9 }}
-                                    whileInView={{ opacity: 1, scale: 1 }}
-                                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                                    viewport={{ once: true }}
-                                    className="relative aspect-[4/3] group overflow-hidden rounded-none shadow-md cursor-pointer"
-                                >
-                                    <Image
-                                        src={img.src}
-                                        alt={img.alt}
-                                        fill
-                                        className="object-cover transition-transform duration-500 group-hover:scale-110"
-                                    />
-                                    {/* Optional Overlay on Hover */}
-                                    <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-                                </motion.div>
-                            ))}
+                            {loading ? (
+                                Array.from({ length: 6 }).map((_, i) => (
+                                    <div key={i} className="aspect-[4/3] bg-gray-100 animate-pulse" />
+                                ))
+                            ) : gallery.length > 0 ? (
+                                gallery.map((img, index) => (
+                                    <motion.div
+                                        key={index}
+                                        initial={{ opacity: 0, scale: 0.9 }}
+                                        whileInView={{ opacity: 1, scale: 1 }}
+                                        transition={{ duration: 0.5, delay: index * 0.1 }}
+                                        viewport={{ once: true }}
+                                        className="relative aspect-[4/3] group overflow-hidden rounded-none shadow-md cursor-pointer"
+                                    >
+                                        <Image
+                                            src={getImageUrl(img) || "/logo deero-02 .svg"}
+                                            alt={`Motion Graphics ${index + 1}`}
+                                            fill
+                                            className="object-cover transition-transform duration-500 group-hover:scale-110"
+                                            onError={(e) => {
+                                                const target = e.target as HTMLImageElement;
+                                                target.src = "/logo deero-02 .svg";
+                                            }}
+                                        />
+                                        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+                                    </motion.div>
+                                ))
+                            ) : (
+                                <div className="col-span-full py-20 text-center text-gray-400 italic">
+                                    No gallery images available for this category yet.
+                                </div>
+                            )}
                         </div>
                     </div>
                 </section>

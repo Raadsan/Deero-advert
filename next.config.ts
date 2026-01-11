@@ -16,6 +16,9 @@ const nextConfig: NextConfig = {
         pathname: "/uploads/**",
       },
     ],
+    dangerouslyAllowSVG: true,
+    contentDispositionType: 'attachment',
+    unoptimized: process.env.NODE_ENV === 'development',
   },
   async redirects() {
     return [

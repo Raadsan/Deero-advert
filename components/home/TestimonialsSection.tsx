@@ -191,12 +191,16 @@ export default function TestimonialsSection() {
                                                 <div className="mt-auto flex items-center gap-4 pt-6 border-t border-gray-100">
                                                     <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-white shadow-md flex-shrink-0 bg-gray-50">
                                                         <NextImage
-                                                            src={getImageUrl(`uploads/${item.clientImage}`) || "/home-images/placeholder.png"}
-                                                            alt={item.clientName}
+                                                            src={getImageUrl(item.clientImage) || "/logo deero-02 .svg"}
+                                                            alt={item.clientName || "Client"}
                                                             width={56}
                                                             height={56}
                                                             className="w-full h-full object-cover"
-                                                            unoptimized // helpful to avoid local next/image path issues for now
+                                                            unoptimized
+                                                            onError={(e) => {
+                                                                const target = e.target as HTMLImageElement;
+                                                                target.src = "/logo deero-02 .svg";
+                                                            }}
                                                         />
                                                     </div>
                                                     <div>

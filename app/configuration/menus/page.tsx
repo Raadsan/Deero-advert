@@ -21,7 +21,7 @@ export default function MenusPage() {
         icon: "",
         url: "",
         isCollapsible: false,
-        subMenus: [] as Array<{ title: string; url: string }>,
+        subMenus: [] as Array<{ _id?: string; title: string; url: string }>,
     });
 
     useEffect(() => {
@@ -67,7 +67,7 @@ export default function MenusPage() {
             icon: menu.icon || "",
             url: menu.url || "",
             isCollapsible: menu.isCollapsible,
-            subMenus: menu.subMenus.map(sm => ({ title: sm.title, url: sm.url })),
+            subMenus: menu.subMenus.map(sm => ({ _id: sm._id, title: sm.title, url: sm.url })),
         });
         setShowModal(true);
     };

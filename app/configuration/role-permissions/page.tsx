@@ -60,11 +60,11 @@ export default function RolePermissionsPage() {
     };
 
     // Helper function to get submenu title by ID
-    const getSubMenuTitle = (menuId: string, subMenuId: string): string => {
+    const getSubMenuTitle = (menuId: string, subMenuId: string): string | null => {
         const menu = menus.find(m => m._id === menuId);
-        if (!menu) return subMenuId;
+        if (!menu) return null;
         const submenu = menu.subMenus.find(sm => sm._id === subMenuId);
-        return submenu?.title || subMenuId;
+        return submenu?.title || null;
     };
 
     const handleEdit = (perm: RolePermission) => {
@@ -126,6 +126,49 @@ export default function RolePermissionsPage() {
                 [menuId]: { ...current, subMenus },
             };
         });
+    };
+
+    const selectAllSubMenus = (menuId: string) => {
+        const menu = menus.find((m) => m._id === menuId);
+        if (!menu) return;
+        setSelectedMenus((prev) => ({
+            ...prev,
+            [menuId]: {
+                enabled: true,
+                subMenus: menu.subMenus.map((sm) => sm._id),
+            },
+        }));
+    };
+
+    const deselectAllSubMenus = (menuId: string) => {
+        setSelectedMenus((prev) => ({
+            ...prev,
+            [menuId]: {
+                ...(prev[menuId] || { enabled: true }),
+                subMenus: [],
+            },
+        }));
+    };
+
+    const purgeOrphans = () => {
+        setSelectedMenus((prev) => {
+            const next = { ...prev };
+            Object.keys(next).forEach((menuId) => {
+                const masterMenu = menus.find((m) => m._id === menuId);
+                if (!masterMenu) {
+                    delete next[menuId];
+                } else {
+                    next[menuId] = {
+                        ...next[menuId],
+                        subMenus: next[menuId].subMenus.filter((smId) =>
+                            masterMenu.subMenus.some((sm) => sm._id === smId)
+                        ),
+                    };
+                }
+            });
+            return next;
+        });
+        alert("System filtered out invalid menu IDs. Click Save to apply changes.");
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -274,17 +317,20 @@ export default function RolePermissionsPage() {
                                     {perm.menusAccess.length > 0 ? (
                                         perm.menusAccess.map((ma, maIndex) => {
                                             // Calculate valid submenus (filtering out raw IDs)
-                                            const validSubMenus = ma.subMenus.reduce((acc: any[], sm) => {
+                                            const subMenuStatus = ma.subMenus.reduce((acc: { valid: any[], broken: any[] }, sm) => {
                                                 const populatedMenu = ma.menuId as any;
                                                 const embeddedSubMenu = populatedMenu?.subMenus?.find((s: any) => s._id === sm.subMenuId);
                                                 const title = embeddedSubMenu?.title || getSubMenuTitle(ma.menuId?._id || "", sm.subMenuId);
 
-                                                // Only include if title resolves (is not the ID itself)
-                                                if (title && title !== sm.subMenuId) {
-                                                    acc.push({ ...sm, displayTitle: title });
+                                                if (title) {
+                                                    acc.valid.push({ ...sm, displayTitle: title });
+                                                } else {
+                                                    acc.broken.push(sm);
                                                 }
                                                 return acc;
-                                            }, []);
+                                            }, { valid: [], broken: [] });
+
+                                            const { valid: validSubMenus, broken: brokenSubMenus } = subMenuStatus;
 
                                             return (
                                                 <div key={`${ma._id || 'menu'}-${maIndex}`} className="bg-gradient-to-br from-gray-50 to-white rounded-lg p-2.5 border border-gray-100 hover:border-[#EB4724]/30 transition-colors">
@@ -297,26 +343,23 @@ export default function RolePermissionsPage() {
                                                     </div>
 
                                                     {/* Submenus */}
-                                                    {validSubMenus.length > 0 ? (
-                                                        <div className="ml-4 space-y-1.5 mt-2">
-                                                            {validSubMenus.map((sm: any, smIndex: number) => (
-                                                                <div
-                                                                    key={`${sm._id || 'sub'}-${smIndex}`}
-                                                                    className="flex items-center gap-2 text-sm"
-                                                                >
-                                                                    <Check className="h-3 w-3 text-green-600" />
-                                                                    <span className="text-gray-700">{sm.displayTitle}</span>
-                                                                </div>
-                                                            ))}
-                                                        </div>
-                                                    ) : (
-                                                        // Show "No submenus assigned" if Collapsible and no valid submenus
-                                                        ma.menuId && ma.menuId.isCollapsible && (
-                                                            <div className="ml-4 mt-2 flex flex-col">
+                                                    <div className="ml-4 space-y-1.5 mt-2">
+                                                        {validSubMenus.map((sm: any, smIndex: number) => (
+                                                            <div
+                                                                key={`${sm._id || 'sub'}-${smIndex}`}
+                                                                className="flex items-center gap-2 text-sm"
+                                                            >
+                                                                <Check className="h-3 w-3 text-green-600" />
+                                                                <span className="text-gray-700">{sm.displayTitle}</span>
+                                                            </div>
+                                                        ))}
+
+                                                        {validSubMenus.length === 0 && ma.menuId?.isCollapsible && (
+                                                            <div className="flex flex-col">
                                                                 <span className="text-gray-400 text-[10px] mt-1 font-normal">No submenus assigned</span>
                                                             </div>
-                                                        )
-                                                    )}
+                                                        )}
+                                                    </div>
                                                 </div>
                                             );
                                         })
@@ -376,7 +419,18 @@ export default function RolePermissionsPage() {
                                     <Shield className="h-6 w-6" />
                                 </div>
                                 <div>
-                                    <h2 className="text-2xl font-bold">Assign Menu Permissions</h2>
+                                    <div className="flex items-center justify-between mb-2">
+                                        <h2 className="text-2xl font-bold">Assign Menu Permissions</h2>
+                                        <button
+                                            type="button"
+                                            onClick={purgeOrphans}
+                                            className="text-[10px] bg-red-100/20 hover:bg-red-500 text-white px-2 py-1 rounded transition-colors flex items-center gap-1 border border-white/20"
+                                            title="Remove IDs that no longer exist"
+                                        >
+                                            <Trash2 className="h-3 w-3" />
+                                            Force Cleanup Broken IDs
+                                        </button>
+                                    </div>
                                     <p className="text-white/80 text-sm mt-1">
                                         Select a role and configure their menu access
                                     </p>
@@ -432,9 +486,29 @@ export default function RolePermissionsPage() {
                                                             {menu.title}
                                                         </span>
                                                         {menu.isCollapsible && (
-                                                            <span className="ml-2 text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full">
-                                                                {menu.subMenus.length} submenus
-                                                            </span>
+                                                            <div className="flex items-center gap-2 mt-1">
+                                                                <span className="text-[10px] bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full">
+                                                                    {menu.subMenus.length} submenus
+                                                                </span>
+                                                                {selectedMenus[menu._id]?.enabled && (
+                                                                    <div className="flex gap-2">
+                                                                        <button
+                                                                            type="button"
+                                                                            onClick={() => selectAllSubMenus(menu._id)}
+                                                                            className="text-[10px] text-blue-600 hover:underline"
+                                                                        >
+                                                                            Select All
+                                                                        </button>
+                                                                        <button
+                                                                            type="button"
+                                                                            onClick={() => deselectAllSubMenus(menu._id)}
+                                                                            className="text-[10px] text-gray-500 hover:underline"
+                                                                        >
+                                                                            Clear
+                                                                        </button>
+                                                                    </div>
+                                                                )}
+                                                            </div>
                                                         )}
                                                     </div>
                                                 </label>
