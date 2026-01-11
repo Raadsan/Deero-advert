@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 
 import { useState, useEffect } from "react";
 import { getPortfolios } from "@/api/portfolioApi";
-import { getImageUrl } from "@/utils/url";
+import { getImageUrl, slugify } from "@/utils/url";
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -60,10 +60,13 @@ export default function PortfolioSection({ showHeader = true, limit }: { showHea
                 console.log("Parsed items before processing:", items); // Debug log
 
                 // Process image URLs
-                const processedItems = items.map((item: any) => ({
-                    ...item,
-                    mainImage: getImageUrl(item.mainImage),
-                }));
+                const processedItems = items.map((item: any) => {
+                    const processed = getImageUrl(item.mainImage);
+                    return {
+                        ...item,
+                        mainImage: processed,
+                    };
+                });
 
                 console.log("Processed portfolios:", processedItems); // Debug log
                 setPortfolios(processedItems);
@@ -80,8 +83,9 @@ export default function PortfolioSection({ showHeader = true, limit }: { showHea
     }, []);
 
     const handlePortfolioClick = (item: any) => {
-        // Navigate to individual portfolio gallery page using the portfolio ID
-        router.push(`/portfolio/${item._id}`);
+        // Navigate to individual portfolio gallery page
+        const slug = item.title ? slugify(item.title) : item._id;
+        router.push(`/portfolio/${slug}`);
     };
 
     return (

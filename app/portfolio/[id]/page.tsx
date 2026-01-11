@@ -6,7 +6,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowLeft, X } from "lucide-react";
 import { getPortfolios, getPortfolioById } from "@/api/portfolioApi";
-import { getImageUrl } from "@/utils/url";
+import { getImageUrl, slugify } from "@/utils/url";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 
@@ -24,23 +24,28 @@ export default function PortfolioGalleryPage() {
         const fetchPortfolio = async () => {
             try {
                 setLoading(true);
-                console.log("Portfolio page - Looking for ID:", portfolioId);
+                // Try to find by slug first (since we expect slugs now)
+                // Note: The backend getPortfolioById likely expects an ObjectID.
+                // If param is a slug, direct lookup by ID will fail.
+                // So we'll fetch all and filter by slug.
 
-                // Try to fetch single portfolio by ID first
-                try {
-                    const singleResponse = await getPortfolioById(portfolioId);
-                    const singleData = singleResponse.data;
-                    console.log("Portfolio page - Single fetch response:", singleData);
+                // However, check if it looks like an ID (24 hex chars)
+                const isId = /^[0-9a-fA-F]{24}$/.test(portfolioId);
 
-                    if (singleData.success && singleData.portfolio) {
-                        setPortfolio(singleData.portfolio);
-                        return;
+                if (isId) {
+                    try {
+                        const singleResponse = await getPortfolioById(portfolioId);
+                        const singleData = singleResponse.data;
+                        if (singleData.success && singleData.portfolio) {
+                            setPortfolio(singleData.portfolio);
+                            return;
+                        }
+                    } catch (singleError) {
+                        console.log("Single portfolio fetch failed, falling back to getAll:", singleError);
                     }
-                } catch (singleError) {
-                    console.log("Single portfolio fetch failed, falling back to getAll:", singleError);
                 }
 
-                // Fallback: fetch all portfolios and find by ID
+                // Fallback: fetch all portfolios and find by ID OR Slug
                 const response = await getPortfolios();
                 const data = response.data;
                 console.log("Portfolio page - All portfolios response:", data);
@@ -59,10 +64,13 @@ export default function PortfolioGalleryPage() {
                     items = data.portfolios;
                 }
 
-                console.log("Portfolio page - Available IDs:", items.map((p: any) => p._id));
+                // Find the specific portfolio by ID or Slug
+                const foundPortfolio = items.find((p: any) => {
+                    if (p._id === portfolioId) return true;
+                    if (p.title && slugify(p.title) === portfolioId) return true;
+                    return false;
+                });
 
-                // Find the specific portfolio by ID
-                const foundPortfolio = items.find((p: any) => p._id === portfolioId);
                 console.log("Portfolio page - Found portfolio:", foundPortfolio);
                 setPortfolio(foundPortfolio);
             } catch (error) {
@@ -125,7 +133,7 @@ export default function PortfolioGalleryPage() {
     return (
         <>
             <Header />
-            <div className="min-h-screen bg-[#fcd7c3] pt-[170px] pb-20 px-4 sm:px-10">
+            <div className="min-h-screen bg-[#fcd7c3] pt-[220px] pb-20 px-4 sm:px-10">
                 <div className="mx-auto max-w-7xl">
                     {/* Title */}
                     <motion.h1
@@ -151,8 +159,7 @@ export default function PortfolioGalleryPage() {
                                     animate={{ opacity: 1, scale: 1 }}
                                     transition={{ delay: index * 0.1 }}
                                     whileHover={{ y: -8 }}
-                                    onClick={() => openLightbox(index)}
-                                    className="relative aspect-[4/3] group overflow-hidden rounded-lg shadow-lg cursor-pointer bg-white"
+                                    className="relative aspect-[4/3] group overflow-hidden rounded-lg shadow-lg bg-white"
                                 >
                                     <Image
                                         src={getImageUrl(img) || "/logo deero-02 .svg"}
