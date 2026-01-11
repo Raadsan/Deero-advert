@@ -69,7 +69,7 @@ export default function PortfolioSection({ showHeader = true, limit }: { showHea
                 });
 
                 console.log("Processed portfolios:", processedItems); // Debug log
-                setPortfolios(processedItems);
+                setPortfolios(processedItems.reverse());
             } catch (err: any) {
                 console.error("Error fetching portfolios:", err);
                 setError(err?.message || "Failed to load portfolios");

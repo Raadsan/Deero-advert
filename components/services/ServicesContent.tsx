@@ -119,31 +119,39 @@ export default function ServicesContent({
         fetchServices();
     }, []);
 
-    // Handle scroll after navigation from hash - wait for loading to finish
+    // Handle scroll after navigation from hash or slug - wait for loading to finish
     useEffect(() => {
-        if (isServicesPage && !loading && window.location.hash) {
-            const hash = window.location.hash.substring(1);
+        if (!loading) {
+            let targetId = "";
 
-            // Function to perform the actual scroll
-            const performScroll = () => {
-                const element = document.getElementById(hash);
-                if (element) {
-                    scrollToSection(hash);
-                }
-            };
+            if (isServicesPage && window.location.hash) {
+                targetId = window.location.hash.substring(1);
+            } else if (filterSlug) {
+                targetId = filterSlug;
+            }
 
-            // First attempt
-            const timer1 = setTimeout(performScroll, 300);
+            if (targetId) {
+                // Function to perform the actual scroll
+                const performScroll = () => {
+                    const element = document.getElementById(targetId);
+                    if (element) {
+                        scrollToSection(targetId);
+                    }
+                };
 
-            // Second attempt (in case images shifted things)
-            const timer2 = setTimeout(performScroll, 800);
+                // First attempt
+                const timer1 = setTimeout(performScroll, 300);
 
-            return () => {
-                clearTimeout(timer1);
-                clearTimeout(timer2);
-            };
+                // Second attempt (in case images shifted things)
+                const timer2 = setTimeout(performScroll, 800);
+
+                return () => {
+                    clearTimeout(timer1);
+                    clearTimeout(timer2);
+                };
+            }
         }
-    }, [isServicesPage, loading]);
+    }, [isServicesPage, loading, filterSlug]);
 
     const handleServiceClick = (service: Service) => {
         const slug = getServiceSlug(service.serviceTitle || "service");
