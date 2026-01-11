@@ -27,6 +27,9 @@ export default function TeamsManagementPage() {
     const [formData, setFormData] = useState({
         name: "",
         position: "",
+        facebook: "",
+        twitter: "",
+        linkedin: "",
         image: null as File | null,
         imagePreview: "",
     });
@@ -45,6 +48,8 @@ export default function TeamsManagementPage() {
                     name: t.name || t.fullname || "",
                     position: t.position || t.title || "",
                     image: getImageUrl(t.image),
+                    socials: t.socials || [],
+                    createdAt: t.createdAt,
                 }))
             );
         } catch (err) {
@@ -89,6 +94,15 @@ export default function TeamsManagementPage() {
         const formDataToSend = new FormData();
         formDataToSend.append("name", formData.name);
         formDataToSend.append("position", formData.position);
+
+        const socials = [
+            { platform: "facebook", url: formData.facebook },
+            { platform: "twitter", url: formData.twitter },
+            { platform: "linkedin", url: formData.linkedin },
+        ].filter(s => s.url); // Only send platforms with URLs
+
+        formDataToSend.append("socials", JSON.stringify(socials));
+
         if (formData.image) {
             formDataToSend.append("image", formData.image);
         }
@@ -134,9 +148,17 @@ export default function TeamsManagementPage() {
 
     const handleEdit = (member: any) => {
         setEditingId(member._id);
+
+        const facebook = member.socials?.find((s: any) => s.platform === "facebook")?.url || "";
+        const twitter = member.socials?.find((s: any) => s.platform === "twitter")?.url || "";
+        const linkedin = member.socials?.find((s: any) => s.platform === "linkedin")?.url || "";
+
         setFormData({
             name: member.name,
             position: member.position,
+            facebook,
+            twitter,
+            linkedin,
             image: null,
             imagePreview: member.image,
         });
@@ -148,6 +170,9 @@ export default function TeamsManagementPage() {
         setFormData({
             name: "",
             position: "",
+            facebook: "",
+            twitter: "",
+            linkedin: "",
             image: null,
             imagePreview: "",
         });
@@ -172,6 +197,35 @@ export default function TeamsManagementPage() {
         },
         { label: "Name", key: "name" },
         { label: "Position", key: "position" },
+        {
+            label: "Socials",
+            key: "socials",
+            render: (row: any) => (
+                <div className="flex gap-2">
+                    {row.socials?.map((s: any) => (
+                        <a
+                            key={s._id || s.platform}
+                            href={s.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-gray-400 hover:text-[#EB4724] transition-colors"
+                            title={s.platform}
+                        >
+                            <span className="capitalize text-[10px]">{s.platform}</span>
+                        </a>
+                    ))}
+                </div>
+            )
+        },
+        {
+            label: "Date",
+            key: "createdAt",
+            render: (row: any) => (
+                <span className="text-xs text-gray-500">
+                    {new Date(row.createdAt).toLocaleDateString()}
+                </span>
+            )
+        },
         {
             label: "Actions",
             key: "actions",
@@ -274,32 +328,74 @@ export default function TeamsManagementPage() {
                         </div>
                     </div>
 
-                    <div className="space-y-0.5">
-                        <label className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">
-                            Name <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                            type="text"
-                            name="name"
-                            required
-                            value={formData.name}
-                            onChange={handleInputChange}
-                            className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#EB4724] focus:border-[#EB4724]"
-                        />
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-0.5">
+                            <label className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">
+                                Name <span className="text-red-500">*</span>
+                            </label>
+                            <input
+                                type="text"
+                                name="name"
+                                required
+                                value={formData.name}
+                                onChange={handleInputChange}
+                                className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#EB4724] focus:border-[#EB4724]"
+                            />
+                        </div>
+
+                        <div className="space-y-0.5">
+                            <label className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">
+                                Position <span className="text-red-500">*</span>
+                            </label>
+                            <input
+                                type="text"
+                                name="position"
+                                required
+                                value={formData.position}
+                                onChange={handleInputChange}
+                                className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#EB4724] focus:border-[#EB4724]"
+                            />
+                        </div>
                     </div>
 
-                    <div className="space-y-0.5">
-                        <label className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">
-                            Position <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                            type="text"
-                            name="position"
-                            required
-                            value={formData.position}
-                            onChange={handleInputChange}
-                            className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#EB4724] focus:border-[#EB4724]"
-                        />
+                    <div className="space-y-3 pt-2">
+                        <p className="text-[10px] uppercase font-bold text-gray-500 tracking-wider border-b pb-1">Social Media Links</p>
+
+                        <div className="space-y-0.5">
+                            <label className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Facebook URL</label>
+                            <input
+                                type="url"
+                                name="facebook"
+                                placeholder="https://facebook.com/..."
+                                value={formData.facebook}
+                                onChange={handleInputChange}
+                                className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#EB4724] focus:border-[#EB4724]"
+                            />
+                        </div>
+
+                        <div className="space-y-0.5">
+                            <label className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Twitter/X URL</label>
+                            <input
+                                type="url"
+                                name="twitter"
+                                placeholder="https://twitter.com/..."
+                                value={formData.twitter}
+                                onChange={handleInputChange}
+                                className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#EB4724] focus:border-[#EB4724]"
+                            />
+                        </div>
+
+                        <div className="space-y-0.5">
+                            <label className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">LinkedIn URL</label>
+                            <input
+                                type="url"
+                                name="linkedin"
+                                placeholder="https://linkedin.com/in/..."
+                                value={formData.linkedin}
+                                onChange={handleInputChange}
+                                className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#EB4724] focus:border-[#EB4724]"
+                            />
+                        </div>
                     </div>
 
                     <div className="flex justify-end gap-2 pt-3 border-t border-gray-100 mt-4">
