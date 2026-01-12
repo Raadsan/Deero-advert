@@ -110,7 +110,7 @@ export default function ServicesContent({
                 setGroupedServices(results);
             } catch (err) {
                 console.error("Error fetching services:", err);
-                setError("Failed to load services");
+                setError("no service found");
             } finally {
                 setLoading(false);
             }

@@ -72,7 +72,7 @@ export default function PortfolioSection({ showHeader = true, limit }: { showHea
                 setPortfolios(processedItems.reverse());
             } catch (err: any) {
                 console.error("Error fetching portfolios:", err);
-                setError(err?.message || "Failed to load portfolios");
+                setError("no portfolio found");
                 setPortfolios([]);
             } finally {
                 setLoading(false);
@@ -155,7 +155,7 @@ export default function PortfolioSection({ showHeader = true, limit }: { showHea
                         ))
                     ) : error ? (
                         <div className="col-span-full py-20 text-center text-red-600">
-                            Error: {error}
+                            {error}
                         </div>
                     ) : (
                         <div className="col-span-full py-20 text-center text-[#651313]/60 italic">
