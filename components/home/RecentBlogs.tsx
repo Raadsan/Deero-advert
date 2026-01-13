@@ -30,6 +30,7 @@ export default function RecentBlogs() {
         const fetchBlogs = async () => {
             try {
                 const res = await getAllBlogs();
+                console.log("Blogs API Response:", res.data);
                 const data = res.data.success ? res.data.data : (Array.isArray(res.data) ? res.data : []);
                 setBlogs(data.slice(0, 3));
             } catch (err) {
@@ -52,90 +53,66 @@ export default function RecentBlogs() {
                 <motion.h2 variants={itemVariants} className="text-3xl font-bold text-[#651313] text-center mb-16">Recent Blogs</motion.h2>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+                    {loading && (
+                        <div className="col-span-full text-center text-gray-500 py-10">Loading blogs...</div>
+                    )}
                     {blogs.length === 0 && !loading && (
                         <div className="col-span-full text-center text-gray-500 py-10">No blogs found.</div>
                     )}
-                    {blogs.map((blog, idx) => (
-                        <motion.div
-                            key={blog._id || idx}
-                            variants={itemVariants}
-                            whileHover={{ y: -10 }}
-                            className="bg-white rounded-xl overflow-hidden shadow-xl flex flex-col group transition-all duration-300"
-                        >
-                            {/* Top Card Area with Image */}
-                            <div className={`${['bg-[#EB4724]', 'bg-[#4d0e0e]', 'bg-[#9b7677]'][idx % 3]} h-48 relative overflow-hidden`}>
-                                <Image
-                                    src={getImageUrl(blog.featuredImage || blog.featured_image) || "/logo deero-02 .svg"}
-                                    alt={blog.title || "Blog Cover"}
-                                    fill
-                                    unoptimized
-                                    className="object-cover brightness-110 contrast-125 transition-transform duration-500 group-hover:scale-110"
-                                    onError={(e) => {
-                                        const target = e.target as HTMLImageElement;
-                                        target.src = "/logo deero-02 .svg";
-                                    }}
-                                />
+                    {blogs.map((blog, idx) => {
+                        if (!blog) return null; // Safe guard
+                        return (
+                            <motion.div
+                                key={blog._id || idx}
+                                initial="hidden"
+                                animate="visible"
+                                variants={itemVariants}
+                                whileHover={{ y: -10 }}
+                                className="bg-white rounded-xl overflow-hidden shadow-xl flex flex-col group transition-all duration-300"
+                            >
+                                {/* Top Card Area with Image */}
+                                <div className={`${['bg-[#EB4724]', 'bg-[#4d0e0e]', 'bg-[#9b7677]'][idx % 3]} h-48 relative overflow-hidden`}>
+                                    <Image
+                                        src={getImageUrl(blog.featuredImage || blog.featured_image) || `/home-images/blog${(idx % 3) + 1}.png`}
+                                        alt={blog.title || "Blog Cover"}
+                                        fill
+                                        unoptimized
+                                        className="object-cover brightness-110 contrast-125 transition-transform duration-500 group-hover:scale-110"
+                                        onError={(e) => {
+                                            const target = e.target as HTMLImageElement;
+                                            target.srcset = "";
+                                            target.src = `/home-images/blog${(idx % 3) + 1}.png`;
+                                        }}
+                                    />
 
-                                {/* Float Badge */}
-                                <motion.div
-                                    initial={{ scale: 0.8, opacity: 0 }}
-                                    whileInView={{ scale: 1, opacity: 1 }}
-                                    transition={{ delay: 0.4, duration: 0.4 }}
-                                    className="absolute -bottom-8 left-6 bg-white rounded-md shadow-md py-2 px-4 flex items-center gap-3 w-fit pr-10 z-20"
-                                >
-                                    <div className="w-12 h-12 rounded-full bg-[#fce5d8] flex items-center justify-center border-2 border-[#EB4724] overflow-hidden">
-                                        <Image
-                                            src={getImageUrl(blog.authorAvatar) || "/logo deero-02 .svg"}
-                                            alt={blog.authorName || "Author"}
-                                            width={44}
-                                            height={44}
-                                            className="object-cover"
-                                            onError={(e) => {
-                                                const target = e.target as HTMLImageElement;
-                                                target.src = "/logo deero-02 .svg";
-                                            }}
-                                        />
-                                    </div>
-                                    <div className="flex flex-col">
-                                        <span className="text-[11px] font-bold text-[#EB4724] uppercase">{blog.authorName || "Deero Advert"}</span>
-                                        <span className="text-[10px] text-gray-400 font-semibold">{new Date(blog.createdAt).toLocaleDateString()}</span>
-                                    </div>
-                                </motion.div>
-                            </div>
+                                    {/* Float Badge */}
 
-                            {/* Content Area */}
-                            <div className="p-6 pt-12 flex-1 flex flex-col text-left">
-                                <h3 className="text-2xl font-bold text-[#EB4724] mb-4 min-h-[56px] flex items-center justify-start leading-tight line-clamp-2">
-                                    {blog.title}
-                                </h3>
-                                <div
-                                    className="text-gray-500 text-sm mb-6 flex-1 line-clamp-3 overflow-hidden"
-                                    dangerouslySetInnerHTML={{ __html: blog.content }}
-                                />
-                                <div className="border-t border-gray-100 pt-6 mt-auto">
-                                    <div className="flex flex-wrap justify-start gap-4 text-[11px] font-bold text-gray-400 uppercase tracking-widest">
-                                        {(() => {
-                                            const tags = Array.isArray(blog.categories) ? blog.categories :
-                                                (typeof blog.categories === 'string' ? blog.categories.split(',').map((c: string) => c.trim()).filter(Boolean) :
-                                                    (blog.tags || ["Design", "Branding"]));
+                                </div>
 
-                                            // Ensure we always have an array and handle any duplicates/empty
-                                            const uniqueTags = Array.from(new Set(tags)).filter(Boolean);
+                                {/* Content Area */}
+                                <div className="p-6 pt-12 flex-1 flex flex-col text-left">
+                                    <h3 className="text-2xl font-bold text-[#EB4724] mb-4 min-h-[56px] flex items-center justify-start leading-tight line-clamp-2">
+                                        {blog.title}
+                                    </h3>
+                                    <div
+                                        className="text-gray-500 text-sm mb-6 flex-1 line-clamp-3 overflow-hidden"
+                                        dangerouslySetInnerHTML={{ __html: blog.content }}
+                                    />
+                                    <div className="mt-auto pt-6 flex justify-between items-center text-xs font-bold uppercase tracking-widest text-gray-400 border-t border-gray-100">
+                                        {/* Author - Left */}
+                                        <span className="hover:text-[#EB4724] transition-colors">
+                                            {typeof blog.author === 'string' ? blog.author : (blog.author?.name || blog.authorName || "Deero Advert")}
+                                        </span>
 
-                                            return uniqueTags.map((tag: any, tIdx: number) => (
-                                                <span
-                                                    key={`${blog._id}-${tag}-${tIdx}`}
-                                                    className="hover:text-[#EB4724] cursor-pointer transition-colors"
-                                                >
-                                                    {tag}
-                                                </span>
-                                            ));
-                                        })()}
+                                        {/* Date - Right */}
+                                        <span>
+                                            {new Date(blog.published_date || blog.createdAt).toLocaleDateString()}
+                                        </span>
                                     </div>
                                 </div>
-                            </div>
-                        </motion.div>
-                    ))}
+                            </motion.div>
+                        );
+                    })}
                 </div>
 
                 <motion.div variants={itemVariants} className="text-center">
