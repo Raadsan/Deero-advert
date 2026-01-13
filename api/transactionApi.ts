@@ -2,9 +2,11 @@ import api from "./axios";
 
 // ➕ CREATE TRANSACTION
 export const createTransaction = (data: {
-  domainId: string;
+  domainId?: string;
+  serviceId?: string;
+  packageId?: string;
   userId: string;
-  type: "register" | "transfer" | "renew" | "payment";
+  type: "register" | "transfer" | "renew" | "payment" | "service_payment";
   amount: number;
   currency?: string;
   description?: string;

@@ -12,7 +12,7 @@ import { getAllTransactions, getTransactionsByUser } from "@/api/transactionApi"
 import { getDomainsByUser } from "@/api/domainApi";
 import DataTable from "@/components/layout/DataTable";
 import { Transaction } from "@/types/transaction";
-import { isAdminOrManager, getUserId, isUser } from "@/utils/auth";
+import { isAdminOrManager, getUserId, isUser, getUserRole } from "@/utils/auth";
 
 export default function DashboardContent() {
     const [stats, setStats] = useState<any[]>([]);
@@ -26,6 +26,7 @@ export default function DashboardContent() {
 
     const isPrivileged = isAdminOrManager();
     const userId = getUserId();
+    const userRole = getUserRole(); // Get role
 
     useEffect(() => {
         const fetchDashboardData = async () => {
@@ -197,7 +198,11 @@ export default function DashboardContent() {
 
     return (
         <div className="space-y-6">
-            <h1 className="text-3xl font-bold tracking-tight text-[#651313]">Dashboard</h1>
+            <div className="flex items-center gap-4">
+                <h1 className="text-3xl font-bold tracking-tight text-[#651313]">
+                    {userRole ? `${userRole.charAt(0).toUpperCase() + userRole.slice(1)} Dashboard` : "Dashboard"}
+                </h1>
+            </div>
 
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                 {loading ? (
@@ -283,7 +288,23 @@ export default function DashboardContent() {
                     <div className="space-y-4">
                         {loading ? [1, 2, 3].map(i => <div key={i} className="h-16 bg-gray-50 rounded-lg animate-pulse" />) :
                             transactions.length > 0 ? transactions.slice(0, 5).map((t, i) => {
-                                const domainName = typeof t.domain === 'object' ? t.domain?.name : 'N/A';
+                                // Determine what to display based on transaction type
+                                let displayName = 'N/A';
+
+                                if (t.type === 'service_payment') {
+                                    // For service purchases, show the package name
+                                    const packageId = t.packageId;
+                                    if (typeof t.service === 'object' && t.service?.packages && packageId) {
+                                        const pkg = t.service.packages.find((p: any) => p._id === packageId);
+                                        displayName = pkg?.packageTitle || t.service?.serviceTitle || 'Service Purchase';
+                                    } else if (typeof t.service === 'object') {
+                                        displayName = t.service?.serviceTitle || 'Service Purchase';
+                                    }
+                                } else {
+                                    // For domain purchases, show the domain name
+                                    displayName = typeof t.domain === 'object' ? t.domain?.name : 'N/A';
+                                }
+
                                 return (
                                     <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-gray-50 border border-gray-100">
                                         <div className="flex items-center gap-3">
@@ -291,7 +312,7 @@ export default function DashboardContent() {
                                                 <TrendingUp className="h-4 w-4" />
                                             </div>
                                             <div className="min-w-0">
-                                                <p className="text-sm font-semibold text-gray-900 truncate">{domainName}</p>
+                                                <p className="text-sm font-semibold text-gray-900 truncate">{displayName}</p>
                                                 <p className="text-xs text-gray-500">{new Date(t.createdAt).toLocaleDateString()}</p>
                                             </div>
                                         </div>

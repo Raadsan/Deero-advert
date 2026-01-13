@@ -1,13 +1,13 @@
-"use client";
-
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import ServiceCard from "./ServiceCard";
 import { getAllServices, Service } from "../../api/serviceApi";
-import { CheckIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
+import { CheckIcon, ChevronDownIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { getImageUrl } from "@/utils/url";
+import { getUserId, isAuthenticated, isUser, isAdminOrManager } from "@/utils/auth";
+import { createTransaction } from "@/api/transactionApi";
 
 const HEADER_OFFSET = 170; // match fixed header height
 
@@ -66,12 +66,20 @@ export default function ServicesContent({
     const [error, setError] = useState("");
     const [expandedPackages, setExpandedPackages] = useState<Record<string, boolean>>({});
 
+    // Purchase State
+    const [purchaseModalOpen, setPurchaseModalOpen] = useState(false);
+    const [selectedPlan, setSelectedPlan] = useState<any>(null);
+    const [selectedService, setSelectedService] = useState<Service | null>(null);
+    const [accountNo, setAccountNo] = useState("");
+    const [isPurchasing, setIsPurchasing] = useState(false);
+    const [purchaseStatus, setPurchaseStatus] = useState<{ success: boolean; message: string } | null>(null);
+
     useEffect(() => {
         const fetchServices = async () => {
             try {
                 const res: any = await getAllServices();
                 const servicesData = Array.isArray(res.data) ? res.data : (res.data?.data || res);
-                let rawResults: Service[] = Array.isArray(servicesData) ? servicesData : [];
+                const rawResults: Service[] = Array.isArray(servicesData) ? servicesData : [];
 
                 // Group by title and merge packages
                 const groupedMap = new Map<string, Service>();
@@ -156,6 +164,58 @@ export default function ServicesContent({
     const handleServiceClick = (service: Service) => {
         const slug = getServiceSlug(service.serviceTitle || "service");
         router.push(`/services/${slug}`);
+    };
+
+    const handlePurchaseClick = (pkg: any, service: Service) => {
+        // Check if user is not authenticated
+        if (!isAuthenticated()) {
+            router.push("/login?redirect=" + pathname);
+            return;
+        }
+
+        // Check if user is admin or manager (they shouldn't purchase)
+        if (isAdminOrManager()) {
+            alert("Admin and Manager accounts cannot purchase services. Please use a regular user account.");
+            return;
+        }
+
+        // User is authenticated and is a regular user
+        setSelectedPlan(pkg);
+        setSelectedService(service);
+        setAccountNo("");
+        setPurchaseStatus(null);
+        setPurchaseModalOpen(true);
+    };
+
+    const processPurchase = async () => {
+        if (!selectedPlan || !selectedService || !accountNo) return;
+
+        setIsPurchasing(true);
+        setPurchaseStatus(null);
+
+        try {
+            const userId = getUserId();
+            if (!userId) throw new Error("User not found");
+
+            await createTransaction({
+                serviceId: selectedService._id,
+                packageId: selectedPlan._id,
+                userId: userId,
+                type: "service_payment",
+                amount: selectedPlan.price,
+                paymentMethod: "waafi",
+                accountNo: accountNo,
+                description: `Payment for ${selectedService.serviceTitle} - ${selectedPlan.packageTitle}`
+            });
+
+            setPurchaseStatus({ success: true, message: "Transaction initiated successfully! Check your phone for verification." });
+            // Close after delay or let user close? Let's just show success in modal.
+        } catch (err: any) {
+            console.error("Purchase failed", err);
+            setPurchaseStatus({ success: false, message: err.response?.data?.message || "Transaction failed. Please try again." });
+        } finally {
+            setIsPurchasing(false);
+        }
     };
 
     return (
@@ -272,8 +332,12 @@ export default function ServicesContent({
                                                             )}
                                                         </div>
 
-                                                        <button className="w-full py-4 px-6 rounded-xl bg-[#651313] text-white font-bold text-sm uppercase tracking-widest hover:brightness-110 active:scale-95 transition-all shadow-lg">
-                                                            Get Started
+
+                                                        <button
+                                                            onClick={() => handlePurchaseClick(pkg, service)}
+                                                            className="w-full py-4 px-6 rounded-xl bg-[#651313] text-white font-bold text-sm uppercase tracking-widest hover:brightness-110 active:scale-95 transition-all shadow-lg"
+                                                        >
+                                                            Purchase Plan
                                                         </button>
                                                     </motion.div>
                                                 );
@@ -295,6 +359,101 @@ export default function ServicesContent({
                         </Link>
                     </motion.div>
                 )}
+
+                {/* Purchase Modal */}
+                <AnimatePresence>
+                    {purchaseModalOpen && selectedPlan && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+                            onClick={() => !isPurchasing && setPurchaseModalOpen(false)}
+                        >
+                            <motion.div
+                                initial={{ scale: 0.95, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                exit={{ scale: 0.95, opacity: 0 }}
+                                onClick={(e) => e.stopPropagation()}
+                                className="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl relative overflow-hidden"
+                            >
+                                <button
+                                    onClick={() => setPurchaseModalOpen(false)}
+                                    className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+                                    disabled={isPurchasing}
+                                >
+                                    <XMarkIcon className="h-6 w-6" />
+                                </button>
+
+                                <h3 className="text-2xl font-bold text-[#651313] mb-2">Confirm Purchase</h3>
+                                <p className="text-gray-600 mb-6">You are selecting the <span className="font-bold text-[#EB4724]">{selectedPlan.packageTitle}</span> plan for <span className="font-semibold">{selectedService?.serviceTitle}</span>.</p>
+
+                                <div className="bg-gray-50 p-4 rounded-xl mb-6">
+                                    <div className="flex justify-between items-center mb-2">
+                                        <span className="text-gray-500 text-sm font-medium uppercase tracking-wide">Price</span>
+                                        <span className="text-xl font-bold text-[#651313]">${selectedPlan.price}</span>
+                                    </div>
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-gray-500 text-sm font-medium uppercase tracking-wide">Method</span>
+                                        <span className="text-sm font-bold text-gray-700 flex items-center gap-2">
+                                            WaafiPay
+                                        </span>
+                                    </div>
+                                </div>
+
+                                {purchaseStatus ? (
+                                    <div className={`p-4 rounded-xl mb-6 text-center ${purchaseStatus.success ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                                        <p className="font-semibold">{purchaseStatus.message}</p>
+                                        {purchaseStatus.success && (
+                                            <button
+                                                onClick={() => setPurchaseModalOpen(false)}
+                                                className="mt-4 px-6 py-2 bg-green-600 text-white rounded-lg text-sm font-bold shadow-md hover:bg-green-700 transition"
+                                            >
+                                                Close
+                                            </button>
+                                        )}
+                                        {!purchaseStatus.success && (
+                                            <button
+                                                onClick={() => setPurchaseStatus(null)}
+                                                className="mt-4 px-6 py-2 bg-red-600 text-white rounded-lg text-sm font-bold shadow-md hover:bg-red-700 transition"
+                                            >
+                                                Try Again
+                                            </button>
+                                        )}
+                                    </div>
+                                ) : (
+                                    <>
+                                        <div className="mb-6">
+                                            <label className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">
+                                                Waafi Account Number
+                                            </label>
+                                            <input
+                                                type="text"
+                                                value={accountNo}
+                                                onChange={(e) => setAccountNo(e.target.value)}
+                                                placeholder="e.g. 25261xxxxxxx"
+                                                className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#EB4724]/20 focus:border-[#EB4724] transition-all font-medium"
+                                                disabled={isPurchasing}
+                                            />
+                                            <p className="text-xs text-gray-400 mt-2 ml-1">Enter your Waafi mobile money number to authorize payment.</p>
+                                        </div>
+
+                                        <button
+                                            onClick={processPurchase}
+                                            disabled={!accountNo || isPurchasing}
+                                            className="w-full py-4 bg-[#651313] text-white rounded-xl font-bold uppercase tracking-widest shadow-lg hover:brightness-110 active:scale-95 disabled:opacity-50 disabled:active:scale-100 transition-all flex items-center justify-center gap-3"
+                                        >
+                                            {isPurchasing && (
+                                                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                            )}
+                                            {isPurchasing ? "Processing..." : "Pay Now"}
+                                        </button>
+                                    </>
+                                )}
+                            </motion.div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </motion.div>
         </section>
     );

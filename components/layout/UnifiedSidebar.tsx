@@ -282,6 +282,25 @@ export default function UnifiedSidebar({ isOpen, onClose }: { isOpen?: boolean; 
                             })
                         )}
 
+                        {/* Static Service Requests Link for Admin/Manager */}
+                        {!loading && isAdminOrManager() && !menus.some(m => m.url === '/management/request-service' || m.subMenus?.some(s => s.url === '/management/request-service')) && (
+                            <li>
+                                <Link
+                                    href="/management/request-service"
+                                    onClick={onClose}
+                                    className={`flex items-center rounded-lg px-4 py-3 transition-colors hover:bg-white/10 ${pathname === '/management/request-service'
+                                        ? "bg-[#EB4724] text-white shadow-md"
+                                        : "text-white/80 hover:text-white"
+                                        }`}
+                                >
+                                    <ShoppingBag className="h-5 w-5 flex-shrink-0" />
+                                    <span className="ml-3 text-sm font-medium tracking-wide">
+                                        Service Requests
+                                    </span>
+                                </Link>
+                            </li>
+                        )}
+
                         {/* Static Teams Link for Admin/Manager as requested */}
                         {!loading && isAdminOrManager() && !menus.some(m => m.url === '/management/teams' || m.subMenus?.some(s => s.url === '/management/teams')) && (
                             <li>

@@ -22,7 +22,8 @@ export default function UnifiedHeader({ onMenuClick }: { onMenuClick: () => void
                 const roleName = (typeof role === 'object' && role?.name) ? role.name.toLowerCase() : 'user';
 
                 // Unified title for all portals
-                setPortalTitle("Portal Dashboard");
+                const formattedRole = roleName.charAt(0).toUpperCase() + roleName.slice(1);
+                setPortalTitle(`${formattedRole} Dashboard`);
             } catch (e) {
                 console.error("Error parsing user data", e);
             }

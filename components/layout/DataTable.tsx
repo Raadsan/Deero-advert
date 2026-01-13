@@ -88,7 +88,8 @@ const DataTable = ({ title, columns, data = [], onAddClick, showAddButton = true
                             {columns.map((col: any, i: number) => (
                                 <th
                                     key={col.key || i}
-                                    className="px-5 py-4 uppercase text-xs font-semibold tracking-wide"
+                                    className={`px-5 py-4 uppercase text-xs font-semibold tracking-wide ${col.align === 'center' ? 'text-center' : col.align === 'right' ? 'text-right' : 'text-left'
+                                        }`}
                                     style={col.width ? { width: col.width, minWidth: col.width } : {}}
                                 >
                                     {col.label ?? ""}
