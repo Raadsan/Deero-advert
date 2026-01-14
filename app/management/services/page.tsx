@@ -5,7 +5,7 @@ import DataTable from "@/components/layout/DataTable";
 import Modal from "@/components/layout/Modal";
 import DeleteConfirmModal from "@/components/layout/DeleteConfirmModal";
 import { Edit, Trash2, Camera, Plus, X } from "lucide-react";
-import { getAllServices, createService, updateService, deleteService } from "../../../api/serviceApi";
+import { getAllServices, createService, updateService, deleteService } from "@/api/serviceApi";
 
 type Service = any;
 
@@ -345,7 +345,7 @@ export default function AdminServicesPage() {
   ];
 
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-6">
 
 
       <DataTable

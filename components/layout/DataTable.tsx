@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 // Removed ThemeContext dependency for now as it wasn't requested/verified to exist in this context,
 // and we want to enforce brand colors.
 
-const DataTable = ({ title, columns, data = [], onAddClick, showAddButton = true, loading = false }: any) => {
+const DataTable = ({ title, columns, data = [], onAddClick, showAddButton = true, loading = false, addButtonLabel = "Add New" }: any) => {
     const [search, setSearch] = useState("");
     const [filteredData, setFilteredData] = useState<any[]>(data);
     const [entriesPerPage, setEntriesPerPage] = useState(10);
@@ -29,66 +29,68 @@ const DataTable = ({ title, columns, data = [], onAddClick, showAddButton = true
     const totalPages = Math.ceil(filteredData.length / entriesPerPage);
 
     return (
-        <div className="p-6 bg-white rounded-xl shadow-sm border border-gray-100 max-w-full mx-auto">
-            <div className="flex justify-between items-center mb-6">
-                <div className="header">
-                    <h2 className="text-xl font-bold text-[#651313]">{title}</h2>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 max-w-full mx-auto overflow-hidden">
+            <div className="p-6 pb-0">
+                <div className="flex justify-between items-center mb-6">
+                    <div className="header">
+                        <h2 className="text-xl font-bold text-[#651313]">{title}</h2>
+                    </div>
+                    {showAddButton && onAddClick && (
+                        <button
+                            onClick={onAddClick}
+                            className="bg-[#651313] hover:opacity-90 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-all shadow-md active:scale-95"
+                        >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                            </svg>
+                            {addButtonLabel}
+                        </button>
+                    )}
                 </div>
-                {showAddButton && onAddClick && (
-                    <button
-                        onClick={onAddClick}
-                        className="bg-[#EB4724] hover:opacity-90 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-all shadow-md active:scale-95"
-                    >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+
+                <div className="flex justify-between items-center mb-4 gap-4 flex-wrap">
+                    <div className="flex items-center">
+                        <label className="text-sm text-gray-600">Show&nbsp;</label>
+                        <select
+                            value={entriesPerPage}
+                            onChange={(e) => {
+                                setEntriesPerPage(Number(e.target.value));
+                                setCurrentPage(1);
+                            }}
+                            className="border border-gray-300 bg-white text-gray-900 rounded-md px-2 py-1 focus:ring-[#EB4724] focus:border-[#EB4724]"
+                        >
+                            {[5, 10, 25, 50, 100].map((num) => (
+                                <option key={num} value={num}>
+                                    {num}
+                                </option>
+                            ))}
+                        </select>
+                        <span className="text-sm text-gray-600 ml-1"> entries</span>
+                    </div>
+                    <div className="relative w-full sm:w-64">
+                        {/* Search Icon */}
+                        <svg className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
-                        Add New
-                    </button>
-                )}
-            </div>
-
-            <div className="flex justify-between items-center mb-4 gap-4 flex-wrap">
-                <div className="flex items-center">
-                    <label className="text-sm text-gray-600">Show&nbsp;</label>
-                    <select
-                        value={entriesPerPage}
-                        onChange={(e) => {
-                            setEntriesPerPage(Number(e.target.value));
-                            setCurrentPage(1);
-                        }}
-                        className="border border-gray-300 bg-white text-gray-900 rounded-md px-2 py-1 focus:ring-[#EB4724] focus:border-[#EB4724]"
-                    >
-                        {[5, 10, 25, 50, 100].map((num) => (
-                            <option key={num} value={num}>
-                                {num}
-                            </option>
-                        ))}
-                    </select>
-                    <span className="text-sm text-gray-600 ml-1"> entries</span>
-                </div>
-                <div className="relative w-full sm:w-64">
-                    {/* Search Icon */}
-                    <svg className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                    <input
-                        type="text"
-                        placeholder="Search details..."
-                        className="border border-gray-200 pl-9 pr-4 py-2 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-[#EB4724] focus:border-transparent transition-all"
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                    />
+                        <input
+                            type="text"
+                            placeholder="Search details..."
+                            className="border border-gray-200 pl-9 pr-4 py-2 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-[#EB4724] focus:border-transparent transition-all"
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                        />
+                    </div>
                 </div>
             </div>
 
-            <div className="overflow-x-auto rounded-lg border border-gray-200">
+            <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm">
                     <thead className="bg-[#651313] text-white">
                         <tr>
                             {columns.map((col: any, i: number) => (
                                 <th
                                     key={col.key || i}
-                                    className={`px-5 py-4 uppercase text-xs font-semibold tracking-wide ${col.align === 'center' ? 'text-center' : col.align === 'right' ? 'text-right' : 'text-left'
+                                    className={`px-6 py-4 uppercase text-xs font-bold tracking-wider ${col.align === 'center' ? 'text-center' : col.align === 'right' ? 'text-right' : 'text-left'
                                         }`}
                                     style={col.width ? { width: col.width, minWidth: col.width } : {}}
                                 >
@@ -102,7 +104,7 @@ const DataTable = ({ title, columns, data = [], onAddClick, showAddButton = true
                             [1, 2, 3, 4, 5].map((i) => (
                                 <tr key={i} className="animate-pulse">
                                     {columns.map((_: any, j: number) => (
-                                        <td key={j} className="px-5 py-4">
+                                        <td key={j} className="px-6 py-4">
                                             <div className="h-4 bg-gray-200 rounded w-full"></div>
                                         </td>
                                     ))}
@@ -113,8 +115,8 @@ const DataTable = ({ title, columns, data = [], onAddClick, showAddButton = true
                                 <tr
                                     key={row._id || row.id || idx}
                                     className={`group transition-colors ${idx % 2 === 0
-                                        ? "bg-white"
-                                        : "bg-gray-50/50"
+                                        ? "bg-white hover:bg-gray-50"
+                                        : "bg-gray-50/50 hover:bg-gray-100"
                                         }`}
                                 >
                                     {columns.map((col: any, i: number) => {
@@ -135,7 +137,8 @@ const DataTable = ({ title, columns, data = [], onAddClick, showAddButton = true
                                         return (
                                             <td
                                                 key={col.key || i}
-                                                className="px-5 py-4 text-gray-600 font-medium"
+                                                className={`px-6 py-4 text-gray-600 font-medium ${col.align === 'center' ? 'text-center' : col.align === 'right' ? 'text-right' : 'text-left'
+                                                    }`}
                                                 style={col.width ? { width: col.width, minWidth: col.width } : {}}
                                             >
                                                 {cellContent}

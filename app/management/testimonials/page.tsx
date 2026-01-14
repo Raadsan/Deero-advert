@@ -11,7 +11,7 @@ import {
   createTestimonial,
   updateTestimonial,
   deleteTestimonial,
-} from "../../../api/testmonialApi";
+} from "@/api/testmonialApi";
 
 export default function TestimonialsPage() {
   const [data, setData] = useState<any[]>([]);

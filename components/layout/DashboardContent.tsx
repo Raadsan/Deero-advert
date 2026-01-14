@@ -198,11 +198,7 @@ export default function DashboardContent() {
 
     return (
         <div className="space-y-6">
-            <div className="flex items-center gap-4">
-                <h1 className="text-3xl font-bold tracking-tight text-[#651313]">
-                    {userRole ? `${userRole.charAt(0).toUpperCase() + userRole.slice(1)} Dashboard` : "Dashboard"}
-                </h1>
-            </div>
+
 
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                 {loading ? (
@@ -291,7 +287,10 @@ export default function DashboardContent() {
                                 // Determine what to display based on transaction type
                                 let displayName = 'N/A';
 
-                                if (t.type === 'service_payment') {
+                                if (t.type === 'hosting_payment') {
+                                    // For hosting package payments
+                                    displayName = typeof t.hostingPackage === 'object' ? t.hostingPackage?.name : 'Hosting Package';
+                                } else if (t.type === 'service_payment') {
                                     // For service purchases, show the package name
                                     const packageId = t.packageId;
                                     if (typeof t.service === 'object' && t.service?.packages && packageId) {

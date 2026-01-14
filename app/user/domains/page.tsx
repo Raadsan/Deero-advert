@@ -103,21 +103,13 @@ export default function UserDomainsPage() {
 
     return (
         <div className="space-y-6">
-            <div className="flex items-end justify-end">
-
-                <button
-                    onClick={() => router.push("/#search")}
-                    className="px-5 py-2.5 bg-[#651313] text-white text-sm font-bold rounded-xl hover:bg-[#831a1a] transition-all shadow-md active:scale-95"
-                >
-                    Register New Domain
-                </button>
-            </div>
-
             <DataTable
                 title="Domain Portfolio"
                 columns={columns}
                 data={domains}
-                showAddButton={false}
+                showAddButton={true}
+                onAddClick={() => router.push("/#search")}
+                addButtonLabel="Register New Domain"
                 loading={isLoading}
             />
         </div>

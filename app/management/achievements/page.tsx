@@ -12,7 +12,7 @@ import {
   updateAchievement,
   deleteAchievement,
   Achievement,
-} from "../../../api/achievementApi";
+} from "@/api/achievementApi";
 
 export default function AchievementsPage() {
   const [data, setData] = useState<any[]>([]);

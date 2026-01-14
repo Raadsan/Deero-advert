@@ -10,7 +10,7 @@ import {
   createBlog,
   updateBlog,
   deleteBlog,
-} from "../../../api/blogsApi";
+} from "@/api/blogsApi";
 
 export default function AdminBlogsPage() {
   const [loading, setLoading] = useState(true);
@@ -221,7 +221,7 @@ export default function AdminBlogsPage() {
   ];
 
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-6">
 
 
       <DataTable

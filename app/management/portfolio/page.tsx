@@ -12,7 +12,7 @@ import {
     updatePortfolio,
     deletePortfolio,
     deleteGalleryImage,
-} from "../../../api/portfolioApi";
+} from "@/api/portfolioApi";
 import { getImageUrl } from "@/utils/url";
 
 export default function PortfolioManagementPage() {

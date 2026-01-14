@@ -5,8 +5,9 @@ export const createTransaction = (data: {
   domainId?: string;
   serviceId?: string;
   packageId?: string;
+  hostingPackageId?: string;
   userId: string;
-  type: "register" | "transfer" | "renew" | "payment" | "service_payment";
+  type: "register" | "transfer" | "renew" | "payment" | "service_payment" | "hosting_payment";
   amount: number;
   currency?: string;
   description?: string;

@@ -27,11 +27,11 @@ import {
     User
 } from "lucide-react";
 import Image from "next/image";
-import { logout } from "../../api/authApi";
+import { logout } from "@/api/authApi";
 import { useEffect, useState } from "react";
-import { getUserMenus } from "../../api/menuApi";
-import { getUser, isAdminOrManager } from "../../utils/auth";
-import { Menu } from "../../types/menu";
+import { getUserMenus } from "@/api/menuApi";
+import { getUser, isAdminOrManager } from "@/utils/auth";
+import { Menu } from "@/types/menu";
 import { Users as UsersIcon } from "lucide-react"; // Rename to avoid confusion with the mapping
 
 // Icon mapping from string names to Lucide components
@@ -80,6 +80,7 @@ const iconMap: Record<string, LucideIcon> = {
     "major-clients": Users,
     domains: Globe,
     teams: Users,
+    management: LayoutDashboard,
 };
 
 export default function UnifiedSidebar({ isOpen, onClose }: { isOpen?: boolean; onClose?: () => void }) {
@@ -91,43 +92,64 @@ export default function UnifiedSidebar({ isOpen, onClose }: { isOpen?: boolean; 
     const [expandedMenuId, setExpandedMenuId] = useState<string | null>(null);
 
     useEffect(() => {
+        let isMounted = true;
         const fetchMenus = async () => {
             try {
-                setLoading(true);
-                setError(null);
+                if (isMounted) {
+                    setLoading(true);
+                    setError(null);
+                }
 
                 const user = getUser();
                 if (!user) {
-                    setError("User not found. Please login again.");
-                    setLoading(false);
+                    if (isMounted) {
+                        setError("User not found. Please login again.");
+                        setLoading(false);
+                    }
                     return;
                 }
 
                 const roleId = user.role?._id || user.role;
 
                 if (!roleId) {
-                    setError("Role not found. Please login again.");
-                    setLoading(false);
+                    if (isMounted) {
+                        setError("Role not found. Please login again.");
+                        setLoading(false);
+                    }
                     return;
                 }
 
                 // Try to get menus for this role
-                const response = await getUserMenus(typeof roleId === 'object' ? roleId._id : roleId);
-
-                if (response && response.menus) {
-                    setMenus(response.menus);
-                } else {
-                    setMenus([]);
+                try {
+                    const response = await getUserMenus(typeof roleId === 'object' ? roleId._id : roleId);
+                    if (isMounted) {
+                        if (response && response.menus) {
+                            setMenus(response.menus);
+                        } else {
+                            setMenus([]);
+                        }
+                    }
+                } catch (innerErr: any) {
+                    if (innerErr.code === "ERR_CANCELED" || innerErr.name === "CanceledError") {
+                        console.log("Menu fetch canceled");
+                        return;
+                    }
+                    throw innerErr;
                 }
+
             } catch (err: any) {
                 console.error("Error fetching menus:", err);
-                setError(err.message || "Failed to load menus");
+                if (isMounted) setError(err.message || "Failed to load menus");
             } finally {
-                setLoading(false);
+                if (isMounted) setLoading(false);
             }
         };
 
         fetchMenus();
+
+        return () => {
+            isMounted = false;
+        };
     }, []);
 
     // Auto-expand the active menu section
@@ -200,8 +222,8 @@ export default function UnifiedSidebar({ isOpen, onClose }: { isOpen?: boolean; 
                         </button>
                     </div>
 
-                    {/* Navigation Links */}
-                    <ul className="flex-1 space-y-1.5 font-medium py-5 overflow-y-auto">
+                    {/* Navigation Links - Scrollable but with hidden scrollbar for a cleaner look */}
+                    <ul className="flex-1 space-y-1.5 font-medium py-5 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                         {loading ? (
                             <li className="px-4 py-3 text-white/60 text-sm">Loading menus...</li>
                         ) : error ? (
@@ -282,43 +304,7 @@ export default function UnifiedSidebar({ isOpen, onClose }: { isOpen?: boolean; 
                             })
                         )}
 
-                        {/* Static Service Requests Link for Admin/Manager */}
-                        {!loading && isAdminOrManager() && !menus.some(m => m.url === '/management/request-service' || m.subMenus?.some(s => s.url === '/management/request-service')) && (
-                            <li>
-                                <Link
-                                    href="/management/request-service"
-                                    onClick={onClose}
-                                    className={`flex items-center rounded-lg px-4 py-3 transition-colors hover:bg-white/10 ${pathname === '/management/request-service'
-                                        ? "bg-[#EB4724] text-white shadow-md"
-                                        : "text-white/80 hover:text-white"
-                                        }`}
-                                >
-                                    <ShoppingBag className="h-5 w-5 flex-shrink-0" />
-                                    <span className="ml-3 text-sm font-medium tracking-wide">
-                                        Service Requests
-                                    </span>
-                                </Link>
-                            </li>
-                        )}
 
-                        {/* Static Teams Link for Admin/Manager as requested */}
-                        {!loading && isAdminOrManager() && !menus.some(m => m.url === '/management/teams' || m.subMenus?.some(s => s.url === '/management/teams')) && (
-                            <li>
-                                <Link
-                                    href="/management/teams"
-                                    onClick={onClose}
-                                    className={`flex items-center rounded-lg px-4 py-3 transition-colors hover:bg-white/10 ${pathname === '/management/teams'
-                                        ? "bg-[#EB4724] text-white shadow-md"
-                                        : "text-white/80 hover:text-white"
-                                        }`}
-                                >
-                                    <UsersIcon className="h-5 w-5 flex-shrink-0" />
-                                    <span className="ml-3 text-sm font-medium tracking-wide">
-                                        Manage Teams
-                                    </span>
-                                </Link>
-                            </li>
-                        )}
                     </ul>
 
                     <div className="mt-auto border-t border-white/10 pt-4">

@@ -11,7 +11,7 @@ import {
     createTeam,
     updateTeam,
     deleteTeam,
-} from "../../../api/teamApi";
+} from "@/api/teamApi";
 import { getImageUrl } from "@/utils/url";
 
 

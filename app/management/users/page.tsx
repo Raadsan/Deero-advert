@@ -10,7 +10,7 @@ import {
   createUser,
   deleteUser,
   updateUser,
-} from "../../../api/usersApi"; // adjust path
+} from "@/api/usersApi";
 import { getAllRoles } from "@/api/roleApi";
 
 export default function UsersPage() {
@@ -35,20 +35,28 @@ export default function UsersPage() {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const [userRes, roleRes] = await Promise.all([
-        getAllUsers(),
-        getAllRoles()
-      ]);
+      // Fetch users first
+      try {
+        const userRes = await getAllUsers();
+        // Handle users data structure (direct array or nested in data)
+        const users = Array.isArray(userRes.data) ? userRes.data : (userRes.data?.data || []);
+        setData(users);
+      } catch (uErr) {
+        console.error("Failed to fetch users", uErr);
+      }
 
-      // Handle users data structure (direct array or nested in data)
-      const users = Array.isArray(userRes.data) ? userRes.data : (userRes.data?.data || []);
-      setData(users);
-
-      // Handle roles data structure
-      if (roleRes.roles) {
-        setRoles(roleRes.roles);
-      } else if (Array.isArray(roleRes)) {
-        setRoles(roleRes);
+      // Fetch roles separately
+      try {
+        const roleRes = await getAllRoles();
+        // Handle roles data structure
+        if (roleRes.roles) {
+          setRoles(roleRes.roles);
+        } else if (Array.isArray(roleRes)) {
+          setRoles(roleRes);
+        }
+      } catch (rErr) {
+        console.error("Failed to fetch roles", rErr);
+        // Fallback empty roles or simple error toast could be added here
       }
     } catch (error) {
       console.error("Failed to fetch users or roles", error);

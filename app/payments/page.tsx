@@ -80,7 +80,23 @@ export default function PaymentsPage() {
                                 </thead>
                                 <tbody>
                                     {transactions.map((t, idx) => {
-                                        const domainName = typeof t.domain === 'object' ? t.domain?.name : 'N/A';
+                                        let displayName = 'N/A';
+
+                                        if (t.type === 'hosting_payment') {
+                                            displayName = typeof t.hostingPackage === 'object' ? t.hostingPackage?.name : 'Hosting Package';
+                                        } else if (t.type === 'service_payment') {
+                                            const packageId = t.packageId;
+                                            if (typeof t.service === 'object' && t.service?.packages && packageId) {
+                                                const pkg = t.service.packages.find((p: any) => p._id === packageId);
+                                                displayName = pkg?.packageTitle || t.service?.serviceTitle || 'Service Purchase';
+                                            } else if (typeof t.service === 'object') {
+                                                displayName = t.service?.serviceTitle || 'Service Purchase';
+                                            }
+                                        } else {
+                                            displayName = typeof t.domain === 'object' ? t.domain?.name : 'N/A';
+                                        }
+
+                                        const domainName = displayName; // Keep variable name for compatibility or refactor below
                                         const fullName = typeof t.user === 'object' ? t.user?.fullname : 'N/A';
 
                                         return (

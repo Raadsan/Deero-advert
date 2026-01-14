@@ -8,9 +8,10 @@ interface ModalProps {
     onClose: () => void;
     title: string;
     children: React.ReactNode;
+    maxWidth?: string;
 }
 
-const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
+const Modal = ({ isOpen, onClose, title, children, maxWidth = "max-w-2xl" }: ModalProps) => {
     const modalRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -44,7 +45,7 @@ const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
         >
             <div
                 ref={modalRef}
-                className="relative w-full max-w-2xl transform rounded-xl bg-white p-5 shadow-2xl transition-all animate-in zoom-in-95 duration-200"
+                className={`relative w-full ${maxWidth} max-h-[85vh] overflow-y-auto transform rounded-xl bg-white p-5 shadow-2xl transition-all animate-in zoom-in-95 duration-200 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent`}
             >
                 <div className="flex items-center justify-between mb-4 border-b border-gray-100 pb-3">
                     <h3 className="text-xl font-bold text-[#651313]">{title}</h3>

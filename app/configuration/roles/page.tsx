@@ -80,26 +80,8 @@ export default function RolesPage() {
     };
 
     return (
-        <div className="p-6">
-            <div className="mb-6 flex items-center justify-between">
-                <div>
-                    <h1 className="text-2xl font-bold text-gray-900">Role Management</h1>
-                    <p className="mt-1 text-sm text-gray-600">
-                        Manage user roles and access levels
-                    </p>
-                </div>
-                <button
-                    onClick={() => {
-                        setEditingRole(null);
-                        setFormData({ name: "", description: "" });
-                        setShowModal(true);
-                    }}
-                    className="flex items-center gap-2 rounded-lg bg-[#651313] px-4 py-2 text-white hover:bg-[#EB4724] transition-colors"
-                >
-                    <Plus className="h-5 w-5" />
-                    Add Role
-                </button>
-            </div>
+        <div className="space-y-6">
+
 
             <DataTable
                 title="System Roles"
@@ -154,8 +136,12 @@ export default function RolesPage() {
                     },
                 ]}
                 data={roles}
-                showAddButton={false}
                 loading={loading}
+                onAddClick={() => {
+                    setEditingRole(null);
+                    setFormData({ name: "", description: "" });
+                    setShowModal(true);
+                }}
             />
 
             <DeleteConfirmModal
@@ -166,60 +152,61 @@ export default function RolesPage() {
             />
 
             {/* Modal */}
-            {showModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-                    <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
-                        <h2 className="mb-4 text-xl font-bold text-gray-900">
-                            {editingRole ? "Edit Role" : "Add New Role"}
-                        </h2>
-                        <form onSubmit={handleSubmit}>
-                            <div className="mb-4">
-                                <label className="mb-2 block text-sm font-medium text-gray-700">
-                                    Role Name *
-                                </label>
-                                <input
-                                    type="text"
-                                    value={formData.name}
-                                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                    className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-[#EB4724] focus:outline-none focus:ring-1 focus:ring-[#EB4724]"
-                                    placeholder="e.g. Staff"
-                                    required
-                                />
-                            </div>
-                            <div className="mb-4">
-                                <label className="mb-2 block text-sm font-medium text-gray-700">
-                                    Description
-                                </label>
-                                <textarea
-                                    value={formData.description}
-                                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                                    className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-[#EB4724] focus:outline-none focus:ring-1 focus:ring-[#EB4724]"
-                                    rows={3}
-                                />
-                            </div>
-                            <div className="flex justify-end gap-2">
-                                <button
-                                    type="button"
-                                    onClick={() => {
-                                        setShowModal(false);
-                                        setEditingRole(null);
-                                        setFormData({ name: "", description: "" });
-                                    }}
-                                    className="rounded-lg border border-gray-300 px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors"
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    type="submit"
-                                    className="rounded-lg bg-[#651313] px-4 py-2 text-white hover:bg-[#EB4724] transition-colors"
-                                >
-                                    {editingRole ? "Update" : "Create"}
-                                </button>
-                            </div>
-                        </form>
+            <Modal
+                isOpen={showModal}
+                onClose={() => {
+                    setShowModal(false);
+                    setEditingRole(null);
+                    setFormData({ name: "", description: "" });
+                }}
+                title={editingRole ? "Edit Role" : "Add New Role"}
+            >
+                <form onSubmit={handleSubmit}>
+                    <div className="mb-4">
+                        <label className="mb-2 block text-sm font-medium text-gray-700">
+                            Role Name *
+                        </label>
+                        <input
+                            type="text"
+                            value={formData.name}
+                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                            className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-[#EB4724] focus:outline-none focus:ring-1 focus:ring-[#EB4724]"
+                            placeholder="e.g. Staff"
+                            required
+                        />
                     </div>
-                </div>
-            )}
+                    <div className="mb-4">
+                        <label className="mb-2 block text-sm font-medium text-gray-700">
+                            Description
+                        </label>
+                        <textarea
+                            value={formData.description}
+                            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                            className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-[#EB4724] focus:outline-none focus:ring-1 focus:ring-[#EB4724]"
+                            rows={3}
+                        />
+                    </div>
+                    <div className="flex justify-end gap-2">
+                        <button
+                            type="button"
+                            onClick={() => {
+                                setShowModal(false);
+                                setEditingRole(null);
+                                setFormData({ name: "", description: "" });
+                            }}
+                            className="rounded-lg border border-gray-300 px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="submit"
+                            className="rounded-lg bg-[#651313] px-4 py-2 text-white hover:bg-[#EB4724] transition-colors"
+                        >
+                            {editingRole ? "Update" : "Create"}
+                        </button>
+                    </div>
+                </form>
+            </Modal>
         </div>
     );
 }

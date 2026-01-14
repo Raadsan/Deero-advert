@@ -113,26 +113,8 @@ export default function MenusPage() {
     };
 
     return (
-        <div className="p-6">
-            <div className="mb-6 flex items-center justify-between">
-                <div>
-                    <h1 className="text-2xl font-bold text-gray-900">Menu Management</h1>
-                    <p className="mt-1 text-sm text-gray-600">
-                        Manage system menus and navigation structure
-                    </p>
-                </div>
-                <button
-                    onClick={() => {
-                        setEditingMenu(null);
-                        setFormData({ title: "", icon: "", url: "", isCollapsible: false, subMenus: [] });
-                        setShowModal(true);
-                    }}
-                    className="flex items-center gap-2 rounded-lg bg-[#651313] px-4 py-2 text-white hover:bg-[#EB4724] transition-colors"
-                >
-                    <Plus className="h-5 w-5" />
-                    Add Menu
-                </button>
-            </div>
+        <div className="space-y-6">
+
 
             {loading ? (
                 <div className="bg-white rounded-lg shadow p-6">
@@ -144,7 +126,7 @@ export default function MenusPage() {
                 </div>
             ) : (
                 <DataTable
-                    title="System Menus"
+                    title="Menu Management"
                     columns={[
                         {
                             label: "Title",
@@ -220,7 +202,11 @@ export default function MenusPage() {
                         },
                     ]}
                     data={menus}
-                    showAddButton={false}
+                    onAddClick={() => {
+                        setEditingMenu(null);
+                        setFormData({ title: "", icon: "", url: "", isCollapsible: false, subMenus: [] });
+                        setShowModal(true);
+                    }}
                 />
             )}
 
@@ -232,132 +218,134 @@ export default function MenusPage() {
             />
 
             {/* Modal */}
-            {showModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 overflow-y-auto">
-                    <div className="w-full max-w-2xl rounded-lg bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto">
-                        <h2 className="mb-4 text-xl font-bold text-gray-900">
-                            {editingMenu ? "Edit Menu" : "Add New Menu"}
-                        </h2>
-                        <form onSubmit={handleSubmit}>
-                            <div className="grid grid-cols-2 gap-4 mb-4">
-                                <div>
-                                    <label className="mb-2 block text-sm font-medium text-gray-700">
-                                        Menu Title *
-                                    </label>
-                                    <input
-                                        type="text"
-                                        value={formData.title}
-                                        onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                                        className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-[#EB4724] focus:outline-none focus:ring-1 focus:ring-[#EB4724]"
-                                        required
-                                    />
-                                </div>
-                                <div>
-                                    <label className="mb-2 block text-sm font-medium text-gray-700">
-                                        Icon Name
-                                    </label>
-                                    <input
-                                        type="text"
-                                        value={formData.icon}
-                                        onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
-                                        className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-[#EB4724] focus:outline-none focus:ring-1 focus:ring-[#EB4724]"
-                                        placeholder="e.g., settings, dashboard"
-                                    />
-                                </div>
-                            </div>
+            <Modal
+                isOpen={showModal}
+                onClose={() => {
+                    setShowModal(false);
+                    setEditingMenu(null);
+                    setFormData({ title: "", icon: "", url: "", isCollapsible: false, subMenus: [] });
+                }}
+                title={editingMenu ? "Edit Menu" : "Add New Menu"}
+                maxWidth="max-w-4xl"
+            >
+                <form onSubmit={handleSubmit}>
+                    <div className="grid grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label className="mb-2 block text-sm font-medium text-gray-700">
+                                Menu Title *
+                            </label>
+                            <input
+                                type="text"
+                                value={formData.title}
+                                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-[#EB4724] focus:outline-none focus:ring-1 focus:ring-[#EB4724]"
+                                required
+                            />
+                        </div>
+                        <div>
+                            <label className="mb-2 block text-sm font-medium text-gray-700">
+                                Icon Name
+                            </label>
+                            <input
+                                type="text"
+                                value={formData.icon}
+                                onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
+                                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-[#EB4724] focus:outline-none focus:ring-1 focus:ring-[#EB4724]"
+                                placeholder="e.g., settings, dashboard"
+                            />
+                        </div>
+                    </div>
 
-                            <div className="mb-4">
-                                <label className="mb-2 block text-sm font-medium text-gray-700">
-                                    URL Path
+                    <div className="mb-4">
+                        <label className="mb-2 block text-sm font-medium text-gray-700">
+                            URL Path
+                        </label>
+                        <input
+                            type="text"
+                            value={formData.url}
+                            onChange={(e) => setFormData({ ...formData, url: e.target.value })}
+                            className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-[#EB4724] focus:outline-none focus:ring-1 focus:ring-[#EB4724]"
+                            placeholder="/path/to/page"
+                        />
+                    </div>
+
+                    <div className="mb-4">
+                        <label className="flex items-center gap-2">
+                            <input
+                                type="checkbox"
+                                checked={formData.isCollapsible}
+                                onChange={(e) => setFormData({ ...formData, isCollapsible: e.target.checked })}
+                                className="rounded border-gray-300 text-[#651313] focus:ring-[#EB4724]"
+                            />
+                            <span className="text-sm font-medium text-gray-700">Collapsible (has submenus)</span>
+                        </label>
+                    </div>
+
+                    {formData.isCollapsible && (
+                        <div className="mb-4">
+                            <div className="flex items-center justify-between mb-2">
+                                <label className="block text-sm font-medium text-gray-700">
+                                    Submenus
                                 </label>
-                                <input
-                                    type="text"
-                                    value={formData.url}
-                                    onChange={(e) => setFormData({ ...formData, url: e.target.value })}
-                                    className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-[#EB4724] focus:outline-none focus:ring-1 focus:ring-[#EB4724]"
-                                    placeholder="/path/to/page"
-                                />
-                            </div>
-
-                            <div className="mb-4">
-                                <label className="flex items-center gap-2">
-                                    <input
-                                        type="checkbox"
-                                        checked={formData.isCollapsible}
-                                        onChange={(e) => setFormData({ ...formData, isCollapsible: e.target.checked })}
-                                        className="rounded border-gray-300 text-[#651313] focus:ring-[#EB4724]"
-                                    />
-                                    <span className="text-sm font-medium text-gray-700">Collapsible (has submenus)</span>
-                                </label>
-                            </div>
-
-                            {formData.isCollapsible && (
-                                <div className="mb-4">
-                                    <div className="flex items-center justify-between mb-2">
-                                        <label className="block text-sm font-medium text-gray-700">
-                                            Submenus
-                                        </label>
-                                        <button
-                                            type="button"
-                                            onClick={addSubMenu}
-                                            className="text-sm text-[#651313] hover:text-[#EB4724]"
-                                        >
-                                            + Add Submenu
-                                        </button>
-                                    </div>
-                                    <div className="space-y-2">
-                                        {formData.subMenus.map((submenu, index) => (
-                                            <div key={index} className="flex gap-2">
-                                                <input
-                                                    type="text"
-                                                    value={submenu.title}
-                                                    onChange={(e) => updateSubMenu(index, "title", e.target.value)}
-                                                    placeholder="Submenu title"
-                                                    className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#EB4724] focus:outline-none focus:ring-1 focus:ring-[#EB4724]"
-                                                />
-                                                <input
-                                                    type="text"
-                                                    value={submenu.url}
-                                                    onChange={(e) => updateSubMenu(index, "url", e.target.value)}
-                                                    placeholder="/submenu/path"
-                                                    className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#EB4724] focus:outline-none focus:ring-1 focus:ring-[#EB4724]"
-                                                />
-                                                <button
-                                                    type="button"
-                                                    onClick={() => removeSubMenu(index)}
-                                                    className="rounded p-2 text-red-600 hover:bg-red-50"
-                                                >
-                                                    <Trash2 className="h-4 w-4" />
-                                                </button>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-
-                            <div className="flex justify-end gap-2">
                                 <button
                                     type="button"
-                                    onClick={() => {
-                                        setShowModal(false);
-                                        setEditingMenu(null);
-                                        setFormData({ title: "", icon: "", url: "", isCollapsible: false, subMenus: [] });
-                                    }}
-                                    className="rounded-lg border border-gray-300 px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors"
+                                    onClick={addSubMenu}
+                                    className="text-sm text-[#651313] hover:text-[#EB4724]"
                                 >
-                                    Cancel
-                                </button>
-                                <button
-                                    type="submit"
-                                    className="rounded-lg bg-[#651313] px-4 py-2 text-white hover:bg-[#EB4724] transition-colors"
-                                >
-                                    {editingMenu ? "Update" : "Create"}
+                                    + Add Submenu
                                 </button>
                             </div>
-                        </form>
+                            <div className="space-y-2">
+                                {formData.subMenus.map((submenu, index) => (
+                                    <div key={index} className="flex gap-2">
+                                        <input
+                                            type="text"
+                                            value={submenu.title}
+                                            onChange={(e) => updateSubMenu(index, "title", e.target.value)}
+                                            placeholder="Submenu title"
+                                            className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#EB4724] focus:outline-none focus:ring-1 focus:ring-[#EB4724]"
+                                        />
+                                        <input
+                                            type="text"
+                                            value={submenu.url}
+                                            onChange={(e) => updateSubMenu(index, "url", e.target.value)}
+                                            placeholder="/submenu/path"
+                                            className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#EB4724] focus:outline-none focus:ring-1 focus:ring-[#EB4724]"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => removeSubMenu(index)}
+                                            className="rounded p-2 text-red-600 hover:bg-red-50"
+                                        >
+                                            <Trash2 className="h-4 w-4" />
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="flex justify-end gap-2">
+                        <button
+                            type="button"
+                            onClick={() => {
+                                setShowModal(false);
+                                setEditingMenu(null);
+                                setFormData({ title: "", icon: "", url: "", isCollapsible: false, subMenus: [] });
+                            }}
+                            className="rounded-lg border border-gray-300 px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="submit"
+                            className="rounded-lg bg-[#651313] px-4 py-2 text-white hover:bg-[#EB4724] transition-colors"
+                        >
+                            {editingMenu ? "Update" : "Create"}
+                        </button>
                     </div>
-                </div>
-            )}
+                </form>
+            </Modal>
         </div>
     );
 }

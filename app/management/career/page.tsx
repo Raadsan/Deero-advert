@@ -5,7 +5,7 @@ import DataTable from "@/components/layout/DataTable";
 import Modal from "@/components/layout/Modal";
 import DeleteConfirmModal from "@/components/layout/DeleteConfirmModal";
 import { Edit, Trash2, CheckCircle, XCircle } from "lucide-react";
-import { getAllCareers, createCareer, updateCareer, deleteCareer, Career } from "../../../api/careerApi";
+import { getAllCareers, createCareer, updateCareer, deleteCareer, Career } from "@/api/careerApi";
 
 export default function CareersPage() {
     const [loading, setLoading] = useState(true);
@@ -246,7 +246,7 @@ export default function CareersPage() {
     ];
 
     return (
-        <div className="space-y-6 p-6">
+        <div className="space-y-6">
             <DataTable
                 title="Job Postings"
                 columns={columns}

@@ -33,9 +33,7 @@ export default function RequestServicePage() {
 
     return (
         <div className="space-y-6">
-            <h1 className="text-3xl font-bold tracking-tight text-[#651313]">
-                Service Requests
-            </h1>
+           
 
             <DataTable
                 title="Service Purchase Requests"

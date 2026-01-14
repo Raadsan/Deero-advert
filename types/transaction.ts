@@ -6,8 +6,9 @@ export interface Transaction {
     domain?: string | Domain;
     service?: string | any; // Service object with packages
     packageId?: string;
+    hostingPackage?: any;
     user: string | User;
-    type: "register" | "transfer" | "renew" | "payment" | "service_payment";
+    type: "register" | "transfer" | "renew" | "payment" | "service_payment" | "hosting_payment";
     amount: number;
     status: "pending" | "completed" | "failed";
     currency: string;

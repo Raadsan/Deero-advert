@@ -211,7 +211,7 @@ export default function AnnouncementsPage() {
     ];
 
     return (
-        <div className="p-6">
+        <div className="space-y-6">
             <DataTable
                 title="Announcements Management"
                 columns={columns}

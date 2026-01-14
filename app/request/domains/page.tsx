@@ -94,18 +94,9 @@ export default function DomainsPage() {
     };
 
     return (
-        <div className="p-6">
-            <div className="mb-6 flex items-center justify-between">
-                <div>
-                    <h1 className="text-2xl font-bold text-gray-900">Domain Management</h1>
-                    <p className="mt-1 text-sm text-gray-600">
-                        Manage registered domains and registrations
-                    </p>
-                </div>
-            </div>
-
+        <div className="space-y-6">
             <DataTable
-                title="Registered Domains"
+                title="Request Domains"
                 columns={[
                     {
                         label: "Domain Name",

@@ -10,7 +10,7 @@ import {
     getMajorClients,
     createMajorClient,
     deleteMajorClient,
-} from "../../../api/majorClientApi";
+} from "@/api/majorClientApi";
 
 export default function MajorClientsPage() {
     const [data, setData] = useState<any[]>([]);
