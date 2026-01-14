@@ -6,15 +6,15 @@ import { getTransactionsByUser } from "@/api/transactionApi";
 import { getUserId, isAuthenticated } from "@/utils/auth";
 import DataTable from "@/components/layout/DataTable";
 
-export default function MyServicesPage() {
+export default function MyHostingPage() {
     const router = useRouter();
-    const [services, setServices] = useState<any[]>([]);
+    const [hosting, setHosting] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchMyServices = async () => {
+        const fetchMyHosting = async () => {
             if (!isAuthenticated()) {
-                router.push("/login?redirect=/my-services");
+                router.push("/login?redirect=/my-hosting");
                 return;
             }
 
@@ -29,47 +29,46 @@ export default function MyServicesPage() {
                 const response = await getTransactionsByUser(userId);
                 const allTransactions = response.data?.transactions || [];
 
-                // Filter for service_payment type transactions
-                const servicePayments = allTransactions.filter(
-                    (t: any) => t.type === "service_payment"
+                // Filter for hosting_payment type transactions
+                const hostingPayments = allTransactions.filter(
+                    (t: any) => t.type === "hosting_payment"
                 );
 
-                setServices(servicePayments);
+                setHosting(hostingPayments);
             } catch (error) {
-                console.error("Error fetching my services:", error);
+                console.error("Error fetching my hosting:", error);
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchMyServices();
+        fetchMyHosting();
     }, [router]);
 
     const columns = [
         {
-            label: "Service Name",
-            key: "service",
+            label: "Package Name",
+            key: "hostingPackage",
             render: (row: any) => {
-                const serviceName = typeof row.service === 'object' ? row.service?.serviceTitle : "N/A";
-                return <span className="font-semibold text-gray-900">{serviceName}</span>;
+                const packageName = typeof row.hostingPackage === 'object' ? row.hostingPackage?.name : "N/A";
+                return <span className="font-semibold text-gray-900">{packageName}</span>;
             }
         },
         {
-            label: "Package",
-            key: "package",
+            label: "Price",
+            key: "price",
+            align: "center",
             render: (row: any) => {
-                const packageId = row.packageId;
-                let packageTitle = "N/A";
-
-                if (typeof row.service === 'object' && row.service?.packages && packageId) {
-                    const pkg = row.service.packages.find((p: any) => p._id === packageId);
-                    packageTitle = pkg?.packageTitle || "N/A";
-                }
-                return <span className="text-gray-700">{packageTitle}</span>;
+                const packagePrice = typeof row.hostingPackage === 'object' ? row.hostingPackage?.price : null;
+                return (
+                    <div className="text-center font-medium text-gray-500 italic">
+                        {packagePrice ? `$${packagePrice.toFixed(2)}` : "-"}
+                    </div>
+                );
             }
         },
         {
-            label: "Amount",
+            label: "Amount Paid",
             key: "amount",
             align: "center",
             render: (row: any) => (
@@ -133,9 +132,9 @@ export default function MyServicesPage() {
     return (
         <div className="space-y-6">
             <DataTable
-                title="My Services"
+                title="My Hosting Packages"
                 columns={columns}
-                data={services}
+                data={hosting}
                 showAddButton={false}
                 loading={loading}
             />

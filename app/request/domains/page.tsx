@@ -2,24 +2,33 @@
 
 import { useState, useEffect } from "react";
 import DataTable from "@/components/layout/DataTable";
-import { getAllDomains } from "@/api/domainApi";
+import { getAllTransactions } from "@/api/transactionApi";
 import { getAllUsers } from "@/api/usersApi";
 import { Globe } from "lucide-react";
 
 interface Domain {
     _id: string;
-    name: string;
+    name?: string; // Fallback
+    domain?: {
+        _id: string;
+        name: string;
+        status: string;
+        price?: number;
+        expiryDate?: string;
+    };
     user: any; // Can be ID or populated object
     status: string;
     registrationDate?: string;
     expiryDate?: string;
-    price: number;
+    price?: number;
+    amount?: number;
     createdAt: string;
 }
 
 interface User {
     _id: string;
-    name: string;
+    name?: string;
+    fullname?: string;
     email: string;
     role?: any; // Role object or ID
 }
@@ -38,14 +47,18 @@ export default function DomainsPage() {
     const fetchData = async () => {
         try {
             setLoading(true);
-            const [domainsRes, usersRes] = await Promise.all([
-                getAllDomains(),
+            const [transRes, usersRes] = await Promise.all([
+                getAllTransactions(),
                 getAllUsers()
             ]);
 
-            if (domainsRes.data) {
-                // Handle different response structures if needed
-                setDomains(Array.isArray(domainsRes.data) ? domainsRes.data : domainsRes.data.domains || []);
+            if (transRes.data) {
+                const allTrans = transRes.data.transactions || (Array.isArray(transRes.data) ? transRes.data : []);
+                // Filter for domain related transactions
+                const domainTrans = allTrans.filter((t: any) =>
+                    ["register", "transfer", "renew"].includes(t.type)
+                );
+                setDomains(domainTrans);
             }
 
             if (usersRes.data) {
@@ -67,10 +80,13 @@ export default function DomainsPage() {
     };
 
     const getStatusColor = (status: string) => {
+        if (!status) return "text-gray-600 bg-gray-50";
         switch (status.toLowerCase()) {
-            case "registered": return "text-green-600 bg-green-50";
+            case "registered":
+            case "completed": return "text-green-600 bg-green-50";
             case "transferred": return "text-blue-600 bg-blue-50";
             case "available": return "text-gray-600 bg-gray-50";
+            case "pending": return "text-orange-600 bg-orange-50";
             default: return "text-gray-600 bg-gray-50";
         }
     };
@@ -79,7 +95,7 @@ export default function DomainsPage() {
         if (!user) return "-";
         if (typeof user === 'string') {
             const foundUser = users.find(u => u._id === user);
-            return foundUser ? (foundUser.name || (foundUser as any).fullname) : "Unknown User";
+            return foundUser ? (foundUser.fullname || foundUser.name) : "Unknown User";
         }
         return user.fullname || user.name || user.email || "Unknown User";
     };
@@ -106,7 +122,7 @@ export default function DomainsPage() {
                                 <div className="p-1.5 rounded bg-blue-50 text-blue-600">
                                     <Globe className="h-4 w-4" />
                                 </div>
-                                <span className="font-medium text-gray-900">{row.name}</span>
+                                <span className="font-medium text-gray-900">{row.domain?.name || row.name || "-"}</span>
                             </div>
                         ),
                     },
@@ -128,27 +144,40 @@ export default function DomainsPage() {
                         label: "Status",
                         key: "status",
                         render: (row: Domain) => (
-                            <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${getStatusColor(row.status)}`}>
-                                {row.status.toUpperCase()}
+                            <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${getStatusColor(row.status || row.domain?.status || "")}`}>
+                                {(row.status || row.domain?.status || "PENDING").toUpperCase()}
                             </span>
                         ),
                     },
                     {
                         label: "Price",
                         key: "price",
-                        render: (row: Domain) => (
-                            <span className="font-medium text-gray-900">${row.price}</span>
-                        ),
+                        render: (row: Domain) => {
+                            const price = row.domain?.price || row.price || 0;
+                            return <span className="font-medium text-gray-500">${price.toFixed(2)}</span>;
+                        },
+                    },
+                    {
+                        label: "Amount paid",
+                        key: "amount",
+                        render: (row: Domain) => {
+                            const amountPaid = row.amount ?? row.price ?? 0;
+                            return <span className="font-bold text-gray-900">${amountPaid.toFixed(2)}</span>;
+                        },
                     },
                     {
                         label: "Registration / Expiry",
                         key: "dates",
-                        render: (row: Domain) => (
-                            <div className="flex flex-col text-xs text-gray-500">
-                                <span>Reg: {row.registrationDate ? new Date(row.registrationDate).toLocaleDateString() : "-"}</span>
-                                <span>Exp: {row.expiryDate ? new Date(row.expiryDate).toLocaleDateString() : "-"}</span>
-                            </div>
-                        ),
+                        render: (row: Domain) => {
+                            const regDate = row.registrationDate || row.createdAt;
+                            const expDate = row.expiryDate || row.domain?.expiryDate;
+                            return (
+                                <div className="flex flex-col text-xs text-gray-500">
+                                    <span>Reg: {regDate ? new Date(regDate).toLocaleDateString() : "-"}</span>
+                                    <span>Exp: {expDate ? new Date(expDate).toLocaleDateString() : "-"}</span>
+                                </div>
+                            );
+                        },
                     }
                 ]}
                 data={domains}

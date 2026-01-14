@@ -4,39 +4,37 @@ import { useState, useEffect } from "react";
 import { getAllTransactions } from "@/api/transactionApi";
 import DataTable from "@/components/layout/DataTable";
 
-export default function RequestServicePage() {
-    const [serviceRequests, setServiceRequests] = useState<any[]>([]);
+export default function RequestHostingPage() {
+    const [hostingRequests, setHostingRequests] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchServiceRequests = async () => {
+        const fetchHostingRequests = async () => {
             try {
                 setLoading(true);
                 const response = await getAllTransactions();
                 const allTransactions = response.data?.transactions || [];
 
-                // Filter for service_payment type transactions
-                const servicePayments = allTransactions.filter(
-                    (t: any) => t.type === "service_payment"
+                // Filter for hosting_payment type transactions
+                const hostingPayments = allTransactions.filter(
+                    (t: any) => t.type === "hosting_payment"
                 );
 
-                setServiceRequests(servicePayments);
+                setHostingRequests(hostingPayments);
             } catch (error) {
-                console.error("Error fetching service requests:", error);
+                console.error("Error fetching hosting requests:", error);
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchServiceRequests();
+        fetchHostingRequests();
     }, []);
 
     return (
         <div className="space-y-6">
-
-
             <DataTable
-                title="Service Purchase Requests"
+                title="Hosting Package Purchase Requests"
                 columns={[
                     {
                         label: "Username",
@@ -55,45 +53,19 @@ export default function RequestServicePage() {
                         }
                     },
                     {
-                        label: "Phone",
-                        key: "phone",
+                        label: "Hosting Package",
+                        key: "hostingPackage",
                         render: (row: any) => {
-                            const user = row.user;
-                            return typeof user === 'object' ? user?.phone || "N/A" : "N/A";
-                        }
-                    },
-                    {
-                        label: "Service Name",
-                        key: "service",
-                        render: (row: any) => {
-                            const service = row.service;
-                            return typeof service === 'object' ? service?.serviceTitle || "N/A" : "N/A";
-                        }
-                    },
-                    {
-                        label: "Package",
-                        key: "package",
-                        render: (row: any) => {
-                            const service = row.service;
-                            const packageId = row.packageId;
-                            if (typeof service === 'object' && service?.packages && packageId) {
-                                const pkg = service.packages.find((p: any) => p._id === packageId);
-                                return pkg?.packageTitle || "N/A";
-                            }
-                            return "N/A";
+                            const pkg = row.hostingPackage;
+                            return typeof pkg === 'object' ? pkg?.name || "N/A" : "N/A";
                         }
                     },
                     {
                         label: "Price",
                         key: "price",
                         render: (row: any) => {
-                            const service = row.service;
-                            const packageId = row.packageId;
-                            if (typeof service === 'object' && service?.packages && packageId) {
-                                const pkg = service.packages.find((p: any) => p._id === packageId);
-                                return pkg ? `$${(pkg.price || 0).toFixed(2)}` : "N/A";
-                            }
-                            return "N/A";
+                            const pkg = row.hostingPackage;
+                            return pkg?.price ? `$${(pkg.price).toFixed(2)}` : "N/A";
                         }
                     },
                     {
@@ -124,7 +96,7 @@ export default function RequestServicePage() {
                         render: (row: any) => new Date(row.createdAt).toLocaleDateString()
                     }
                 ]}
-                data={serviceRequests}
+                data={hostingRequests}
                 showAddButton={false}
                 loading={loading}
             />
