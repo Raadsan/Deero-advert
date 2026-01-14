@@ -5,12 +5,14 @@ import DataTable from "@/components/layout/DataTable";
 import Modal from "@/components/layout/Modal";
 import DeleteConfirmModal from "@/components/layout/DeleteConfirmModal";
 import { Edit, Trash2, Camera } from "lucide-react";
+import Image from "next/image";
 import {
   getAllBlogs,
   createBlog,
   updateBlog,
   deleteBlog,
 } from "@/api/blogsApi";
+import { getImageUrl } from "@/utils/url";
 
 export default function AdminBlogsPage() {
   const [loading, setLoading] = useState(true);
@@ -44,7 +46,7 @@ export default function AdminBlogsPage() {
           slug: b.slug,
           content: b.content,
           author: b.author, // string
-          featuredImage: b.featured_image || b.featuredImage || "",
+          featuredImage: getImageUrl(b.featured_image || b.featuredImage),
           publishedDate: b.published_date || b.publishedDate || null,
         }))
       );
@@ -161,7 +163,7 @@ export default function AdminBlogsPage() {
       content: blog.content,
       author: blog.author || "",
       featuredImage: null,
-      featuredImagePreview: featuredUrl.startsWith("/") ? featuredUrl : `/${featuredUrl}`,
+      featuredImagePreview: featuredUrl,
       publishedDate: blog.publishedDate ? blog.publishedDate.slice(0, 10) : "",
     });
     setIsModalOpen(true);
@@ -187,8 +189,15 @@ export default function AdminBlogsPage() {
       width: "110px",
       render: (r: any) =>
         r.featuredImage ? (
-          <div className="w-16 h-10 rounded overflow-hidden">
-            <img src={r.featuredImage.startsWith("/") ? r.featuredImage : `/${r.featuredImage}`} alt="feat" className="w-full h-full object-cover" />
+          <div className="h-12 w-12 flex-shrink-0 overflow-hidden rounded-full border border-gray-100 bg-gray-50">
+            <Image
+              src={r.featuredImage}
+              alt="feat"
+              width={48}
+              height={48}
+              unoptimized
+              className="h-full w-full object-cover"
+            />
           </div>
         ) : (
           <span className="text-gray-400">-</span>

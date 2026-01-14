@@ -11,6 +11,7 @@ import {
     createMajorClient,
     deleteMajorClient,
 } from "@/api/majorClientApi";
+import { getImageUrl } from "@/utils/url";
 
 export default function MajorClientsPage() {
     const [data, setData] = useState<any[]>([]);
@@ -35,7 +36,7 @@ export default function MajorClientsPage() {
                 clients.map((c: any) => ({
                     id: c._id,
                     description: c.description,
-                    images: c.images || [],
+                    images: (c.images || []).map((img: string) => getImageUrl(img)),
                     createdAt: c.createdAt,
                 }))
             );
@@ -159,9 +160,10 @@ export default function MajorClientsPage() {
                         row.images.slice(0, 4).map((img: string, i: number) => (
                             <div key={i} className="inline-block h-10 w-10 rounded-full ring-2 ring-white bg-gray-100 overflow-hidden relative">
                                 <Image
-                                    src={img.startsWith("http") ? img : `/uploads/${img}`}
+                                    src={img || "/logo deero-02 .svg"}
                                     alt={`Client Image ${i + 1}`}
                                     fill
+                                    unoptimized
                                     className="object-cover"
                                 />
                             </div>

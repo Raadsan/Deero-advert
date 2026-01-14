@@ -12,6 +12,7 @@ import {
   updateTestimonial,
   deleteTestimonial,
 } from "@/api/testmonialApi";
+import { getImageUrl } from "@/utils/url";
 
 export default function TestimonialsPage() {
   const [data, setData] = useState<any[]>([]);
@@ -43,9 +44,7 @@ export default function TestimonialsPage() {
           id: t._id,
           clientName: t.clientName,
           clientTitle: t.clientTitle,
-          clientImage: t.clientImage && typeof t.clientImage === 'string' && t.clientImage.startsWith("/")
-            ? t.clientImage
-            : t.clientImage ? `/${t.clientImage}` : "",
+          clientImage: getImageUrl(t.clientImage),
           message: t.message,
           rating: t.rating || 5,
         }))
@@ -156,9 +155,7 @@ export default function TestimonialsPage() {
   // ✅ Edit testimonial
   const handleEdit = (testimonial: any) => {
     setEditingId(testimonial.id);
-    const imageUrl = testimonial.clientImage.startsWith("/")
-      ? testimonial.clientImage
-      : `/${testimonial.clientImage}`;
+    const imageUrl = testimonial.clientImage || "";
     setFormData({
       clientName: testimonial.clientName,
       clientTitle: testimonial.clientTitle,
@@ -181,6 +178,7 @@ export default function TestimonialsPage() {
             alt={row.clientName}
             width={48}
             height={48}
+            unoptimized
             className="h-full w-full object-cover"
           />
         </div>

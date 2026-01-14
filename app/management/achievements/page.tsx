@@ -13,6 +13,7 @@ import {
   deleteAchievement,
   Achievement,
 } from "@/api/achievementApi";
+import { getImageUrl } from "@/utils/url";
 
 export default function AchievementsPage() {
   const [data, setData] = useState<any[]>([]);
@@ -41,7 +42,7 @@ export default function AchievementsPage() {
           id: a._id,
           title: a.title,
           count: a.count,
-          icon: a.icon?.startsWith("/") ? a.icon : `/${a.icon}`,
+          icon: getImageUrl(a.icon),
         }))
       );
     } catch (err) {
@@ -139,12 +140,11 @@ export default function AchievementsPage() {
   // ✅ Edit achievement
   const handleEdit = (achievement: any) => {
     setEditingId(achievement.id);
-    const iconUrl = achievement.icon.startsWith("/") ? achievement.icon : `/${achievement.icon}`;
     setFormData({
       title: achievement.title,
       count: achievement.count.toString(),
       icon: null,
-      iconPreview: iconUrl,
+      iconPreview: achievement.icon || "",
     });
     setIsModalOpen(true);
   };
@@ -154,13 +154,14 @@ export default function AchievementsPage() {
       label: "Icon",
       key: "icon",
       render: (row: any) => (
-        <div className="h-10 w-10 flex-shrink-0 overflow-hidden rounded-lg bg-gray-50 p-2 border border-gray-100">
+        <div className="h-12 w-12 flex-shrink-0 overflow-hidden rounded-full border border-gray-100 bg-gray-50">
           <Image
-            src={row.icon}
+            src={row.icon || "/logo deero-02 .svg"}
             alt={row.title}
-            width={40}
-            height={40}
-            className="h-full w-full object-contain"
+            width={48}
+            height={48}
+            unoptimized
+            className="h-full w-full object-cover"
           />
         </div>
       ),

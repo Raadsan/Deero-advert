@@ -5,7 +5,9 @@ import DataTable from "@/components/layout/DataTable";
 import Modal from "@/components/layout/Modal";
 import DeleteConfirmModal from "@/components/layout/DeleteConfirmModal";
 import { Edit, Trash2, Camera, Plus, X } from "lucide-react";
+import Image from "next/image";
 import { getAllServices, createService, updateService, deleteService } from "@/api/serviceApi";
+import { getImageUrl } from "@/utils/url";
 
 type Service = any;
 
@@ -47,7 +49,7 @@ export default function AdminServicesPage() {
               _id: pkg._id || svc._id,
               serviceId: svc._id,
               serviceTitle: svc.serviceTitle,
-              serviceIcon: svc.serviceIcon,
+              serviceIcon: getImageUrl(svc.serviceIcon),
               packageTitle: pkg.packageTitle,
               price: pkg.price,
               features: pkg.features,
@@ -59,7 +61,7 @@ export default function AdminServicesPage() {
             _id: svc._id,
             serviceId: svc._id,
             serviceTitle: svc.serviceTitle,
-            serviceIcon: svc.serviceIcon,
+            serviceIcon: getImageUrl(svc.serviceIcon),
             packageTitle: "-",
             price: "-",
             features: [],
@@ -273,9 +275,7 @@ export default function AdminServicesPage() {
         setFormData({
           serviceTitle: service.serviceTitle,
           serviceIcon: null,
-          serviceIconPreview: service.serviceIcon?.startsWith("/")
-            ? service.serviceIcon
-            : `/${service.serviceIcon}`,
+          serviceIconPreview: getImageUrl(service.serviceIcon) || "",
           packages: packages.length > 0 ? packages : [{ packageTitle: "", price: "", features: [""] }],
         });
         setIsModalOpen(true);
@@ -293,10 +293,13 @@ export default function AdminServicesPage() {
       width: "80px",
       render: (row: any) =>
         row.serviceIcon ? (
-          <div className="w-10 h-10 rounded overflow-hidden">
-            <img
-              src={row.serviceIcon.startsWith("/") ? row.serviceIcon : `/${row.serviceIcon}`}
+          <div className="h-12 w-12 flex-shrink-0 overflow-hidden rounded-full border border-gray-100 bg-gray-50">
+            <Image
+              src={row.serviceIcon}
               alt="icon"
+              width={48}
+              height={48}
+              unoptimized
               className="w-full h-full object-cover"
             />
           </div>
