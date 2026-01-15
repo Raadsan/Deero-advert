@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { Bell, User, LogOut, ShoppingCart } from "lucide-react";
 import { useCart } from "@/context/CartContext";
-import { isAuthenticated, getUser, clearAuth, isAdmin } from "@/utils/auth";
+import { isAuthenticated, getUser, clearAuth, isAdmin, isManager, isAdminOrManager } from "@/utils/auth";
 import { logout as apiLogout } from "../../api/authApi";
 
 const navLinks = [
@@ -27,6 +27,7 @@ export default function Header() {
   const [user, setUser] = useState<any>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdminUser, setIsAdminUser] = useState(false);
+  const [isStaff, setIsStaff] = useState(false);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
 
   useEffect(() => {
@@ -35,6 +36,7 @@ export default function Header() {
     if (userData) {
       setUser(userData);
       setIsAdminUser(isAdmin());
+      setIsStaff(isAdminOrManager());
     }
 
     if (typeof window === "undefined") return;
@@ -49,6 +51,7 @@ export default function Header() {
     clearAuth();
     setIsLoggedIn(false);
     setIsAdminUser(false);
+    setIsStaff(false);
     setUser(null);
     setShowProfileDropdown(false);
     router.push("/");
@@ -129,14 +132,16 @@ export default function Header() {
           {/* Client Area - Right */}
           <div className="hidden md:flex items-center gap-6 pr-25">
             {/* Shopping Cart */}
-            <Link href="/cart" className="relative p-2 text-[#651313] hover:bg-gray-100 rounded-full transition">
-              <ShoppingCart className="h-6 w-6" />
-              {cartItems.length > 0 && (
-                <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#EB4724] text-[10px] font-bold text-white ring-2 ring-white">
-                  {cartItems.length}
-                </span>
-              )}
-            </Link>
+            {!isStaff && (
+              <Link href="/cart" className="relative p-2 text-[#651313] hover:bg-gray-100 rounded-full transition">
+                <ShoppingCart className="h-6 w-6" />
+                {cartItems.length > 0 && (
+                  <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#EB4724] text-[10px] font-bold text-white ring-2 ring-white">
+                    {cartItems.length}
+                  </span>
+                )}
+              </Link>
+            )}
 
             {isLoggedIn ? (
               <Link
@@ -157,14 +162,16 @@ export default function Header() {
 
           {/* Mobile menu toggle */}
           <div className="md:hidden flex items-center gap-2">
-            <Link href="/cart" className="relative p-2 text-[#651313] hover:bg-gray-100 rounded-full transition">
-              <ShoppingCart className="h-6 w-6" />
-              {cartItems.length > 0 && (
-                <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#EB4724] text-[10px] font-bold text-white ring-2 ring-white">
-                  {cartItems.length}
-                </span>
-              )}
-            </Link>
+            {!isStaff && (
+              <Link href="/cart" className="relative p-2 text-[#651313] hover:bg-gray-100 rounded-full transition">
+                <ShoppingCart className="h-6 w-6" />
+                {cartItems.length > 0 && (
+                  <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#EB4724] text-[10px] font-bold text-white ring-2 ring-white">
+                    {cartItems.length}
+                  </span>
+                )}
+              </Link>
+            )}
             <button
               type="button"
               aria-label="Toggle navigation"
