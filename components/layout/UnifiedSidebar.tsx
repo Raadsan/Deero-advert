@@ -65,8 +65,6 @@ const iconMap: Record<string, LucideIcon> = {
     heart: Heart,
     "credit-card": CreditCard,
     creditcard: CreditCard,
-    user: User,
-    profile: User,
     "my domains": Globe,
     "my services": Package,
     "my orders": ShoppingBag,

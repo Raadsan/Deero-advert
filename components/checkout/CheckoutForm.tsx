@@ -12,6 +12,8 @@ import { useCart } from "@/context/CartContext";
 import { loginUser, signupUser } from "@/api/authApi";
 import { registerDomain } from "@/api/domainApi";
 import { createTransaction } from "@/api/transactionApi";
+import { isAdminOrManager, isAuthenticated } from "@/utils/auth";
+import { useEffect } from "react";
 
 export default function CheckoutForm() {
     const { cartItems, cartTotal, clearCart } = useCart();
@@ -20,6 +22,12 @@ export default function CheckoutForm() {
     const [isExistingCustomer, setIsExistingCustomer] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (isAuthenticated() && isAdminOrManager()) {
+            router.push("/dashboard");
+        }
+    }, [router]);
 
     // Form states
     const [formData, setFormData] = useState({
@@ -44,6 +52,13 @@ export default function CheckoutForm() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        // Extra check for admin/manager
+        if (isAuthenticated() && isAdminOrManager()) {
+            alert("Admin and Manager accounts cannot make purchases.");
+            return;
+        }
+
         if (cartItems.length === 0) {
             setError("Your cart is empty");
             return;
