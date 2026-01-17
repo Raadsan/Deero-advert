@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 // Removed ThemeContext dependency for now as it wasn't requested/verified to exist in this context,
 // and we want to enforce brand colors.
 
-const DataTable = ({ title, columns, data = [], onAddClick, showAddButton = true, loading = false, addButtonLabel = "Add New" }: any) => {
+const DataTable = ({ title, columns, data = [], onAddClick, onRefresh, showAddButton = true, loading = false, addButtonLabel = "Add New" }: any) => {
     const [search, setSearch] = useState("");
     const [filteredData, setFilteredData] = useState<any[]>(data);
     const [entriesPerPage, setEntriesPerPage] = useState(10);
@@ -12,17 +12,70 @@ const DataTable = ({ title, columns, data = [], onAddClick, showAddButton = true
 
     useEffect(() => {
         if (Array.isArray(data)) {
-            const filtered = data.filter((item) =>
-                Object.values(item).some((val) =>
-                    String(val).toLowerCase().includes(search.toLowerCase())
-                )
-            );
+            const searchStr = search.toLowerCase();
+
+            // Helper to get all searchable strings from any value (including objects and dates)
+            const getAllStrings = (val: any): string => {
+                if (val === null || val === undefined) return "";
+
+                // Handle Dates specifically
+                if (val instanceof Date) {
+                    return `${val.toLocaleDateString()} ${val.toISOString()}`;
+                }
+
+                if (typeof val === "string") {
+                    // Check if it's an ISO date string (common for created_at fields)
+                    if (val.length > 10 && !isNaN(Date.parse(val)) && val.includes("-") && val.includes("T")) {
+                        const d = new Date(val);
+                        return `${val} ${d.toLocaleDateString()}`;
+                    }
+                    return val;
+                }
+
+                if (typeof val === "number") return String(val);
+                if (Array.isArray(val)) return val.map(getAllStrings).join(" ");
+                if (typeof val === "object") {
+                    return Object.values(val).map(getAllStrings).join(" ");
+                }
+                return "";
+            };
+
+            const filtered = data.filter((row) => {
+                if (!searchStr) return true;
+
+                return columns.some((col: any) => {
+                    let searchableContent = "";
+
+                    // 1. Try to get from render
+                    if (col.render) {
+                        try {
+                            const rendered = col.render(row);
+                            if (typeof rendered === "string" || typeof rendered === "number") {
+                                searchableContent = String(rendered);
+                            } else {
+                                // If it's a React element, fall back to the data at col.key
+                                const raw = col.key ? col.key.split(".").reduce((obj: any, k: any) => obj?.[k], row) : null;
+                                searchableContent = getAllStrings(raw);
+                            }
+                        } catch (e) {
+                            searchableContent = "";
+                        }
+                    }
+                    // 2. Fallback to key
+                    else if (col.key) {
+                        const raw = col.key.split(".").reduce((obj: any, k: any) => obj?.[k], row);
+                        searchableContent = getAllStrings(raw);
+                    }
+
+                    return searchableContent.toLowerCase().includes(searchStr);
+                });
+            });
             setFilteredData(filtered);
             setCurrentPage(1);
         } else {
             setFilteredData([]);
         }
-    }, [search, data]);
+    }, [search, data, columns]);
 
     const startIdx = (currentPage - 1) * entriesPerPage;
     const endIdx = startIdx + entriesPerPage;
@@ -35,17 +88,20 @@ const DataTable = ({ title, columns, data = [], onAddClick, showAddButton = true
                     <div className="header">
                         <h2 className="text-xl font-bold text-[#651313]">{title}</h2>
                     </div>
-                    {showAddButton && onAddClick && (
-                        <button
-                            onClick={onAddClick}
-                            className="bg-[#651313] hover:opacity-90 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-all shadow-md active:scale-95"
-                        >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                            </svg>
-                            {addButtonLabel}
-                        </button>
-                    )}
+                    <div className="flex items-center gap-3">
+
+                        {showAddButton && onAddClick && (
+                            <button
+                                onClick={onAddClick}
+                                className="bg-[#651313] hover:opacity-90 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-all shadow-md active:scale-95"
+                            >
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                                </svg>
+                                {addButtonLabel}
+                            </button>
+                        )}
+                    </div>
                 </div>
 
                 <div className="flex justify-between items-center mb-4 gap-4 flex-wrap">
@@ -83,7 +139,7 @@ const DataTable = ({ title, columns, data = [], onAddClick, showAddButton = true
                 </div>
             </div>
 
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto relative">
                 <table className="w-full text-left text-sm">
                     <thead className="bg-[#651313] text-white">
                         <tr>
@@ -100,7 +156,7 @@ const DataTable = ({ title, columns, data = [], onAddClick, showAddButton = true
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
-                        {loading ? (
+                        {loading && filteredData.length === 0 ? (
                             [1, 2, 3, 4, 5].map((i) => (
                                 <tr key={i} className="animate-pulse">
                                     {columns.map((_: any, j: number) => (
@@ -110,55 +166,65 @@ const DataTable = ({ title, columns, data = [], onAddClick, showAddButton = true
                                     ))}
                                 </tr>
                             ))
-                        ) : filteredData.length > 0 ? (
-                            filteredData.slice(startIdx, endIdx).map((row: any, idx: number) => (
-                                <tr
-                                    key={row._id || row.id || idx}
-                                    className={`group transition-colors ${idx % 2 === 0
-                                        ? "bg-white hover:bg-gray-50"
-                                        : "bg-gray-50/50 hover:bg-gray-100"
-                                        }`}
-                                >
-                                    {columns.map((col: any, i: number) => {
-                                        const rawValue = col.render
-                                            ? col.render(row, idx)
-                                            : col.key
-                                                ? col.key.split(".").reduce((obj: any, key: any) => obj?.[key], row)
-                                                : undefined;
-
-                                        let cellContent = rawValue;
-
-                                        if (rawValue === undefined || rawValue === null || rawValue === "") {
-                                            cellContent = <span className="text-gray-400">-</span>;
-                                        } else if (Array.isArray(rawValue)) {
-                                            cellContent = rawValue.join(", ");
-                                        }
-
-                                        return (
-                                            <td
-                                                key={col.key || i}
-                                                className={`px-6 py-4 text-gray-600 font-medium ${col.align === 'center' ? 'text-center' : col.align === 'right' ? 'text-right' : 'text-left'
-                                                    }`}
-                                                style={col.width ? { width: col.width, minWidth: col.width } : {}}
-                                            >
-                                                {cellContent}
-                                            </td>
-                                        );
-                                    })}
-                                </tr>
-                            ))
                         ) : (
-                            <tr>
-                                <td
-                                    colSpan={columns.length}
-                                    className="px-4 py-10 text-center text-gray-400"
-                                >
-                                    <p>No data found matching your search.</p>
-                                </td>
-                            </tr>
+                            filteredData.length > 0 ? (
+                                filteredData.slice(startIdx, endIdx).map((row: any, idx: number) => (
+                                    <tr
+                                        key={row._id || row.id || idx}
+                                        className={`group transition-colors ${idx % 2 === 0
+                                            ? "bg-white hover:bg-gray-50"
+                                            : "bg-gray-50/50 hover:bg-gray-100"
+                                            }`}
+                                    >
+                                        {columns.map((col: any, i: number) => {
+                                            const rawValue = col.render
+                                                ? col.render(row, idx)
+                                                : col.key
+                                                    ? col.key.split(".").reduce((obj: any, key: any) => obj?.[key], row)
+                                                    : undefined;
+
+                                            let cellContent = rawValue;
+
+                                            if (rawValue === undefined || rawValue === null || rawValue === "") {
+                                                cellContent = <span className="text-gray-400">-</span>;
+                                            } else if (Array.isArray(rawValue)) {
+                                                cellContent = rawValue.join(", ");
+                                            }
+
+                                            return (
+                                                <td
+                                                    key={col.key || i}
+                                                    className={`px-6 py-4 text-gray-600 font-medium ${col.align === 'center' ? 'text-center' : col.align === 'right' ? 'text-right' : 'text-left'
+                                                        }`}
+                                                    style={col.width ? { width: col.width, minWidth: col.width } : {}}
+                                                >
+                                                    {cellContent}
+                                                </td>
+                                            );
+                                        })}
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td
+                                        colSpan={columns.length}
+                                        className="px-4 py-10 text-center text-gray-400"
+                                    >
+                                        <p>No data found matching your search.</p>
+                                    </td>
+                                </tr>
+                            )
                         )}
                     </tbody>
                 </table>
+                {loading && filteredData.length > 0 && (
+                    <div className="absolute inset-0 bg-white/30 backdrop-blur-[1px] flex items-center justify-center z-10">
+                        <div className="flex flex-col items-center gap-2">
+                            <div className="w-8 h-8 border-4 border-[#651313] border-t-transparent rounded-full animate-spin"></div>
+                            <span className="text-xs font-bold text-[#651313] uppercase tracking-widest">Updating...</span>
+                        </div>
+                    </div>
+                )}
             </div>
 
             <div className="flex justify-between items-center mt-4 text-sm text-gray-500 flex-wrap gap-4">

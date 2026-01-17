@@ -16,19 +16,19 @@ const slides: Slide[] = [
   {
     title: "Graphic Design",
     description:
-      "We offer a range of graphic design services including logo design, UI design, event branding, and brand identity. With our expertise, we create captivating and memorable brands that resonate with the public.",
+      "We offer range of graphic design services encompasses logo design, UI design, event branding, and brand identity. With our expertise, we create captivating and memorable brands that resonate with the public, leaving a lasting impression.",
     image: "/home-images/graphic design.png",
   },
   {
     title: "Digital Marketing",
     description:
-      "Complete digital marketing services: social media strategy, analytics, branding, content writing, and campaign management to align with your business objectives.",
+      "We offer complete digital marketing services, including social media marketing strategy, social media analytics, branding, content writing and social media management. The strategy team understands business cases and how to align digital marketing activities to ensure they deliver on your objectives.",
     image: "/home-images/digital-marketing.png",
   },
   {
     title: "Web Solutions",
     description:
-      "Responsive web design, domain services, SSL, and hosting. We build experiences that look wonderful on every device and keep your brand secure online.",
+      "We offer complete web services, including web design, domain registration, domain transfer, SSL certificates, and web hosting. We create responsive websites that look wonderful on any device, including smartphones, tablets, and desktop computers.",
     image: "/home-images/web solution.png",
   },
   {
@@ -40,7 +40,7 @@ const slides: Slide[] = [
   {
     title: "Digital Consulting",
     description:
-      "Comprehensive digital consulting across marketing, branding, content creation, media, and communication to guide your teams.",
+      "We offer a full suite of digital consulting services, including digital marketing, branding consulting, event consulting, assisting with content creation, digital media, and communication consulting.",
     image: "/home-images/digital consulting.png",
   },
 ];

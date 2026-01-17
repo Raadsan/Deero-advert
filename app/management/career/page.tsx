@@ -30,7 +30,7 @@ export default function CareersPage() {
         try {
             const res = await getAllCareers();
             if (res.data.success) {
-                setRows(res.data.data);
+                setRows([...res.data.data].reverse());
             }
         } catch (err) {
             console.error("Failed to load careers", err);
@@ -264,6 +264,7 @@ export default function CareersPage() {
                         expireDate: "",
                     });
                 }}
+                onRefresh={fetchData}
                 loading={loading}
             />
 

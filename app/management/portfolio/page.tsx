@@ -44,7 +44,7 @@ export default function PortfolioManagementPage() {
                     : [];
 
             setData(
-                items.map((p: any) => ({
+                [...items].reverse().map((p: any) => ({
                     _id: p._id,
                     title: p.title || "",
                     description: p.description || "",
@@ -278,6 +278,7 @@ export default function PortfolioManagementPage() {
                 data={data}
                 showAddButton
                 onAddClick={() => setIsModalOpen(true)}
+                onRefresh={fetchPortfolios}
                 loading={loading}
             />
 

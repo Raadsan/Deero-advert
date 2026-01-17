@@ -42,7 +42,8 @@ export default function AnnouncementsPage() {
             ]);
 
             if (annRes.success && annRes.data) {
-                setAnnouncements(Array.isArray(annRes.data) ? annRes.data : [annRes.data]);
+                const data = Array.isArray(annRes.data) ? annRes.data : [annRes.data];
+                setAnnouncements([...data].reverse());
             }
 
             if (userRes.data) {
@@ -218,6 +219,7 @@ export default function AnnouncementsPage() {
                 data={announcements}
                 loading={loading}
                 onAddClick={() => setIsModalOpen(true)}
+                onRefresh={fetchData}
                 addButtonLabel="New Announcement"
             />
 

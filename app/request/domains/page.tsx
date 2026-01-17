@@ -182,6 +182,7 @@ export default function DomainsPage() {
                 ]}
                 data={domains}
                 showAddButton={false}
+                onRefresh={fetchData}
                 loading={loading}
             />
         </div>

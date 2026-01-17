@@ -40,7 +40,7 @@ export default function AdminBlogsPage() {
       const dataArr = Array.isArray(res.data) ? res.data : (res.data?.data || []);
 
       setRows(
-        dataArr.map((b: any) => ({
+        dataArr.reverse().map((b: any) => ({
           _id: b._id,
           title: b.title,
           slug: b.slug,
@@ -239,6 +239,7 @@ export default function AdminBlogsPage() {
         data={rows}
         showAddButton
         onAddClick={() => setIsModalOpen(true)}
+        onRefresh={fetchBlogs}
         loading={loading}
       />
 

@@ -38,7 +38,7 @@ export default function AdminServicesPage() {
     setLoading(true);
     try {
       const res = await getAllServices();
-      const data: Service[] = Array.isArray(res.data?.data) ? res.data.data : [];
+      const data: Service[] = Array.isArray(res.data?.data) ? [...res.data.data].reverse() : [];
 
       const flattened: any[] = [];
 
@@ -366,6 +366,7 @@ export default function AdminServicesPage() {
             packages: [{ packageTitle: "", price: "", features: [""] }],
           });
         }}
+        onRefresh={fetchData}
         loading={loading}
       />
 

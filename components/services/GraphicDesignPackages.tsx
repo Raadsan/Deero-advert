@@ -1,7 +1,8 @@
 "use client";
 
 import { CheckIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
 
 const graphicPlans = [
     {
@@ -61,6 +62,12 @@ const itemVariants = {
 };
 
 export default function GraphicDesignPackages() {
+    const [expandedPlans, setExpandedPlans] = useState<Record<string, boolean>>({});
+
+    const togglePlan = (name: string) => {
+        setExpandedPlans(prev => ({ ...prev, [name]: !prev[name] }));
+    };
+
     return (
         <section id="graphic-design" className="bg-[#f2f2f2] py-24 px-4 sm:px-10 overflow-hidden">
             <motion.div
@@ -77,54 +84,71 @@ export default function GraphicDesignPackages() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
-                    {graphicPlans.map((plan) => (
-                        <motion.div
-                            key={plan.name}
-                            variants={itemVariants}
-                            whileHover={{ scale: 1.02 }}
-                            className="bg-[#fcd7c3] p-6 md:p-7 shadow-sm flex flex-col relative overflow-hidden rounded-2xl transition-all duration-300 min-h-[480px]"
-                        >
-                            {/* Most Popular Ribbon */}
-                            {plan.isPopular && (
-                                <div className="absolute top-6 -right-8 w-40 h-8">
-                                    <div className="bg-[#651313] w-full h-full rotate-45 flex items-center justify-center shadow-md">
-                                        <span className="text-white text-[10px] font-bold uppercase tracking-widest translate-y-[1px]">Most Popular</span>
+                    {graphicPlans.map((plan) => {
+                        const isExpanded = expandedPlans[plan.name];
+                        const displayedFeatures = isExpanded ? plan.features : plan.features.slice(0, 5);
+
+                        return (
+                            <motion.div
+                                key={plan.name}
+                                variants={itemVariants}
+                                whileHover={{ scale: 1.02 }}
+                                className="bg-[#fcd7c3] p-6 md:p-7 shadow-sm flex flex-col relative overflow-hidden rounded-2xl transition-all duration-300 min-h-[480px] text-left"
+                            >
+                                {/* Most Popular Ribbon */}
+                                {plan.isPopular && (
+                                    <div className="absolute top-6 -right-8 w-40 h-8">
+                                        <div className="bg-[#651313] w-full h-full rotate-45 flex items-center justify-center shadow-md">
+                                            <span className="text-white text-[10px] font-bold uppercase tracking-widest translate-y-[1px]">Most Popular</span>
+                                        </div>
                                     </div>
+                                )}
+
+                                <h3 className="text-xl font-bold text-[#4d0e0e] mb-2 pr-8 leading-tight">{plan.name}</h3>
+
+                                <div className="flex items-baseline mb-6">
+                                    <span className="text-4xl font-bold text-[#EB4724]">
+                                        ${plan.price}
+                                    </span>
                                 </div>
-                            )}
 
-                            <h3 className="text-xl font-bold text-[#4d0e0e] mb-2 pr-8 leading-tight">{plan.name}</h3>
+                                <div className="flex-1">
+                                    <ul className="space-y-4 mb-4">
+                                        <AnimatePresence>
+                                            {displayedFeatures.map((feature, fIdx) => (
+                                                <motion.li
+                                                    key={feature}
+                                                    initial={{ opacity: 0, x: -10 }}
+                                                    animate={{ opacity: 1, x: 0 }}
+                                                    transition={{ delay: fIdx * 0.05 }}
+                                                    className="flex items-start gap-3 text-[#4d0e0e] text-xs md:text-sm font-medium leading-tight"
+                                                >
+                                                    <CheckIcon className="h-4 w-4 shrink-0 stroke-[4] text-[#EB4724] mt-1" />
+                                                    <span>{feature}</span>
+                                                </motion.li>
+                                            ))}
+                                        </AnimatePresence>
+                                    </ul>
 
-                            <div className="flex items-baseline mb-6">
-                                <span className="text-4xl font-bold text-[#EB4724]">
-                                    ${plan.price}
-                                </span>
-                            </div>
-
-                            <ul className="space-y-4 mb-4 flex-1">
-                                {plan.features.map((feature) => (
-                                    <li key={feature} className="flex items-start gap-3 text-[#4d0e0e] text-sm md:text-base font-medium leading-tight">
-                                        <CheckIcon className="h-4 w-4 shrink-0 stroke-[4] text-[#4d0e0e] mt-1" />
-                                        <span>{feature}</span>
-                                    </li>
-                                ))}
-                                  {/* Expand Feature Toggle Placeholder */}
-                            <div className="flex items-center gap-2 text-[#4d0e0e]/60 text-sm font-bold mb-6 cursor-pointer hover:text-[#4d0e0e] transition-colors group">
-                                <div className="w-5 h-5 rounded-full bg-white/50 flex items-center justify-center group-hover:bg-white transition-colors">
-                                    <ChevronDownIcon className="h-3 w-3 stroke-[3]" />
+                                    {plan.features.length > 5 && (
+                                        <button
+                                            onClick={() => togglePlan(plan.name)}
+                                            className="flex items-center gap-2 text-[#4d0e0e]/60 text-sm font-bold mb-6 cursor-pointer hover:text-[#4d0e0e] transition-colors group"
+                                        >
+                                            <div className={`w-5 h-5 rounded-full bg-white/50 flex items-center justify-center group-hover:bg-white transition-all ${isExpanded ? 'rotate-180' : ''}`}>
+                                                <ChevronDownIcon className="h-3 w-3 stroke-[3]" />
+                                            </div>
+                                            <span>{isExpanded ? 'Collapse Feature' : 'Expand Feature'}</span>
+                                        </button>
+                                    )}
                                 </div>
-                                <span>Expand Feature</span>
-                            </div>
-                            </ul>
 
-                          
-
-                            <button className={`${plan.buttonColor} text-white font-bold py-4 rounded-xl shadow-lg hover:brightness-110 active:scale-95 transition-all text-sm uppercase tracking-wide`}>
-                                Purchase Plan
-                            </button>
-
-                        </motion.div>
-                    ))}
+                                <button className={`${plan.buttonColor} text-white font-bold py-4 rounded-xl shadow-lg hover:brightness-110 active:scale-95 transition-all text-sm uppercase tracking-wide mt-auto`}>
+                                    Purchase Plan
+                                </button>
+                            </motion.div>
+                        );
+                    })}
                 </div>
             </motion.div>
         </section>

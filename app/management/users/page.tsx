@@ -40,7 +40,7 @@ export default function UsersPage() {
         const userRes = await getAllUsers();
         // Handle users data structure (direct array or nested in data)
         const users = Array.isArray(userRes.data) ? userRes.data : (userRes.data?.data || []);
-        setData(users);
+        setData(users.reverse());
       } catch (uErr) {
         console.error("Failed to fetch users", uErr);
       }
@@ -70,12 +70,15 @@ export default function UsersPage() {
   }, []);
 
   const fetchUsers = async () => {
+    setLoading(true);
     try {
       const res = await getAllUsers();
       const users = Array.isArray(res.data) ? res.data : (res.data?.data || []);
-      setData(users);
+      setData(users.reverse());
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -216,6 +219,7 @@ export default function UsersPage() {
         columns={columns}
         data={data}
         onAddClick={() => setIsModalOpen(true)}
+        onRefresh={fetchData}
         loading={loading}
       />
 

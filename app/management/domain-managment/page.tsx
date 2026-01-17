@@ -44,7 +44,7 @@ export default function DomainManagementPage() {
             const res = await getAllDomainPrices();
             // Adjust based on the provided JSON structure: { success: true, prices: [...] }
             const items = (res.data as any).prices || (Array.isArray(res.data) ? res.data : []);
-            setData(items);
+            setData([...items].reverse());
         } catch (err) {
             console.error("Failed to load domain prices", err);
             setData([]);
@@ -209,6 +209,7 @@ export default function DomainManagementPage() {
                     resetForm();
                     setIsModalOpen(true);
                 }}
+                onRefresh={fetchDomainPrices}
                 loading={loading}
             />
 

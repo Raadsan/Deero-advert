@@ -31,7 +31,8 @@ export default function MajorClientsPage() {
         setLoading(true);
         try {
             const res = await getMajorClients();
-            const clients = Array.isArray(res.clients) ? res.clients : res.data || [];
+            const clientsData = Array.isArray(res.clients) ? res.clients : res.data || [];
+            const clients = [...clientsData].reverse();
             setData(
                 clients.map((c: any) => ({
                     id: c._id,
@@ -221,6 +222,7 @@ export default function MajorClientsPage() {
                 data={data}
                 showAddButton
                 onAddClick={() => setIsModalOpen(true)}
+                onRefresh={fetchClients}
                 loading={loading}
             />
 

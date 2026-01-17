@@ -38,7 +38,7 @@ export default function AchievementsPage() {
       // Safely access the array from the response
       const achievements = Array.isArray(res.data?.data) ? res.data.data : [];
       setData(
-        achievements.map((a: Achievement) => ({
+        [...achievements].reverse().map((a: Achievement) => ({
           id: a._id,
           title: a.title,
           count: a.count,
@@ -205,6 +205,7 @@ export default function AchievementsPage() {
         data={data}
         showAddButton
         onAddClick={() => setIsModalOpen(true)}
+        onRefresh={fetchAchievements}
         loading={loading}
       />
 

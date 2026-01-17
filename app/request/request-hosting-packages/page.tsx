@@ -8,26 +8,26 @@ export default function RequestHostingPage() {
     const [hostingRequests, setHostingRequests] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
+    const fetchHostingRequests = async () => {
+        try {
+            setLoading(true);
+            const response = await getAllTransactions();
+            const allTransactions = response.data?.transactions || [];
+
+            // Filter for hosting_payment type transactions
+            const hostingPayments = allTransactions.filter(
+                (t: any) => t.type === "hosting_payment"
+            );
+
+            setHostingRequests(hostingPayments);
+        } catch (error) {
+            console.error("Error fetching hosting requests:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        const fetchHostingRequests = async () => {
-            try {
-                setLoading(true);
-                const response = await getAllTransactions();
-                const allTransactions = response.data?.transactions || [];
-
-                // Filter for hosting_payment type transactions
-                const hostingPayments = allTransactions.filter(
-                    (t: any) => t.type === "hosting_payment"
-                );
-
-                setHostingRequests(hostingPayments);
-            } catch (error) {
-                console.error("Error fetching hosting requests:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchHostingRequests();
     }, []);
 
@@ -98,6 +98,7 @@ export default function RequestHostingPage() {
                 ]}
                 data={hostingRequests}
                 showAddButton={false}
+                onRefresh={fetchHostingRequests}
                 loading={loading}
             />
         </div>

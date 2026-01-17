@@ -37,7 +37,7 @@ export default function EventsNewsPage() {
         try {
             const res = await getAllEventsNews();
             if (res.data.success) {
-                setRows(res.data.data);
+                setRows([...res.data.data].reverse());
             }
         } catch (err) {
             console.error("Failed to load events & news", err);
@@ -213,6 +213,7 @@ export default function EventsNewsPage() {
                         date: "",
                     });
                 }}
+                onRefresh={fetchData}
                 loading={loading}
             />
 

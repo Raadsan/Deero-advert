@@ -40,7 +40,7 @@ export default function TestimonialsPage() {
       const items = Array.isArray(res.data) ? res.data : (res.data?.data || []);
 
       setData(
-        items.map((t: any) => ({
+        items.reverse().map((t: any) => ({
           id: t._id,
           clientName: t.clientName,
           clientTitle: t.clientTitle,
@@ -240,6 +240,7 @@ export default function TestimonialsPage() {
         data={data}
         showAddButton
         onAddClick={() => setIsModalOpen(true)}
+        onRefresh={fetchTestimonials}
         loading={loading}
       />
 

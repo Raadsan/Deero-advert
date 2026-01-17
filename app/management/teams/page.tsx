@@ -259,6 +259,7 @@ export default function TeamsManagementPage() {
                 data={data}
                 showAddButton
                 onAddClick={() => setIsModalOpen(true)}
+                onRefresh={fetchTeams}
                 loading={loading}
             />
 

@@ -8,26 +8,26 @@ export default function RequestServicePage() {
     const [serviceRequests, setServiceRequests] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
+    const fetchServiceRequests = async () => {
+        try {
+            setLoading(true);
+            const response = await getAllTransactions();
+            const allTransactions = response.data?.transactions || [];
+
+            // Filter for service_payment type transactions
+            const servicePayments = allTransactions.filter(
+                (t: any) => t.type === "service_payment"
+            );
+
+            setServiceRequests(servicePayments);
+        } catch (error) {
+            console.error("Error fetching service requests:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        const fetchServiceRequests = async () => {
-            try {
-                setLoading(true);
-                const response = await getAllTransactions();
-                const allTransactions = response.data?.transactions || [];
-
-                // Filter for service_payment type transactions
-                const servicePayments = allTransactions.filter(
-                    (t: any) => t.type === "service_payment"
-                );
-
-                setServiceRequests(servicePayments);
-            } catch (error) {
-                console.error("Error fetching service requests:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchServiceRequests();
     }, []);
 
@@ -66,8 +66,15 @@ export default function RequestServicePage() {
                         label: "Service Name",
                         key: "service",
                         render: (row: any) => {
-                            const service = row.service;
-                            return typeof service === 'object' ? service?.serviceTitle || "N/A" : "N/A";
+                            if (row.service && typeof row.service === 'object') {
+                                return row.service.serviceTitle || "N/A";
+                            }
+                            // Fallback: Parse from description "Payment for Service - Package"
+                            if (row.description && row.description.includes("Payment for")) {
+                                const parts = row.description.replace("Payment for ", "").split(" - ");
+                                return parts[0] || "N/A";
+                            }
+                            return "N/A";
                         }
                     },
                     {
@@ -77,8 +84,17 @@ export default function RequestServicePage() {
                             const service = row.service;
                             const packageId = row.packageId;
                             if (typeof service === 'object' && service?.packages && packageId) {
-                                const pkg = service.packages.find((p: any) => p._id === packageId);
-                                return pkg?.packageTitle || "N/A";
+                                // Use a more robust comparison for the ID
+                                const pkg = service.packages.find((p: any) =>
+                                    (p._id?.toString() === packageId.toString()) || (p._id === packageId)
+                                );
+                                if (pkg) return pkg.packageTitle || "N/A";
+                            }
+
+                            // Fallback: Parse from description
+                            if (row.description && row.description.includes("Payment for")) {
+                                const parts = row.description.replace("Payment for ", "").split(" - ");
+                                return parts[1] || "N/A";
                             }
                             return "N/A";
                         }
@@ -90,10 +106,13 @@ export default function RequestServicePage() {
                             const service = row.service;
                             const packageId = row.packageId;
                             if (typeof service === 'object' && service?.packages && packageId) {
-                                const pkg = service.packages.find((p: any) => p._id === packageId);
-                                return pkg ? `$${(pkg.price || 0).toFixed(2)}` : "N/A";
+                                const pkg = service.packages.find((p: any) =>
+                                    (p._id?.toString() === packageId.toString()) || (p._id === packageId)
+                                );
+                                if (pkg) return `$${(pkg.price || 0).toFixed(2)}`;
                             }
-                            return "N/A";
+                            // Fallback: use amount paid if price not found
+                            return row.amount ? `$${(row.amount || 0).toFixed(2)}` : "N/A";
                         }
                     },
                     {
@@ -126,6 +145,7 @@ export default function RequestServicePage() {
                 ]}
                 data={serviceRequests}
                 showAddButton={false}
+                onRefresh={fetchServiceRequests}
                 loading={loading}
             />
         </div>

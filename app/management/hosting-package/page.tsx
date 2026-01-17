@@ -27,7 +27,7 @@ export default function HostingPackageManagement() {
             setLoading(true);
             const res: any = await getAllPackages();
             const data = res.data?.data || res.data || [];
-            setPackages(Array.isArray(data) ? data : []);
+            setPackages(Array.isArray(data) ? [...data].reverse() : []);
         } catch (error) {
             console.error("Failed to load packages", error);
             toast.error("Failed to load packages");
@@ -143,6 +143,7 @@ export default function HostingPackageManagement() {
                 data={packages}
                 loading={loading}
                 onAddClick={handleAdd}
+                onRefresh={fetchPackages}
             />
 
             {/* Modal */}

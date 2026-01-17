@@ -177,7 +177,7 @@ export default function Footer() {
                         Copyright © {new Date().getFullYear()} Deero Advert. All rights reserved.
                     </p>
                     <p className="text-white/80">
-                        Powered by Deero Advert.
+                        Powered by Raadsan Teach.
                     </p>
                 </div>
             </div>

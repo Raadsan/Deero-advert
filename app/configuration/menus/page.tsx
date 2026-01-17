@@ -207,6 +207,8 @@ export default function MenusPage() {
                         setFormData({ title: "", icon: "", url: "", isCollapsible: false, subMenus: [] });
                         setShowModal(true);
                     }}
+                    onRefresh={fetchMenus}
+                    loading={loading}
                 />
             )}
 

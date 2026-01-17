@@ -59,7 +59,7 @@ export default function ServicesContent({
 }: ServicesContentProps) {
     const pathname = usePathname();
     const router = useRouter();
-    const isServicesPage = pathname === "/services";
+    const isServicesPage = pathname?.startsWith("/services");
 
     const [groupedServices, setGroupedServices] = useState<Service[]>([]);
     const [loading, setLoading] = useState(true);
@@ -77,9 +77,29 @@ export default function ServicesContent({
     useEffect(() => {
         const fetchServices = async () => {
             try {
+                // Add a tiny delay to ensure everything is settled on refresh
+                await new Promise(resolve => setTimeout(resolve, 100));
+
                 const res: any = await getAllServices();
-                const servicesData = Array.isArray(res.data) ? res.data : (res.data?.data || res);
-                const rawResults: Service[] = Array.isArray(servicesData) ? servicesData : [];
+                console.log("Services API Raw Response:", res);
+
+                // Extremely robust parsing for different response formats
+                let servicesData = [];
+                if (res.data?.data && Array.isArray(res.data.data)) {
+                    servicesData = res.data.data;
+                } else if (Array.isArray(res.data)) {
+                    servicesData = res.data;
+                } else if (res.data?.success && res.data?.services && Array.isArray(res.data.services)) {
+                    servicesData = res.data.services;
+                } else if (res.data && typeof res.data === 'object' && !Array.isArray(res.data)) {
+                    // Try to find any array property (fallback)
+                    const values = Object.values(res.data);
+                    const arrayProp = values.find(val => Array.isArray(val)) as any[];
+                    if (arrayProp) servicesData = arrayProp;
+                }
+
+                console.log("Parsed Services Data:", servicesData);
+                const rawResults: Service[] = servicesData;
 
                 // Group by title and merge packages
                 const groupedMap = new Map<string, Service>();
@@ -222,8 +242,8 @@ export default function ServicesContent({
         <section className={`bg-[#f2f2f2] overflow-hidden ${paddingClasses}`}>
             <motion.div
                 initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, amount: 0.2 }}
+                animate="visible"
+                viewport={{ once: true, amount: 0 }}
                 variants={containerVariants}
                 className="mx-auto max-w-6xl text-center space-y-12"
             >
@@ -277,7 +297,7 @@ export default function ServicesContent({
                                             {service.packages.map((pkg: any, idx: number) => {
                                                 const packageId = `${service._id}-${idx}`;
                                                 const isExpanded = expandedPackages[packageId];
-                                                const initialFeaturesCount = 4;
+                                                const initialFeaturesCount = 5;
                                                 const hasMoreFeatures = pkg.features?.length > initialFeaturesCount;
                                                 const displayedFeatures = isExpanded ? pkg.features : (pkg.features?.slice(0, initialFeaturesCount) || []);
 
