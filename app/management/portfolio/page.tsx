@@ -25,6 +25,9 @@ export default function PortfolioManagementPage() {
     const [deletingName, setDeletingName] = useState("");
     const [formData, setFormData] = useState({
         title: "",
+        description: "",
+        year: "",
+        industry: "",
         mainImage: null as File | null,
         mainImagePreview: "",
         galleryImages: [] as File[],
@@ -48,9 +51,11 @@ export default function PortfolioManagementPage() {
                     _id: p._id,
                     title: p.title || "",
                     description: p.description || "",
+                    industry: p.industry || "",
+                    year: p.year || "",
                     mainImage: getImageUrl(p.mainImage),
                     gallery: p.gallery || [],
-                    createdAt: p.createdAt,
+                    createdAt: p.createdAt || p.updatedAt || "",
                 }))
             );
         } catch (err) {
@@ -131,6 +136,9 @@ export default function PortfolioManagementPage() {
 
         const formDataToSend = new FormData();
         formDataToSend.append("title", formData.title);
+        formDataToSend.append("description", formData.description);
+        formDataToSend.append("year", formData.year);
+        formDataToSend.append("industry", formData.industry);
 
         if (formData.mainImage) {
             formDataToSend.append("mainImage", formData.mainImage);
@@ -184,6 +192,9 @@ export default function PortfolioManagementPage() {
 
         setFormData({
             title: portfolio.title,
+            description: portfolio.description || "",
+            year: portfolio.year || "",
+            industry: portfolio.industry || "",
             mainImage: null,
             mainImagePreview: portfolio.mainImage,
             galleryImages: [],
@@ -197,6 +208,9 @@ export default function PortfolioManagementPage() {
         setEditingId(null);
         setFormData({
             title: "",
+            description: "",
+            year: "",
+            industry: "",
             mainImage: null,
             mainImagePreview: "",
             galleryImages: [],
@@ -228,6 +242,15 @@ export default function PortfolioManagementPage() {
         },
         { label: "Title", key: "title" },
         {
+            label: "Description",
+            key: "description",
+            render: (row: any) => (
+                <span className="text-xs text-gray-500 line-clamp-1 max-w-[200px]">
+                    {row.description}
+                </span>
+            ),
+        },
+        {
             label: "Gallery",
             key: "gallery",
             render: (row: any) => (
@@ -236,14 +259,20 @@ export default function PortfolioManagementPage() {
                 </span>
             ),
         },
+        { label: "Industry", key: "industry" },
+        { label: "Year", key: "year" },
         {
             label: "Date",
             key: "createdAt",
-            render: (row: any) => (
-                <span className="text-xs text-gray-500">
-                    {new Date(row.createdAt).toLocaleDateString()}
-                </span>
-            ),
+            render: (row: any) => {
+                const date = row.createdAt ? new Date(row.createdAt) : null;
+                const isValidDate = date && !isNaN(date.getTime());
+                return (
+                    <span className="text-xs text-gray-500">
+                        {isValidDate ? date.toLocaleDateString() : "-"}
+                    </span>
+                );
+            },
         },
         {
             label: "Actions",
@@ -361,6 +390,52 @@ export default function PortfolioManagementPage() {
                             onChange={handleInputChange}
                             className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#EB4724] focus:border-[#EB4724]"
                         />
+                    </div>
+
+                    {/* Description */}
+                    <div className="space-y-0.5">
+                        <label className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">
+                            Description
+                        </label>
+                        <textarea
+                            name="description"
+                            rows={3}
+                            value={formData.description}
+                            onChange={handleInputChange}
+                            className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#EB4724] focus:border-[#EB4724]"
+                        />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                        {/* Year */}
+                        <div className="space-y-0.5">
+                            <label className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">
+                                Year
+                            </label>
+                            <input
+                                type="text"
+                                name="year"
+                                value={formData.year}
+                                onChange={handleInputChange}
+                                className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#EB4724] focus:border-[#EB4724]"
+                                placeholder="e.g. 2021"
+                            />
+                        </div>
+
+                        {/* Industry */}
+                        <div className="space-y-0.5">
+                            <label className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">
+                                Industry
+                            </label>
+                            <input
+                                type="text"
+                                name="industry"
+                                value={formData.industry}
+                                onChange={handleInputChange}
+                                className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#EB4724] focus:border-[#EB4724]"
+                                placeholder="e.g. Healthcare"
+                            />
+                        </div>
                     </div>
 
                     {/* Gallery Images */}

@@ -113,42 +113,66 @@ export default function PortfolioSection({ showHeader = true, limit }: { showHea
                     </div>
                 )}
 
-                {/* Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {/* List of Portfolios */}
+                <div className="flex flex-col gap-12">
                     {loading ? (
                         // Skeleton Loading State
-                        Array.from({ length: 3 }).map((_, i) => (
-                            <div key={i} className="aspect-[4/3] bg-white/50 animate-pulse rounded-lg" />
+                        Array.from({ length: 2 }).map((_, i) => (
+                            <div key={i} className="w-full h-[400px] bg-white/50 animate-pulse rounded-3xl" />
                         ))
                     ) : portfolios.length > 0 ? (
                         (limit ? portfolios.slice(0, limit) : portfolios).map((item, index) => (
                             <motion.div
                                 key={item._id}
-                                initial={{ opacity: 0, scale: 0.9, y: 30 }}
-                                animate={{ opacity: 1, scale: 1, y: 0 }}
-                                transition={{ duration: 0.5, delay: index * 0.1 }}
-                                whileHover={{ y: -8 }}
-                                onClick={() => handlePortfolioClick(item)}
-                                className="group relative bg-white rounded-none overflow-hidden shadow-lg transition-all duration-300 cursor-pointer"
+                                initial={{ opacity: 0, y: 50 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.6, delay: index * 0.1 }}
+                                className="bg-white rounded-[40px] overflow-hidden shadow-sm flex flex-col lg:flex-row min-h-[450px] lg:gap-12"
                             >
-                                {/* Image Container */}
-                                <div className="relative aspect-[4/3] overflow-hidden bg-gray-100">
-                                    <Image
-                                        src={item.mainImage || "/logo deero-02 .svg"}
-                                        alt={item.title || "Portfolio Item"}
-                                        fill
-                                        className="object-cover transition duration-500 group-hover:scale-110"
-                                        onError={(e) => {
-                                            const target = e.target as HTMLImageElement;
-                                            target.src = "/logo deero-02 .svg";
-                                        }}
-                                    />
-                                    {/* Overlay */}
-                                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-300">
-                                        <div className="bg-[#EB4724] h-1 w-12 mb-4 transform -translate-y-4 group-hover:translate-y-0 transition-transform duration-300"></div>
-                                        <h3 className="text-white font-bold text-xl text-center px-6 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
+                                {/* Left Content Area */}
+                                <div className="lg:w-1/2 p-8 md:p-12 flex flex-col justify-between">
+                                    <div>
+                                        <h3 className="text-4xl md:text-5xl font-bold text-[#1a1a1a] mb-6">
                                             {item.title}
                                         </h3>
+                                        <p className="text-gray-600 text-lg leading-relaxed mb-8 max-w-xl line-clamp-4">
+                                            {item.description}
+                                        </p>
+                                    </div>
+
+                                    {/* Year and Industry */}
+                                    <div className="flex gap-12 mb-8">
+                                        <div>
+                                            <p className="text-xl font-bold text-[#1a1a1a] mb-1">Year:</p>
+                                            <p className="text-lg text-gray-500 font-medium">{item.year || "N/A"}</p>
+                                        </div>
+                                        <div>
+                                            <p className="text-xl font-bold text-[#1a1a1a] mb-1">Industry:</p>
+                                            <p className="text-lg text-gray-500 font-medium">{item.industry || "N/A"}</p>
+                                        </div>
+                                    </div>
+
+                                    <button
+                                        onClick={() => handlePortfolioClick(item)}
+                                        className="w-full px-12 py-5 bg-[#e2e1ff] hover:bg-[#d5d4ff] text-[#1a1a1a] font-semibold text-xl rounded-full transition-colors duration-300"
+                                    >
+                                        Full project
+                                    </button>
+                                </div>
+
+                                {/* Right Image Area */}
+                                <div className="lg:w-1/2 p-6 lg:p-8 flex items-center justify-center">
+                                    <div className="relative w-full h-full min-h-[300px] md:min-h-[400px] rounded-[32px] overflow-hidden shadow-md">
+                                        <Image
+                                            src={item.mainImage || "/logo deero-02 .svg"}
+                                            alt={item.title}
+                                            fill
+                                            className="object-cover transition-transform duration-500 hover:scale-105"
+                                            onError={(e) => {
+                                                const target = e.target as HTMLImageElement;
+                                                target.src = "/logo deero-02 .svg";
+                                            }}
+                                        />
                                     </div>
                                 </div>
                             </motion.div>

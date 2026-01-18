@@ -21,7 +21,7 @@ export const getPortfolioById = (id: string) => {
 
 /* ✏ UPDATE PORTFOLIO */
 export const updatePortfolio = (id: string, formData: FormData) => {
-    return api.put(`/portfolios/${id}`, formData, {
+    return api.patch(`/portfolios/${id}`, formData, {
         headers: {
             "Content-Type": "multipart/form-data",
         },
