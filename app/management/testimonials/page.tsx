@@ -11,7 +11,7 @@ import {
   createTestimonial,
   updateTestimonial,
   deleteTestimonial,
-} from "@/api/testmonialApi";
+} from "@/api/testimonialApi";
 import { getImageUrl } from "@/utils/url";
 
 export default function TestimonialsPage() {
@@ -37,7 +37,7 @@ export default function TestimonialsPage() {
     setLoading(true);
     try {
       const res = await getAllTestimonials();
-      const items = Array.isArray(res.data) ? res.data : (res.data?.data || []);
+      const items = Array.isArray(res) ? res : [];
 
       setData(
         items.reverse().map((t: any) => ({

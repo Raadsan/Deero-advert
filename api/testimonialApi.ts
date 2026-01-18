@@ -16,6 +16,14 @@ export const getTestimonials = async (): Promise<Testimonial[]> => {
     return response.data;
 };
 
+// Aliases for compatibility
+export const getAllTestimonials = getTestimonials;
+
+export const getTestimonialById = async (id: string) => {
+    const response = await axios.get(`/testimonials/${id}`);
+    return response.data;
+};
+
 export const addTestimonial = async (formData: FormData) => {
     const response = await axios.post("/testimonials", formData, {
         headers: {
@@ -24,6 +32,8 @@ export const addTestimonial = async (formData: FormData) => {
     });
     return response.data;
 };
+
+export const createTestimonial = addTestimonial;
 
 export const updateTestimonial = async (id: string, formData: FormData) => {
     const response = await axios.patch(`/testimonials/${id}`, formData, {
