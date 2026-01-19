@@ -8,21 +8,11 @@ import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { getPortfolios } from "@/api/portfolioApi";
 import { getImageUrl, slugify } from "@/utils/url";
+import { ArrowRight } from "lucide-react";
 
-const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-        opacity: 1,
-        transition: {
-            staggerChildren: 0.1,
-        },
-    },
-};
 
-const itemVariants = {
-    hidden: { opacity: 0, scale: 0.9, y: 30 },
-    visible: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.5 } },
-};
+
+
 
 export default function PortfolioSection({ showHeader = true, limit }: { showHeader?: boolean; limit?: number }) {
     const router = useRouter();
@@ -90,22 +80,27 @@ export default function PortfolioSection({ showHeader = true, limit }: { showHea
 
     return (
         <section className="bg-[#fcd7c3] py-20 px-4 sm:px-10">
-            <motion.div
-                initial="hidden"
-                animate="visible"
-                variants={containerVariants}
-                className="mx-auto max-w-6xl"
-            >
+            <div className="mx-auto max-w-6xl">
                 {/* Header Area */}
                 {showHeader && (
                     <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
-                        <motion.div variants={itemVariants}>
-                            <h2 className="text-4xl font-bold text-[#651313] mb-4 text-center justify-center">Our Portfolios</h2>
+                        <motion.div
+                            initial={{ opacity: 0, y: -20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.6 }}
+                        >
+                            <h2 className="text-3xl font-bold text-[#651313] mb-4 text-center justify-center">Our Portfolios</h2>
                         </motion.div>
-                        <motion.div variants={itemVariants}>
+                        <motion.div
+                            initial={{ opacity: 0, y: -20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.6, delay: 0.2 }}
+                        >
                             <Link
                                 href="/portfolio"
-                                className="bg-[#EB4724] text-white px-10 py-3 rounded-full font-bold hover:bg-[#d13d1d] hover:scale-105 active:scale-95 transition-all uppercase tracking-wider text-sm shadow-md inline-block"
+                                className="bg-[#EB4724] text-white px-10 py-3 rounded-full font-bold hover:bg-[#d13d1d] transition-all uppercase tracking-wider text-sm shadow-md inline-block"
                             >
                                 View More
                             </Link>
@@ -125,17 +120,18 @@ export default function PortfolioSection({ showHeader = true, limit }: { showHea
                             <motion.div
                                 key={item._id}
                                 initial={{ opacity: 0, y: 50 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.6, delay: index * 0.1 }}
-                                className="bg-white rounded-[40px] overflow-hidden shadow-sm flex flex-col lg:flex-row min-h-[450px] lg:gap-12"
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true, amount: 0.2 }}
+                                transition={{ duration: 0.8, delay: index * 0.1 }}
+                                className="bg-white rounded-3xl overflow-hidden shadow-sm flex flex-col lg:flex-row min-h-[400px] lg:gap-12"
                             >
                                 {/* Left Content Area */}
                                 <div className="lg:w-1/2 p-8 md:p-12 flex flex-col justify-between">
                                     <div>
-                                        <h3 className="text-4xl md:text-5xl font-bold text-[#1a1a1a] mb-6">
+                                        <h3 className="text-2xl md:text-3xl font-black text-[#651313] mb-4 uppercase tracking-tighter italic">
                                             {item.title}
                                         </h3>
-                                        <p className="text-gray-600 text-lg leading-relaxed mb-8 max-w-xl line-clamp-4">
+                                        <p className="text-gray-600 text-base leading-relaxed mb-8 max-w-xl line-clamp-4">
                                             {item.description}
                                         </p>
                                     </div>
@@ -143,31 +139,34 @@ export default function PortfolioSection({ showHeader = true, limit }: { showHea
                                     {/* Year and Industry */}
                                     <div className="flex gap-12 mb-8">
                                         <div>
-                                            <p className="text-xl font-bold text-[#1a1a1a] mb-1">Year:</p>
-                                            <p className="text-lg text-gray-500 font-medium">{item.year || "N/A"}</p>
+                                            <p className="text-lg font-bold text-[#1a1a1a] mb-1">Year:</p>
+                                            <p className="text-base text-gray-500 font-medium">{item.year || "N/A"}</p>
                                         </div>
                                         <div>
-                                            <p className="text-xl font-bold text-[#1a1a1a] mb-1">Industry:</p>
-                                            <p className="text-lg text-gray-500 font-medium">{item.industry || "N/A"}</p>
+                                            <p className="text-lg font-bold text-[#1a1a1a] mb-1">Industry:</p>
+                                            <p className="text-base text-gray-500 font-medium">{item.industry || "N/A"}</p>
                                         </div>
                                     </div>
 
                                     <button
                                         onClick={() => handlePortfolioClick(item)}
-                                        className="w-full px-12 py-5 bg-[#e2e1ff] hover:bg-[#d5d4ff] text-[#1a1a1a] font-semibold text-xl rounded-full transition-colors duration-300"
+                                        className="group w-full px-12 py-5 bg-[#651313] hover:bg-[#EC4724] text-white font-semibold text-lg rounded-full transition-colors duration-300 flex items-center justify-center gap-2"
                                     >
-                                        Full project
+                                        <span>Full project</span>
+                                        <ArrowRight className="w-5 h-5 opacity-0 translate-x-[-10px] group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
                                     </button>
                                 </div>
 
                                 {/* Right Image Area */}
                                 <div className="lg:w-1/2 p-6 lg:p-8 flex items-center justify-center">
-                                    <div className="relative w-full h-full min-h-[300px] md:min-h-[400px] rounded-[32px] overflow-hidden shadow-md">
+                                    <div className="relative w-full rounded-2xl overflow-hidden shadow-md">
                                         <Image
                                             src={item.mainImage || "/logo deero-02 .svg"}
                                             alt={item.title}
-                                            fill
-                                            className="object-cover transition-transform duration-500 hover:scale-105"
+                                            width={800}
+                                            height={600}
+                                            style={{ width: '100%', height: 'auto' }}
+                                            className="object-contain"
                                             onError={(e) => {
                                                 const target = e.target as HTMLImageElement;
                                                 target.src = "/logo deero-02 .svg";
@@ -187,7 +186,7 @@ export default function PortfolioSection({ showHeader = true, limit }: { showHea
                         </div>
                     )}
                 </div>
-            </motion.div>
+            </div>
         </section>
     );
 }

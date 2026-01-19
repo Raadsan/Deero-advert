@@ -19,7 +19,7 @@ export default function Home() {
         <Hero />
         <DomainSearch />
         <ServicesSection />
-        <PortfolioSection limit={6} />
+        <PortfolioSection limit={1} />
         <HostingPackages />
         <AchievementsSection />
         <RecentBlogs />
