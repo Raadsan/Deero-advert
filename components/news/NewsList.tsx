@@ -44,8 +44,8 @@ const NewsCard = ({ item, formatDate }: { item: EventNewsItem; formatDate: (d: s
             <div className="p-6 pb-4">
                 <span
                     className={`inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide shadow-sm transition-all duration-300 ${item.type === "event"
-                        ? "bg-blue-100 text-blue-700 border border-blue-200 group-hover:bg-blue-600 group-hover:text-white"
-                        : "bg-green-100 text-green-700 border border-green-200 group-hover:bg-green-600 group-hover:text-white"
+                        ? "bg-blue-100 text-blue-700 border border-blue-200"
+                        : "bg-green-100 text-green-700 border border-green-200"
                         }`}
                 >
                     {item.type}
@@ -55,13 +55,13 @@ const NewsCard = ({ item, formatDate }: { item: EventNewsItem; formatDate: (d: s
             {/* Content */}
             <div className="px-6 pb-6 flex flex-col flex-1">
                 {/* Date */}
-                <div className="flex items-center gap-2 text-xs text-gray-500 font-medium mb-4 group-hover:text-[#EB4724] transition-colors">
+                <div className="flex items-center gap-2 text-xs text-gray-500 font-medium mb-4 transition-colors">
                     <Calendar className="h-3.5 w-3.5" />
                     <span>{formatDate(item.date)}</span>
                 </div>
 
                 {/* Title */}
-                <h3 className="text-xl font-bold text-[#4d0e0e] mb-2 line-clamp-2 leading-tight group-hover:text-[#EB4724] transition-colors">
+                <h3 className="text-xl font-bold text-[#4d0e0e] mb-2 line-clamp-2 leading-tight transition-colors">
                     {item.title}
                 </h3>
 
