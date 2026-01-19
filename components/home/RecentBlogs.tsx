@@ -51,8 +51,11 @@ export default function RecentBlogs() {
                 variants={containerVariants}
                 className="mx-auto max-w-7xl"
             >
-                <div className="flex justify-center items-center mb-16 px-4">
-                    <motion.h2 variants={itemVariants} className="text-3xl font-bold text-[#651313]">Recent Blogs</motion.h2>
+                <div className="text-center mb-16">
+                    <motion.div variants={itemVariants} className="mb-4">
+                        <h2 className="text-2xl md:text-3xl font-bold text-[#651313] mb-4">Recent Blogs</h2>
+                        <div className="w-20 h-1.5 bg-[#EB4724] mx-auto rounded-full"></div>
+                    </motion.div>
                 </div>
 
                 <div className="relative w-full overflow-hidden min-h-[500px]">

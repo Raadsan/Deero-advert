@@ -56,20 +56,15 @@ export default function TeamSection() {
             <div className="mx-auto max-w-7xl">
                 {/* Header */}
                 <div className="text-center mb-20">
-                    <motion.h2
+                    <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="text-4xl md:text-5xl font-bold text-[#651313] mb-4"
+                        className="mb-4"
                     >
-                        Our Team
-                    </motion.h2>
-                    <motion.div
-                        initial={{ scaleX: 0 }}
-                        whileInView={{ scaleX: 1 }}
-                        viewport={{ once: true }}
-                        className="h-1 w-24 bg-[#EB4724] mx-auto rounded-full"
-                    ></motion.div>
+                        <h2 className="text-2xl md:text-3xl font-bold text-[#651313] mb-4">Our Team</h2>
+                        <div className="w-20 h-1.5 bg-[#EB4724] mx-auto rounded-full"></div>
+                    </motion.div>
                 </div>
 
                 {/* Slider Container */}
@@ -199,7 +194,7 @@ function InnerSlider({ items }: { items: any[] }) {
                         {/* Content */}
                         <div className="text-center relative z-10 w-full px-4 transition-all duration-500 group-hover:-translate-y-2 group-hover:scale-105">
                             <h3 className="text-lg font-bold text-[#651313] mb-1 whitespace-nowrap overflow-hidden text-ellipsis group-hover:text-[#EB4724] transition-colors duration-300">{member.name}</h3>
-                            <p className="text-[#EB4724] font-medium text-sm uppercase tracking-wider group-hover:text-[#651313] transition-colors duration-300">{member.title}</p>
+                            <p className="text-[#EB4724] font-medium text-sm tracking-wider group-hover:text-[#651313] transition-colors duration-300">{member.title}</p>
                         </div>
                     </div>
                 ))}

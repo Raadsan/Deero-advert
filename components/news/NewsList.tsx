@@ -10,6 +10,7 @@ type EventNewsItem = {
     title: string;
     type: "event" | "news";
     date: string;
+    description?: string;
     isPublished: boolean;
     createdAt: string;
 };
@@ -27,6 +28,63 @@ const containerVariants = {
 const itemVariants = {
     hidden: { opacity: 0, y: 30 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+};
+
+const NewsCard = ({ item, formatDate }: { item: EventNewsItem; formatDate: (d: string) => string }) => {
+    const [isExpanded, setIsExpanded] = useState(false);
+
+    return (
+        <motion.article
+            key={item._id}
+            variants={itemVariants}
+            whileHover={{ y: -8, transition: { duration: 0.3 } }}
+            className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full border border-gray-100 group"
+        >
+            {/* Type Badge */}
+            <div className="p-6 pb-4">
+                <span
+                    className={`inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide shadow-sm transition-all duration-300 ${item.type === "event"
+                        ? "bg-blue-100 text-blue-700 border border-blue-200 group-hover:bg-blue-600 group-hover:text-white"
+                        : "bg-green-100 text-green-700 border border-green-200 group-hover:bg-green-600 group-hover:text-white"
+                        }`}
+                >
+                    {item.type}
+                </span>
+            </div>
+
+            {/* Content */}
+            <div className="px-6 pb-6 flex flex-col flex-1">
+                {/* Date */}
+                <div className="flex items-center gap-2 text-xs text-gray-500 font-medium mb-4 group-hover:text-[#EB4724] transition-colors">
+                    <Calendar className="h-3.5 w-3.5" />
+                    <span>{formatDate(item.date)}</span>
+                </div>
+
+                {/* Title */}
+                <h3 className="text-xl font-bold text-[#4d0e0e] mb-2 line-clamp-2 leading-tight group-hover:text-[#EB4724] transition-colors">
+                    {item.title}
+                </h3>
+
+                {/* Description */}
+                {item.description && (
+                    <p className={`text-sm text-gray-600 leading-relaxed mb-4 break-words transition-all duration-300 ${isExpanded ? "" : "line-clamp-1"}`}>
+                        {item.description}
+                    </p>
+                )}
+
+                {/* Read More Link */}
+                <div className="mt-auto pt-6 border-t border-gray-100">
+                    <button
+                        onClick={() => setIsExpanded(!isExpanded)}
+                        className="inline-flex items-center gap-2 text-sm font-bold text-[#EB4724] group-hover:gap-3 transition-all duration-300"
+                    >
+                        {isExpanded ? "Read Less" : "Read More"}
+                        <ArrowRight className={`w-4 h-4 transition-transform duration-300 ${isExpanded ? "-rotate-90" : ""}`} />
+                    </button>
+                </div>
+            </div>
+        </motion.article>
+    );
 };
 
 export default function NewsList() {
@@ -152,46 +210,7 @@ export default function NewsList() {
                             className="grid gap-8 md:grid-cols-2 lg:grid-cols-3"
                         >
                             {filteredItems.map((item) => (
-                                <motion.article
-                                    key={item._id}
-                                    variants={itemVariants}
-                                    whileHover={{ y: -8, transition: { duration: 0.3 } }}
-                                    className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full border border-gray-100 group"
-                                >
-                                    {/* Type Badge */}
-                                    <div className="p-6 pb-4">
-                                        <span
-                                            className={`inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide shadow-sm transition-all duration-300 ${item.type === "event"
-                                                    ? "bg-blue-100 text-blue-700 border border-blue-200 group-hover:bg-blue-600 group-hover:text-white"
-                                                    : "bg-green-100 text-green-700 border border-green-200 group-hover:bg-green-600 group-hover:text-white"
-                                                }`}
-                                        >
-                                            {item.type}
-                                        </span>
-                                    </div>
-
-                                    {/* Content */}
-                                    <div className="px-6 pb-6 flex flex-col flex-1">
-                                        {/* Date */}
-                                        <div className="flex items-center gap-2 text-xs text-gray-500 font-medium mb-4 group-hover:text-[#EB4724] transition-colors">
-                                            <Calendar className="h-3.5 w-3.5" />
-                                            <span>{formatDate(item.date)}</span>
-                                        </div>
-
-                                        {/* Title */}
-                                        <h3 className="text-xl font-bold text-[#4d0e0e] mb-4 line-clamp-2 leading-tight group-hover:text-[#EB4724] transition-colors">
-                                            {item.title}
-                                        </h3>
-
-                                        {/* Read More Link */}
-                                        <div className="mt-auto pt-6 border-t border-gray-100">
-                                            <button className="inline-flex items-center gap-2 text-sm font-bold text-[#EB4724] group-hover:gap-3 transition-all duration-300">
-                                                Learn More
-                                                <ArrowRight className="w-4 h-4" />
-                                            </button>
-                                        </div>
-                                    </div>
-                                </motion.article>
+                                <NewsCard key={item._id} item={item} formatDate={formatDate} />
                             ))}
                         </motion.div>
                     </AnimatePresence>

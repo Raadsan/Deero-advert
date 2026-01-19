@@ -131,7 +131,7 @@ export default function TestimonialsSection() {
                         variants={containerVariants}
                         className="text-center mb-16"
                     >
-                        <motion.h2 variants={itemVariants} className="text-3xl md:text-4xl font-bold text-[#651313] mb-4">
+                        <motion.h2 variants={itemVariants} className="text-2xl md:text-3xl font-bold text-[#651313] mb-4">
                             What Our Clients Say
                         </motion.h2>
                         <motion.div variants={itemVariants} className="w-20 h-1.5 bg-[#EB4724] mx-auto rounded-full"></motion.div>

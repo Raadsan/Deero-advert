@@ -249,9 +249,12 @@ export default function ServicesContent({
                 className="mx-auto max-w-6xl text-center space-y-12"
             >
                 {showTitle && (
-                    <motion.h2 variants={itemVariants} className="text-4xl font-bold text-[#651313]">
-                        Our Services
-                    </motion.h2>
+                    <motion.div variants={itemVariants} className="text-center mb-8">
+                        <h2 className="text-2xl md:text-3xl font-bold text-[#651313] mb-4">
+                            Our Services
+                        </h2>
+                        <div className="w-20 h-1.5 bg-[#EB4724] mx-auto rounded-full"></div>
+                    </motion.div>
                 )}
 
                 {loading ? (
@@ -391,7 +394,7 @@ export default function ServicesContent({
                     <motion.div variants={itemVariants} className="flex justify-center pt-8">
                         <Link
                             href="/services"
-                            className="bg-[#651313] text-white px-8 py-3 rounded-full font-bold text-lg uppercase tracking-wide hover:bg-[#EB4724] hover:scale-105 active:scale-95 transition-all shadow-lg"
+                            className="bg-[#EB4724] text-white px-8 py-3 rounded-full font-bold text-lg uppercase tracking-wide hover:bg-[#EB4724] hover:scale-105 active:scale-95 transition-all shadow-lg"
                         >
                             VIEW MORE
                         </Link>

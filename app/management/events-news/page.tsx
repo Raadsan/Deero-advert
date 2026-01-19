@@ -12,6 +12,7 @@ type EventNewsItem = {
     title: string;
     type: "event" | "news";
     date: string;
+    description?: string;
     isPublished: boolean;
     createdAt: string;
     updatedAt: string;
@@ -29,6 +30,7 @@ export default function EventsNewsPage() {
         title: "",
         type: "event" as "event" | "news",
         date: "",
+        description: "",
     });
 
     // Fetch events and news
@@ -52,7 +54,7 @@ export default function EventsNewsPage() {
     }, []);
 
     // Handle input changes
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
@@ -76,6 +78,7 @@ export default function EventsNewsPage() {
                 title: formData.title.trim(),
                 type: formData.type,
                 date: formData.date,
+                description: formData.description.trim(),
             };
 
             if (editingId) {
@@ -91,6 +94,7 @@ export default function EventsNewsPage() {
                 title: "",
                 type: "event",
                 date: "",
+                description: "",
             });
 
             // Reload data
@@ -130,6 +134,7 @@ export default function EventsNewsPage() {
             title: row.title,
             type: row.type,
             date: row.date.split("T")[0], // Format date for input
+            description: row.description || "",
         });
         setIsModalOpen(true);
     };
@@ -138,9 +143,19 @@ export default function EventsNewsPage() {
         {
             label: "Title",
             key: "title",
-            width: "40%",
+            width: "25%",
             render: (row: EventNewsItem) => (
                 <span className="font-medium text-gray-900">{row.title}</span>
+            ),
+        },
+        {
+            label: "Description",
+            key: "description",
+            width: "25%",
+            render: (row: EventNewsItem) => (
+                <div className="text-gray-500 truncate text-xs max-w-[200px]" title={row.description}>
+                    {row.description || "-"}
+                </div>
             ),
         },
         {
@@ -211,6 +226,7 @@ export default function EventsNewsPage() {
                         title: "",
                         type: "event",
                         date: "",
+                        description: "",
                     });
                 }}
                 onRefresh={fetchData}
@@ -233,6 +249,7 @@ export default function EventsNewsPage() {
                         title: "",
                         type: "event",
                         date: "",
+                        description: "",
                     });
                 }}
                 title={editingId ? "Edit Event/News" : "Add New Event/News"}
@@ -286,6 +303,21 @@ export default function EventsNewsPage() {
                         />
                     </div>
 
+                    {/* Description */}
+                    <div className="space-y-0.5">
+                        <label className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">
+                            Description
+                        </label>
+                        <textarea
+                            name="description"
+                            rows={3}
+                            value={formData.description}
+                            onChange={handleInputChange}
+                            className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#EB4724] focus:border-[#EB4724] resize-none"
+                            placeholder="Enter description..."
+                        />
+                    </div>
+
                     <div className="flex justify-end gap-2 pt-3 border-t border-gray-100 mt-4">
                         <button
                             type="button"
@@ -296,6 +328,7 @@ export default function EventsNewsPage() {
                                     title: "",
                                     type: "event",
                                     date: "",
+                                    description: "",
                                 });
                             }}
                             className="px-3 py-1.5 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"

@@ -78,7 +78,7 @@ export default function NewsletterSection() {
                         <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#EB4724]/20 mb-6">
                             <EnvelopeIcon className="w-8 h-8 text-[#EB4724]" />
                         </div>
-                        <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                        <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
                             Stay Updated with Our Newsletter
                         </h2>
                         <p className="text-white/80 text-sm md:text-base max-w-2xl mx-auto leading-relaxed">

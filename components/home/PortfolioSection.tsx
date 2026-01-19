@@ -83,14 +83,14 @@ export default function PortfolioSection({ showHeader = true, limit }: { showHea
             <div className="mx-auto max-w-6xl">
                 {/* Header Area */}
                 {showHeader && (
-                    <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between mb-16 gap-8 text-center md:text-left">
                         <motion.div
                             initial={{ opacity: 0, y: -20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.6 }}
                         >
-                            <h2 className="text-3xl font-bold text-[#651313] mb-4 text-center justify-center">Our Portfolios</h2>
+                            <h2 className="text-2xl md:text-3xl font-bold text-[#651313]">Our Portfolios</h2>
                         </motion.div>
                         <motion.div
                             initial={{ opacity: 0, y: -20 }}
@@ -128,7 +128,7 @@ export default function PortfolioSection({ showHeader = true, limit }: { showHea
                                 {/* Left Content Area */}
                                 <div className="lg:w-1/2 p-8 md:p-12 flex flex-col justify-between">
                                     <div>
-                                        <h3 className="text-2xl md:text-3xl font-black text-[#651313] mb-4 uppercase tracking-tighter italic">
+                                        <h3 className="text-2xl md:text-3xl font-semibold text-[#651313] mb-4 tracking-tighter capitalize">
                                             {item.title}
                                         </h3>
                                         <p className="text-gray-600 text-base leading-relaxed mb-8 max-w-xl line-clamp-4">

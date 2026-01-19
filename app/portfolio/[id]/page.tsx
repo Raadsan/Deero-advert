@@ -110,11 +110,10 @@ export default function PortfolioGalleryPage() {
                         {loading ? (
                             <div className="h-12 w-64 bg-[#651313]/10 animate-pulse rounded-lg mx-auto mb-4" />
                         ) : (
-                            <h1 className="text-4xl md:text-5xl font-black text-[#651313] mb-4 uppercase tracking-tighter italic">
+                            <h1 className="text-4xl md:text-5xl font-semibold text-[#651313] mb-4 tracking-tighter capitalize">
                                 {portfolio?.title}
                             </h1>
                         )}
-                        <div className="w-24 h-1.5 bg-[#EB4724] mx-auto rounded-full" />
                     </div>
 
                     {/* Gallery Grid */}

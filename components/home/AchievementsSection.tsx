@@ -100,18 +100,21 @@ export default function AchievementsSection() {
     return (
         <section className="overflow-hidden">
             {/* Achievements Part - Peach Background */}
-            <div className=" py-20 px-4 sm:px-10">
+            <div className="pt-16 pb-0 px-4 sm:px-10">
                 <div className="mx-auto max-w-6xl">
-                    <div className="text-center">
-                        <motion.h2
+                    <div className="text-center mb-16">
+                        <motion.div
                             initial="hidden"
                             whileInView="visible"
                             viewport={{ once: true, amount: 0.1 }}
                             variants={itemVariants}
-                            className="text-2xl font-bold text-[#651313] mb-16 uppercase tracking-wider"
+                            className="mb-14"
                         >
-                            Our Achievements
-                        </motion.h2>
+                            <h2 className="text-2xl md:text-3xl font-bold text-[#651313] mb-4 tracking-wider">
+                                Our Achievements
+                            </h2>
+                            <div className="w-20 h-1.5 bg-[#EB4724] mx-auto rounded-full"></div>
+                        </motion.div>
 
                         {loading ? (
                             <div className="flex justify-center items-center py-10">
@@ -128,18 +131,14 @@ export default function AchievementsSection() {
                                 {achievements.map((item) => {
                                     return (
                                         <motion.div key={item._id} variants={itemVariants} className="flex flex-col items-center group">
-                                            <div className="relative w-28 h-28 flex items-center justify-center mb-6">
-                                                <div className="absolute inset-0 border-2 border-[#EB4724] rounded-full group-hover:scale-110 transition-transform duration-300"></div>
-                                                <div className="absolute top-1/2 -left-1.5 w-3 h-3 bg-[#651313] rounded-full -translate-y-1/2"></div>
-                                                <div className="absolute top-1/2 -right-1.5 w-3 h-3 bg-[#651313] rounded-full -translate-y-1/2"></div>
-
-                                                <div className="relative h-14 w-14">
+                                            <div className="relative w-24 h-24 flex items-center justify-center mb-6">
+                                                <div className="relative h-18 w-18">
                                                     <Image
                                                         src={getImageUrl(item.icon) || "/logo deero-02 .svg"}
                                                         alt={item.title || "Achievement Icon"}
                                                         fill
                                                         unoptimized
-                                                        className="object-contain"
+                                                        className="object-contain group-hover:scale-110 transition-transform duration-300"
                                                         onError={(e) => {
                                                             const target = e.target as HTMLImageElement;
                                                             target.src = "/logo deero-02 .svg";
@@ -163,18 +162,21 @@ export default function AchievementsSection() {
             </div>
 
             {/* Major Clients Part - White Background */}
-            <div className="bg-white py-20 px-4 sm:px-10">
+            <div className="bg-white pt-8 pb-16 px-4 sm:px-10">
                 <div className="mx-auto max-w-6xl">
-                    <div className="text-center">
-                        <motion.h2
+                    <div className="text-center mb-16">
+                        <motion.div
                             initial="hidden"
                             whileInView="visible"
                             viewport={{ once: true, amount: 0.1 }}
                             variants={itemVariants}
-                            className="text-2xl font-bold text-[#651313] mb-16 uppercase tracking-wider"
+                            className="mb-8"
                         >
-                            Our Major Clients
-                        </motion.h2>
+                            <h2 className="text-2xl md:text-3xl font-bold text-[#651313] mb-4 tracking-wider">
+                                Our Major Clients
+                            </h2>
+                            <div className="w-20 h-1.5 bg-[#EB4724] mx-auto rounded-full"></div>
+                        </motion.div>
 
                         {clientsLoading ? (
                             <div className="flex justify-center items-center py-10">

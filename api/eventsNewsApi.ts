@@ -5,6 +5,7 @@ export const createEventNews = (data: {
   title: string;
   type: "event" | "news";
   date: string;
+  description?: string;
 }) => {
   return api.post("/events-news", data);
 };
@@ -26,6 +27,7 @@ export const updateEventNews = (
     title: string;
     type: "event" | "news";
     date: string;
+    description?: string;
   }
 ) => {
   return api.patch(`/events-news/${id}`, data);
