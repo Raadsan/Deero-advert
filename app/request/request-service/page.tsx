@@ -16,7 +16,8 @@ export default function RequestServicePage() {
 
             // Filter for service_payment type transactions
             const servicePayments = allTransactions.filter(
-                (t: any) => t.type === "service_payment"
+                (t: any) => t.type === "service_payment" &&
+                    t.status?.toLowerCase() === "completed"
             );
 
             setServiceRequests(servicePayments);

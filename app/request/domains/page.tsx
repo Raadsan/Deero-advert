@@ -30,6 +30,7 @@ interface User {
     name?: string;
     fullname?: string;
     email: string;
+    phone?: string;
     role?: any; // Role object or ID
 }
 
@@ -56,7 +57,8 @@ export default function DomainsPage() {
                 const allTrans = transRes.data.transactions || (Array.isArray(transRes.data) ? transRes.data : []);
                 // Filter for domain related transactions
                 const domainTrans = allTrans.filter((t: any) =>
-                    ["register", "transfer", "renew"].includes(t.type)
+                    ["register", "transfer", "renew"].includes(t.type) &&
+                    t.status?.toLowerCase() === "completed"
                 );
                 setDomains(domainTrans);
             }
@@ -109,6 +111,15 @@ export default function DomainsPage() {
         return user.email || "-";
     };
 
+    const getUserPhone = (user: any) => {
+        if (!user) return "-";
+        if (typeof user === 'string') {
+            const foundUser = users.find(u => u._id === user);
+            return foundUser ? (foundUser.phone || "-") : "-";
+        }
+        return user.phone || "-";
+    };
+
     return (
         <div className="space-y-6">
             <DataTable
@@ -138,6 +149,13 @@ export default function DomainsPage() {
                         key: "useremail",
                         render: (row: Domain) => (
                             <span className="text-gray-500">{getUserEmail(row.user)}</span>
+                        ),
+                    },
+                    {
+                        label: "Phone",
+                        key: "userphone",
+                        render: (row: Domain) => (
+                            <span className="text-gray-500">{getUserPhone(row.user)}</span>
                         ),
                     },
                     {

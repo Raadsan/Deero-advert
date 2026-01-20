@@ -16,7 +16,8 @@ export default function RequestHostingPage() {
 
             // Filter for hosting_payment type transactions
             const hostingPayments = allTransactions.filter(
-                (t: any) => t.type === "hosting_payment"
+                (t: any) => t.type === "hosting_payment" &&
+                    t.status?.toLowerCase() === "completed"
             );
 
             setHostingRequests(hostingPayments);
@@ -50,6 +51,14 @@ export default function RequestHostingPage() {
                         render: (row: any) => {
                             const user = row.user;
                             return typeof user === 'object' ? user?.email || "N/A" : "N/A";
+                        }
+                    },
+                    {
+                        label: "Phone",
+                        key: "phone",
+                        render: (row: any) => {
+                            const user = row.user;
+                            return typeof user === 'object' ? user?.phone || "N/A" : "N/A";
                         }
                     },
                     {
