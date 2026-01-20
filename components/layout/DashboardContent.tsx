@@ -69,6 +69,9 @@ export default function DashboardContent() {
 
                     const formatNumber = (num: number) => num.toLocaleString();
 
+                    // Sort transactions by date (newest first)
+                    transactionsData.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
                     setTransactions(transactionsData);
                     setStats([
                         {
@@ -130,6 +133,9 @@ export default function DashboardContent() {
                         .reduce((acc: number, t: any) => acc + (t.amount || 0), 0);
 
                     const pendingPayments = myTransactions.filter((t: any) => t.status === "pending").length;
+
+                    // Sort user transactions by date (newest first)
+                    myTransactions.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
                     setTransactions(myTransactions);
                     setStats([
