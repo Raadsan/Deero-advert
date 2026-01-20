@@ -2,28 +2,54 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { MagnifyingGlassIcon, ExclamationCircleIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
-import { useState } from "react";
-import { checkDomainAvailability, DomainCheckResult } from "../../api/domainCheckerApi";
+import { MagnifyingGlassIcon, ExclamationCircleIcon, CheckCircleIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
+import { useState, useEffect } from "react";
+import { checkDomainAvailability, fetchAllDomainPrices, DomainCheckResult, DomainPrice } from "../../api/domainCheckerApi";
+
+import { useRouter } from "next/navigation";
 
 export default function DomainSearch() {
     const [query, setQuery] = useState("");
     const [results, setResults] = useState<DomainCheckResult[] | null>(null);
     const [loading, setLoading] = useState(false);
+    const [allPrices, setAllPrices] = useState<DomainPrice[]>([]);
+    const [selectedTlds, setSelectedTlds] = useState<string[]>(['.com', '.org', '.net', '.edu']);
+    const [showTldSelector, setShowTldSelector] = useState(false);
 
-    const handleSearch = async () => {
+    // Popular TLDs to display by default
+    const popularTlds = ['.com', '.org', '.net', '.edu'];
+
+    // Fetch all available TLDs on mount
+    useEffect(() => {
+        const loadPrices = async () => {
+            const prices = await fetchAllDomainPrices();
+            setAllPrices(prices);
+        };
+        loadPrices();
+    }, []);
+
+    const router = useRouter();
+
+    const handleSearch = () => {
         if (!query.trim()) return;
-        setLoading(true);
-        try {
-            const data = await checkDomainAvailability(query);
-            if (data.success) {
-                setResults(data.results);
-            }
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setLoading(false);
-        }
+
+        // Enforce extension validation even here for consistency, or let hosting page handle it.
+        // Let's pass it raw to hosting page so the validation logic is centralized there.
+        // Redirect to hosting page with domain query param
+        router.push(`/hosting?domain=${encodeURIComponent(query)}#domains`);
+    };
+
+    const toggleTld = (tld: string) => {
+        setSelectedTlds(prev =>
+            prev.includes(tld)
+                ? prev.filter(t => t !== tld)
+                : [...prev, tld]
+        );
+    };
+
+    const getPrice = (tld: string) => {
+        const price = allPrices.find(p => p.tld.toLowerCase() === tld.toLowerCase());
+        return price ? `$${price.newPrice.toFixed(2)}/Year` : '$14.99/Year';
     };
 
     return (
@@ -40,6 +66,7 @@ export default function DomainSearch() {
                             type="text"
                             value={query}
                             onChange={(e) => setQuery(e.target.value)}
+                            onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
                             placeholder="Search your Domain"
                             className="flex-1 px-3 sm:px-4 py-2 sm:py-3 text-base sm:text-lg outline-none bg-white/90 text-black"
                         />
@@ -89,22 +116,12 @@ export default function DomainSearch() {
                     <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-6 sm:gap-12 text-[#651313]">
                         {!results ? (
                             <>
-                                <div className="text-center">
-                                    <p className="text-2xl sm:text-3xl font-bold">.com</p>
-                                    <p className="text-sm sm:text-base font-semibold text-[#EB4724]">$14.99/Year</p>
-                                </div>
-                                <div className="text-center">
-                                    <p className="text-2xl sm:text-3xl font-bold">.org</p>
-                                    <p className="text-sm sm:text-base font-semibold text-[#EB4724]">$14.99/Year</p>
-                                </div>
-                                <div className="text-center">
-                                    <p className="text-2xl sm:text-3xl font-bold">.net</p>
-                                    <p className="text-sm sm:text-base font-semibold text-[#EB4724]">$14.99/Year</p>
-                                </div>
-                                <div className="text-center">
-                                    <p className="text-2xl sm:text-3xl font-bold">.edu</p>
-                                    <p className="text-sm sm:text-base font-semibold text-[#EB4724]">$14.99/Year</p>
-                                </div>
+                                {popularTlds.map(tld => (
+                                    <div key={tld} className="text-center">
+                                        <p className="text-2xl sm:text-3xl font-bold">{tld}</p>
+                                        <p className="text-sm sm:text-base font-semibold text-[#EB4724]">{getPrice(tld)}</p>
+                                    </div>
+                                ))}
                             </>
                         ) : (
                             results.map((res) => {

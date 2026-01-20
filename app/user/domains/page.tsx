@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { isAuthenticated, getUserId } from "@/utils/auth";
 import { getDomainsByUser } from "@/api/domainApi";
+import { getTransactionsByUser } from "@/api/transactionApi";
 import { Domain } from "@/types/domain";
 import DataTable from "@/components/layout/DataTable";
 import { GlobeAltIcon } from "@heroicons/react/24/outline";
@@ -14,7 +15,7 @@ export default function UserDomainsPage() {
     const [domains, setDomains] = useState<Domain[]>([]);
 
     useEffect(() => {
-        const fetchDomains = async () => {
+        const fetchDomainsAndTransactions = async () => {
             if (!isAuthenticated()) {
                 router.push("/login?redirect=/user/domains");
                 return;
@@ -23,19 +24,38 @@ export default function UserDomainsPage() {
             try {
                 const userId = getUserId();
                 if (userId) {
-                    const response = await getDomainsByUser(userId);
-                    if (response.data.success) {
-                        setDomains(response.data.domains);
+                    const [domainsRes, transactionsRes] = await Promise.all([
+                        getDomainsByUser(userId),
+                        getTransactionsByUser(userId)
+                    ]);
+
+                    let validDomainIds = new Set<string>();
+
+                    if (transactionsRes.data.success) {
+                        const transactions = transactionsRes.data.transactions || [];
+                        transactions.forEach((t: any) => {
+                            if (t.status === "completed" && t.domain) {
+                                const dId = typeof t.domain === 'object' ? t.domain._id : t.domain;
+                                validDomainIds.add(dId);
+                            }
+                        });
+                    }
+
+                    if (domainsRes.data.success) {
+                        const allDomains = domainsRes.data.domains;
+                        // Only show domains that have a corresponding COMPLETED transaction
+                        const filteredDomains = allDomains.filter((d: Domain) => validDomainIds.has(d._id));
+                        setDomains(filteredDomains);
                     }
                 }
             } catch (error) {
-                console.error("Error fetching domains:", error);
+                console.error("Error fetching data:", error);
             } finally {
                 setIsLoading(false);
             }
         };
 
-        fetchDomains();
+        fetchDomainsAndTransactions();
     }, [router]);
 
     const columns = [

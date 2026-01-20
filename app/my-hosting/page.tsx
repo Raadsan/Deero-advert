@@ -31,7 +31,7 @@ export default function MyHostingPage() {
 
                 // Filter for hosting_payment type transactions
                 const hostingPayments = allTransactions.filter(
-                    (t: any) => t.type === "hosting_payment"
+                    (t: any) => t.type === "hosting_payment" && t.status === "completed"
                 );
 
                 setHosting(hostingPayments);

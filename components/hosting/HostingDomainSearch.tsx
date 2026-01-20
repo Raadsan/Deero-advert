@@ -4,11 +4,10 @@ import { useState, useEffect } from "react";
 import { MagnifyingGlassIcon, ArrowPathIcon } from "@heroicons/react/24/outline";
 import { motion, AnimatePresence } from "framer-motion";
 
-import { checkDomainAvailability, DomainCheckResult } from "../../api/domainCheckerApi";
+import { checkDomainAvailability, DomainCheckResult, fetchAllDomainPrices, DomainPrice } from "../../api/domainCheckerApi";
 import { ExclamationCircleIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { isAuthenticated, isAdminOrManager } from "@/utils/auth";
-import DomainPricingTable from "./DomainPricingTable";
 import { useCart } from "@/context/CartContext";
 
 export default function HostingDomainSearch({ transparent = false }: { transparent?: boolean }) {
@@ -18,6 +17,11 @@ export default function HostingDomainSearch({ transparent = false }: { transpare
     const [query, setQuery] = useState("");
     const [results, setResults] = useState<DomainCheckResult[] | null>(null);
     const [loading, setLoading] = useState(false);
+    const [allPrices, setAllPrices] = useState<DomainPrice[]>([]);
+
+    // Use useSearchParams to get the query parameter
+    // Note: We need to use useSearchParams from next/navigation
+    const searchParams = useSearchParams();
 
     useEffect(() => {
         const handleHashChange = () => {
@@ -27,8 +31,55 @@ export default function HostingDomainSearch({ transparent = false }: { transpare
 
         handleHashChange(); // Initial check
         window.addEventListener('hashchange', handleHashChange);
+
+        // Load all available TLDs and handle auto-search
+        const init = async () => {
+            const prices = await fetchAllDomainPrices();
+            setAllPrices(prices);
+
+            // Check for domain in URL
+            const domainParam = searchParams.get('domain');
+            if (domainParam) {
+                setQuery(domainParam);
+                // Trigger search after a small delay to ensure state updates
+                // We need to call the search logic directly here since we can't easily invoke the handler from useEffect if it relies on current state
+                // But we can duplicate the logic or use a ref. 
+                // Cleaner approach: Extract check logic
+                performSearch(domainParam, prices);
+            }
+        };
+        init();
+
         return () => window.removeEventListener('hashchange', handleHashChange);
-    }, []);
+    }, [searchParams]); // Re-run if params change
+
+    const performSearch = async (searchQuery: string, prices: DomainPrice[]) => {
+        if (!searchQuery.trim()) return;
+
+        // Enforce that user must enter a domain with an extension
+        if (!searchQuery.includes('.')) {
+            // If coming from home page without extension, maybe we shouldn't alert immediately but just show input?
+            // User request earlier was to enforce it. Let's just return if invalid from URL to avoid alert loop on load
+            return;
+        }
+
+        setLoading(true);
+        try {
+            const lastDotIndex = searchQuery.lastIndexOf('.');
+            const targetTld = searchQuery.substring(lastDotIndex);
+
+            // Pass the query and specific TLD
+            const data = await checkDomainAvailability(searchQuery, [targetTld]);
+
+            if (data.success) {
+                setResults(data.results);
+            }
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    }
 
     const handleAddToCart = (domain: string, price: string) => {
         // Authenticate
@@ -56,9 +107,22 @@ export default function HostingDomainSearch({ transparent = false }: { transpare
 
     const handleSearch = async () => {
         if (!query.trim()) return;
+
+        // Enforce that user must enter a domain with an extension
+        if (!query.includes('.')) {
+            alert("Please enter a valid domain name including the extension (e.g., example.com)");
+            return;
+        }
+
         setLoading(true);
         try {
-            const data = await checkDomainAvailability(query);
+            // Determine which TLD to check based on user input
+            const lastDotIndex = query.lastIndexOf('.');
+            const targetTld = query.substring(lastDotIndex);
+
+            // Only check availability for this specific TLD
+            const data = await checkDomainAvailability(query, [targetTld]);
+
             if (data.success) {
                 setResults(data.results);
             }
@@ -177,35 +241,12 @@ export default function HostingDomainSearch({ transparent = false }: { transpare
                                         return null;
                                     })()}
 
-                                    {/* Other Extensions Grid */}
-                                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                                        {results.map((res, idx) => {
-                                            const ext = res.domain.substring(res.domain.lastIndexOf('.'));
-                                            return (
-                                                <div key={`${res.domain}-${idx}`} className="bg-gray-50 p-4 rounded-xl text-center border border-gray-100 hover:border-[#EB4724]/30 transition-all flex flex-col items-center justify-center gap-3">
-                                                    <div>
-                                                        <p className="text-xl font-bold text-[#651313]">{ext}</p>
-                                                        {res.available ? (
-                                                            <p className="text-sm font-semibold text-[#EB4724]">{res.price}</p>
-                                                        ) : (
-                                                            <p className="text-sm font-bold text-red-600">Taken</p>
-                                                        )}
-                                                    </div>
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
                                 </div>
                             )}
                         </motion.div>
 
                     </AnimatePresence>
                 </div>
-
-                {/* Pricing Table - Only show when no results are active in Register tab */}
-                {activeTab === 'register' && !results && (
-                    <DomainPricingTable />
-                )}
             </div>
         </section>
     );

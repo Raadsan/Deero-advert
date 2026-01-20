@@ -8,7 +8,7 @@ import { getAllUsers } from "@/api/usersApi";
 import { getAllAchievements } from "@/api/achievementApi";
 import { getAllEventsNews } from "@/api/eventsNewsApi";
 import { getMajorClients } from "@/api/majorClientApi";
-import { getAllTransactions, getTransactionsByUser } from "@/api/transactionApi";
+import { getAllTransactions, getTransactionsByUser, getRevenueAnalytics } from "@/api/transactionApi";
 import { getDomainsByUser } from "@/api/domainApi";
 import DataTable from "@/components/layout/DataTable";
 import { Transaction } from "@/types/transaction";
@@ -24,6 +24,10 @@ export default function DashboardContent() {
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [transactionsLoading, setTransactionsLoading] = useState(true);
 
+    // Revenue Analytics State
+    const [revenueData, setRevenueData] = useState<any[]>([]);
+    const [revenueLoading, setRevenueLoading] = useState(false);
+
     const isPrivileged = isAdminOrManager();
     const userId = getUserId();
     const userRole = getUserRole(); // Get role
@@ -35,17 +39,25 @@ export default function DashboardContent() {
                 setTransactionsLoading(true);
 
                 if (isPrivileged) {
+                    setRevenueLoading(true);
                     // ADMIN/MANAGER STATS - Global
-                    const [servicesRes, usersRes, achievementsRes, transactionsRes] = await Promise.all([
+                    const [servicesRes, usersRes, achievementsRes, transactionsRes, revenueRes] = await Promise.all([
                         getAllServices(),
                         getAllUsers(),
                         getAllAchievements(),
                         getAllTransactions(),
+                        getRevenueAnalytics(),
                     ]);
 
                     const servicesResAny = servicesRes as any;
                     const achievementsResAny = achievementsRes as any;
                     const transactionsData = transactionsRes.data?.transactions || [];
+
+                    // Set revenue data
+                    if (revenueRes.data && revenueRes.data.success) {
+                        setRevenueData(revenueRes.data.data);
+                    }
+
 
                     const servicesCount = servicesResAny.data?.count || servicesResAny.data?.data?.length || 0;
                     const usersCount = Array.isArray(usersRes.data) ? usersRes.data.length : 0;
@@ -89,14 +101,29 @@ export default function DashboardContent() {
                         },
                     ]);
                 } else if (userId) {
+                    setRevenueLoading(true);
                     // REGULAR USER STATS - Personal
-                    const [domainsRes, transactionsRes] = await Promise.all([
+                    const [domainsRes, transactionsRes, revenueRes] = await Promise.all([
                         getDomainsByUser(userId),
                         getTransactionsByUser(userId),
+                        getRevenueAnalytics(userId),
                     ]);
 
                     const myDomains = domainsRes.data?.domains || [];
                     const myTransactions = transactionsRes.data?.transactions || [];
+
+                    // Filter domains to only count those with completed transactions
+                    const activeDomainsCount = myDomains.filter((d: any) => {
+                        return myTransactions.some((t: any) =>
+                            t.status === "completed" &&
+                            (typeof t.domain === 'object' ? t.domain?._id === d._id : t.domain === d._id)
+                        );
+                    }).length;
+
+                    // Set revenue data (Spending Overview)
+                    if (revenueRes.data && revenueRes.data.success) {
+                        setRevenueData(revenueRes.data.data);
+                    }
 
                     const totalSpent = myTransactions
                         .filter((t: any) => t.status === "completed")
@@ -108,14 +135,14 @@ export default function DashboardContent() {
                     setStats([
                         {
                             title: "My Domains",
-                            value: myDomains.length.toString(),
+                            value: activeDomainsCount.toString(),
                             change: "Registered domains",
                             icon: Globe,
                             color: "bg-blue-100 text-blue-700",
                         },
                         {
                             title: "Total Transactions",
-                            value: myTransactions.length.toString(),
+                            value: myTransactions.filter((t: any) => t.status === "completed").length.toString(),
                             change: "Order history count",
                             icon: Activity,
                             color: "bg-green-100 text-green-700",
@@ -128,7 +155,7 @@ export default function DashboardContent() {
                             color: "bg-orange-100 text-orange-700",
                         },
                         {
-                            title: "Total Peyments",
+                            title: "Total Payments",
                             value: `$${totalSpent.toLocaleString()}`,
                             change: "Completed orders",
                             icon: CreditCard,
@@ -141,6 +168,7 @@ export default function DashboardContent() {
             } finally {
                 setLoading(false);
                 setTransactionsLoading(false);
+                setRevenueLoading(false);
             }
         };
 
@@ -246,33 +274,103 @@ export default function DashboardContent() {
                         </div>
                     </div>
                     {/* ... (SVG content) ... */}
+                    {/* Dynamic Revenue Chart */}
                     <div className="h-[300px] relative">
-                        <svg viewBox="0 0 600 300" className="w-full h-full">
-                            <defs>
-                                <linearGradient id="revenueGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                                    <stop offset="0%" stopColor="#EB4724" stopOpacity="0.3" />
-                                    <stop offset="100%" stopColor="#EB4724" stopOpacity="0.05" />
-                                </linearGradient>
-                                <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                    <stop offset="0%" stopColor="#651313" />
-                                    <stop offset="100%" stopColor="#EB4724" />
-                                </linearGradient>
-                            </defs>
-                            {[0, 1, 2, 3, 4].map((i) => (
-                                <line key={i} x1="50" y1={50 + i * 50} x2="550" y2={50 + i * 50} stroke="#f3f4f6" strokeWidth="1" />
-                            ))}
-                            <path d="M 50,200 Q 150,180 250,150 T 450,100 T 550,80" fill="none" stroke="url(#lineGradient)" strokeWidth="3" strokeLinecap="round" />
-                            <path d="M 50,200 Q 150,180 250,150 T 450,100 T 550,80 L 550,250 L 50,250 Z" fill="url(#revenueGradient)" />
-                            {[{ x: 50, y: 200 }, { x: 150, y: 180 }, { x: 250, y: 150 }, { x: 350, y: 120 }, { x: 450, y: 100 }, { x: 550, y: 80 },].map((point, i) => (
-                                <circle key={i} cx={point.x} cy={point.y} r="5" fill="#EB4724" stroke="white" strokeWidth="2" />
-                            ))}
-                            {["Jan", "Feb", "Mar", "Apr", "May", "Jun"].map((label, i) => (
-                                <text key={i} x={50 + i * 100} y={280} textAnchor="middle" className="text-xs fill-gray-500" fontSize="12">{label}</text>
-                            ))}
-                            {["$0", "$10k", "$20k", "$30k", "$40k"].map((label, i) => (
-                                <text key={i} x="30" y={250 - i * 50} textAnchor="end" className="text-xs fill-gray-500" fontSize="12">{label}</text>
-                            ))}
-                        </svg>
+                        {loading || revenueLoading ? (
+                            <div className="w-full h-full flex items-center justify-center">
+                                <span className="animate-spin h-8 w-8 border-4 border-[#EB4724] border-t-transparent rounded-full"></span>
+                            </div>
+                        ) : (
+                            <svg viewBox="0 0 600 300" className="w-full h-full">
+                                <defs>
+                                    <linearGradient id="revenueGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                        <stop offset="0%" stopColor="#EB4724" stopOpacity="0.3" />
+                                        <stop offset="100%" stopColor="#EB4724" stopOpacity="0.05" />
+                                    </linearGradient>
+                                    <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" stopColor="#651313" />
+                                        <stop offset="100%" stopColor="#EB4724" />
+                                    </linearGradient>
+                                </defs>
+                                {/* Grid Lines */}
+                                {[0, 1, 2, 3, 4].map((i) => (
+                                    <line key={i} x1="50" y1={50 + i * 50} x2="550" y2={50 + i * 50} stroke="#f3f4f6" strokeWidth="1" />
+                                ))}
+
+                                {/* Dynamic Path Generation */}
+                                {(() => {
+                                    if (!revenueData || revenueData.length === 0) {
+                                        return (
+                                            <text x="300" y="150" textAnchor="middle" className="text-gray-400 text-sm">No revenue data available</text>
+                                        );
+                                    }
+
+                                    // Calculate maximum revenue to scale Y-axis
+                                    const maxRevenue = Math.max(...revenueData.map((d: any) => d.revenue), 100);
+                                    // Ensure we scale nicely (add 20% buffer)
+                                    const yMax = maxRevenue * 1.2;
+
+                                    // Generate points
+                                    // X range: 50 to 550 (width = 500)
+                                    // Y range: 250 (bottom) to 50 (top) (height = 200)
+                                    // 6 points, so segments = 5. Step X = 500 / 5 = 100
+
+                                    const points = revenueData.map((d: any, i: number) => {
+                                        const x = 50 + (i * 100);
+                                        // Normalize revenue to height
+                                        // ratio = d.revenue / yMax
+                                        // y = 250 - (ratio * 200)
+                                        const y = 250 - ((d.revenue / yMax) * 200);
+                                        return { x, y, val: d.revenue, label: d.label };
+                                    });
+
+                                    if (points.length === 0) return null;
+
+                                    // Create path string (Smooth curve using Catmull-Rom or Quadratic Bezier simplification)
+                                    // Simple line for now: L x y
+                                    let pathD = `M ${points[0].x},${points[0].y}`;
+                                    points.slice(1).forEach((p: any) => {
+                                        pathD += ` L ${p.x},${p.y}`;
+                                    });
+                                    // For area fetch, close the path
+                                    const areaD = `${pathD} L ${points[points.length - 1].x},250 L ${points[0].x},250 Z`;
+
+                                    // Determine Y-axis labels dynamically
+                                    const yLabels = [0, yMax * 0.25, yMax * 0.5, yMax * 0.75, yMax].map(v =>
+                                        v >= 1000 ? `$${(v / 1000).toFixed(1)}k` : `$${Math.round(v)}`
+                                    );
+
+                                    return (
+                                        <>
+                                            {/* Y-axis Labels */}
+                                            {yLabels.map((label, i) => (
+                                                <text key={i} x="40" y={250 - i * 50} textAnchor="end" className="text-xs fill-gray-500" fontSize="12">{label}</text>
+                                            ))}
+
+                                            {/* Area Fill */}
+                                            <path d={areaD} fill="url(#revenueGradient)" />
+
+                                            {/* Line Stroke */}
+                                            <path d={pathD} fill="none" stroke="url(#lineGradient)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+
+                                            {/* Data Points */}
+                                            {points.map((p: any, i: number) => (
+                                                <g key={i} className="group relative">
+                                                    <circle cx={p.x} cy={p.y} r="5" fill="#EB4724" stroke="white" strokeWidth="2" />
+                                                    {/* Tooltip on hover */}
+                                                    <title>${p.val.toLocaleString()}</title>
+                                                </g>
+                                            ))}
+
+                                            {/* X-axis Labels (Months) */}
+                                            {points.map((p: any, i: number) => (
+                                                <text key={i} x={p.x} y={280} textAnchor="middle" className="text-xs fill-gray-500" fontSize="12">{p.label}</text>
+                                            ))}
+                                        </>
+                                    );
+                                })()}
+                            </svg>
+                        )}
                     </div>
                 </div>
 
@@ -283,7 +381,7 @@ export default function DashboardContent() {
                     </div>
                     <div className="space-y-4">
                         {loading ? [1, 2, 3].map(i => <div key={i} className="h-16 bg-gray-50 rounded-lg animate-pulse" />) :
-                            transactions.length > 0 ? transactions.slice(0, 5).map((t, i) => {
+                            transactions.filter(t => t.status === 'completed').length > 0 ? transactions.filter(t => t.status === 'completed').slice(0, 5).map((t, i) => {
                                 // Determine what to display based on transaction type
                                 let displayName = 'N/A';
 
@@ -325,6 +423,94 @@ export default function DashboardContent() {
                     </div>
                 </div>
             </div>
+
+            {/* Service Purchase History Table for Regular Users */}
+            {!isPrivileged && userId && (
+                <div className="mt-8">
+                    <DataTable
+                        title="Service Purchase History"
+                        columns={[
+                            {
+                                label: "Service Name",
+                                key: "service",
+                                render: (row: any) => {
+                                    const serviceName = typeof row.service === 'object' ? row.service?.serviceTitle : "N/A";
+                                    return <span className="font-medium text-gray-900">{serviceName}</span>;
+                                }
+                            },
+                            {
+                                label: "Package",
+                                key: "package",
+                                render: (row: any) => {
+                                    const packageId = row.packageId;
+                                    let packageTitle = "N/A";
+
+                                    if (typeof row.service === 'object' && row.service?.packages && packageId) {
+                                        const pkg = row.service.packages.find((p: any) => p._id === packageId);
+                                        packageTitle = pkg?.packageTitle || "N/A";
+                                    }
+                                    return <span className="text-gray-700">{packageTitle}</span>;
+                                }
+                            },
+                            {
+                                label: "Amount",
+                                key: "amount",
+                                align: "center",
+                                render: (row: any) => (
+                                    <div className="text-center">
+                                        <span className="font-bold text-gray-900">${row.amount}</span>
+                                    </div>
+                                )
+                            },
+                            {
+                                label: "Method",
+                                key: "paymentMethod",
+                                align: "center",
+                                render: (row: any) => (
+                                    <div className="text-center">
+                                        <span className="text-blue-600 font-bold uppercase text-xs">
+                                            {row.paymentMethod || "WAAFI"}
+                                        </span>
+                                    </div>
+                                )
+                            },
+                            {
+                                label: "Status",
+                                key: "status",
+                                align: "center",
+                                render: (row: any) => {
+                                    const statusColors: any = {
+                                        completed: "text-green-600",
+                                        failed: "text-red-600",
+                                        pending: "text-yellow-600"
+                                    };
+                                    return (
+                                        <div className="text-center">
+                                            <span className={`font-bold uppercase text-xs ${statusColors[row.status] || 'text-gray-600'}`}>
+                                                {row.status === "completed" && "✓ "}
+                                                {row.status}
+                                            </span>
+                                        </div>
+                                    );
+                                }
+                            },
+                            {
+                                label: "Date",
+                                key: "createdAt",
+                                align: "center",
+                                render: (row: any) => (
+                                    <div className="text-center text-gray-600">
+                                        {new Date(row.createdAt).toLocaleDateString()}
+                                    </div>
+                                )
+                            }
+                        ]}
+                        data={transactions.filter(t => t.type === 'service_payment')}
+                        showAddButton={false}
+                        loading={transactionsLoading}
+                    />
+                </div>
+            )}
 
             {isPrivileged && (
                 <DataTable

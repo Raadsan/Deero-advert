@@ -41,3 +41,9 @@ export const updateTransaction = (id: string, data: any) => {
 export const deleteTransaction = (id: string) => {
   return api.delete(`/transactions/${id}`);
 };
+
+// 📈 GET REVENUE ANALYTICS
+export const getRevenueAnalytics = (userId?: string) => {
+  const url = userId ? `/transactions/analytics/revenue?userId=${userId}` : "/transactions/analytics/revenue";
+  return api.get(url);
+};

@@ -177,11 +177,17 @@ export default function UnifiedSidebar({ isOpen, onClose }: { isOpen?: boolean; 
         return iconMap[normalizedName] || iconMap[iconName.toLowerCase()] || Folder;
     };
 
+    const ensureAbsoluteUrl = (url?: string) => {
+        if (!url) return "#";
+        return url.startsWith("/") ? url : `/${url}`;
+    };
+
     const isMenuActive = (menu: Menu): boolean => {
+        const absoluteUrl = ensureAbsoluteUrl(menu.url);
         if (!menu.isCollapsible && menu.url) {
-            return pathname === menu.url;
+            return pathname === absoluteUrl;
         }
-        return menu.subMenus.some(sub => pathname === sub.url);
+        return menu.subMenus.some(sub => pathname === ensureAbsoluteUrl(sub.url));
     };
 
     return (
@@ -238,7 +244,7 @@ export default function UnifiedSidebar({ isOpen, onClose }: { isOpen?: boolean; 
                                     return (
                                         <li key={`${menu._id}-${index}`}>
                                             <Link
-                                                href={menu.url}
+                                                href={ensureAbsoluteUrl(menu.url)}
                                                 onClick={onClose}
                                                 className={`flex items-center rounded-lg px-4 py-3 transition-colors hover:bg-white/10 ${isActive
                                                     ? "bg-[#EB4724] text-white shadow-md"
@@ -279,11 +285,12 @@ export default function UnifiedSidebar({ isOpen, onClose }: { isOpen?: boolean; 
                                         {isExpanded && menu.subMenus.length > 0 && (
                                             <ul className="mt-1 ml-4 space-y-1">
                                                 {menu.subMenus.map((submenu, subIndex) => {
-                                                    const isSubActive = pathname === submenu.url;
+                                                    const subUrl = ensureAbsoluteUrl(submenu.url);
+                                                    const isSubActive = pathname === subUrl;
                                                     return (
                                                         <li key={`${submenu._id}-${subIndex}`}>
                                                             <Link
-                                                                href={submenu.url}
+                                                                href={subUrl}
                                                                 onClick={onClose}
                                                                 className={`flex items-center rounded-lg px-4 py-2 pl-8 text-sm transition-colors hover:bg-white/10 ${isSubActive
                                                                     ? "bg-white/20 text-white font-medium"
