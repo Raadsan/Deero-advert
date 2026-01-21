@@ -50,7 +50,17 @@ export default function MyServicesPage() {
             label: "Service Name",
             key: "service",
             render: (row: any) => {
-                const serviceName = typeof row.service === 'object' ? row.service?.serviceTitle : "N/A";
+                console.log('Transaction row:', row);
+                console.log('Service data:', row.service, 'Type:', typeof row.service);
+
+                let serviceName = "N/A";
+                if (typeof row.service === 'object' && row.service?.serviceTitle) {
+                    serviceName = row.service.serviceTitle;
+                } else if (row.description) {
+                    // Fallback: try to parse from description
+                    serviceName = row.description.replace("Payment for ", "").split(" - ")[0] || "N/A";
+                }
+
                 return <span className="font-medium text-gray-900">{serviceName}</span>;
             }
         },
@@ -64,7 +74,12 @@ export default function MyServicesPage() {
                 if (typeof row.service === 'object' && row.service?.packages && packageId) {
                     const pkg = row.service.packages.find((p: any) => p._id === packageId);
                     packageTitle = pkg?.packageTitle || "N/A";
+                } else if (row.description && row.description.includes(" - ")) {
+                    // Fallback: try to parse from description
+                    const parts = row.description.replace("Payment for ", "").split(" - ");
+                    packageTitle = parts[1] || "N/A";
                 }
+
                 return <span className="text-gray-700">{packageTitle}</span>;
             }
         },

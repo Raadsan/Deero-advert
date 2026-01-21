@@ -11,10 +11,10 @@ import { logout as apiLogout } from "../../api/authApi";
 
 const navLinks = [
   { label: "Home", href: "/" },
+  { label: "About Us", href: "/about" },
   { label: "Hosting", href: "/hosting" },
   { label: "Services", href: "/services" },
   { label: "Portfolio", href: "/portfolio" },
-  { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];
 
