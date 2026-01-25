@@ -1,14 +1,5 @@
 // frontend/services/achievementApi.ts
-import api from "./axios";
-
-export interface Achievement {
-  _id: string;
-  title: string;
-  count: number;
-  icon: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import api from "./axios"; // your axios instance
 
 // ➕ CREATE ACHIEVEMENT (with FormData for file upload)
 export const createAchievement = (formData: FormData) => {
@@ -21,12 +12,12 @@ export const createAchievement = (formData: FormData) => {
 
 // 📄 GET ALL ACHIEVEMENTS
 export const getAllAchievements = () => {
-  return api.get<{ success: boolean; data: Achievement[] }>("/achievements");
+  return api.get("/achievements");
 };
 
 // 📄 GET ACHIEVEMENT BY ID
 export const getAchievementById = (id: string) => {
-  return api.get<{ success: boolean; data: Achievement }>(`/achievements/${id}`);
+  return api.get(`/achievements/${id}`);
 };
 
 // ✏️ UPDATE ACHIEVEMENT (with FormData for file upload)

@@ -9,7 +9,7 @@ import { getAllAchievements } from "@/api/achievementApi";
 import { getAllEventsNews } from "@/api/eventsNewsApi";
 import { getMajorClients } from "@/api/majorClientApi";
 import { getAllTransactions, getTransactionsByUser, getRevenueAnalytics } from "@/api/transactionApi";
-import { getDomainsByUser } from "@/api/domainApi";
+
 import DataTable from "@/components/layout/DataTable";
 import { Transaction } from "@/types/transaction";
 import { isAdminOrManager, getUserId, isUser, getUserRole } from "@/utils/auth";
@@ -106,22 +106,17 @@ export default function DashboardContent() {
                 } else if (userId) {
                     setRevenueLoading(true);
                     // REGULAR USER STATS - Personal
-                    const [domainsRes, transactionsRes, revenueRes] = await Promise.all([
-                        getDomainsByUser(userId),
+                    const [transactionsRes, revenueRes] = await Promise.all([
                         getTransactionsByUser(userId),
                         getRevenueAnalytics(userId),
                     ]);
 
-                    const myDomains = domainsRes.data?.domains || [];
                     const myTransactions = transactionsRes.data?.transactions || [];
 
-                    // Filter domains to only count those with completed transactions
-                    const activeDomainsCount = myDomains.filter((d: any) => {
-                        return myTransactions.some((t: any) =>
-                            t.status === "completed" &&
-                            (typeof t.domain === 'object' ? t.domain?._id === d._id : t.domain === d._id)
-                        );
-                    }).length;
+                    // Filter transactions to count active domains
+                    const activeDomainsCount = myTransactions.filter((t: any) =>
+                        (t.type === 'register' || t.domain || t.domainId) && t.status === 'completed'
+                    ).length;
 
                     // Set revenue data (Spending Overview)
                     if (revenueRes.data && revenueRes.data.success) {
@@ -405,7 +400,21 @@ export default function DashboardContent() {
                                     }
                                 } else {
                                     // For domain purchases, show the domain name
-                                    displayName = typeof t.domain === 'object' ? t.domain?.name : 'N/A';
+                                    let name = typeof t.domain === 'object' ? t.domain?.name : t.domain;
+                                    // Check for new domainName field
+                                    if (t.domainName) name = t.domainName;
+
+                                    // Fallback: If it looks like an ObjectId (24 hex chars) or is missing, try description
+                                    if (!name || (typeof name === 'string' && name.length === 24 && /^[0-9a-fA-F]{24}$/.test(name))) {
+                                        if (t.description) {
+                                            if (t.description.includes("Payment for domain - ")) {
+                                                name = t.description.replace("Payment for domain - ", "").trim();
+                                            } else if (t.description.includes("Domain Registration: ")) {
+                                                name = t.description.replace("Domain Registration: ", "").trim();
+                                            }
+                                        }
+                                    }
+                                    displayName = name || 'N/A';
                                 }
 
                                 return (

@@ -1,9 +1,10 @@
 import { User } from "./user";
-import { Domain } from "./domain";
+
 
 export interface Transaction {
     _id: string;
-    domain?: string | Domain;
+    domain?: string | any;
+    domainName?: string;
     service?: string | any; // Service object with packages
     packageId?: string;
     hostingPackage?: any;

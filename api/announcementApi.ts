@@ -1,4 +1,5 @@
-import api from "./axios";
+// frontend/services/announcementApi.ts
+import api from "./axios"; // your axios instance
 
 export interface Announcement {
     _id: string;
@@ -20,45 +21,27 @@ export interface Announcement {
     updatedAt: string;
 }
 
-export interface AnnouncementResponse {
-    success: boolean;
-    data?: Announcement | Announcement[];
-    message?: string;
-}
-
-/**
- * Get all announcements
- */
-export const getAllAnnouncements = async (): Promise<AnnouncementResponse> => {
-    const response = await api.get<AnnouncementResponse>("/announcements");
-    return response.data;
-};
-
-/**
- * Create or broadcast announcement
- */
-export const createAnnouncement = async (data: {
+// ➕ CREATE ANNOUNCEMENT
+export const createAnnouncement = (data: {
     title: string;
     message: string;
     sendEmail?: boolean;
     recipients?: string[];
-}): Promise<AnnouncementResponse> => {
-    const response = await api.post<AnnouncementResponse>("/announcements", data);
-    return response.data;
+}) => {
+    return api.post("/announcements", data);
 };
 
-/**
- * Get announcement by ID
- */
-export const getAnnouncementById = async (id: string): Promise<AnnouncementResponse> => {
-    const response = await api.get<AnnouncementResponse>(`/announcements/${id}`);
-    return response.data;
+// 📄 GET ALL ANNOUNCEMENTS
+export const getAllAnnouncements = () => {
+    return api.get("/announcements");
 };
 
-/**
- * Delete announcement
- */
-export const deleteAnnouncement = async (id: string): Promise<AnnouncementResponse> => {
-    const response = await api.delete<AnnouncementResponse>(`/announcements/${id}`);
-    return response.data;
+// 📄 GET ANNOUNCEMENT BY ID
+export const getAnnouncementById = (id: string) => {
+    return api.get(`/announcements/${id}`);
+};
+
+// 🗑 DELETE ANNOUNCEMENT
+export const deleteAnnouncement = (id: string) => {
+    return api.delete(`/announcements/${id}`);
 };

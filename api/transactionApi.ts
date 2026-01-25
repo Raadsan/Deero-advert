@@ -3,6 +3,12 @@ import api from "./axios";
 // ➕ CREATE TRANSACTION
 export const createTransaction = (data: {
   domainId?: string;
+  domain?: {
+    name: string;
+    user: string;
+    price: number;
+    [key: string]: any;
+  };
   serviceId?: string;
   packageId?: string;
   hostingPackageId?: string;

@@ -9,6 +9,8 @@ import { Globe } from "lucide-react";
 interface Domain {
     _id: string;
     name?: string; // Fallback
+    domainName?: string; // New field
+    description?: string; // For parsing
     domain?: {
         _id: string;
         name: string;
@@ -128,14 +130,32 @@ export default function DomainsPage() {
                     {
                         label: "Domain Name",
                         key: "name",
-                        render: (row: Domain) => (
-                            <div className="flex items-center gap-2">
-                                <div className="p-1.5 rounded bg-blue-50 text-blue-600">
-                                    <Globe className="h-4 w-4" />
+                        render: (row: Domain) => {
+                            let name = row.domainName || row.domain?.name || row.name;
+
+                            // Fallback logic
+                            if (!name || (typeof name === 'string' && name.length === 24 && /^[0-9a-fA-F]{24}$/.test(name))) {
+                                if (row.description) {
+                                    if (row.description.includes("Payment for domain - ")) {
+                                        name = row.description.replace("Payment for domain - ", "").trim();
+                                    } else if (row.description.includes("Domain Registration: ")) {
+                                        name = row.description.replace("Domain Registration: ", "").trim();
+                                    }
+                                }
+                            }
+                            // Fallback for ID display if still not found (better than nothing, or stay '-')
+                            if (!name && row.domain?._id) name = row.domain._id;
+                            if (!name && row.name) name = row.name;
+
+                            return (
+                                <div className="flex items-center gap-2">
+                                    <div className="p-1.5 rounded bg-blue-50 text-blue-600">
+                                        <Globe className="h-4 w-4" />
+                                    </div>
+                                    <span className="font-medium text-gray-900">{name || "-"}</span>
                                 </div>
-                                <span className="font-medium text-gray-900">{row.domain?.name || row.name || "-"}</span>
-                            </div>
-                        ),
+                            );
+                        },
                     },
                     {
                         label: "User Name",

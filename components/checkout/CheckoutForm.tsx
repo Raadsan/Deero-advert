@@ -10,7 +10,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "@/context/CartContext";
 import { loginUser, signupUser } from "@/api/authApi";
-import { registerDomain } from "@/api/domainApi";
+
 import { createTransaction } from "@/api/transactionApi";
 import { isAdminOrManager, isAuthenticated } from "@/utils/auth";
 import { useEffect } from "react";
@@ -18,7 +18,7 @@ import { useEffect } from "react";
 export default function CheckoutForm() {
     const { cartItems, cartTotal, clearCart } = useCart();
     const router = useRouter();
-    const [paymentMethod, setPaymentMethod] = useState<'mail' | 'waafi'>('mail');
+    const [paymentMethod, setPaymentMethod] = useState<'waafi'>('waafi');
     const [isExistingCustomer, setIsExistingCustomer] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -115,18 +115,13 @@ export default function CheckoutForm() {
             // Process each item in cart
             for (const item of cartItems) {
                 if (item.type === 'domain') {
-                    // 1. Register Domain
-                    const domainRes = await registerDomain({
-                        domainName: item.subtitle, // subtitle contains the domain name like 'example.com'
-                        userId: userId,
-                        price: item.price
-                    });
-
-                    const domainId = domainRes.data.domain._id;
-
-                    // 2. Create Transaction
+                    // 1. Create Transaction (Domain created by backend)
                     await createTransaction({
-                        domainId: domainId,
+                        domain: {
+                            name: item.subtitle, // subtitle is the domain name
+                            user: userId,
+                            price: item.price
+                        },
                         userId: userId,
                         type: "register",
                         amount: item.price,
@@ -496,37 +491,10 @@ export default function CheckoutForm() {
                 </div>
 
                 <div className="space-y-4">
-                    <p className="font-bold text-[#651313]">Please choose your preferred method of payment.</p>
-                    <div className="flex flex-wrap gap-6">
-                        <label className="flex items-center gap-3 cursor-pointer group">
-                            <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${paymentMethod === 'mail' ? 'border-[#EB4724] bg-[#EB4724]' : 'border-gray-200'}`}>
-                                {paymentMethod === 'mail' && <CheckCircle2 className="w-4 h-4 text-white" />}
-                            </div>
-                            <input
-                                type="radio"
-                                name="payment"
-                                className="hidden"
-                                checked={paymentMethod === 'mail'}
-                                onChange={() => setPaymentMethod('mail')}
-                            />
-                            <span className="text-[#651313] font-medium group-hover:text-[#EB4724] transition-colors">Mail In Payment</span>
-                        </label>
-                        <label className="flex items-center gap-3 cursor-pointer group">
-                            <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${paymentMethod === 'waafi' ? 'border-[#EB4724] bg-[#EB4724]' : 'border-gray-200'}`}>
-                                {paymentMethod === 'waafi' && <CheckCircle2 className="w-4 h-4 text-white" />}
-                            </div>
-                            <input
-                                type="radio"
-                                name="payment"
-                                className="hidden"
-                                checked={paymentMethod === 'waafi'}
-                                onChange={() => setPaymentMethod('waafi')}
-                            />
-                            <span className="text-[#651313] font-medium group-hover:text-[#EB4724] transition-colors">Waafi Payment( EVC, Zaad, Sahal, Jeeb)</span>
-                        </label>
-                    </div>
+                    <p className="font-bold text-[#651313]">Payment Method: Waafi Payment (EVC, Zaad, Sahal, Jeeb)</p>
 
-                    {paymentMethod === 'waafi' && (
+                    {/* Waafi Phone Input - Always shown */}
+                    {true && (
                         <div className="mt-4 animate-in fade-in slide-in-from-top-2">
                             <div className="relative group">
                                 <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#EB4724] transition-colors">

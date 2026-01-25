@@ -90,7 +90,16 @@ export default function DomainSearch() {
                         const match = results.find(r => r.domain.toLowerCase() === searchDomain);
 
                         if (match) {
-                            if (!match.available) {
+                            if (match.invalidTld) {
+                                return (
+                                    <div className="w-full max-w-2xl bg-white rounded-md p-3 flex items-center gap-2 text-[#651313]">
+                                        <div className="bg-[#651313] rounded-full p-1">
+                                            <ExclamationCircleIcon className="w-5 h-5 text-white" />
+                                        </div>
+                                        <span className="font-medium text-lg">{match.domain} extension not exist</span>
+                                    </div>
+                                );
+                            } else if (!match.available) {
                                 return (
                                     <div className="w-full max-w-2xl bg-white rounded-md p-3 flex items-center gap-2 text-[#651313]">
                                         <div className="bg-[#651313] rounded-full p-1">

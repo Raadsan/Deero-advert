@@ -18,6 +18,7 @@ export default function HostingDomainSearch({ transparent = false }: { transpare
     const [results, setResults] = useState<DomainCheckResult[] | null>(null);
     const [loading, setLoading] = useState(false);
     const [allPrices, setAllPrices] = useState<DomainPrice[]>([]);
+    const [selectedDuration, setSelectedDuration] = useState(1);
 
     // Use useSearchParams to get the query parameter
     // Note: We need to use useSearchParams from next/navigation
@@ -100,8 +101,8 @@ export default function HostingDomainSearch({ transparent = false }: { transpare
             title: 'Domain Registration',
             subtitle: domain,
             price: parseFloat(price.replace('$', '')),
-            options: '1 Year',
-            renewalPrice: parseFloat(price.replace('$', ''))
+            options: `${selectedDuration} Year${selectedDuration > 1 ? 's' : ''}`,
+            renewalPrice: parseFloat(price.replace('$', '')) / selectedDuration // calculate base renewal properly per year assumption
         });
     };
 
@@ -201,13 +202,21 @@ export default function HostingDomainSearch({ transparent = false }: { transpare
                             {/* Results Section */}
                             {results && query && (
                                 <div className="space-y-4 pt-4 border-t border-gray-100">
-                                    {/* Main Result Banner */}
                                     {(() => {
                                         const searchDomain = query.includes('.') ? query.toLowerCase() : `${query.toLowerCase()}.com`;
                                         const match = results.find(r => r.domain.toLowerCase() === searchDomain);
 
                                         if (match) {
-                                            if (!match.available) {
+                                            if (match.invalidTld) {
+                                                return (
+                                                    <div className="w-full bg-[#651313]/5 rounded-xl p-4 flex items-center gap-3 text-[#651313]">
+                                                        <div className="bg-[#651313] rounded-full p-1 shrink-0">
+                                                            <ExclamationCircleIcon className="w-5 h-5 text-white" />
+                                                        </div>
+                                                        <span className="font-semibold text-lg">{match.domain} extension not exist</span>
+                                                    </div>
+                                                );
+                                            } else if (!match.available) {
                                                 return (
                                                     <div className="w-full bg-[#651313]/5 rounded-xl p-4 flex items-center gap-3 text-[#651313]">
                                                         <div className="bg-[#651313] rounded-full p-1 shrink-0">
@@ -217,23 +226,53 @@ export default function HostingDomainSearch({ transparent = false }: { transpare
                                                     </div>
                                                 );
                                             } else {
+                                                const basePrice = parseFloat(match.price.replace(/[^0-9.]/g, '')) || 0;
+                                                const totalPrice = (basePrice * selectedDuration).toFixed(2);
+
                                                 return (
-                                                    <div className="w-full bg-green-50 rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-green-700">
+                                                    <div className="w-full bg-green-50 rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+                                                        {/* Left side - Available message */}
                                                         <div className="flex items-center gap-3">
                                                             <div className="bg-green-600 rounded-full p-1 shrink-0">
                                                                 <CheckCircleIcon className="w-5 h-5 text-white" />
                                                             </div>
-                                                            <span className="font-semibold text-lg">{match.domain} is available!</span>
+                                                            <span className="font-semibold text-lg text-green-700">{match.domain} is available!</span>
                                                         </div>
-                                                        <button
-                                                            onClick={() => handleAddToCart(match.domain, match.price)}
-                                                            className={`whitespace-nowrap px-6 py-2 rounded-lg font-bold transition-colors shadow-sm active:scale-95 ${isInCart(match.domain)
-                                                                ? 'bg-gray-100 text-[#651313] hover:bg-gray-200'
-                                                                : 'bg-[#EB4724] text-white hover:bg-[#d13d1d]'
-                                                                }`}
-                                                        >
-                                                            {isInCart(match.domain) ? 'Remove from Cart' : 'Add to Cart'}
-                                                        </button>
+
+                                                        {/* Right side - Duration, Price, and Button */}
+                                                        <div className="flex items-center gap-3 sm:gap-4 w-full sm:w-auto justify-between sm:justify-end">
+                                                            {/* Duration Dropdown */}
+                                                            <div className="relative">
+                                                                <select
+                                                                    value={selectedDuration}
+                                                                    onChange={(e) => setSelectedDuration(parseInt(e.target.value))}
+                                                                    className="appearance-none bg-white border border-gray-300 text-gray-700 py-2 pl-3 pr-8 rounded-md leading-tight focus:outline-none focus:border-green-500 text-sm font-medium cursor-pointer hover:border-green-400 transition-colors"
+                                                                >
+                                                                    {[1, 2, 3, 5, 10].map(year => (
+                                                                        <option key={year} value={year}>{year} year{year > 1 ? 's' : ''}</option>
+                                                                    ))}
+                                                                </select>
+                                                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-600">
+                                                                    <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
+                                                                </div>
+                                                            </div>
+
+                                                            {/* Price Display */}
+                                                            <div className="font-bold text-lg text-gray-800 min-w-[70px] text-right">
+                                                                ${totalPrice}
+                                                            </div>
+
+                                                            {/* Add to Cart Button */}
+                                                            <button
+                                                                onClick={() => handleAddToCart(match.domain, totalPrice)}
+                                                                className={`whitespace-nowrap px-5 py-2 rounded-lg font-bold transition-all shadow-sm active:scale-95 ${isInCart(match.domain)
+                                                                    ? 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+                                                                    : 'bg-[#EB4724] text-white hover:bg-[#d13d1d]'
+                                                                    }`}
+                                                            >
+                                                                {isInCart(match.domain) ? 'Remove from Cart' : 'Add to Cart'}
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 );
                                             }

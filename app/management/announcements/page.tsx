@@ -41,8 +41,8 @@ export default function AnnouncementsPage() {
                 getAllUsers()
             ]);
 
-            if (annRes.success && annRes.data) {
-                const data = Array.isArray(annRes.data) ? annRes.data : [annRes.data];
+            if (annRes.data?.success && annRes.data?.data) {
+                const data = Array.isArray(annRes.data.data) ? annRes.data.data : [annRes.data.data];
                 setAnnouncements([...data].reverse());
             }
 
@@ -88,13 +88,24 @@ export default function AnnouncementsPage() {
                 recipients: formData.recipients.length > 0 ? formData.recipients : undefined
             });
 
-            if (res.success) {
+            // Handle the response - res.data contains the actual response
+            if (res.data?.success) {
                 closeModal();
                 fetchData();
+
+                // Show appropriate message based on email status
+                if (res.data.emailSent === false && res.data.emailError) {
+                    alert(`✅ Announcement created successfully!\n\n⚠️ However, email sending failed: ${res.data.emailError}\n\nThe announcement is saved and visible to users in the app.`);
+                } else if (formData.sendEmail) {
+                    alert("✅ Announcement sent successfully! Emails have been delivered to recipients.");
+                } else {
+                    alert("✅ Announcement created successfully!");
+                }
             } else {
-                alert(res.message || "Failed to send announcement");
+                alert(res.data?.message || "Failed to send announcement");
             }
         } catch (error: any) {
+            console.error("Error sending announcement:", error);
             alert(error.response?.data?.message || "Error sending announcement");
         } finally {
             setIsSubmitting(false);
@@ -111,7 +122,7 @@ export default function AnnouncementsPage() {
         if (!deletingId) return;
         try {
             const res = await deleteAnnouncement(deletingId);
-            if (res.success) {
+            if (res.data?.success) {
                 fetchData();
             }
         } catch (error: any) {

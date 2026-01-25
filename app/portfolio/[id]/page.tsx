@@ -11,6 +11,9 @@ import Footer from "@/components/layout/Footer";
 
 
 
+import { ArrowRight } from "lucide-react";
+import ImageModal from "@/components/layout/ImageModal";
+
 export default function PortfolioGalleryPage() {
     const params = useParams();
     const router = useRouter();
@@ -18,6 +21,7 @@ export default function PortfolioGalleryPage() {
 
     const [portfolio, setPortfolio] = useState<any>(null);
     const [loading, setLoading] = useState(true);
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchPortfolio = async () => {
@@ -132,8 +136,12 @@ export default function PortfolioGalleryPage() {
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true, amount: 0.1 }}
                                     transition={{ duration: 0.8, delay: index * 0.1 }}
-                                    className="relative aspect-[4/3] group overflow-hidden rounded-md shadow-lg bg-white"
+                                    className="relative aspect-[4/3] group overflow-hidden rounded-md shadow-lg bg-white cursor-pointer"
+                                    onClick={() => setSelectedImage(img)}
                                 >
+                                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors z-10 flex items-center justify-center">
+
+                                    </div>
                                     <Image
                                         src={getImageUrl(img) || "/logo deero-02 .svg"}
                                         alt={`${portfolio.title} gallery ${index + 1}`}
@@ -154,6 +162,45 @@ export default function PortfolioGalleryPage() {
                     )}
                 </div>
             </div>
+
+            {/* Lightbox Modal */}
+            <ImageModal
+                isOpen={!!selectedImage}
+                onClose={() => setSelectedImage(null)}
+                onNext={() => {
+                    if (!selectedImage) return;
+                    const currentIndex = galleryImages.indexOf(selectedImage);
+                    if (currentIndex < galleryImages.length - 1) {
+                        setSelectedImage(galleryImages[currentIndex + 1]);
+                    }
+                }}
+                onPrev={() => {
+                    if (!selectedImage) return;
+                    const currentIndex = galleryImages.indexOf(selectedImage);
+                    if (currentIndex > 0) {
+                        setSelectedImage(galleryImages[currentIndex - 1]);
+                    }
+                }}
+                hasNext={selectedImage ? galleryImages.indexOf(selectedImage) < galleryImages.length - 1 : false}
+                hasPrev={selectedImage ? galleryImages.indexOf(selectedImage) > 0 : false}
+            >
+                {selectedImage && (
+                    <div className="relative w-auto h-auto max-w-[90vw] max-h-[90vh]">
+                        <Image
+                            src={getImageUrl(selectedImage) || "/logo deero-02 .svg"}
+                            alt={portfolio?.title || "Gallery Image"}
+                            width={1200}
+                            height={800}
+                            style={{ width: 'auto', height: 'auto', maxHeight: '90vh', objectFit: 'contain' }}
+                            onError={(e) => {
+                                const target = e.target as HTMLImageElement;
+                                target.src = "/logo deero-02 .svg";
+                            }}
+                        />
+                    </div>
+                )}
+            </ImageModal>
+
             <Footer />
         </>
     );

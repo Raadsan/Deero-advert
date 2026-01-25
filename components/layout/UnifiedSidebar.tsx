@@ -122,7 +122,16 @@ export default function UnifiedSidebar({ isOpen, onClose }: { isOpen?: boolean; 
                     const response = await getUserMenus(typeof roleId === 'object' ? roleId._id : roleId);
                     if (isMounted) {
                         if (response && response.menus) {
-                            setMenus(response.menus);
+                            // Filter out Domain Management from menus and submenus
+                            const filteredMenus = response.menus.filter((m: Menu) =>
+                                m.title !== "Domain Managment" && m.title !== "Domain Management"
+                            ).map((m: Menu) => ({
+                                ...m,
+                                subMenus: m.subMenus.filter((sm: any) =>
+                                    sm.title !== "Domain Managment" && sm.title !== "Domain Management"
+                                )
+                            }));
+                            setMenus(filteredMenus);
                         } else {
                             setMenus([]);
                         }

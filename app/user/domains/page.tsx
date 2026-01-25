@@ -3,16 +3,14 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { isAuthenticated, getUserId } from "@/utils/auth";
-import { getDomainsByUser } from "@/api/domainApi";
 import { getTransactionsByUser } from "@/api/transactionApi";
-import { Domain } from "@/types/domain";
 import DataTable from "@/components/layout/DataTable";
 import { GlobeAltIcon } from "@heroicons/react/24/outline";
 
 export default function UserDomainsPage() {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(true);
-    const [domains, setDomains] = useState<Domain[]>([]);
+    const [domains, setDomains] = useState<any[]>([]);
 
     useEffect(() => {
         const fetchDomainsAndTransactions = async () => {
@@ -24,28 +22,43 @@ export default function UserDomainsPage() {
             try {
                 const userId = getUserId();
                 if (userId) {
-                    const [domainsRes, transactionsRes] = await Promise.all([
-                        getDomainsByUser(userId),
+                    const [transactionsRes] = await Promise.all([
                         getTransactionsByUser(userId)
                     ]);
 
-                    let validDomainIds = new Set<string>();
-
                     if (transactionsRes.data.success) {
                         const transactions = transactionsRes.data.transactions || [];
+                        const validDomains: any[] = [];
+
                         transactions.forEach((t: any) => {
-                            if (t.status === "completed" && t.domain) {
-                                const dId = typeof t.domain === 'object' ? t.domain._id : t.domain;
-                                validDomainIds.add(dId);
+                            if (t.status === "completed" && (t.type === 'register' || t.domainName || t.domain)) {
+                                // Extract domain name
+                                let name = t.domainName || (typeof t.domain === 'object' ? t.domain.name : t.domain);
+
+                                // Fallback: If it looks like an ObjectId (24 hex chars) or is missing, try description
+                                if (!name || (typeof name === 'string' && name.length === 24 && /^[0-9a-fA-F]{24}$/.test(name))) {
+                                    if (t.description) {
+                                        if (t.description.includes("Payment for domain - ")) {
+                                            name = t.description.replace("Payment for domain - ", "").trim();
+                                        } else if (t.description.includes("Domain Registration: ")) {
+                                            name = t.description.replace("Domain Registration: ", "").trim();
+                                        }
+                                    }
+                                }
+
+                                if (name && !(typeof name === 'string' && name.length === 24 && /^[0-9a-fA-F]{24}$/.test(name))) {
+                                    validDomains.push({
+                                        _id: t._id, // Use transaction ID as key
+                                        name: name,
+                                        status: "registered",
+                                        registrationDate: t.createdAt,
+                                        expiryDate: new Date(new Date(t.createdAt).setFullYear(new Date(t.createdAt).getFullYear() + 1)).toISOString() // Approximate expiry
+                                    });
+                                }
                             }
                         });
-                    }
 
-                    if (domainsRes.data.success) {
-                        const allDomains = domainsRes.data.domains;
-                        // Only show domains that have a corresponding COMPLETED transaction
-                        const filteredDomains = allDomains.filter((d: Domain) => validDomainIds.has(d._id));
-                        setDomains(filteredDomains);
+                        setDomains(validDomains);
                     }
                 }
             } catch (error) {

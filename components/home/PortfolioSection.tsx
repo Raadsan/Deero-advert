@@ -9,6 +9,7 @@ import { useState, useEffect } from "react";
 import { getPortfolios } from "@/api/portfolioApi";
 import { getImageUrl, slugify } from "@/utils/url";
 import { ArrowRight } from "lucide-react";
+import ImageModal from "../layout/ImageModal";
 
 
 
@@ -19,6 +20,7 @@ export default function PortfolioSection({ showHeader = true, limit }: { showHea
     const [portfolios, setPortfolios] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [selectedItem, setSelectedItem] = useState<any | null>(null);
 
     useEffect(() => {
         const fetchPortfolios = async () => {
@@ -159,7 +161,13 @@ export default function PortfolioSection({ showHeader = true, limit }: { showHea
 
                                 {/* Right Image Area */}
                                 <div className="lg:w-1/2 p-6 lg:p-8 flex items-center justify-center">
-                                    <div className="relative w-full rounded-2xl overflow-hidden shadow-md">
+                                    <div
+                                        className="relative w-full rounded-2xl overflow-hidden shadow-md cursor-pointer group/image"
+                                        onClick={() => setSelectedItem(item)}
+                                    >
+                                        <div className="absolute inset-0 bg-black/0 group-hover/image:bg-black/10 transition-colors z-10 flex items-center justify-center">
+
+                                        </div>
                                         <Image
                                             src={item.mainImage || "/logo deero-02 .svg"}
                                             alt={item.title}
@@ -187,6 +195,44 @@ export default function PortfolioSection({ showHeader = true, limit }: { showHea
                     )}
                 </div>
             </div>
+
+            {/* Image Modal */}
+            <ImageModal
+                isOpen={!!selectedItem}
+                onClose={() => setSelectedItem(null)}
+                onNext={() => {
+                    if (!selectedItem) return;
+                    const currentIndex = portfolios.findIndex(p => p._id === selectedItem._id);
+                    if (currentIndex < portfolios.length - 1) {
+                        setSelectedItem(portfolios[currentIndex + 1]);
+                    }
+                }}
+                onPrev={() => {
+                    if (!selectedItem) return;
+                    const currentIndex = portfolios.findIndex(p => p._id === selectedItem._id);
+                    if (currentIndex > 0) {
+                        setSelectedItem(portfolios[currentIndex - 1]);
+                    }
+                }}
+                hasNext={selectedItem && portfolios.findIndex(p => p._id === selectedItem._id) < portfolios.length - 1}
+                hasPrev={selectedItem && portfolios.findIndex(p => p._id === selectedItem._id) > 0}
+            >
+                {selectedItem && (
+                    <div className="relative w-auto h-auto max-w-[90vw] max-h-[90vh]">
+                        <Image
+                            src={selectedItem.mainImage || "/logo deero-02 .svg"}
+                            alt={selectedItem.title}
+                            width={1200}
+                            height={800}
+                            style={{ width: 'auto', height: 'auto', maxHeight: '90vh', objectFit: 'contain' }}
+                            onError={(e) => {
+                                const target = e.target as HTMLImageElement;
+                                target.src = "/logo deero-02 .svg";
+                            }}
+                        />
+                    </div>
+                )}
+            </ImageModal>
         </section>
     );
 }

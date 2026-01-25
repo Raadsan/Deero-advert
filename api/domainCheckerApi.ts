@@ -4,6 +4,8 @@ export interface DomainCheckResult {
     domain: string;
     available: boolean;
     price: string;
+    id: string;
+    invalidTld?: boolean;
 }
 
 export interface DomainCheckResponse {
@@ -25,16 +27,26 @@ const getApiUrl = () => {
 };
 
 // Fetch all available domain prices from backend
+// Hardcoded prices since backend endpoint is removed
+import { VALID_TLDS } from "./validTlds";
+
 export const fetchAllDomainPrices = async (): Promise<DomainPrice[]> => {
-    try {
-        const response = await fetch(`${getApiUrl()}/api/domain-prices`, { cache: 'no-store' });
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        const data = await response.json();
-        return data.success ? data.prices : [];
-    } catch (error) {
-        console.error("Failed to fetch domain prices:", error);
-        return [];
-    }
+    return [
+        { tld: '.com', newPrice: 14.99, duration: '1 Year' },
+        { tld: '.net', newPrice: 15.99, duration: '1 Year' },
+        { tld: '.org', newPrice: 16.99, duration: '1 Year' },
+        { tld: '.io', newPrice: 39.99, duration: '1 Year' },
+        { tld: '.co', newPrice: 29.99, duration: '1 Year' },
+        { tld: '.ai', newPrice: 79.99, duration: '1 Year' },
+        { tld: '.info', newPrice: 9.99, duration: '1 Year' },
+        { tld: '.biz', newPrice: 12.99, duration: '1 Year' },
+        { tld: '.online', newPrice: 5.28, duration: '1 Year' }, // Added per request
+        { tld: '.xyz', newPrice: 10.99, duration: '1 Year' },
+        { tld: '.tech', newPrice: 9.99, duration: '1 Year' },
+        { tld: '.store', newPrice: 19.99, duration: '1 Year' },
+        { tld: '.me', newPrice: 18.99, duration: '1 Year' },
+        { tld: '.site', newPrice: 2.99, duration: '1 Year' }
+    ];
 };
 
 // Check domain availability for specific TLDs
@@ -65,6 +77,30 @@ export const checkDomainAvailability = async (
     // Strip any existing extension to get base name
     const baseName = query.includes('.') ? query.substring(0, query.lastIndexOf('.')) : query;
 
+    // Detect if user typed a specific extension that wasn't covered
+    if (query.includes('.')) {
+        const ext = query.substring(query.lastIndexOf('.')).toLowerCase();
+
+        // VALIDATION: Check if it's a real TLD
+        if (!VALID_TLDS.includes(ext)) {
+            // If explicit extension is invalid, fail immediately for this batch
+            return {
+                success: true,
+                results: [{
+                    id: query,
+                    domain: query,
+                    available: false,
+                    price: 'N/A',
+                    invalidTld: true
+                }]
+            };
+        }
+
+        if (!tldsToCheck.includes(ext)) {
+            tldsToCheck.push(ext);
+        }
+    }
+
     const results: DomainCheckResult[] = [];
     const BATCH_SIZE = 3;
 
@@ -72,7 +108,12 @@ export const checkDomainAvailability = async (
         const batch = tldsToCheck.slice(i, i + BATCH_SIZE);
         const batchPromises = batch.map(async (tld) => {
             const domainName = (baseName + tld).toLowerCase();
-            const price = priceMap.get(tld.toLowerCase()) || 14.99; // Fallback price
+            let price = priceMap.get(tld.toLowerCase());
+
+            // If price is missing for this TLD, used a default fallback instead of blocking
+            if (price === undefined) {
+                price = 19.99; // Default fallback price for unknown TLDs
+            }
 
             try {
                 // Using rdap.org for availability check
@@ -82,6 +123,7 @@ export const checkDomainAvailability = async (
                 if (response.status === 429) {
                     console.warn(`Rate limited for ${domainName}, treating as available`);
                     return {
+                        id: domainName,
                         domain: domainName,
                         available: true,
                         price: `$${price.toFixed(2)}/Year`
@@ -89,6 +131,7 @@ export const checkDomainAvailability = async (
                 }
 
                 return {
+                    id: domainName,
                     domain: domainName,
                     available: response.status === 404,
                     price: `$${price.toFixed(2)}/Year`
@@ -96,6 +139,7 @@ export const checkDomainAvailability = async (
             } catch (error) {
                 console.error(`RDAP check failed for ${domainName}:`, error);
                 return {
+                    id: domainName,
                     domain: domainName,
                     available: true, // Assume available on error
                     price: `$${price.toFixed(2)}/Year`
