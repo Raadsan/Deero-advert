@@ -1,4 +1,5 @@
 "use client";
+export const dynamic = 'force-static';
 
 import { useState, useEffect } from "react";
 import { getAllTransactions } from "@/api/transactionApi";

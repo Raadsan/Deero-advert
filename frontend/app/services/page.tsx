@@ -1,4 +1,5 @@
 "use client";
+export const dynamic = 'force-static';
 
 import { useEffect } from "react";
 import Header from "@/components/layout/Header";

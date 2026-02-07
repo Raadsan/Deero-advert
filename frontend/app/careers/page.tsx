@@ -1,3 +1,4 @@
+export const dynamic = 'force-static';
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import CareersHero from "@/components/careers/CareersHero";

@@ -1,4 +1,5 @@
 "use client";
+export const dynamic = 'force-static';
 
 import { useState, useEffect } from "react";
 import { Eye, EyeOff, Mail, Lock, User, Phone, ArrowLeft } from "lucide-react";

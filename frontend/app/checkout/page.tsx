@@ -1,4 +1,5 @@
 "use client";
+export const dynamic = 'force-static';
 
 import CartHeader from "@/components/cart/CartHeader";
 import Header from "@/components/layout/Header";

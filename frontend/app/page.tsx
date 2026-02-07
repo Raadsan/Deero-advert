@@ -1,3 +1,4 @@
+export const dynamic = 'force-static';
 import Header from "@/components/layout/Header";
 import Hero from "@/components/home/hero";
 import DomainSearch from "@/components/home/DomainSearch";
