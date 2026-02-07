@@ -9,7 +9,9 @@ import "react-phone-input-2/lib/style.css";
 import { isAuthenticated } from "@/utils/auth";
 import Link from "next/link";
 
-export default function SignupPage() {
+import { Suspense } from "react";
+
+function SignupContent() {
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
@@ -222,5 +224,13 @@ export default function SignupPage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function SignupPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen bg-gray-100 flex items-center justify-center">Loading...</div>}>
+            <SignupContent />
+        </Suspense>
     );
 }

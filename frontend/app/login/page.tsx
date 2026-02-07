@@ -12,7 +12,9 @@ import Link from "next/link";
 
 type ViewType = "login" | "forgot";
 
-export default function LoginPage() {
+import { Suspense } from "react";
+
+function LoginContent() {
   const [view, setView] = useState<ViewType>("login");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -242,6 +244,14 @@ export default function LoginPage() {
 
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-100 flex items-center justify-center">Loading...</div>}>
+      <LoginContent />
+    </Suspense>
   );
 }
 
