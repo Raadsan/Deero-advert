@@ -1,5 +1,11 @@
-// frontend/services/achievementApi.ts
 import api from "./axios"; // your axios instance
+
+export interface Achievement {
+  _id: string;
+  title: string;
+  count: number | string;
+  icon: string;
+}
 
 // ➕ CREATE ACHIEVEMENT (with FormData for file upload)
 export const createAchievement = (formData: FormData) => {
