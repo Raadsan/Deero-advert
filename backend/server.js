@@ -15,7 +15,7 @@ import rolepermissionRoutes from "./routes/RolePermissionRoutes.js";
 import roleRoutes from "./routes/roleRoutes.js";
 import menuRoutes from "./routes/menuRoutes.js";
 import contactRoute from "./routes/contactRoute.js";
-import eventsNewsRoutes from "./routes/eventNewsroutes.js";
+import eventsNewsRoutes from "./routes/eventNewsRoutes.js";
 import careerRoutes from "./routes/careerRoutes.js";
 import clientRoute from "./routes/majorclientRoute.js";
 import announcementRoute from "./routes/AnnouncementRoute.js";
