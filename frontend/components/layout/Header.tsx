@@ -95,14 +95,16 @@ export default function Header() {
 
           {/* Logo - Left */}
           <div className="flex-shrink-0">
-            <Image
-              src="/home-images/Deero Logo full.png"
-              alt="Deero Advertising Agency"
-              width={500}
-              height={500}
-              className="w-[220px] md:w-[260px] lg:w-[300px] h-auto"
-              priority
-            />
+            <Link href="/" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+              <Image
+                src="/home-images/Deero Logo full.png"
+                alt="Deero Advertising Agency"
+                width={500}
+                height={500}
+                className="w-[220px] md:w-[260px] lg:w-[300px] h-auto cursor-pointer"
+                priority
+              />
+            </Link>
           </div>
 
           {/* Navigation - Center */}
