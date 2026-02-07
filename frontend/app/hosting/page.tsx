@@ -1,3 +1,4 @@
+export const dynamic = 'force-static';
 import HostingFeatures from "@/components/hosting/HostingFeatures";
 import HostingHero from "@/components/hosting/HostingHero";
 import HostingPackages from "@/components/home/HostingPackages";

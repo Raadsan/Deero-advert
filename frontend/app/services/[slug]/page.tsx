@@ -1,4 +1,5 @@
 "use client";
+export const runtime = 'edge';
 
 import { use } from "react";
 import Header from "@/components/layout/Header";
