@@ -3,7 +3,7 @@ export const dynamic = 'force-static';
 
 import { useState, useEffect } from "react";
 import DataTable from "@/components/layout/DataTable";
-import { getAllPackages, createPackage, updatePackage, deletePackage, HostingPackage } from "@/api/hostingPackageApi";
+import { getAllPackages, createPackage, updatePackage, deletePackage, HostingPackage } from "@/api-client/hostingPackageApi";
 import { PencilIcon, TrashIcon, XMarkIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { toast } from 'react-hot-toast';
 import { motion, AnimatePresence } from "framer-motion";
@@ -250,3 +250,4 @@ export default function HostingPackageManagement() {
         </div>
     );
 }
+

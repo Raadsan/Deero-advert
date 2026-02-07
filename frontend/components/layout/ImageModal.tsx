@@ -93,3 +93,4 @@ const ImageModal = ({ isOpen, onClose, children, onNext, onPrev, hasNext, hasPre
 };
 
 export default ImageModal;
+

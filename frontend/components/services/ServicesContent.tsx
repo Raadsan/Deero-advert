@@ -3,11 +3,11 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import ServiceCard from "./ServiceCard";
-import { getAllServices, Service } from "../../api/serviceApi";
+import { getAllServices, Service } from "../../api-client/serviceApi";
 import { CheckIcon, ChevronDownIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { getImageUrl } from "@/utils/url";
 import { getUserId, isAuthenticated, isUser, isAdminOrManager } from "@/utils/auth";
-import { createTransaction } from "@/api/transactionApi";
+import { createTransaction } from "@/api-client/transactionApi";
 import DigitalConsultingSection from "./DigitalConsultingSection";
 
 const HEADER_OFFSET = 170; // match fixed header height
@@ -499,3 +499,4 @@ export default function ServicesContent({
         </section>
     );
 }
+

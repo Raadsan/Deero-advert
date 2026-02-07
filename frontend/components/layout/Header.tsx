@@ -7,7 +7,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { Bell, User, LogOut, ShoppingCart } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { isAuthenticated, getUser, clearAuth, isAdmin, isManager, isAdminOrManager } from "@/utils/auth";
-import { logout as apiLogout } from "../../api/authApi";
+import { logout as apiLogout } from "../../api-client/authApi";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -249,3 +249,4 @@ export default function Header() {
     </header>
   );
 }
+

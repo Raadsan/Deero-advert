@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Bell, Search, Menu, LogOut, User } from "lucide-react";
-import { logout } from "../../api/authApi";
+import { logout } from "../../api-client/authApi";
 
 export default function UnifiedHeader({ onMenuClick }: { onMenuClick: () => void }) {
     const router = useRouter();
@@ -110,3 +110,4 @@ export default function UnifiedHeader({ onMenuClick }: { onMenuClick: () => void
         </header>
     );
 }
+

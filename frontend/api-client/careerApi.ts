@@ -42,3 +42,4 @@ export const updateCareer = (id: string, data: Partial<Career>) => {
 export const deleteCareer = (id: string) => {
     return api.delete(`/careers/${id}`);
 };
+

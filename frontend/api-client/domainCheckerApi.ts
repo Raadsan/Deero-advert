@@ -158,3 +158,4 @@ export const checkDomainAvailability = async (
 
     return { success: true, results };
 };
+

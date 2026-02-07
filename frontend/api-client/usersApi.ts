@@ -24,3 +24,4 @@ export const updateUser = (id: string, data: any) => {
 export const deleteUser = (id: string) => {
   return api.delete(`/users/${id}`);
 };
+

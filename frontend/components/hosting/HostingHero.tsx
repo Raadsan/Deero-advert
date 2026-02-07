@@ -37,3 +37,4 @@ export default function HostingHero({ title = "Hosting" }: HostingHeroProps) {
         </section>
     );
 }
+

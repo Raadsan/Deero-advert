@@ -9,9 +9,9 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "@/context/CartContext";
-import { loginUser, signupUser } from "@/api/authApi";
+import { loginUser, signupUser } from "@/api-client/authApi";
 
-import { createTransaction } from "@/api/transactionApi";
+import { createTransaction } from "@/api-client/transactionApi";
 import { isAdminOrManager, isAuthenticated } from "@/utils/auth";
 import { useEffect } from "react";
 
@@ -548,3 +548,4 @@ export default function CheckoutForm() {
         </form>
     );
 }
+

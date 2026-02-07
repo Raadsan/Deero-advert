@@ -13,7 +13,7 @@ export interface Service {
   updatedAt?: string;
 }
 
-import axios from "@/api/axios";
+import axios from "@/api-client/axios";
 
 export const getAllServices = (): Promise<any> => {
   return axios.get("/service");
@@ -46,3 +46,4 @@ export const deleteService = async (id: string) => {
   const response = await axios.delete(`/service/${id}`);
   return response.data;
 };
+

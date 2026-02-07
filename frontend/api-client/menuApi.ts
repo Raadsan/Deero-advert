@@ -63,3 +63,4 @@ export const deleteMenu = async (id: string): Promise<MenuResponse> => {
     const response = await api.delete<MenuResponse>(`/menus/${id}`);
     return response.data;
 };
+

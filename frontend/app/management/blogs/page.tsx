@@ -12,7 +12,7 @@ import {
   createBlog,
   updateBlog,
   deleteBlog,
-} from "@/api/blogsApi";
+} from "@/api-client/blogsApi";
 import { getImageUrl } from "@/utils/url";
 
 export default function AdminBlogsPage() {
@@ -349,3 +349,4 @@ export default function AdminBlogsPage() {
     </div>
   );
 }
+

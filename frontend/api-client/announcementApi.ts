@@ -45,3 +45,4 @@ export const getAnnouncementById = (id: string) => {
 export const deleteAnnouncement = (id: string) => {
     return api.delete(`/announcements/${id}`);
 };
+

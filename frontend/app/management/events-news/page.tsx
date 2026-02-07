@@ -6,7 +6,7 @@ import DataTable from "@/components/layout/DataTable";
 import Modal from "@/components/layout/Modal";
 import DeleteConfirmModal from "@/components/layout/DeleteConfirmModal";
 import { Edit, Trash2 } from "lucide-react";
-import { getAllEventsNews, createEventNews, updateEventNews, deleteEventNews } from "@/api/eventsNewsApi";
+import { getAllEventsNews, createEventNews, updateEventNews, deleteEventNews } from "@/api-client/eventsNewsApi";
 
 type EventNewsItem = {
     _id: string;
@@ -348,3 +348,4 @@ export default function EventsNewsPage() {
         </div>
     );
 }
+

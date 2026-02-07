@@ -13,7 +13,7 @@ import {
     updatePortfolio,
     deletePortfolio,
     deleteGalleryImage,
-} from "@/api/portfolioApi";
+} from "@/api-client/portfolioApi";
 import { getImageUrl } from "@/utils/url";
 
 export default function PortfolioManagementPage() {
@@ -531,3 +531,4 @@ export default function PortfolioManagementPage() {
         </div>
     );
 }
+

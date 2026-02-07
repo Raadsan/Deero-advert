@@ -4,7 +4,7 @@ export const dynamic = 'force-static';
 import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Lock, Eye, EyeOff, ArrowLeft } from "lucide-react";
-import { resetPassword } from "../../../api/authApi";
+import { resetPassword } from "../../../api-client/authApi";
 
 export default function ResetPasswordPage() {
     const params = useParams();

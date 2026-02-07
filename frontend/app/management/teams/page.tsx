@@ -12,7 +12,7 @@ import {
     createTeam,
     updateTeam,
     deleteTeam,
-} from "@/api/teamApi";
+} from "@/api-client/teamApi";
 import { getImageUrl } from "@/utils/url";
 
 
@@ -423,3 +423,4 @@ export default function TeamsManagementPage() {
         </div>
     );
 }
+

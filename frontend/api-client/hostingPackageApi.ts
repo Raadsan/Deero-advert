@@ -24,3 +24,4 @@ export const updatePackage = (id: string, data: any) => {
 export const deletePackage = (id: string) => {
     return api.delete(`/hosting/${id}`);
 };
+

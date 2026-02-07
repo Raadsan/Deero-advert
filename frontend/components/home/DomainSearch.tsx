@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { MagnifyingGlassIcon, ExclamationCircleIcon, CheckCircleIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import { useState, useEffect } from "react";
-import { checkDomainAvailability, fetchAllDomainPrices, DomainCheckResult, DomainPrice } from "../../api/domainCheckerApi";
+import { checkDomainAvailability, fetchAllDomainPrices, DomainCheckResult, DomainPrice } from "../../api-client/domainCheckerApi";
 
 import { useRouter } from "next/navigation";
 
@@ -163,3 +163,4 @@ export default function DomainSearch() {
         </section>
     );
 }
+

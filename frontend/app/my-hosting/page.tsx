@@ -3,7 +3,7 @@ export const dynamic = 'force-static';
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { getTransactionsByUser } from "@/api/transactionApi";
+import { getTransactionsByUser } from "@/api-client/transactionApi";
 import { getUserId, isAuthenticated } from "@/utils/auth";
 import DataTable from "@/components/layout/DataTable";
 
@@ -142,3 +142,4 @@ export default function MyHostingPage() {
         </div>
     );
 }
+

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { getPortfolios, getPortfolioById } from "@/api/portfolioApi";
+import { getPortfolios, getPortfolioById } from "@/api-client/portfolioApi";
 import { getImageUrl, slugify } from "@/utils/url";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";

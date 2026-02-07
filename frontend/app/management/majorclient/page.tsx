@@ -11,7 +11,7 @@ import {
     getMajorClients,
     createMajorClient,
     deleteMajorClient,
-} from "@/api/majorClientApi";
+} from "@/api-client/majorClientApi";
 import { getImageUrl } from "@/utils/url";
 
 export default function MajorClientsPage() {
@@ -327,3 +327,4 @@ export default function MajorClientsPage() {
         </div >
     );
 }
+

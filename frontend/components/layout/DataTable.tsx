@@ -260,3 +260,4 @@ const DataTable = ({ title, columns, data = [], onAddClick, onRefresh, showAddBu
 };
 
 export default DataTable;
+

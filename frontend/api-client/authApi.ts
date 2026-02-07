@@ -40,3 +40,4 @@ export const resetPassword = (token: string, password: string) => {
   return api.post(`/users/reset-password/${token}`, { password });
 };
 
+

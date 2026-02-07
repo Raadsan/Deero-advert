@@ -39,3 +39,4 @@ export default function CartHeader({ currentStep = 1 }: { currentStep?: number }
         </section>
     );
 }
+

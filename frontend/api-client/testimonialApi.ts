@@ -1,4 +1,4 @@
-import axios from "@/api/axios";
+import axios from "@/api-client/axios";
 
 export interface Testimonial {
     _id: string;
@@ -48,3 +48,4 @@ export const deleteTestimonial = async (id: string) => {
     const response = await axios.delete(`/testimonials/${id}`);
     return response.data;
 };
+

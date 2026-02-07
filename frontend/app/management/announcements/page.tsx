@@ -11,8 +11,8 @@ import {
     createAnnouncement,
     deleteAnnouncement,
     Announcement
-} from "@/api/announcementApi";
-import { getAllUsers } from "@/api/usersApi";
+} from "@/api-client/announcementApi";
+import { getAllUsers } from "@/api-client/usersApi";
 
 export default function AnnouncementsPage() {
     const [announcements, setAnnouncements] = useState<Announcement[]>([]);
@@ -350,3 +350,4 @@ export default function AnnouncementsPage() {
         </div>
     );
 }
+

@@ -39,3 +39,4 @@ export const deleteGalleryImage = (id: string, imagePath: string) => {
         data: { imagePath }
     });
 };
+

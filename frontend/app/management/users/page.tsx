@@ -11,8 +11,8 @@ import {
   createUser,
   deleteUser,
   updateUser,
-} from "@/api/usersApi";
-import { getAllRoles } from "@/api/roleApi";
+} from "@/api-client/usersApi";
+import { getAllRoles } from "@/api-client/roleApi";
 
 export default function UsersPage() {
   const [data, setData] = useState([]);
@@ -341,3 +341,4 @@ export default function UsersPage() {
     </div>
   );
 }
+

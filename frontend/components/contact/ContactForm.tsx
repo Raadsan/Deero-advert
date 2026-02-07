@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { PaperAirplaneIcon } from "@heroicons/react/24/solid";
-import { createContact } from "../../api/contactApi";
+import { createContact } from "../../api-client/contactApi";
 
 export default function ContactForm() {
     const [formData, setFormData] = useState({
@@ -176,3 +176,4 @@ export default function ContactForm() {
         </section>
     );
 }
+

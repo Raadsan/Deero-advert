@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { getAllBlogs } from "@/api/blogsApi";
+import { getAllBlogs } from "@/api-client/blogsApi";
 import { getImageUrl } from "@/utils/url";
 import { useState, useEffect } from "react";
 
@@ -172,3 +172,4 @@ function BlogSlider({ blogs }: { blogs: any[] }) {
         </div>
     );
 }
+

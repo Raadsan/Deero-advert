@@ -4,7 +4,7 @@ export const dynamic = 'force-static';
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { isAuthenticated, getUserId } from "@/utils/auth";
-import { getTransactionsByUser } from "@/api/transactionApi";
+import { getTransactionsByUser } from "@/api-client/transactionApi";
 import DataTable from "@/components/layout/DataTable";
 import { GlobeAltIcon } from "@heroicons/react/24/outline";
 
@@ -149,3 +149,4 @@ export default function UserDomainsPage() {
         </div>
     );
 }
+

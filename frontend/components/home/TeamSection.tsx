@@ -4,7 +4,7 @@ import Image from "next/image";
 import { motion, Variants } from "framer-motion"; // Add Variants import
 import { useState, useEffect } from "react";
 
-import { getTeams } from "@/api/teamApi";
+import { getTeams } from "@/api-client/teamApi";
 import { getImageUrl } from "@/utils/url";
 
 export default function TeamSection() {
@@ -216,3 +216,4 @@ function InnerSlider({ items }: { items: any[] }) {
         </div>
     )
 }
+

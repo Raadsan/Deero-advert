@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import DataTable from "@/components/layout/DataTable";
 import Modal from "@/components/layout/Modal";
 import DeleteConfirmModal from "@/components/layout/DeleteConfirmModal";
-import { getAllRoles, createRole, updateRole, deleteRole, Role } from "@/api/roleApi";
+import { getAllRoles, createRole, updateRole, deleteRole, Role } from "@/api-client/roleApi";
 import { Trash2, Edit, Plus } from "lucide-react";
 
 export default function RolesPage() {
@@ -211,3 +211,4 @@ export default function RolesPage() {
         </div>
     );
 }
+

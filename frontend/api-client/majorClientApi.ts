@@ -26,3 +26,4 @@ export const deleteMajorClient = async (id: string) => {
     const response = await api.delete(`/majorclients/${id}`);
     return response.data;
 };
+

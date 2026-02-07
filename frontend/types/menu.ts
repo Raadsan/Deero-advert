@@ -19,3 +19,4 @@ export interface MenuResponse {
     success: boolean;
     menus: Menu[];
 }
+

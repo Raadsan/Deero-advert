@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 
 import { useState, useEffect } from "react";
-import { getPortfolios } from "@/api/portfolioApi";
+import { getPortfolios } from "@/api-client/portfolioApi";
 import { getImageUrl, slugify } from "@/utils/url";
 import { ArrowRight } from "lucide-react";
 import ImageModal from "../layout/ImageModal";
@@ -236,3 +236,4 @@ export default function PortfolioSection({ showHeader = true, limit }: { showHea
         </section>
     );
 }
+

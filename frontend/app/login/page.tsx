@@ -3,7 +3,7 @@ export const dynamic = 'force-static';
 
 import { useState, useEffect } from "react";
 import { Eye, EyeOff, Mail, Lock, User, Phone, ArrowLeft } from "lucide-react";
-import { loginUser, signupUser, forgotPassword } from "../../api/authApi";
+import { loginUser, signupUser, forgotPassword } from "../../api-client/authApi";
 import { useRouter, useSearchParams } from "next/navigation";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
@@ -255,4 +255,5 @@ export default function LoginPage() {
     </Suspense>
   );
 }
+
 

@@ -53,3 +53,4 @@ export const deleteRole = async (id: string): Promise<RoleResponse> => {
     const response = await api.delete<RoleResponse>(`/roles/${id}`);
     return response.data;
 };
+

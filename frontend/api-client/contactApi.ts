@@ -27,3 +27,4 @@ export const getContactById = (id: string) => {
 export const deleteContact = (id: string) => {
     return api.delete(`/contact/${id}`);
 };
+

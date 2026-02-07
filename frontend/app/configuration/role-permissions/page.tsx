@@ -7,9 +7,9 @@ import {
     createOrUpdatePermissions,
     deleteRolePermissions,
     RolePermission,
-} from "@/api/rolePermissionApi";
-import { getAllRoles, Role } from "@/api/roleApi";
-import { getAllMenus } from "@/api/menuApi";
+} from "@/api-client/rolePermissionApi";
+import { getAllRoles, Role } from "@/api-client/roleApi";
+import { getAllMenus } from "@/api-client/menuApi";
 import { Menu } from "@/types/menu";
 import DeleteConfirmModal from "@/components/layout/DeleteConfirmModal";
 import { Trash2, Edit, Plus, Save, Shield, Lock, Check, X } from "lucide-react";
@@ -574,3 +574,4 @@ export default function RolePermissionsPage() {
         </div>
     );
 }
+

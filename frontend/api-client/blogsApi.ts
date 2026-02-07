@@ -33,3 +33,4 @@ export const updateBlog = (id: string, formData: FormData) => {
 export const deleteBlog = (id: string) => {
   return api.delete(`/blogs/${id}`);
 };
+

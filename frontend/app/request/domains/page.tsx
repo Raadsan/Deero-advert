@@ -3,8 +3,8 @@ export const dynamic = 'force-static';
 
 import { useState, useEffect } from "react";
 import DataTable from "@/components/layout/DataTable";
-import { getAllTransactions } from "@/api/transactionApi";
-import { getAllUsers } from "@/api/usersApi";
+import { getAllTransactions } from "@/api-client/transactionApi";
+import { getAllUsers } from "@/api-client/usersApi";
 import { Globe } from "lucide-react";
 
 interface Domain {
@@ -227,3 +227,4 @@ export default function DomainsPage() {
         </div>
     );
 }
+

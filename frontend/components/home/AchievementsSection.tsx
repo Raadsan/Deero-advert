@@ -3,8 +3,8 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { motion, animate, useInView } from "framer-motion";
-import { getAllAchievements, Achievement } from "../../api/achievementApi";
-import { getMajorClients } from "../../api/majorClientApi";
+import { getAllAchievements, Achievement } from "../../api-client/achievementApi";
+import { getMajorClients } from "../../api-client/majorClientApi";
 import { getImageUrl } from "@/utils/url";
 
 function Counter({ value, duration = 2 }: { value: number; duration?: number }) {
@@ -244,3 +244,4 @@ export default function AchievementsSection() {
         </section >
     );
 }
+

@@ -37,3 +37,4 @@ export const updateEventNews = (
 export const deleteEventNews = (id: string) => {
   return api.delete(`/events-news/${id}`);
 };
+

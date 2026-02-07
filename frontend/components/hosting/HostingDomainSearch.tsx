@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { MagnifyingGlassIcon, ArrowPathIcon } from "@heroicons/react/24/outline";
 import { motion, AnimatePresence } from "framer-motion";
 
-import { checkDomainAvailability, DomainCheckResult, fetchAllDomainPrices, DomainPrice } from "../../api/domainCheckerApi";
+import { checkDomainAvailability, DomainCheckResult, fetchAllDomainPrices, DomainPrice } from "../../api-client/domainCheckerApi";
 import { ExclamationCircleIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
 import { useRouter, useSearchParams } from "next/navigation";
 import { isAuthenticated, isAdminOrManager } from "@/utils/auth";
@@ -290,3 +290,4 @@ export default function HostingDomainSearch({ transparent = false }: { transpare
         </section>
     );
 }
+

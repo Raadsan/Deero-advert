@@ -2,7 +2,7 @@
 export const dynamic = 'force-static';
 
 import { useState, useEffect } from "react";
-import { getAllTransactions } from "@/api/transactionApi";
+import { getAllTransactions } from "@/api-client/transactionApi";
 import DataTable from "@/components/layout/DataTable";
 
 export default function RequestHostingPage() {
@@ -114,3 +114,4 @@ export default function RequestHostingPage() {
         </div>
     );
 }
+

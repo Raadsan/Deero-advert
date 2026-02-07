@@ -13,7 +13,7 @@ import {
   updateAchievement,
   deleteAchievement,
   Achievement,
-} from "@/api/achievementApi";
+} from "@/api-client/achievementApi";
 import { getImageUrl } from "@/utils/url";
 
 export default function AchievementsPage() {
@@ -330,3 +330,4 @@ export default function AchievementsPage() {
     </div>
   );
 }
+

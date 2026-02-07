@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Calendar, ArrowRight } from "lucide-react";
-import { getAllEventsNews } from "../../api/eventsNewsApi";
+import { getAllEventsNews } from "../../api-client/eventsNewsApi";
 
 type EventNewsItem = {
     _id: string;
@@ -219,3 +219,4 @@ export default function NewsList() {
         </section>
     );
 }
+

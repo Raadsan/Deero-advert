@@ -4,7 +4,7 @@ export const dynamic = 'force-static';
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { isAuthenticated, getUserId } from "@/utils/auth";
-import { getTransactionsByUser } from "@/api/transactionApi";
+import { getTransactionsByUser } from "@/api-client/transactionApi";
 import { Transaction } from "@/types/transaction";
 import { motion } from "framer-motion";
 import {
@@ -162,3 +162,4 @@ export default function PaymentsPage() {
         </div>
     );
 }
+

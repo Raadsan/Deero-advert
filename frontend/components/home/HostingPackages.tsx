@@ -5,8 +5,8 @@ import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "@/context/CartContext";
 import { useRouter, usePathname } from "next/navigation";
-import { getAllPackages, HostingPackage } from "@/api/hostingPackageApi";
-import { createTransaction } from "@/api/transactionApi";
+import { getAllPackages, HostingPackage } from "@/api-client/hostingPackageApi";
+import { createTransaction } from "@/api-client/transactionApi";
 import { getUserId, isAuthenticated, isAdminOrManager } from "@/utils/auth";
 
 const containerVariants = {
@@ -319,3 +319,4 @@ export default function HostingPackages() {
         </section>
     );
 }
+

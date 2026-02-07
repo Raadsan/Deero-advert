@@ -3,12 +3,12 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Users, TrendingUp, Activity, Briefcase, Award, ArrowUpRight, Globe, CreditCard, Clock } from "lucide-react";
-import { getAllServices } from "@/api/serviceApi";
-import { getAllUsers } from "@/api/usersApi";
-import { getAllAchievements } from "@/api/achievementApi";
-import { getAllEventsNews } from "@/api/eventsNewsApi";
-import { getMajorClients } from "@/api/majorClientApi";
-import { getAllTransactions, getTransactionsByUser, getRevenueAnalytics } from "@/api/transactionApi";
+import { getAllServices } from "@/api-client/serviceApi";
+import { getAllUsers } from "@/api-client/usersApi";
+import { getAllAchievements } from "@/api-client/achievementApi";
+import { getAllEventsNews } from "@/api-client/eventsNewsApi";
+import { getMajorClients } from "@/api-client/majorClientApi";
+import { getAllTransactions, getTransactionsByUser, getRevenueAnalytics } from "@/api-client/transactionApi";
 
 import DataTable from "@/components/layout/DataTable";
 import { Transaction } from "@/types/transaction";
@@ -556,3 +556,4 @@ export default function DashboardContent() {
         </div>
     );
 }
+

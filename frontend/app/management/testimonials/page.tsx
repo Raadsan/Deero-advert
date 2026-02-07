@@ -12,7 +12,7 @@ import {
   createTestimonial,
   updateTestimonial,
   deleteTestimonial,
-} from "@/api/testimonialApi";
+} from "@/api-client/testimonialApi";
 import { getImageUrl } from "@/utils/url";
 
 export default function TestimonialsPage() {
@@ -412,3 +412,4 @@ export default function TestimonialsPage() {
     </div >
   );
 }
+

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import NextImage from "next/image";
 import { StarIcon } from "@heroicons/react/24/solid";
 import { motion } from "framer-motion";
-import { getTestimonials, Testimonial } from "../../api/testimonialApi";
+import { getTestimonials, Testimonial } from "../../api-client/testimonialApi";
 import { getImageUrl } from "@/utils/url";
 
 
@@ -238,3 +238,4 @@ export default function TestimonialsSection() {
         </>
     );
 }
+

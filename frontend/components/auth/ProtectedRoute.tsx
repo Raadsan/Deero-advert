@@ -71,3 +71,4 @@ export default function ProtectedRoute({ children, requiredRole = "any" }: Prote
 
     return <>{children}</>;
 }
+

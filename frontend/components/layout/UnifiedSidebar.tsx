@@ -27,9 +27,9 @@ import {
     User
 } from "lucide-react";
 import Image from "next/image";
-import { logout } from "@/api/authApi";
+import { logout } from "@/api-client/authApi";
 import { useEffect, useState } from "react";
-import { getUserMenus } from "@/api/menuApi";
+import { getUserMenus } from "@/api-client/menuApi";
 import { getUser, isAdminOrManager } from "@/utils/auth";
 import { Menu } from "@/types/menu";
 import { Users as UsersIcon } from "lucide-react"; // Rename to avoid confusion with the mapping
@@ -335,3 +335,4 @@ export default function UnifiedSidebar({ isOpen, onClose }: { isOpen?: boolean; 
         </>
     );
 }
+

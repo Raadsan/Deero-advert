@@ -42,3 +42,4 @@ export const updateSubscriber = (
 export const deleteSubscriber = (id: string) => {
   return api.delete(`/subscribers/${id}`);
 };
+

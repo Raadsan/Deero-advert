@@ -85,3 +85,4 @@ export default function ServiceCard({ name, icon, index, active, itemVariants, o
         </motion.div>
     );
 }
+

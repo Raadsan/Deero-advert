@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { EnvelopeIcon, CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
-import { subscribeEmail } from "@/api/subscriberApi";
+import { subscribeEmail } from "@/api-client/subscriberApi";
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -151,4 +151,5 @@ export default function NewsletterSection() {
         </section>
     );
 }
+
 

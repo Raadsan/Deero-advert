@@ -39,3 +39,4 @@ export const updateAchievement = (id: string, formData: FormData) => {
 export const deleteAchievement = (id: string) => {
   return api.delete(`/achievements/${id}`);
 };
+

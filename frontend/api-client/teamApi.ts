@@ -27,3 +27,4 @@ export const updateTeam = (id: string, formData: FormData) => {
 export const deleteTeam = (id: string) => {
     return api.delete(`/teams/${id}`);
 };
+

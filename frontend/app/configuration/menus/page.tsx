@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import DataTable from "@/components/layout/DataTable";
 import Modal from "@/components/layout/Modal";
 import DeleteConfirmModal from "@/components/layout/DeleteConfirmModal";
-import { getAllMenus, createMenu, updateMenu, deleteMenu } from "@/api/menuApi";
+import { getAllMenus, createMenu, updateMenu, deleteMenu } from "@/api-client/menuApi";
 import { Menu } from "@/types/menu";
 import { Trash2, Edit, Plus, ChevronDown, ChevronRight } from "lucide-react";
 
@@ -352,3 +352,4 @@ export default function MenusPage() {
         </div>
     );
 }
+

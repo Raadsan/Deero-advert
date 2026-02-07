@@ -53,3 +53,4 @@ export const getRevenueAnalytics = (userId?: string) => {
   const url = userId ? `/transactions/analytics/revenue?userId=${userId}` : "/transactions/analytics/revenue";
   return api.get(url);
 };
+

@@ -19,3 +19,4 @@ export const VALID_TLDS = [
     ".cat", ".museum", ".aero", ".coop", ".name", ".pro"
     // Add more as needed based on IANA list
 ];
+

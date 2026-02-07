@@ -61,3 +61,4 @@ export const clearAuth = (): void => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
 };
+

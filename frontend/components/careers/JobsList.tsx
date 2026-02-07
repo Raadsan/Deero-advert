@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Briefcase, MapPin, Calendar } from "lucide-react";
-import { getActiveCareers, Career } from "../../api/careerApi";
+import { getActiveCareers, Career } from "../../api-client/careerApi";
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -145,3 +145,4 @@ export default function JobsList() {
         </section>
     );
 }
+
