@@ -87,9 +87,9 @@ export default function Hero() {
             <AnimatePresence mode="wait">
               <motion.div
                 key={active}
-                initial={{ opacity: 0, y: 80 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 80 }}
+                exit={{ opacity: 0, y: 20 }}
                 transition={{ duration: 0.8 }}
                 className="space-y-6"
               >
@@ -115,9 +115,9 @@ export default function Hero() {
             <AnimatePresence mode="wait">
               <motion.div
                 key={active}
-                initial={{ opacity: 0, y: -80 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -80 }}
+                exit={{ opacity: 0, y: 20 }}
                 transition={{ duration: 0.8 }}
                 className="relative z-10"
               >
@@ -128,6 +128,8 @@ export default function Hero() {
                   height={420}
                   className="h-auto w-full max-w-[520px] object-contain"
                   priority
+                  loading="eager"
+                  unoptimized={false}
                 />
               </motion.div>
             </AnimatePresence>
