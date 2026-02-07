@@ -10,6 +10,8 @@ export const metadata = {
     description: "Reliable and fast web hosting services for your business.",
 };
 
+import { Suspense } from "react";
+
 export default function HostingPage() {
     return (
         <div className="min-h-screen bg-white text-[#1a1a1a]">
@@ -20,7 +22,9 @@ export default function HostingPage() {
             <main className="pt-[170px]">
                 <HostingHero />
 
-                <HostingDomainSearch />
+                <Suspense fallback={<div className="py-16 text-center">Loading search...</div>}>
+                    <HostingDomainSearch />
+                </Suspense>
 
                 {/* Hosting Plans Section with ID for anchor links */}
                 <div id="plans">
