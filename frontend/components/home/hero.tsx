@@ -93,57 +93,53 @@ export default function Hero() {
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between w-full gap-10 ">
           <div className="space-y-6 lg:w-1/2">
             <AnimatePresence mode="wait">
-              {imageLoaded && (
-                <motion.div
-                  key={active}
-                  initial={{ opacity: 0, y: 80 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 80 }}
-                  transition={{ duration: 0.8 }}
-                  className="space-y-6"
-                >
-                  <h1 className="text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">
-                    {slide.title}
-                  </h1>
-                  <p className="max-w-2xl text-lg leading-8 text-white/90">
-                    {slide.description}
-                  </p>
-                  <div className="flex items-center gap-4">
-                    <button
-                      onClick={handleSeeMore}
-                      className="rounded-md bg-[#c88a66] px-10 py-3 pl-8 text-base font-semibold text-white shadow transition hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-                    >
-                      See More
-                    </button>
-                  </div>
-                </motion.div>
-              )}
+              <motion.div
+                key={active}
+                initial={{ opacity: 0, y: 80 }}
+                animate={imageLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 80 }}
+                exit={{ opacity: 0, y: 80 }}
+                transition={{ duration: 0.8 }}
+                className="space-y-6"
+              >
+                <h1 className="text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">
+                  {slide.title}
+                </h1>
+                <p className="max-w-2xl text-lg leading-8 text-white/90">
+                  {slide.description}
+                </p>
+                <div className="flex items-center gap-4">
+                  <button
+                    onClick={handleSeeMore}
+                    className="rounded-md bg-[#c88a66] px-10 py-3 pl-8 text-base font-semibold text-white shadow transition hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                  >
+                    See More
+                  </button>
+                </div>
+              </motion.div>
             </AnimatePresence>
           </div>
 
           <div className="relative lg:w-1/2 flex justify-center items-center">
             <AnimatePresence mode="wait">
-              {imageLoaded && (
-                <motion.div
-                  key={active}
-                  initial={{ opacity: 0, y: -80 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -80 }}
-                  transition={{ duration: 0.8 }}
-                  className="relative z-10"
-                >
-                  <Image
-                    src={slide.image}
-                    alt={slide.title}
-                    width={620}
-                    height={420}
-                    className="h-auto w-full max-w-[520px] object-contain"
-                    priority
-                    loading="eager"
-                    onLoad={() => setImageLoaded(true)}
-                  />
-                </motion.div>
-              )}
+              <motion.div
+                key={active}
+                initial={{ opacity: 0, y: -80 }}
+                animate={imageLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: -80 }}
+                exit={{ opacity: 0, y: -80 }}
+                transition={{ duration: 0.8 }}
+                className="relative z-10"
+              >
+                <Image
+                  src={slide.image}
+                  alt={slide.title}
+                  width={620}
+                  height={420}
+                  className="h-auto w-full max-w-[520px] object-contain"
+                  priority
+                  loading="eager"
+                  onLoad={() => setImageLoaded(true)}
+                />
+              </motion.div>
             </AnimatePresence>
           </div>
         </div>
