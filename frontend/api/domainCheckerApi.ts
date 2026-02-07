@@ -22,7 +22,7 @@ export interface DomainPrice {
 // Helper to get API URL with fallback
 const getApiUrl = () => {
     const url = process.env.NEXT_PUBLIC_API_URL;
-    if (!url || url === 'undefined') return 'http://localhost:5000';
+    if (!url || url === 'undefined') return 'https://deero-advert-backend.onrender.com/api';
     return url;
 };
 

@@ -1,4 +1,4 @@
-export const API_BASE_URL = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api").replace("/api", "");
+export const API_BASE_URL = (process.env.NEXT_PUBLIC_API_URL || "https://deero-advert-backend.onrender.com/api").replace("/api", "");
 
 export const getImageUrl = (path: string | undefined) => {
     if (!path || path === "") return null;
