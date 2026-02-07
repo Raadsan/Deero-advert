@@ -147,7 +147,7 @@ export default function AchievementsSection() {
                                                 </div>
                                             </div>
                                             <h3 className="text-4xl font-semibold text-[#651313] mb-2">
-                                                <Counter value={item.count} />+
+                                                <Counter value={Number(item.count)} />+
                                             </h3>
                                             <p className="text-sm font-semibold text-[#651313]/60">{item.title}</p>
                                         </motion.div>
