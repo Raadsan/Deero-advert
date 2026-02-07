@@ -1,5 +1,5 @@
 "use client";
-export const runtime = 'edge';
+export const dynamic = 'force-static';
 
 import { use } from "react";
 import Header from "@/components/layout/Header";
