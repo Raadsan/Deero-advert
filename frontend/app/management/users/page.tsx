@@ -222,6 +222,7 @@ export default function UsersPage() {
         onAddClick={() => setIsModalOpen(true)}
         onRefresh={fetchData}
         loading={loading}
+        disableUpdatingOverlay={true}
       />
 
       <DeleteConfirmModal

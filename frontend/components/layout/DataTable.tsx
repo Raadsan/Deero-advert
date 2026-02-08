@@ -4,7 +4,8 @@ import React, { useState, useEffect } from "react";
 // Removed ThemeContext dependency for now as it wasn't requested/verified to exist in this context,
 // and we want to enforce brand colors.
 
-const DataTable = ({ title, columns, data = [], onAddClick, onRefresh, showAddButton = true, loading = false, addButtonLabel = "Add New" }: any) => {
+const DataTable = ({ title, columns, data = [], onAddClick, onRefresh, showAddButton = true, loading = false, addButtonLabel = "Add New", disableUpdatingOverlay = false }: any) => {
+
     const [search, setSearch] = useState("");
     const [filteredData, setFilteredData] = useState<any[]>(data);
     const [entriesPerPage, setEntriesPerPage] = useState(10);
@@ -217,7 +218,7 @@ const DataTable = ({ title, columns, data = [], onAddClick, onRefresh, showAddBu
                         )}
                     </tbody>
                 </table>
-                {loading && filteredData.length > 0 && (
+                {loading && filteredData.length > 0 && !disableUpdatingOverlay && (
                     <div className="absolute inset-0 bg-white/30 backdrop-blur-[1px] flex items-center justify-center z-10">
                         <div className="flex flex-col items-center gap-2">
                             <div className="w-8 h-8 border-4 border-[#651313] border-t-transparent rounded-full animate-spin"></div>
