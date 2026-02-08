@@ -13,7 +13,7 @@ export const createTransaction = (data: {
   packageId?: string;
   hostingPackageId?: string;
   userId: string;
-  type: "register" | "transfer" | "renew" | "payment" | "service_payment" | "hosting_payment";
+  type: "register" | "payment" | "service_payment" | "hosting_payment";
   amount: number;
   currency?: string;
   description?: string;

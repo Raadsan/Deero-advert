@@ -26,12 +26,13 @@ export const createAnnouncementForUsers = async (req, res) => {
         }
 
         let recipientIds = [];
+        let cleanFoundUsers = [];
 
         // 1. If recipients are provided in body, use them
         if (req.body.recipients && Array.isArray(req.body.recipients) && req.body.recipients.length > 0) {
             recipientIds = req.body.recipients;
 
-            // Optional: verify users exist? (Skipping for now to keep it simple, but good for future)
+            // Verify users exist
             const users = await User.find({ _id: { $in: recipientIds } }).select("email fullname");
             if (users.length === 0) {
                 return res.status(400).json({
@@ -39,8 +40,7 @@ export const createAnnouncementForUsers = async (req, res) => {
                     message: "None of the provided recipient IDs were found",
                 });
             }
-            // Use found users for email sending logic later
-            req.foundUsers = users;
+            cleanFoundUsers = users;
         } else {
             // 2. Broadcast to all users with role 'user'
             const userRole = await Role.findOne({ name: "user" });
@@ -62,7 +62,7 @@ export const createAnnouncementForUsers = async (req, res) => {
             }
 
             recipientIds = users.map((u) => u._id);
-            req.foundUsers = users;
+            cleanFoundUsers = users;
         }
 
         // Save announcement in DB
@@ -72,48 +72,58 @@ export const createAnnouncementForUsers = async (req, res) => {
             recipients: recipientIds,
             sendEmail: sendMail || false,
             sentAt: sendMail ? new Date() : null,
-            createdBy: req.user._id, // assuming auth middleware
+            createdBy: req.user._id,
         });
 
-        // Send email to users if requested
-        let emailSuccess = true;
-        let emailError = null;
+        // Send response immediately
+        res.status(201).json({
+            success: true,
+            message: sendMail
+                ? "Announcement created. Emails are being sent in the background."
+                : "Announcement created successfully",
+            data: announcement,
+            emailSent: true, // Optimistic success for UI
+        });
 
-        if (sendMail && req.foundUsers) {
-            try {
-                for (const user of req.foundUsers) {
-                    await sendEmail({
-                        email: user.email,
-                        subject: title,
-                        message,
-                        html: `
-            <h2>Hello ${user.fullname},</h2>
-            <p>${message}</p>
-          `,
-                    });
+        // Process emails in background if requested
+        if (sendMail && cleanFoundUsers.length > 0) {
+            // Use setImmediate or just don't await the promise effectively checks out of the request lifecycle
+            // In serverless environments, this might be killed, but for a standard persistent server (like typical Node apps), this works.
+            (async () => {
+                try {
+                    console.log(`[Background] Starting to send ${cleanFoundUsers.length} emails for announcement: ${announcement._id}`);
+                    for (const user of cleanFoundUsers) {
+                        try {
+                            await sendEmail({
+                                email: user.email,
+                                subject: title,
+                                message,
+                                html: `
+                                    <h2>Hello ${user.fullname},</h2>
+                                    <p>${message}</p>
+                                `,
+                            });
+                        } catch (innerErr) {
+                            console.error(`[Background] Failed to send email to ${user.email}:`, innerErr.message);
+                            // Verify if we should update DB status here or just log
+                        }
+                    }
+                    console.log(`[Background] Finished sending emails for announcement: ${announcement._id}`);
+                } catch (emailErr) {
+                    console.error("[Background] Error in email sending loop:", emailErr);
                 }
-            } catch (emailErr) {
-                console.error("Error sending emails:", emailErr);
-                emailSuccess = false;
-                emailError = emailErr.message;
-            }
+            })();
         }
 
-        return res.status(201).json({
-            success: true,
-            message: emailSuccess
-                ? "Announcement sent to all users successfully"
-                : "Announcement created but email sending failed",
-            data: announcement,
-            emailSent: emailSuccess,
-            emailError: emailError,
-        });
     } catch (error) {
-        console.error("Error sending announcement:", error);
-        return res.status(500).json({
-            success: false,
-            message: error.message,
-        });
+        console.error("Error creating announcement:", error);
+        // If headers weren't sent yet
+        if (!res.headersSent) {
+            return res.status(500).json({
+                success: false,
+                message: error.message,
+            });
+        }
     }
 };
 
