@@ -95,8 +95,10 @@ export default function AnnouncementsPage() {
                 fetchData();
 
                 // Show appropriate message based on email status
-                if (formData.sendEmail) {
-                    alert("✅ Announcement created successfully! \n\n📨 Emails are being sent in the background.");
+                if (res.data.emailSent === false && res.data.emailError) {
+                    alert(`✅ Announcement created successfully!\n\n⚠️ However, email sending failed: ${res.data.emailError}\n\nThe announcement is saved and visible to users in the app.`);
+                } else if (formData.sendEmail) {
+                    alert("✅ Announcement sent successfully! Emails have been delivered to recipients.");
                 } else {
                     alert("✅ Announcement created successfully!");
                 }
