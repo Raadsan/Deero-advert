@@ -37,6 +37,10 @@ export default function Header() {
       setUser(userData);
       setIsAdminUser(isAdmin());
       setIsStaff(isAdminOrManager());
+    } else {
+      setUser(null);
+      setIsAdminUser(false);
+      setIsStaff(false);
     }
 
     if (typeof window === "undefined") return;
@@ -45,6 +49,21 @@ export default function Header() {
     window.addEventListener("hashchange", setCurrentHash);
     return () => window.removeEventListener("hashchange", setCurrentHash);
   }, []);
+
+  // Re-check auth status when pathname changes (e.g., after login/logout)
+  useEffect(() => {
+    setIsLoggedIn(isAuthenticated());
+    const userData = getUser();
+    if (userData) {
+      setUser(userData);
+      setIsAdminUser(isAdmin());
+      setIsStaff(isAdminOrManager());
+    } else {
+      setUser(null);
+      setIsAdminUser(false);
+      setIsStaff(false);
+    }
+  }, [pathname]);
 
   const handleLogout = async () => {
     await apiLogout();
@@ -133,8 +152,8 @@ export default function Header() {
 
           {/* Client Area - Right */}
           <div className="hidden md:flex items-center gap-6 pr-25">
-            {/* Shopping Cart */}
-            {!isStaff && (
+            {/* Shopping Cart - Only show when logged in */}
+            {isLoggedIn && !isStaff && (
               <Link href="/cart" className="relative p-2 text-[#651313] hover:bg-gray-100 rounded-full transition">
                 <ShoppingCart className="h-6 w-6" />
                 {cartItems.length > 0 && (
@@ -157,14 +176,14 @@ export default function Header() {
                 href="/login"
                 className="rounded-full bg-[#EB4724] px-6 py-2.5 font-semibold text-white transition hover:opacity-90"
               >
-                Sign In
+                Client Area
               </Link>
             )}
           </div>
 
           {/* Mobile menu toggle */}
           <div className="md:hidden flex items-center gap-2">
-            {!isStaff && (
+            {isLoggedIn && !isStaff && (
               <Link href="/cart" className="relative p-2 text-[#651313] hover:bg-gray-100 rounded-full transition">
                 <ShoppingCart className="h-6 w-6" />
                 {cartItems.length > 0 && (
