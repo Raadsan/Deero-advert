@@ -110,7 +110,7 @@ export default function Header() {
 
       {/* Main header */}
       <div className="border-b border-white/20 bg-white/95 backdrop-blur-sm shadow-sm sm:px-6">
-        <div className="mx-auto max-w-7xl px-4 md:px-6 h-[100px] xl:h-[120px] flex items-center justify-between">
+        <div className="mx-auto max-w-7xl px-4 md:px-6 h-[120px] flex items-center justify-between">
 
           {/* Logo - Left */}
           <div className="flex-shrink-0">
@@ -120,7 +120,7 @@ export default function Header() {
                 alt="Deero Advertising Agency"
                 width={500}
                 height={500}
-                className="w-[180px] md:w-[220px] lg:w-[260px] xl:w-[300px] h-auto cursor-pointer"
+                className="w-[220px] md:w-[260px] lg:w-[300px] h-auto cursor-pointer"
                 priority
               />
             </Link>
