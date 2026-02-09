@@ -14,7 +14,7 @@ const router = express.Router();
 // Fields for mainImage + gallery
 const uploadFields = upload.fields([
   { name: "mainImage", maxCount: 1 },
-  { name: "gallery", maxCount: 10 },
+  { name: "gallery", maxCount: 200 },
 ]);
 
 // ➕ Create portfolio

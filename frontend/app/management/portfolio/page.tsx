@@ -22,6 +22,7 @@ export default function PortfolioManagementPage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [editingId, setEditingId] = useState<string | null>(null);
+    const [submitting, setSubmitting] = useState(false);
     const [deletingId, setDeletingId] = useState<string | null>(null);
     const [deletingName, setDeletingName] = useState("");
     const [formData, setFormData] = useState({
@@ -149,12 +150,14 @@ export default function PortfolioManagementPage() {
             formDataToSend.append("gallery", file);
         });
 
+        setSubmitting(true);
         try {
             if (editingId) {
                 await updatePortfolio(editingId, formDataToSend);
             } else {
                 if (!formData.mainImage) {
                     alert("Main image is required");
+                    setSubmitting(false);
                     return;
                 }
                 await createPortfolio(formDataToSend);
@@ -165,6 +168,8 @@ export default function PortfolioManagementPage() {
         } catch (err: any) {
             console.error("Failed to save portfolio", err);
             alert(err.response?.data?.message || "Failed to save portfolio");
+        } finally {
+            setSubmitting(false);
         }
     };
 
@@ -521,9 +526,11 @@ export default function PortfolioManagementPage() {
                         </button>
                         <button
                             type="submit"
-                            className="px-3 py-1.5 text-xs font-medium text-white bg-[#651313] rounded-lg hover:bg-[#500f0f]"
+                            disabled={submitting}
+                            className={`px-3 py-1.5 text-xs font-medium text-white rounded-lg transition-colors ${submitting ? "bg-gray-400 cursor-not-allowed" : "bg-[#651313] hover:bg-[#500f0f]"
+                                }`}
                         >
-                            {editingId ? "Update" : "Save"}
+                            {submitting ? "Saving..." : editingId ? "Update" : "Save"}
                         </button>
                     </div>
                 </form>
