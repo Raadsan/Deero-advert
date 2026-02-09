@@ -134,7 +134,7 @@ export default function Hero() {
                   alt={slide.title}
                   width={620}
                   height={420}
-                  className="h-auto w-full max-w-[520px] object-contain"
+                  className="h-auto w-full max-w-[520px] lg:max-w-[580px] xl:max-w-[650px] object-contain"
                   priority
                   loading="eager"
                   onLoad={() => setImageLoaded(true)}
