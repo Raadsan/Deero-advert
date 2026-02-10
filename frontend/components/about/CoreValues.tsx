@@ -29,7 +29,7 @@ const coreValues = [
 export default function CoreValues() {
     return (
         <section className="bg-[#fce5d8] py-20 px-4">
-            <div className="mx-auto max-w-7xl">
+            <div className="mx-auto max-w-6xl xl:max-w-7xl">
                 <h2 className="text-3xl md:text-4xl font-bold text-[#651313] text-center mb-16 italic">
                     Core Values
                 </h2>

@@ -55,7 +55,7 @@ export default function DomainSearch() {
 
     return (
         <section className="bg-[#fcd7c3] py-8 sm:py-12 px-4 sm:px-10">
-            <div className="mx-auto max-w-6xl flex flex-col md:flex-row items-center justify-between gap-6 sm:gap-8">
+            <div className="mx-auto max-w-6xl xl:max-w-7xl flex flex-col md:flex-row items-center justify-between gap-6 sm:gap-8">
                 {/* Left side: Search */}
                 <div className="flex-1 w-full space-y-4 sm:space-y-8">
                     <h2 className="text-2xl sm:text-3xl font-bold text-[#651313] leading-tight">
@@ -152,7 +152,7 @@ export default function DomainSearch() {
                 </div>
 
                 {/* Right side: Discount Badge */}
-                <div className="relative w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 shrink-0">
+                <div className="relative w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 shrink-0 lg:mr-28 xl:mr-0">
                     <Image
                         src="/home-images/discount.svg"
                         alt="Limited Time Offer Sale .SO"

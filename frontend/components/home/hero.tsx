@@ -101,10 +101,10 @@ export default function Hero() {
                 transition={{ duration: 0.8 }}
                 className="space-y-6"
               >
-                <h1 className="text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">
+                <h1 className="text-3xl font-bold leading-tight sm:text-4xl lg:text-4xl">
                   {slide.title}
                 </h1>
-                <p className="max-w-2xl text-lg leading-8 text-white/90">
+                <p className="max-w-2xl text-base leading-8 text-white/90">
                   {slide.description}
                 </p>
                 <div className="flex items-center gap-4">

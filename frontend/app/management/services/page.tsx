@@ -320,7 +320,11 @@ export default function AdminServicesPage() {
       key: "features",
       render: (r: any) => {
         const text = Array.isArray(r.features) ? r.features.join(", ") : (r.features || "");
-        return <span title={text}>{truncate(text, 100)}</span>;
+        return (
+          <div title={text} className="truncate max-w-[20ch] xl:max-w-xs">
+            {text}
+          </div>
+        );
       },
     },
     {

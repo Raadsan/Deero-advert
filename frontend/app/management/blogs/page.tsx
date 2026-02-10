@@ -168,7 +168,11 @@ export default function AdminBlogsPage() {
     {
       label: "Content",
       key: "content",
-      render: (r: any) => <span className="text-sm text-gray-700">{truncate(r.content, 120)}</span>,
+      render: (r: any) => (
+        <div title={r.content} className="text-sm text-gray-700 truncate max-w-[20ch] xl:max-w-xs">
+          {r.content}
+        </div>
+      ),
     },
     {
       label: "Author",

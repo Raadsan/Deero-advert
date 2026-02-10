@@ -82,7 +82,7 @@ export default function PortfolioSection({ showHeader = true, limit }: { showHea
 
     return (
         <section className="bg-[#fcd7c3] py-20 px-4 sm:px-10">
-            <div className="mx-auto max-w-6xl">
+            <div className="mx-auto max-w-6xl xl:max-w-7xl">
                 {/* Header Area */}
                 {showHeader && (
                     <div className="flex flex-col md:flex-row md:items-center justify-between mb-16 gap-8 text-center md:text-left">

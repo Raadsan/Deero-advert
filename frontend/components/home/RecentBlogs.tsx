@@ -49,7 +49,7 @@ export default function RecentBlogs() {
                 whileInView="visible"
                 viewport={{ once: true, amount: 0.2 }}
                 variants={containerVariants}
-                className="mx-auto max-w-7xl"
+                className="mx-auto max-w-6xl xl:max-w-7xl"
             >
                 <div className="text-center mb-16">
                     <motion.div variants={itemVariants} className="mb-4">

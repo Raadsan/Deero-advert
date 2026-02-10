@@ -246,7 +246,7 @@ export default function ServicesContent({
                 animate="visible"
                 viewport={{ once: true, amount: 0 }}
                 variants={containerVariants}
-                className="mx-auto max-w-6xl text-center space-y-12"
+                className="mx-auto max-w-6xl xl:max-w-7xl text-center space-y-12"
             >
                 {showTitle && (
                     <motion.div variants={itemVariants} className="text-center mb-8">
