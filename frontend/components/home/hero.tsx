@@ -46,9 +46,7 @@ const slides: Slide[] = [
 ];
 
 export default function Hero() {
-
   const [active, setActive] = useState(0);
-  const [imageLoaded, setImageLoaded] = useState(false);
   const total = useMemo(() => slides.length, []);
   const router = useRouter();
 
@@ -58,12 +56,6 @@ export default function Hero() {
     }, 5500);
     return () => clearInterval(id);
   }, [total]);
-
-  // Reset imageLoaded when slide changes
-  useEffect(() => {
-    setImageLoaded(false);
-  }, [active]);
-
 
   const slide = slides[active];
 
@@ -80,8 +72,8 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative overflow-hidden bg-[linear-gradient(to_right,#651313_0%,#651313_60%,#EB4724_100%)] text-white h-[600px] sm:h-[650px] lg:h-[700px] flex flex-col justify-center">
-      <div className="mx-auto flex max-w-6xl xl:max-w-7xl flex-col gap-12 px-4 py-14 sm:px-10 lg:flex-row lg:items-center lg:py-20 ">
+    <section className="relative overflow-hidden bg-[linear-gradient(to_right,#651313_0%,#651313_60%,#EB4724_100%)] text-white">
+      <div className="mx-auto flex max-w-6xl flex-col gap-12 px-4 py-14 sm:px-10 lg:flex-row lg:items-center lg:py-20 ">
         <button
           type="button"
           aria-label="Previous slide"
@@ -96,15 +88,15 @@ export default function Hero() {
               <motion.div
                 key={active}
                 initial={{ opacity: 0, y: 80 }}
-                animate={imageLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 80 }}
+                animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 80 }}
                 transition={{ duration: 0.8 }}
                 className="space-y-6"
               >
-                <h1 className="text-3xl font-bold leading-tight sm:text-4xl lg:text-4xl">
+                <h1 className="text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">
                   {slide.title}
                 </h1>
-                <p className="max-w-2xl text-base leading-8 text-white/90">
+                <p className="max-w-2xl text-lg leading-8 text-white/90">
                   {slide.description}
                 </p>
                 <div className="flex items-center gap-4">
@@ -124,7 +116,7 @@ export default function Hero() {
               <motion.div
                 key={active}
                 initial={{ opacity: 0, y: -80 }}
-                animate={imageLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: -80 }}
+                animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -80 }}
                 transition={{ duration: 0.8 }}
                 className="relative z-10"
@@ -134,10 +126,8 @@ export default function Hero() {
                   alt={slide.title}
                   width={620}
                   height={420}
-                  className="h-auto w-full max-w-[520px] xl:max-w-[650px] object-contain"
+                  className="h-auto w-full max-w-[520px] object-contain"
                   priority
-                  loading="eager"
-                  onLoad={() => setImageLoaded(true)}
                 />
               </motion.div>
             </AnimatePresence>
@@ -170,4 +160,3 @@ export default function Hero() {
     </section>
   );
 }
-
