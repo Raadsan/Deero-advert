@@ -53,7 +53,7 @@ export default function TeamSection() {
     // No longer returning null, always show the section if it's supposed to be there
     return (
         <section id="team-section" className="bg-white py-24 px-4 sm:px-10 overflow-hidden border-t border-gray-100">
-            <div className="mx-auto max-w-7xl">
+            <div className="mx-auto max-w-6xl xl:max-w-7xl">
                 {/* Header */}
                 <div className="text-center mb-20">
                     <motion.div

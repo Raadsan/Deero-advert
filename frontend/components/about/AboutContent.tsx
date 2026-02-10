@@ -4,8 +4,8 @@ import Image from "next/image";
 
 export default function AboutContent() {
     return (
-        <section className="bg-white py-20 px-4">
-            <div className="mx-auto max-w-6xl">
+        <section className="bg-white py-20 px-4 sm:px-10">
+            <div className="mx-auto max-w-6xl xl:max-w-7xl">
                 <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
                     {/* Left side: Illustration */}
                     <div className="w-full lg:w-1/2 flex justify-center">
@@ -21,7 +21,7 @@ export default function AboutContent() {
                     </div>
 
                     {/* Right side: Text content */}
-                    <div className="w-full lg:w-1/2 space-y-8">
+                    <div className="w-full lg:w-1/2 space-y-8 lg:pr-9 xl:pr-0">
                         <div>
                             <h2 className="text-4xl md:text-5xl font-bold text-[#1a1a1a] mb-8">
                                 About Us

@@ -134,7 +134,7 @@ export default function HostingPackages() {
                 whileInView="visible"
                 viewport={{ once: true, amount: 0.2 }}
                 variants={containerVariants}
-                className="mx-auto max-w-6xl"
+                className="mx-auto max-w-6xl xl:max-w-7xl"
             >
                 <div className="text-center mb-12">
                     <motion.div variants={itemVariants} className="mb-8">

@@ -80,7 +80,7 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative overflow-hidden bg-[linear-gradient(to_right,#651313_0%,#651313_60%,#EB4724_100%)] text-white h-[600px] sm:h-[650px] lg:h-[700px] flex flex-col justify-center">
+    <section className="relative overflow-hidden bg-[linear-gradient(to_right,#651313_0%,#651313_60%,#EB4724_100%)] text-white h-[600px] sm:h-[650px] lg:h-[420px] lg:pt-16 flex flex-col justify-center">
       <div className="mx-auto flex max-w-6xl flex-col gap-12 px-4 py-14 sm:px-10 lg:flex-row lg:items-center lg:py-20 ">
         <button
           type="button"
@@ -101,10 +101,10 @@ export default function Hero() {
                 transition={{ duration: 0.8 }}
                 className="space-y-6"
               >
-                <h1 className="text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">
+                <h1 className="text-3xl font-bold leading-tight sm:text-4xl lg:text-4xl">
                   {slide.title}
                 </h1>
-                <p className="max-w-2xl text-lg leading-8 text-white/90">
+                <p className="max-w-2xl text-base leading-8 text-white/90">
                   {slide.description}
                 </p>
                 <div className="flex items-center gap-4">
@@ -134,7 +134,7 @@ export default function Hero() {
                   alt={slide.title}
                   width={620}
                   height={420}
-                  className="h-auto w-full max-w-[520px] lg:max-w-[650px] object-contain"
+                  className="h-auto w-full max-w-[520px] lg:max-w-[420px] object-contain"
                   priority
                   loading="eager"
                   onLoad={() => setImageLoaded(true)}

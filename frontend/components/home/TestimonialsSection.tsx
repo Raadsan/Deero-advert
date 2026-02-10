@@ -122,7 +122,7 @@ export default function TestimonialsSection() {
 
             {/* Testimonials Content Section - Grey Background */}
             <section className="bg-[#f8f9fa] py-24 px-4 sm:px-10 overflow-hidden min-h-[600px]">
-                <div className="mx-auto max-w-7xl">
+                <div className="mx-auto max-w-6xl xl:max-w-7xl">
                     {/* Section Title */}
                     <motion.div
                         initial="hidden"
