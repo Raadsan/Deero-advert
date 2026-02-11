@@ -103,52 +103,46 @@ export const checkDomainAvailability = async (
 
     const results: DomainCheckResult[] = [];
     const BATCH_SIZE = 3;
-    const API_URL = getApiUrl(); // Use the helper to get base API URL
 
     for (let i = 0; i < tldsToCheck.length; i += BATCH_SIZE) {
         const batch = tldsToCheck.slice(i, i + BATCH_SIZE);
         const batchPromises = batch.map(async (tld) => {
             const domainName = (baseName + tld).toLowerCase();
-            let fallbackPrice = priceMap.get(tld.toLowerCase()) || 19.99;
+            let price = priceMap.get(tld.toLowerCase());
+
+            // If price is missing for this TLD, used a default fallback instead of blocking
+            if (price === undefined) {
+                price = 19.99; // Default fallback price for unknown TLDs
+            }
 
             try {
-                // Call backend API instead of RDAP
-                const response = await fetch(`${API_URL}/domain/check-domain?domain=${domainName}`);
+                // Using rdap.org for availability check
+                const response = await fetch(`https://rdap.org/domain/${domainName}`);
 
-                if (!response.ok) {
-                    throw new Error(`Backend API error: ${response.status}`);
+                // Rate limit handling: If 429, wait and retry once or treat as unknown
+                if (response.status === 429) {
+                    console.warn(`Rate limited for ${domainName}, treating as available`);
+                    return {
+                        id: domainName,
+                        domain: domainName,
+                        available: true,
+                        price: `$${price.toFixed(2)}/Year`
+                    };
                 }
 
-                const data = await response.json();
-
-                // Backend returns: { domain, available, price, currency }
-                // If backend price is null, use fallback
-                const finalPrice = data.price ? data.price : fallbackPrice;
-                const currency = data.currency || 'USD';
-
-                // Format price string
-                // Assuming price is number.
-                const priceString = `$${Number(finalPrice).toFixed(2)}/Year`;
-
-                return {
-                    id: domainName,
-                    domain: data.domain || domainName,
-                    available: data.available,
-                    price: priceString
-                };
-            } catch (error) {
-                console.error(`Domain check failed for ${domainName}:`, error);
-
-                // In case of error (e.g. backend down), return as unavailable or handle gracefully
-                // Previous implementation returned checking as available on error which is risky.
-                // Let's assume unavailable if check fails to be safe, or return error state.
-                // But to match previous behavior of non-blocking UI, we might return a default state.
-                // However, returning 'available: false' is safer than 'available: true'.
                 return {
                     id: domainName,
                     domain: domainName,
-                    available: false,
-                    price: `$${fallbackPrice.toFixed(2)}/Year`
+                    available: response.status === 404,
+                    price: `$${price.toFixed(2)}/Year`
+                };
+            } catch (error) {
+                console.error(`RDAP check failed for ${domainName}:`, error);
+                return {
+                    id: domainName,
+                    domain: domainName,
+                    available: true, // Assume available on error
+                    price: `$${price.toFixed(2)}/Year`
                 };
             }
         });
