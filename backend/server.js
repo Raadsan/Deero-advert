@@ -28,7 +28,7 @@ import portfolioRoutes from "./routes/portfolioRoutes.js";
 import domainRoute from "./routes/domain.js";
 
 import path from "path";
-import { fileURLToPath } from "url"; 
+import { fileURLToPath } from "url";
 
 // Connect Database
 connectDB();
@@ -76,3 +76,4 @@ app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
 
 });
+
