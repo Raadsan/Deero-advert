@@ -11,9 +11,9 @@ router.get("/check-domain", async (req, res) => {
   try {
     const domainLower = domain.toLowerCase().trim();
 
-    // OTE endpoint
+    // Production GoDaddy endpoint
     const response = await fetch(
-      `https://api.ote-godaddy.com/v1/domains/available?domain=${domainLower}`,
+      `https://api.godaddy.com/v1/domains/available?domain=${domainLower}`,
       {
         headers: {
           Authorization: `sso-key ${process.env.GODADDY_KEY}:${process.env.GODADDY_SECRET}`,
