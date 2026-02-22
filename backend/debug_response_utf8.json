@@ -1,0 +1,20 @@
+﻿{
+    "domain":  "available-on-test-999.com",
+    "available":  true,
+    "price":  12.99,
+    "currency":  "USD",
+    "debug":  {
+                  "raw":  {
+                              "available":  true,
+                              "currency":  "USD",
+                              "definitive":  true,
+                              "domain":  "available-on-test-999.com",
+                              "period":  1,
+                              "price":  12990000
+                          },
+                  "env":  {
+                              "keyLength":  35,
+                              "secretLength":  22
+                          }
+              }
+}
