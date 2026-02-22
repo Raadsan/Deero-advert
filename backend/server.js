@@ -43,7 +43,7 @@ app.use(express.urlencoded({ limit: "50mb", extended: true }));
 // Serve uploaded files statically at /uploads
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
 // Register routes
 app.use('/api/service/', ServiceRoutes)
