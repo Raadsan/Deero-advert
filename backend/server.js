@@ -71,18 +71,6 @@ const PORT = process.env.PORT || 5000;
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
-
-app.get("/api/debug-uploads", (req, res) => {
-  const uploadsPath = path.join(__dirname, '..', 'uploads');
-  import('fs').then(fs => {
-    fs.readdir(uploadsPath, (err, files) => {
-      if (err) {
-        return res.status(500).json({ error: err.message, path: uploadsPath });
-      }
-      res.json({ count: files.length, files: files.slice(0, 50), path: uploadsPath });
-    });
-  });
-});
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
 
