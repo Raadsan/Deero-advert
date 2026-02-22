@@ -73,7 +73,7 @@ export default function Hero() {
 
   return (
     <section className="relative overflow-hidden bg-[linear-gradient(to_right,#651313_0%,#651313_60%,#EB4724_100%)] text-white">
-      <div className="mx-auto flex max-w-6xl flex-col gap-12 px-4 py-14 sm:px-10 lg:flex-row lg:items-center lg:py-20 ">
+      <div className="mx-auto flex max-w-6xl flex-col gap-12 px-4 py-14 sm:px-10 lg:flex-row lg:items-center lg:py-20 min-h-[500px] lg:min-h-[600px]">
         <button
           type="button"
           aria-label="Previous slide"
