@@ -54,7 +54,7 @@ export const addAchievement = async (req, res) => {
     const achievement = new Achievement({
       title: title.trim(),
       count: countNumber,
-      icon: req.file.filename
+      icon: req.file.path
     });
 
     const saved = await achievement.save();
@@ -66,7 +66,7 @@ export const addAchievement = async (req, res) => {
 
   } catch (error) {
     console.error("Add Achievement Error:", error);
-    
+
     // Handle Mongoose validation errors
     if (error.name === 'ValidationError') {
       const errors = Object.values(error.errors).map(err => err.message).join(', ');
@@ -98,7 +98,7 @@ export const getAchievements = async (req, res) => {
       count: data.length
     });
   } catch (error) {
-    res.status(500).json({ 
+    res.status(500).json({
       message: "Failed to fetch achievements",
       success: false,
       error: error.message
@@ -113,7 +113,7 @@ export const getAchievementById = async (req, res) => {
   try {
     const { id } = req.params;
     const achievement = await Achievement.findById(id);
-    
+
     if (!achievement) {
       return res.status(404).json({
         success: false,
@@ -178,7 +178,7 @@ export const updateAchievement = async (req, res) => {
 
     // Handle icon file upload if provided
     if (req.file) {
-      update.icon = req.file.filename;
+      update.icon = req.file.path;
     }
 
     // If no fields provided to update, return 400
@@ -210,7 +210,7 @@ export const updateAchievement = async (req, res) => {
 
   } catch (error) {
     console.error("Update Achievement Error:", error);
-    
+
     // Handle Mongoose validation errors
     if (error.name === 'ValidationError') {
       const errors = Object.values(error.errors).map(err => err.message).join(', ');
@@ -238,20 +238,20 @@ export const deleteAchievement = async (req, res) => {
 
     const deleted = await Achievement.findByIdAndDelete(id);
     if (!deleted) {
-      return res.status(404).json({ 
+      return res.status(404).json({
         message: "Achievement not found",
         success: false
       });
     }
 
-    res.status(200).json({ 
+    res.status(200).json({
       message: "Achievement deleted successfully",
       success: true,
       data: deleted
     });
   } catch (error) {
     console.error("Delete Achievement Error:", error);
-    res.status(500).json({ 
+    res.status(500).json({
       message: "Delete failed",
       success: false,
       error: error.message

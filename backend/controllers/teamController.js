@@ -24,7 +24,7 @@ export const createTeam = async (req, res) => {
         const team = await Team.create({
             name,
             position,
-            image: `uploads/${req.file.filename}`,
+            image: req.file.path,
             socials: parsedSocials || [],
         });
 
@@ -76,7 +76,7 @@ export const updateTeam = async (req, res) => {
         }
 
         if (req.file) {
-            updateData.image = `uploads/${req.file.filename}`;
+            updateData.image = req.file.path;
         }
 
         const team = await Team.findByIdAndUpdate(id, updateData, {

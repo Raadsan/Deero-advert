@@ -12,7 +12,7 @@ export const addTestimonial = async (req, res) => {
       clientTitle,
       message,
       rating: rating || 5,
-      clientImage: req.file ? req.file.filename : ""
+      clientImage: req.file ? req.file.path : ""
     });
 
     const saved = await testimonial.save();
@@ -67,7 +67,7 @@ export const updateTestimonial = async (req, res) => {
 
     // Handle client image file upload if provided (optional for update)
     if (req.file) {
-      update.clientImage = req.file.filename;
+      update.clientImage = req.file.path;
     }
 
     // If no fields provided to update, return 400

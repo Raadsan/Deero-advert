@@ -15,7 +15,7 @@ export const createClient = async (req, res) => {
       return res.status(400).json({ success: false, message: "At least one image is required" });
     }
 
-    const imageFilenames = req.files.map(file => file.filename);
+    const imageFilenames = req.files.map(file => file.path);
 
     const client = new Client({
       description,
@@ -48,6 +48,7 @@ export const deleteClient = async (req, res) => {
 
     // Delete all images
     for (const img of client.images) {
+      if (img.startsWith("http")) continue; // Skip Cloudinary URLs for local unlink
       const filePath = path.join("uploads", img);
       try {
         await fs.unlink(filePath);
