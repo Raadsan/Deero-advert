@@ -131,8 +131,8 @@ export default function AchievementsSection() {
                                 {achievements.map((item) => {
                                     return (
                                         <motion.div key={item._id} variants={itemVariants} className="flex flex-col items-center group">
-                                            <div className="relative w-24 h-24 flex items-center justify-center mb-6">
-                                                <div className="relative h-18 w-18">
+                                            <div className="relative w-full h-36 sm:h-40 max-w-[220px] flex items-center justify-center mb-6">
+                                                <div className="relative h-28 w-28 sm:h-32 sm:w-32">
                                                     <Image
                                                         src={getImageUrl(item.icon) || "/logo deero-02 .svg"}
                                                         alt={item.title || "Achievement Icon"}
