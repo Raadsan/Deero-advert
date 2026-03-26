@@ -34,7 +34,7 @@ export default function Footer() {
                                 { label: "Home", href: "/" },
                                 { label: "About", href: "/about" },
                                 { label: "Services", href: "/services" },
-                                { label: "Portfolio", href: "https://www.behance.net/deeroadvert" },
+                                { label: "Portfolio", href: "/portfolio" },
                                 { label: "Contact", href: "/contact" },
                             ].map((link) => (
                                 <li key={link.href}>
@@ -54,17 +54,17 @@ export default function Footer() {
                         <h3 className="text-white font-bold text-lg mb-6">Services</h3>
                         <ul className="space-y-3">
                             {[
-                                { label: "Graphic Design", sectionId: "graphic-design" },
-                                { label: "Digital Marketing", sectionId: "digital-marketing" },
-                                { label: "Web Solutions", sectionId: "web-solutions" },
-                                { label: "Motion Graphics", sectionId: "motion-graphics" },
-                                { label: "Event Branding", sectionId: "event-branding" },
-                                { label: "Digital Consulting", sectionId: "digital-consulting" },
+                                { label: "Graphic Design", slug: "graphic-design" },
+                                { label: "Digital Marketing", slug: "digital-marketing" },
+                                { label: "Web Solutions", slug: "website-design-and-development" },
+                                { label: "Motion Graphics", slug: "motion-graphics" },
+                                { label: "Event Branding", slug: "event-branding" },
+                                { label: "Digital Consulting", slug: "digital-consulting" },
                             ].map((item) => (
                                 <li key={item.label}>
-                                    {item.sectionId ? (
+                                    {item.slug ? (
                                         <Link
-                                            href={`/services#${item.sectionId}`}
+                                            href={`/services/${item.slug}`}
                                             className="text-white/90 hover:text-[#EB4724] transition-colors text-sm"
                                         >
                                             {item.label}
