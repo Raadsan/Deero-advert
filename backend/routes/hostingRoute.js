@@ -11,18 +11,18 @@ import { protect } from "../middlewares/authMiddleware.js";
 const router = express.Router();
 
 // Create a new hosting package
-router.post("/", protect, createPackage);
+router.post("/", createPackage);
 
 // Get all packages
-router.get("/", protect, getAllPackages);
+router.get("/", getAllPackages);
 
 // Get a package by ID
-router.get("/:id", protect, getPackageById);
+router.get("/:id", getPackageById);
 
 // Update a package by ID
-router.patch("/:id", protect, updatePackage);
+router.patch("/:id", updatePackage);
 
 // Delete a package by ID
-router.delete("/:id", protect, deletePackage);
+router.delete("/:id", deletePackage);
 
 export default router;

@@ -10,15 +10,15 @@ import { protect } from "../middlewares/authMiddleware.js";
 const router = express.Router();
 
 // ➕ Create team member
-router.post("/", protect, upload.single("image"), createTeam);
+router.post("/", upload.single("image"), createTeam);
 
 // 📥 Get all team members
-router.get("/", protect, getTeams);
+router.get("/", getTeams);
 
 // ✏ Update team member
-router.put("/:id", protect, upload.single("image"), updateTeam);
+router.put("/:id", upload.single("image"), updateTeam);
 
 // ❌ Delete team member
-router.delete("/:id", protect, deleteTeam);
+router.delete("/:id", deleteTeam);
 
 export default router;

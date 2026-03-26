@@ -7,8 +7,8 @@ const router = express.Router();
 
 router.post("/", createRole);
 router.get("/", getRoles);
-router.get("/:id", protect, getRoleById);
-router.patch("/:id", protect, updateRole);
-router.delete("/:id", protect, deleteRole);
+router.get("/:id", getRoleById);
+router.patch("/:id", updateRole);
+router.delete("/:id", deleteRole);
 
 export default router;

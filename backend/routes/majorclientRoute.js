@@ -6,13 +6,13 @@ import { protect } from "../middlewares/authMiddleware.js";
 const router = express.Router();
 
 // GET all clients
-router.get("/", protect, getClients);
+router.get("/", getClients);
 
 // POST client with a single image
-router.post("/", protect, upload.single("image"), createClient);
+router.post("/", upload.single("image"), createClient);
 
 // DELETE client
-router.delete("/:id", protect, deleteClient);
+router.delete("/:id", deleteClient);
 
 // UPDATE client
 router.put("/:id", upload.single("image"), updateClient);

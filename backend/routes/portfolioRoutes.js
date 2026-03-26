@@ -18,19 +18,19 @@ const uploadFields = upload.fields([
 ]);
 
 // ➕ Create portfolio
-router.post("/", protect, uploadFields, createPortfolio);
+router.post("/", uploadFields, createPortfolio);
 
 // 📥 Get all portfolios
-router.get("/", protect, getAllPortfolios);
-router.get("/:id", protect, getPortfolioById);
+router.get("/", getAllPortfolios);
+router.get("/:id", getPortfolioById);
 
 // 📝 Update portfolio
-router.patch("/:id", protect, upload.any(), updatePortfolio);
+router.patch("/:id", upload.any(), updatePortfolio);
 
 // 🗑 Delete portfolio
-router.delete("/:id", protect, deletePortfolio);
+router.delete("/:id", deletePortfolio);
 
 // 🗑 Delete single gallery image
-router.delete("/:id/gallery", protect, deleteGalleryImage);
+router.delete("/:id/gallery", deleteGalleryImage);
 
 export default router;

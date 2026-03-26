@@ -14,18 +14,18 @@ import { protect } from "../middlewares/authMiddleware.js";
 const router = express.Router();
 
 // Main menu routes
-router.post("/", protect, createMenu);
-router.get("/", protect, getMenus);
-router.get("/:id", protect, getMenuById);
-router.patch("/:id", protect, updateMenu);
-router.delete("/:id", protect, deleteMenu);
+router.post("/", createMenu);
+router.get("/", getMenus);
+router.get("/:id", getMenuById);
+router.patch("/:id", updateMenu);
+router.delete("/:id", deleteMenu);
 
 // SubMenu routes
-router.post("/:id/submenu", protect, addSubMenu);
-router.patch("/:menuId/submenu/:subMenuId", protect, updateSubMenu);
-router.delete("/:menuId/submenu/:subMenuId", protect, deleteSubMenu);
+router.post("/:id/submenu", addSubMenu);
+router.patch("/:menuId/submenu/:subMenuId", updateSubMenu);
+router.delete("/:menuId/submenu/:subMenuId", deleteSubMenu);
 
 // Get user-specific menus based on role
-router.get("/user/:roleId", protect, getUserMenus);
+router.get("/user/:roleId", getUserMenus);
 
 export default router;
