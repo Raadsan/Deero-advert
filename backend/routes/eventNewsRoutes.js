@@ -7,12 +7,13 @@ import {
   deleteEventNews,
 } from "../controllers/EventNewsController.js";
 
+import { protect } from "../middlewares/authMiddleware.js";
 const router = express.Router();
 
-router.post("/", createEventNews);
-router.get("/", getAllEventsNews);
-router.get("/:id", getEventNewsById);
-router.patch("/:id", updateEventNews);
-router.delete("/:id", deleteEventNews);
+router.post("/", protect, createEventNews);
+router.get("/", protect, getAllEventsNews);
+router.get("/:id", protect, getEventNewsById);
+router.patch("/:id", protect, updateEventNews);
+router.delete("/:id", protect, deleteEventNews);
 
 export default router;
