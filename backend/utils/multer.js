@@ -35,9 +35,3 @@ const upload = multer({
 });
 
 export default upload;
-
-limits: { fileSize: 50 * 1024 * 1024 } // max 50MB
-});
-
-export default upload;
-
