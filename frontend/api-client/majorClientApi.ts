@@ -27,3 +27,12 @@ export const deleteMajorClient = async (id: string) => {
     return response.data;
 };
 
+export const updateMajorClient = async (id: string, formData: FormData) => {
+    const response = await api.put(`/majorclients/${id}`, formData, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+    });
+    return response.data;
+};
+
