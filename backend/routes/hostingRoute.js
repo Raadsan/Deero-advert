@@ -7,21 +7,22 @@ import {
   deletePackage
 } from "../controllers/hostingPackageController.js";
 
+import { protect } from "../middlewares/authMiddleware.js";
 const router = express.Router();
 
 // Create a new hosting package
-router.post("/", createPackage);
+router.post("/", protect, createPackage);
 
 // Get all packages
-router.get("/", getAllPackages);
+router.get("/", protect, getAllPackages);
 
 // Get a package by ID
-router.get("/:id", getPackageById);
+router.get("/:id", protect, getPackageById);
 
 // Update a package by ID
-router.patch("/:id", updatePackage);
+router.patch("/:id", protect, updatePackage);
 
 // Delete a package by ID
-router.delete("/:id", deletePackage);
+router.delete("/:id", protect, deletePackage);
 
 export default router;

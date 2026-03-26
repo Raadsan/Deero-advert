@@ -8,13 +8,14 @@ import {
     deleteCareer,
 } from "../controllers/CareerController.js";
 
+import { protect } from "../middlewares/authMiddleware.js";
 const router = express.Router();
 
-router.post("/", createCareer);
-router.get("/", getAllCareers);
-router.get("/active", getActiveCareers);
-router.get("/:id", getCareerById);
-router.patch("/:id", updateCareer);
-router.delete("/:id", deleteCareer);
+router.post("/", protect, createCareer);
+router.get("/", protect, getAllCareers);
+router.get("/active", protect, getActiveCareers);
+router.get("/:id", protect, getCareerById);
+router.patch("/:id", protect, updateCareer);
+router.delete("/:id", protect, deleteCareer);
 
 export default router;

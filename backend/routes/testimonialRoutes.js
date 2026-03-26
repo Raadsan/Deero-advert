@@ -6,20 +6,20 @@ import {
   updateTestimonial,
   deleteTestimonial
 } from "../controllers/testimonialController.js";
-
+import { protect } from "../middlewares/authMiddleware.js";
 const router = express.Router();
 
 // POST - add testimonial (client image upload)
-router.post("/", upload.single("clientImage"), addTestimonial);
+router.post("/", protect, upload.single("clientImage"), addTestimonial);
 
 // GET - all testimonials
-router.get("/", getTestimonials);
+router.get("/", protect, getTestimonials);
 
 // PATCH/PUT - update testimonial (client image upload is optional)
-router.patch("/:id", upload.single("clientImage"), updateTestimonial);
+router.patch("/:id", protect, upload.single("clientImage"), updateTestimonial);
 
 
 // DELETE - testimonial
-router.delete("/:id", deleteTestimonial);
+router.delete("/:id", protect, deleteTestimonial);
 
 export default router;

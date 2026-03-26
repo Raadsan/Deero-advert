@@ -8,7 +8,7 @@ import {
   getPortfolioById
 } from "../controllers/portfolioController.js";
 import upload from "../utils/multer.js"; // your Multer config
-
+import { protect } from "../middlewares/authMiddleware.js";
 const router = express.Router();
 
 // Fields for mainImage + gallery
@@ -18,19 +18,19 @@ const uploadFields = upload.fields([
 ]);
 
 // ➕ Create portfolio
-router.post("/", uploadFields, createPortfolio);
+router.post("/", protect, uploadFields, createPortfolio);
 
 // 📥 Get all portfolios
-router.get("/", getAllPortfolios);
-router.get("/:id", getPortfolioById);
+router.get("/", protect, getAllPortfolios);
+router.get("/:id", protect, getPortfolioById);
 
 // 📝 Update portfolio
-router.patch("/:id", upload.any(), updatePortfolio);
+router.patch("/:id", protect, upload.any(), updatePortfolio);
 
 // 🗑 Delete portfolio
-router.delete("/:id", deletePortfolio);
+router.delete("/:id", protect, deletePortfolio);
 
 // 🗑 Delete single gallery image
-router.delete("/:id/gallery", deleteGalleryImage);
+router.delete("/:id/gallery", protect, deleteGalleryImage);
 
 export default router;

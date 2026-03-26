@@ -21,9 +21,9 @@ router.post("/", createAnnouncementForUsers);
 router.get("/", getAnnouncements);
 
 // Get single announcement
-router.get("/:id", getAnnouncementById);
+router.get("/:id", protect, getAnnouncementById);
 
 // Delete announcement
-router.delete("/:id", deleteAnnouncement);
+router.delete("/:id", protect, deleteAnnouncement);
 
 export default router;

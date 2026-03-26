@@ -8,22 +8,23 @@ import {
   deleteAchievement
 } from "../controllers/achievementController.js";
 
+import { protect } from "../middlewares/authMiddleware.js";
 const router = express.Router();
 
 // POST - add achievement with icon upload
-router.post("/", upload.single("icon"), addAchievement);
+router.post("/", protect, upload.single("icon"), addAchievement);
 
 // GET - all achievements
-router.get("/", getAchievements);
+router.get("/", protect, getAchievements);
 
 // GET - achievement by ID
-router.get("/:id", getAchievementById);
+router.get("/:id", protect, getAchievementById);
 
 // PATCH/PUT - update achievement (icon upload is optional)
-router.patch("/:id", upload.single("icon"), updateAchievement);
+router.patch("/:id", protect, upload.single("icon"), updateAchievement);
 
 
 // DELETE - achievement
-router.delete("/:id", deleteAchievement);
+router.delete("/:id", protect, deleteAchievement);
 
 export default router;

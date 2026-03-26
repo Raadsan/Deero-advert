@@ -6,19 +6,19 @@ import {
   updateTeam,
   deleteTeam,
 } from "../controllers/teamController.js";
-
+import { protect } from "../middlewares/authMiddleware.js";
 const router = express.Router();
 
 // ➕ Create team member
-router.post("/", upload.single("image"), createTeam);
+router.post("/", protect, upload.single("image"), createTeam);
 
 // 📥 Get all team members
-router.get("/", getTeams);
+router.get("/", protect, getTeams);
 
 // ✏ Update team member
-router.put("/:id", upload.single("image"), updateTeam);
+router.put("/:id", protect, upload.single("image"), updateTeam);
 
 // ❌ Delete team member
-router.delete("/:id", deleteTeam);
+router.delete("/:id", protect, deleteTeam);
 
 export default router;
