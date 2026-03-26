@@ -79,7 +79,7 @@ export default function Header() {
   return (
     <header className="fixed top-0 left-0 right-0 w-full z-50">
       {/* Top bar logic... */}
-      <div className="flex flex-wrap items-center justify-center gap-6 bg-[#651313] py-3 text-sm font-medium text-white sm:px-6 md:text-base">
+      <div className="flex flex-wrap items-center justify-center gap-3 bg-[#651313] py-1.5 text-sm font-medium text-white sm:px-6 md:gap-6 md:py-3 md:text-base">
         <span className="text-base md:text-lg">+252 61 8553566</span>
         <span className="hidden sm:inline">|</span>
         <a
@@ -110,7 +110,7 @@ export default function Header() {
 
       {/* Main header */}
       <div className="border-b border-white/20 bg-white/95 backdrop-blur-sm shadow-sm sm:px-6">
-        <div className="mx-auto max-w-7xl px-4 md:px-6 h-[120px] flex items-center justify-between">
+        <div className="mx-auto max-w-7xl px-4 md:px-6 h-[70px] md:h-[120px] flex items-center justify-between">
 
           {/* Logo - Left */}
           <div className="flex-shrink-0">
@@ -120,7 +120,7 @@ export default function Header() {
                 alt="Deero Advertising Agency"
                 width={500}
                 height={500}
-                className="w-[220px] md:w-[260px] lg:w-[300px] h-auto cursor-pointer"
+                className="w-[150px] md:w-[260px] lg:w-[300px] h-auto cursor-pointer"
                 priority
               />
             </Link>

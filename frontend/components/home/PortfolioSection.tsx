@@ -15,12 +15,13 @@ import ImageModal from "../layout/ImageModal";
 
 
 
-export default function PortfolioSection({ showHeader = true, limit }: { showHeader?: boolean; limit?: number }) {
+export default function PortfolioSection({ showHeader = true, limit, paddingClasses = "py-20 px-4 sm:px-10" }: { showHeader?: boolean; limit?: number; paddingClasses?: string }) {
     const router = useRouter();
     const [portfolios, setPortfolios] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [selectedItem, setSelectedItem] = useState<any | null>(null);
+    const [galleryIndex, setGalleryIndex] = useState<number | null>(null);
 
     useEffect(() => {
         const fetchPortfolios = async () => {
@@ -75,13 +76,47 @@ export default function PortfolioSection({ showHeader = true, limit }: { showHea
     }, []);
 
     const handlePortfolioClick = (item: any) => {
-        // Navigate to individual portfolio gallery page
-        const slug = item.title ? slugify(item.title) : item._id;
-        router.push(`/portfolio/${slug}`);
+        setSelectedItem(item);
+        setGalleryIndex(0); // Start with the first gallery image
+    };
+
+    const handleNext = () => {
+        if (!selectedItem) return;
+
+        if (galleryIndex !== null) {
+            // Intra-project gallery navigation
+            const gallery = selectedItem.gallery || [];
+            if (galleryIndex < gallery.length - 1) {
+                setGalleryIndex(galleryIndex + 1);
+            }
+        } else {
+            // Inter-project navigation
+            const currentIndex = portfolios.findIndex(p => p._id === selectedItem._id);
+            if (currentIndex < portfolios.length - 1) {
+                setSelectedItem(portfolios[currentIndex + 1]);
+            }
+        }
+    };
+
+    const handlePrev = () => {
+        if (!selectedItem) return;
+
+        if (galleryIndex !== null) {
+            // Intra-project gallery navigation
+            if (galleryIndex > 0) {
+                setGalleryIndex(galleryIndex - 1);
+            }
+        } else {
+            // Inter-project navigation
+            const currentIndex = portfolios.findIndex(p => p._id === selectedItem._id);
+            if (currentIndex > 0) {
+                setSelectedItem(portfolios[currentIndex - 1]);
+            }
+        }
     };
 
     return (
-        <section className="bg-[#fcd7c3] py-20 px-4 sm:px-10">
+        <section className={`bg-[#fcd7c3] ${paddingClasses}`}>
             <div className="mx-auto max-w-6xl xl:max-w-7xl">
                 {/* Header Area */}
                 {showHeader && (
@@ -125,7 +160,7 @@ export default function PortfolioSection({ showHeader = true, limit }: { showHea
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true, amount: 0.2 }}
                                 transition={{ duration: 0.8, delay: index * 0.1 }}
-                                className="bg-white rounded-3xl overflow-hidden shadow-sm flex flex-col lg:flex-row min-h-[400px] lg:gap-12"
+                                className={`bg-white rounded-3xl overflow-hidden shadow-sm flex flex-col ${index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} min-h-[400px] lg:gap-12`}
                             >
                                 {/* Left Content Area */}
                                 <div className="lg:w-1/2 p-8 md:p-12 flex flex-col justify-between">
@@ -163,7 +198,10 @@ export default function PortfolioSection({ showHeader = true, limit }: { showHea
                                 <div className="lg:w-1/2 p-6 lg:p-8 flex items-center justify-center">
                                     <div
                                         className="relative w-full rounded-2xl overflow-hidden shadow-md cursor-pointer group/image"
-                                        onClick={() => setSelectedItem(item)}
+                                        onClick={() => {
+                                            setSelectedItem(item);
+                                            setGalleryIndex(null); // Just show main image, arrows move projects
+                                        }}
                                     >
                                         <div className="absolute inset-0 bg-black/0 group-hover/image:bg-black/10 transition-colors z-10 flex items-center justify-center">
 
@@ -199,28 +237,31 @@ export default function PortfolioSection({ showHeader = true, limit }: { showHea
             {/* Image Modal */}
             <ImageModal
                 isOpen={!!selectedItem}
-                onClose={() => setSelectedItem(null)}
-                onNext={() => {
-                    if (!selectedItem) return;
-                    const currentIndex = portfolios.findIndex(p => p._id === selectedItem._id);
-                    if (currentIndex < portfolios.length - 1) {
-                        setSelectedItem(portfolios[currentIndex + 1]);
-                    }
+                onClose={() => {
+                    setSelectedItem(null);
+                    setGalleryIndex(null);
                 }}
-                onPrev={() => {
-                    if (!selectedItem) return;
-                    const currentIndex = portfolios.findIndex(p => p._id === selectedItem._id);
-                    if (currentIndex > 0) {
-                        setSelectedItem(portfolios[currentIndex - 1]);
-                    }
-                }}
-                hasNext={selectedItem && portfolios.findIndex(p => p._id === selectedItem._id) < portfolios.length - 1}
-                hasPrev={selectedItem && portfolios.findIndex(p => p._id === selectedItem._id) > 0}
+                onNext={handleNext}
+                onPrev={handlePrev}
+                hasNext={
+                    galleryIndex !== null
+                        ? galleryIndex < (selectedItem?.gallery?.length || 0) - 1
+                        : selectedItem && portfolios.findIndex(p => p._id === selectedItem._id) < portfolios.length - 1
+                }
+                hasPrev={
+                    galleryIndex !== null
+                        ? galleryIndex > 0
+                        : selectedItem && portfolios.findIndex(p => p._id === selectedItem._id) > 0
+                }
             >
                 {selectedItem && (
                     <div className="relative w-auto h-auto max-w-[90vw] max-h-[90vh]">
                         <Image
-                            src={selectedItem.mainImage || "/logo deero-02 .svg"}
+                            src={
+                                galleryIndex !== null
+                                    ? (getImageUrl(selectedItem.gallery?.[galleryIndex]) || selectedItem.mainImage || "/logo deero-02 .svg")
+                                    : (selectedItem.mainImage || "/logo deero-02 .svg")
+                            }
                             alt={selectedItem.title}
                             width={1200}
                             height={800}

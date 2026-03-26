@@ -50,7 +50,7 @@ export default function DigitalConsultingSection({ service, onPurchase }: Digita
 
                         <button
                             onClick={() => onPurchase(pkg, service)}
-                            className="px-10 py-4 rounded-xl bg-[#616b7a] text-white font-bold text-xl border-2 border-white hover:bg-[#4a5361] active:scale-95 transition-all shadow-xl"
+                            className="w-full sm:w-auto py-4 px-10 rounded-xl bg-[#651313] text-white font-bold text-sm uppercase tracking-widest hover:brightness-110 active:scale-95 transition-all shadow-lg border-none"
                         >
                             Purchase Plan
                         </button>
