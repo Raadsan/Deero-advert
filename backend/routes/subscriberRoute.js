@@ -11,9 +11,9 @@ import { protect } from "../middlewares/authMiddleware.js";
 const router = express.Router();
 
 router.post("/", subscribe);          // ➕ subscribe
-router.get("/", protect, getAllSubscribers);   // 📄 get all
-router.get("/:id", protect, getSubscriberById);// 📄 get one
-router.patch("/:id", protect, updateSubscriber);// ✏️ update
-router.delete("/:id", protect, deleteSubscriber);// 🗑 delete
+router.get("/", getAllSubscribers);   // 📄 get all
+router.get("/:id", getSubscriberById);// 📄 get one
+router.patch("/:id", updateSubscriber);// ✏️ update
+router.delete("/:id", deleteSubscriber);// 🗑 delete
 
 export default router;

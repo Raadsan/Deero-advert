@@ -10,31 +10,31 @@ import {
   deleteTransaction,
   getRevenueAnalytics
 } from "../controllers/transactionController.js";
-import { protect } from "../middlewares/authMiddleware.js";
+
 const router = express.Router();
 
 // CREATE
-router.post("/", protect, createTransaction);
+router.post("/", createTransaction);
 
 // READ all transactions
-router.get("/", protect, getAllTransactions);
+router.get("/", getAllTransactions);
 
 // READ transaction by ID
 // Analytics Route (Must be before /:id)
-router.get("/analytics/revenue", protect, getRevenueAnalytics);
+router.get("/analytics/revenue", getRevenueAnalytics);
 
-router.get("/:id", protect, getTransactionById);
+router.get("/:id", getTransactionById);
 
 // READ transactions by user
-router.get("/user/:userId", protect, getTransactionsByUser);
+router.get("/user/:userId", getTransactionsByUser);
 
 // READ transactions by type
-router.get("/type/:type", protect, getTransactionsByType);
+router.get("/type/:type", getTransactionsByType);
 
 // UPDATE transaction
-router.put("/:id", protect, updateTransaction);
+router.put("/:id", updateTransaction);
 
 // DELETE transaction
-router.delete("/:id", protect, deleteTransaction);
+router.delete("/:id", deleteTransaction);
 
 export default router;

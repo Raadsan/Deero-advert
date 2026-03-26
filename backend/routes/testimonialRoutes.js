@@ -10,16 +10,16 @@ import { protect } from "../middlewares/authMiddleware.js";
 const router = express.Router();
 
 // POST - add testimonial (client image upload)
-router.post("/", protect, upload.single("clientImage"), addTestimonial);
+router.post("/", upload.single("clientImage"), addTestimonial);
 
 // GET - all testimonials
-router.get("/", protect, getTestimonials);
+router.get("/", getTestimonials);
 
 // PATCH/PUT - update testimonial (client image upload is optional)
-router.patch("/:id", protect, upload.single("clientImage"), updateTestimonial);
+router.patch("/:id", upload.single("clientImage"), updateTestimonial);
 
 
 // DELETE - testimonial
-router.delete("/:id", protect, deleteTestimonial);
+router.delete("/:id", deleteTestimonial);
 
 export default router;

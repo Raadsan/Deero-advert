@@ -12,19 +12,19 @@ const router = express.Router();
 
 
 // Add new blog (accept file uploads)
-router.post("/", protect, upload.any(), addBlog);
+router.post("/", upload.any(), addBlog);
 
 // Get all blogs
-router.get("/", protect, getBlogs);
+router.get("/", getBlogs);
 
 // Get single blog by ID or slug
-router.get("/:idOrSlug", protect, getBlogByIdOrSlug);
+router.get("/:idOrSlug", getBlogByIdOrSlug);
 
 // Update blog by ID
 // Update blog by ID (accept file uploads on update)
-router.patch("/:id", protect, upload.any(), updateBlog);
+router.patch("/:id", upload.any(), updateBlog);
 
 // Delete blog by ID
-router.delete("/:id", protect, deleteBlog);
+router.delete("/:id", deleteBlog);
 
 export default router;

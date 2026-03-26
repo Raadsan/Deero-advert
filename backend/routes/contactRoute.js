@@ -5,8 +5,8 @@ import { protect } from "../middlewares/authMiddleware.js";
 const router = express.Router();
 
 router.post("/", createContact);
-router.get("/", protect, getContacts);
-router.get("/:id", protect, getContactById);
-router.delete("/:id", protect, deleteContact);
+router.get("/", getContacts);
+router.get("/:id", getContactById);
+router.delete("/:id", deleteContact);
 
 export default router;
