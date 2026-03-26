@@ -2,6 +2,7 @@
 export const dynamic = 'force-static';
 
 import Header from "@/components/layout/Header";
+import Link from "next/link";
 import Footer from "@/components/layout/Footer";
 import PortfolioSection from "@/components/home/PortfolioSection";
 
@@ -40,9 +41,19 @@ export default function PortfolioPage() {
     return (
         <div className="flex flex-col min-h-screen">
             <Header />
-            <main className="flex-grow pt-[170px]">
+            <main className="flex-grow pt-[130px] md:pt-[150px]">
                 <PortfolioHero />
-                <PortfolioSection showHeader={false} />
+                <div className="bg-[#fcd7c3] pt-8 pb-0">
+                    <div className="mx-auto max-w-6xl xl:max-w-7xl px-4 sm:px-10 text-right">
+                        <Link
+                            href="https://www.behance.net/deeroadvert"
+                            className="bg-[#EB4724] text-white px-10 py-3 rounded-full font-bold hover:bg-[#d13d1d] transition-all uppercase tracking-wider text-sm shadow-md inline-block"
+                        >
+                            Visit Behance
+                        </Link>
+                    </div>
+                </div>
+                <PortfolioSection showHeader={false} paddingClasses="pb-20 pt-4 px-4 sm:px-10" />
             </main>
             <Footer />
         </div>

@@ -11,7 +11,7 @@ export default function CheckoutPage() {
     return (
         <main className="min-h-screen bg-[#fcfcfc]">
             <Header />
-            <div className="pt-[140px]">
+            <div className="pt-[110px] md:pt-[140px]">
                 <CartHeader currentStep={2} />
             </div>
 

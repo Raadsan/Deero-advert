@@ -10,7 +10,7 @@ export default function ContactPage() {
     return (
         <div className="min-h-screen flex flex-col bg-white">
             <Header />
-            <main className="flex-grow pt-[170px]">
+            <main className="flex-grow pt-[130px] md:pt-[170px]">
                 <ContactHero />
                 {/* Spacer section with light grey background to catch the overlapping cards */}
                 <div className="bg-[#f5f5f7] h-32 lg:h-48"></div>

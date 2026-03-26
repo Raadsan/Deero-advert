@@ -14,7 +14,7 @@ export default function CartPage() {
         <div className="min-h-screen bg-[#fafafa] text-[#1a1a1a] flex flex-col">
             <Header />
 
-            <main className="flex-1 pt-[140px]">
+            <main className="flex-1 pt-[110px] md:pt-[140px]">
                 {/* Hero Section */}
                 <CartHeader />
 
