@@ -11,15 +11,15 @@ export const createClient = async (req, res) => {
       return res.status(400).json({ success: false, message: "Description is required" });
     }
 
-    if (!req.files || req.files.length === 0) {
-      return res.status(400).json({ success: false, message: "At least one image is required" });
+    if (!req.file) {
+      return res.status(400).json({ success: false, message: "An image is required" });
     }
 
-    const imageFilenames = req.files.map(file => file.path);
+    const imageFilename = req.file.path;
 
     const client = new Client({
       description,
-      images: imageFilenames
+      images: [imageFilename]
     });
 
     await client.save();
@@ -59,6 +59,54 @@ export const deleteClient = async (req, res) => {
 
     await client.deleteOne();
     res.json({ success: true, message: "Client deleted" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// UPDATE client
+export const updateClient = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { description } = req.body;
+    
+    let existingImages = req.body.existingImages || [];
+    if (typeof existingImages === 'string') {
+        existingImages = [existingImages];
+    }
+    
+    // Map URL to relative path for existing images
+    const cleanExistingImages = existingImages.map(img => {
+       try {
+         const url = new URL(img);
+         const pathname = url.pathname.replace(/^\//, ''); // e.g., 'uploads/image.png'
+         // Replace forward slashes with backslashes for windows compat if needed, 
+         // but Mongoose stores strings verbatim, so we can just use path.normalize
+         return path.normalize(pathname);
+       } catch {
+         return img;
+       }
+    });
+
+    const newImageFilename = req.file ? [req.file.path] : [];
+    const finalImages = [...cleanExistingImages, ...newImageFilename];
+
+    if (!description) {
+      return res.status(400).json({ success: false, message: "Description is required" });
+    }
+    if (finalImages.length === 0) {
+      return res.status(400).json({ success: false, message: "At least one image is required" });
+    }
+
+    const client = await Client.findByIdAndUpdate(
+      id,
+      { description, images: finalImages },
+      { new: true }
+    );
+
+    if (!client) return res.status(404).json({ success: false, message: "Client not found" });
+
+    res.json({ success: true, client });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

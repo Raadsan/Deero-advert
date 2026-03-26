@@ -6,11 +6,12 @@ import Image from "next/image";
 import DataTable from "@/components/layout/DataTable";
 import Modal from "@/components/layout/Modal";
 import DeleteConfirmModal from "@/components/layout/DeleteConfirmModal";
-import { Trash2, Camera, X } from "lucide-react";
+import { Trash2, Camera, X, Pencil } from "lucide-react";
 import {
     getMajorClients,
     createMajorClient,
     deleteMajorClient,
+    updateMajorClient,
 } from "@/api-client/majorClientApi";
 import { getImageUrl } from "@/utils/url";
 
@@ -19,6 +20,7 @@ export default function MajorClientsPage() {
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [editingId, setEditingId] = useState<string | null>(null);
     const [deletingId, setDeletingId] = useState<string | null>(null);
     const [deletingName, setDeletingName] = useState("");
     const [formData, setFormData] = useState({
@@ -100,7 +102,7 @@ export default function MajorClientsPage() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (formData.images.length === 0) {
+        if (formData.images.length === 0 && formData.imagePreviews.length === 0) {
             alert("At least one image is required");
             return;
         }
@@ -109,14 +111,26 @@ export default function MajorClientsPage() {
         const formDataToSend = new FormData();
         formDataToSend.append("description", formData.description);
 
-        // Append all images
+        // Append existing images that were not removed
+        formData.imagePreviews.forEach((preview) => {
+            if (!preview.startsWith("blob:")) {
+                formDataToSend.append("existingImages", preview);
+            }
+        });
+
+        // Append new images
         formData.images.forEach((file) => {
-            formDataToSend.append("images", file);
+            formDataToSend.append("image", file);
         });
 
         try {
-            await createMajorClient(formDataToSend);
+            if (editingId) {
+                await updateMajorClient(editingId, formDataToSend);
+            } else {
+                await createMajorClient(formDataToSend);
+            }
             setIsModalOpen(false);
+            setEditingId(null);
             setFormData({
                 description: "",
                 images: [],
@@ -135,6 +149,16 @@ export default function MajorClientsPage() {
         const namePreview = description?.length > 40 ? description.slice(0, 40) + "..." : description;
         setDeletingName(namePreview || "Major Client");
         setIsDeleteModalOpen(true);
+    };
+
+    const handleEdit = (row: any) => {
+        setEditingId(row.id);
+        setFormData({
+            description: row.description || "",
+            images: [],
+            imagePreviews: row.images || [],
+        });
+        setIsModalOpen(true);
     };
 
     const confirmDelete = async () => {
@@ -202,7 +226,13 @@ export default function MajorClientsPage() {
             width: "100px",
             render: (row: any) => (
                 <div className="flex gap-2">
-                    {/* Edit button omitted since backend doesn't support update yet */}
+                    <button
+                        className="p-2 rounded-lg hover:bg-blue-50 text-blue-600 transition-colors"
+                        title="Edit"
+                        onClick={() => handleEdit(row)}
+                    >
+                        <Pencil className="h-4 w-4" />
+                    </button>
                     <button
                         className="p-2 rounded-lg hover:bg-red-50 text-red-600 transition-colors"
                         title="Delete"
@@ -238,20 +268,20 @@ export default function MajorClientsPage() {
                 isOpen={isModalOpen}
                 onClose={() => {
                     setIsModalOpen(false);
+                    setEditingId(null);
                     setFormData({
                         description: "",
                         images: [],
                         imagePreviews: [],
                     });
                 }}
-                title={"Add New Major Client"}
+                title={editingId ? "Edit Major Client" : "Add New Major Client"}
             >
                 <form onSubmit={handleSubmit} className="space-y-4">
 
-                    {/* Multiple Image Upload */}
                     <div className="space-y-2">
                         <label className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">
-                            Client Images (Max 5) <span className="text-red-500">*</span>
+                            Client Image <span className="text-red-500">*</span>
                         </label>
 
                         <div className="grid grid-cols-5 gap-2">
@@ -268,21 +298,20 @@ export default function MajorClientsPage() {
                                 </div>
                             ))}
 
-                            {formData.images.length < 5 && (
+                            {formData.imagePreviews.length < 1 && (
                                 <label className="flex flex-col items-center justify-center aspect-square rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 cursor-pointer transition-colors">
                                     <Camera className="h-6 w-6 text-gray-400" />
                                     <span className="hidden">Upload</span>
                                     <input
                                         type="file"
                                         accept="image/*"
-                                        multiple
                                         onChange={handleFileChange}
                                         className="hidden"
                                     />
                                 </label>
                             )}
                         </div>
-                        <p className="text-xs text-gray-400">Upload up to 5 images representing the client.</p>
+                        <p className="text-xs text-gray-400">Upload an image representing the client.</p>
                     </div>
 
                     <div className="space-y-0.5">
@@ -305,6 +334,7 @@ export default function MajorClientsPage() {
                             type="button"
                             onClick={() => {
                                 setIsModalOpen(false);
+                                setEditingId(null);
                                 setFormData({
                                     description: "",
                                     images: [],

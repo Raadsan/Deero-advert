@@ -63,7 +63,7 @@ export default function AchievementsSection() {
 
                 // Fetch Major Clients
                 const clientsData = await getMajorClients();
-                const fetchedClients = clientsData.clients || clientsData.data || [];
+                const fetchedClients = [...(clientsData.clients || clientsData.data || [])].reverse();
 
                 // Extract all images from all clients (flattening the array if multiple images per client)
                 const allimages = fetchedClients.flatMap((client: any) =>
