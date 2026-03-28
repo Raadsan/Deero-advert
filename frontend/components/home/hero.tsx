@@ -83,7 +83,7 @@ export default function Hero() {
           <ChevronLeftIcon className="h-8 w-8" />
         </button>
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between w-full gap-10 ">
-          <div className="space-y-6 lg:w-1/2">
+          <div className="space-y-6 lg:w-1/2 w-full flex flex-col justify-center">
             <AnimatePresence mode="wait">
               <motion.div
                 key={active}
@@ -91,7 +91,7 @@ export default function Hero() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 80 }}
                 transition={{ duration: 0.8 }}
-                className="space-y-6"
+                className="space-y-6 w-full"
               >
                 <h1 className="text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">
                   {slide.title}
@@ -111,7 +111,7 @@ export default function Hero() {
             </AnimatePresence>
           </div>
 
-          <div className="relative lg:w-1/2 flex justify-center items-center">
+          <div className="relative lg:w-1/2 flex justify-center items-center w-full min-h-[350px] sm:min-h-[450px] lg:min-h-[500px]">
             <AnimatePresence mode="wait">
               <motion.div
                 key={active}
@@ -119,14 +119,14 @@ export default function Hero() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -80 }}
                 transition={{ duration: 0.8 }}
-                className="relative z-10"
+                className="relative z-10 w-full flex justify-center"
               >
                 <Image
                   src={slide.image}
                   alt={slide.title}
                   width={620}
                   height={420}
-                  className="h-auto w-full max-w-[520px] object-contain"
+                  className="h-auto w-full max-w-[620px] object-contain lg:max-w-none"
                   priority
                 />
               </motion.div>
