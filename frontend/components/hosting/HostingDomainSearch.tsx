@@ -70,7 +70,7 @@ export default function HostingDomainSearch({ transparent = false }: { transpare
             const targetTld = searchQuery.substring(lastDotIndex);
 
             // Pass the query and specific TLD
-            const data = await checkDomainAvailability(searchQuery, [targetTld]);
+            const data = await checkDomainAvailability(searchQuery);
 
             if (data.success) {
                 setResults(data.results);
@@ -122,7 +122,7 @@ export default function HostingDomainSearch({ transparent = false }: { transpare
             const targetTld = query.substring(lastDotIndex);
 
             // Only check availability for this specific TLD
-            const data = await checkDomainAvailability(query, [targetTld]);
+            const data = await checkDomainAvailability(query);
 
             if (data.success) {
                 setResults(data.results);

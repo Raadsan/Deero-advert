@@ -25,6 +25,8 @@ import subscriberRoutes from "./routes/subscriberRoute.js";
 
 import teamRoutes from "./routes/teamRoutes.js";
 import portfolioRoutes from "./routes/portfolioRoutes.js";
+import domainRoute from "./routes/domainRoute.js";
+import domainPriceRoutes from "./routes/domainPriceRoutes.js";
 
 
 import path from "path";
@@ -65,6 +67,8 @@ app.use("/api/transactions", transactionRoute);
 app.use("/api/subscribers", subscriberRoutes);
 app.use("/api/teams", teamRoutes);
 app.use("/api/portfolios", portfolioRoutes);
+app.use("/api/domain", domainRoute);
+app.use("/api/domain-prices", domainPriceRoutes);
 app.use(multerErrorHandler);
 const PORT = process.env.PORT || 5000;
 

@@ -1,12 +1,19 @@
 import axios from "axios";
 
+const getBaseURL = () => {
+  if (typeof window !== "undefined" && window.location.hostname === "localhost") {
+    return "http://localhost:5000/api";
+  }
+  return process.env.NEXT_PUBLIC_API_URL || "https://deero-advert-production-a27c.up.railway.app/api";
+};
+
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || "https://deero-advert-production-a27c.up.railway.app/api",
-  // baseURL: "http://localhost:5000/api",
+  baseURL: getBaseURL(),
   headers: {
     "Content-Type": "application/json",
   },
 });
+
 
 // Add token to requests
 api.interceptors.request.use(

@@ -47,9 +47,9 @@ export default function PortfolioPage() {
                     <div className="mx-auto max-w-6xl xl:max-w-7xl px-4 sm:px-10 text-right">
                         <Link
                             href="https://www.behance.net/deeroadvert"
-                            className="bg-[#EB4724] text-white px-10 py-3 rounded-full font-bold hover:bg-[#d13d1d] transition-all uppercase tracking-wider text-sm shadow-md inline-block"
+                            className="bg-[#EB4724] text-white px-10 py-3 rounded-full font-bold hover:bg-[#d13d1d] transition-all text-sm shadow-md inline-block"
                         >
-                            Visit Behance
+                            View on Behance
                         </Link>
                     </div>
                 </div>
