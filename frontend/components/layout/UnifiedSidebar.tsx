@@ -318,6 +318,26 @@ export default function UnifiedSidebar({ isOpen, onClose }: { isOpen?: boolean; 
                             })
                         )}
 
+                        {/* Static Admin Links */}
+                        {isAdminOrManager() && (
+                            <li>
+                                <Link
+                                    href="/management/domain-price"
+                                    onClick={onClose}
+                                    className={`flex items-center rounded-lg px-4 py-3 transition-colors hover:bg-white/10 ${pathname === "/management/domain-price"
+                                        ? "bg-[#EB4724] text-white shadow-md"
+                                        : "text-white/80 hover:text-white"
+                                        }`}
+                                >
+                                    <Globe className="h-5 w-5 flex-shrink-0" />
+                                    <span className="ml-3 text-sm font-medium tracking-wide">
+                                        Domain Price
+                                    </span>
+                                </Link>
+                            </li>
+                        )}
+
+
 
                     </ul>
 
