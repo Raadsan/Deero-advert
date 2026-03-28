@@ -16,7 +16,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-white text-[#1a1a1a]">
       <Header />
-      <main className="pt-[130px] md:pt-[170px]">
+      <main className="pt-[130px] md:pt-[120px]">
         <Hero />
         <DomainSearch />
         <ServicesSection />
