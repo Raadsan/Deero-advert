@@ -20,7 +20,7 @@ export default function HostingPage() {
                 Wait, I previously saw layout doesn't have header. So keeping it.
             */}
             <Header />
-            <main className="pt-[130px] md:pt-[170px]">
+            <main className="pt-[106px] md:pt-[131px]">
                 <HostingHero />
 
                 <Suspense fallback={<div className="py-16 text-center">Loading search...</div>}>

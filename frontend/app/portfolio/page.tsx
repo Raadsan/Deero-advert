@@ -41,7 +41,7 @@ export default function PortfolioPage() {
     return (
         <div className="flex flex-col min-h-screen">
             <Header />
-            <main className="flex-grow pt-[130px] md:pt-[150px]">
+            <main className="flex-grow pt-[106px] md:pt-[131px]">
                 <PortfolioHero />
                 <div className="bg-[#fcd7c3] pt-8 pb-0">
                     <div className="mx-auto max-w-6xl xl:max-w-7xl px-4 sm:px-10 text-right">
