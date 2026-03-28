@@ -13,7 +13,9 @@ const normalizeTLD = (tld) => {
 // CREATE DOMAIN PRICE
 export const createDomainPrice = async (req, res) => {
   try {
+    console.log("[createDomainPrice] Received body:", JSON.stringify(req.body));
     const { tld, price, isActive } = req.body;
+
 
     const normalizedTLD = normalizeTLD(tld);
 

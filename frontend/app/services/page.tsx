@@ -11,7 +11,7 @@ export default function ServicesPage() {
     return (
         <div className="flex flex-col min-h-screen">
             <Header />
-            <main className="flex-grow pt-[130px] md:pt-[170px]">
+            <main className="flex-grow pt-[106px] md:pt-[131px]">
                 <ServicesHero />
                 <ServicesContent showTitle={false} paddingClasses="py-20 px-4 sm:px-10" />
             </main>
