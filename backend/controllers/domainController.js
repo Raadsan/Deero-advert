@@ -48,10 +48,18 @@ export const checkDomainAvailability = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error("Domain check error:", error.response?.data || error.message);
+    console.error("Domain check error details:", {
+      message: error.message,
+      status: error.response?.status,
+      data: error.response?.data,
+    });
     return res.status(500).json({
       success: false,
-      message: "Failed to check domain availability. Please verify your API key and credits.",
+      message: "Failed to check domain availability.",
+      debug: {
+        message: error.message,
+        data: error.response?.data
+      }
     });
   }
 };

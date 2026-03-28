@@ -2,9 +2,8 @@ export const dynamic = 'force-static';
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import WhatsAppButton from "../components/WhatsAppButton";
-
 import { CartProvider } from "../context/CartContext";
+import Chatbot from "../components/layout/Chatbot";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,7 +34,7 @@ export default function RootLayout({
         <CartProvider>
           {children}
         </CartProvider>
-        <WhatsAppButton />
+        <Chatbot />
       </body>
     </html>
   );
