@@ -5,29 +5,29 @@ import React, { useState, useEffect } from "react";
 import DataTable from "@/components/layout/DataTable";
 import Modal from "@/components/layout/Modal";
 import DeleteConfirmModal from "@/components/layout/DeleteConfirmModal";
-import { Send, Trash2, Mail, Users, Megaphone } from "lucide-react";
+import { Edit2, Trash2, Megaphone } from "lucide-react";
 import {
     getAllAnnouncements,
     createAnnouncement,
+    updateAnnouncement,
     deleteAnnouncement,
     Announcement
 } from "@/api-client/announcementApi";
-import { getAllUsers } from "@/api-client/usersApi";
 
 export default function AnnouncementsPage() {
     const [announcements, setAnnouncements] = useState<Announcement[]>([]);
-    const [users, setUsers] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [deletingId, setDeletingId] = useState<string | null>(null);
     const [deletingTitle, setDeletingTitle] = useState("");
+    const [editingId, setEditingId] = useState<string | null>(null);
     const [formData, setFormData] = useState({
         title: "",
         message: "",
-        sendEmail: true,
-        recipients: [] as string[],
+        startDate: "",
+        endDate: "",
     });
 
     useEffect(() => {
@@ -37,18 +37,11 @@ export default function AnnouncementsPage() {
     const fetchData = async () => {
         try {
             setLoading(true);
-            const [annRes, userRes] = await Promise.all([
-                getAllAnnouncements(),
-                getAllUsers()
-            ]);
+            const annRes = await getAllAnnouncements();
 
             if (annRes.data?.success && annRes.data?.data) {
                 const data = Array.isArray(annRes.data.data) ? annRes.data.data : [annRes.data.data];
                 setAnnouncements([...data].reverse());
-            }
-
-            if (userRes.data) {
-                setUsers(userRes.data);
             }
         } catch (error) {
             console.error("Error fetching data:", error);
@@ -67,50 +60,46 @@ export default function AnnouncementsPage() {
         }
     };
 
-    const handleRecipientToggle = (userId: string) => {
-        setFormData(prev => {
-            const isSelected = prev.recipients.includes(userId);
-            if (isSelected) {
-                return { ...prev, recipients: prev.recipients.filter(id => id !== userId) };
-            } else {
-                return { ...prev, recipients: [...prev.recipients, userId] };
-            }
-        });
-    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
             setIsSubmitting(true);
-            const res = await createAnnouncement({
+            const data = {
                 title: formData.title,
                 message: formData.message,
-                sendEmail: formData.sendEmail,
-                recipients: formData.recipients.length > 0 ? formData.recipients : undefined
-            });
+                startDate: formData.startDate,
+                endDate: formData.endDate,
+            };
 
-            // Handle the response - res.data contains the actual response
+            const res = editingId 
+                ? await updateAnnouncement(editingId, data)
+                : await createAnnouncement(data);
+
             if (res.data?.success) {
                 closeModal();
                 fetchData();
-
-                // Show appropriate message based on email status
-                if (res.data.emailSent === false && res.data.emailError) {
-                    alert(`✅ Announcement created successfully!\n\n⚠️ However, email sending failed: ${res.data.emailError}\n\nThe announcement is saved and visible to users in the app.`);
-                } else if (formData.sendEmail) {
-                    alert("✅ Announcement sent successfully! Emails have been delivered to recipients.");
-                } else {
-                    alert("✅ Announcement created successfully!");
-                }
+                alert(`✅ Announcement ${editingId ? "updated" : "created"} successfully!`);
             } else {
-                alert(res.data?.message || "Failed to send announcement");
+                alert(res.data?.message || `Failed to ${editingId ? "update" : "create"} announcement`);
             }
         } catch (error: any) {
-            console.error("Error sending announcement:", error);
-            alert(error.response?.data?.message || "Error sending announcement");
+            console.error(`Error ${editingId ? "updating" : "creating"} announcement:`, error);
+            alert(error.response?.data?.message || `Error ${editingId ? "updating" : "creating"} announcement`);
         } finally {
             setIsSubmitting(false);
         }
+    };
+
+    const handleEdit = (ann: Announcement) => {
+        setEditingId(ann._id);
+        setFormData({
+            title: ann.title,
+            message: ann.message,
+            startDate: ann.startDate ? new Date(ann.startDate).toISOString().split('T')[0] : "",
+            endDate: ann.endDate ? new Date(ann.endDate).toISOString().split('T')[0] : "",
+        });
+        setIsModalOpen(true);
     };
 
     const handleDelete = (id: string, title: string) => {
@@ -137,11 +126,12 @@ export default function AnnouncementsPage() {
 
     const closeModal = () => {
         setIsModalOpen(false);
+        setEditingId(null);
         setFormData({
             title: "",
             message: "",
-            sendEmail: true,
-            recipients: [],
+            startDate: "",
+            endDate: "",
         });
     };
 
@@ -178,47 +168,43 @@ export default function AnnouncementsPage() {
             )
         },
         {
-            label: "Recipients",
-            key: "recipients",
+            label: "Start Date",
+            key: "startDate",
             render: (row: Announcement) => (
-                <div className="flex items-center gap-1.5 text-gray-600">
-                    <Users className="h-4 w-4" />
-                    <span className="text-sm font-medium">{row.recipients.length} users</span>
+                <div className="text-sm text-gray-600">
+                    {row.startDate ? new Date(row.startDate).toLocaleDateString() : "-"}
                 </div>
             )
         },
         {
-            label: "Email Sent",
-            key: "sendEmail",
+            label: "End Date",
+            key: "endDate",
             render: (row: Announcement) => (
-                <div className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${row.sendEmail ? "bg-green-50 text-green-700 border border-green-100" : "bg-gray-50 text-gray-500 border border-gray-100"
-                    }`}>
-                    <Mail className="h-3 w-3" />
-                    {row.sendEmail ? "Yes" : "No"}
+                <div className="text-sm text-gray-600">
+                    {row.endDate ? new Date(row.endDate).toLocaleDateString() : "-"}
                 </div>
-            )
-        },
-        {
-            label: "Date",
-            key: "createdAt",
-            render: (row: Announcement) => (
-                <span className="text-sm text-gray-500">
-                    {new Date(row.createdAt).toLocaleDateString()}
-                    <br />
-                    <span className="text-xs">{new Date(row.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                </span>
             )
         },
         {
             label: "Actions",
             key: "actions",
             render: (row: Announcement) => (
-                <button
-                    onClick={() => handleDelete(row._id, row.title)}
-                    className="p-2 rounded-lg hover:bg-red-50 text-red-600 transition-colors"
-                >
-                    <Trash2 className="h-4 w-4" />
-                </button>
+                <div className="flex items-center gap-2">
+                    <button
+                        onClick={() => handleEdit(row)}
+                        className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                        title="Edit Announcement"
+                    >
+                        <Edit2 className="h-4 w-4" />
+                    </button>
+                    <button
+                        onClick={() => handleDelete(row._id, row.title)}
+                        className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                        title="Delete Announcement"
+                    >
+                        <Trash2 className="h-4 w-4" />
+                    </button>
+                </div>
             )
         }
     ];
@@ -245,7 +231,7 @@ export default function AnnouncementsPage() {
             <Modal
                 isOpen={isModalOpen}
                 onClose={closeModal}
-                title="Create New Announcement"
+                title={editingId ? "Edit Announcement" : "Create New Announcement"}
             >
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="space-y-1">
@@ -278,44 +264,32 @@ export default function AnnouncementsPage() {
                         />
                     </div>
 
-                    <div className="flex items-center gap-2 py-2">
-                        <input
-                            type="checkbox"
-                            id="sendEmail"
-                            name="sendEmail"
-                            checked={formData.sendEmail}
-                            onChange={handleInputChange}
-                            className="w-4 h-4 text-[#651313] border-gray-300 rounded focus:ring-[#EB4724]"
-                        />
-                        <label htmlFor="sendEmail" className="text-sm font-medium text-gray-700 cursor-pointer">
-                            Also send via Email to recipients
-                        </label>
-                    </div>
-
-                    <div className="space-y-2">
-                        <label className="text-xs font-bold text-gray-500 uppercase tracking-wider block">
-                            Recipients (Leave empty to broadcast to ALL users)
-                        </label>
-                        <div className="max-h-40 overflow-y-auto border border-gray-200 rounded-lg p-2 bg-gray-50 space-y-1">
-                            {users
-                                .filter(user => {
-                                    const roleName = typeof user.role === 'object' ? user.role?.name : user.role;
-                                    return roleName?.toLowerCase() === 'user';
-                                })
-                                .map(user => (
-                                    <label key={user._id} className="flex items-center gap-2 p-1.5 hover:bg-white rounded cursor-pointer transition-colors group">
-                                        <input
-                                            type="checkbox"
-                                            checked={formData.recipients.includes(user._id)}
-                                            onChange={() => handleRecipientToggle(user._id)}
-                                            className="w-3.5 h-3.5 text-[#651313] border-gray-300 rounded focus:ring-[#EB4724]"
-                                        />
-                                        <div className="flex-1 min-w-0">
-                                            <p className="text-sm font-medium text-gray-900 truncate">{user.fullname}</p>
-                                            <p className="text-xs text-gray-500 truncate">{user.email}</p>
-                                        </div>
-                                    </label>
-                                ))}
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-1">
+                            <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                Start Date <span className="text-red-500">*</span>
+                            </label>
+                            <input
+                                type="date"
+                                name="startDate"
+                                value={formData.startDate}
+                                onChange={handleInputChange}
+                                required
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#EB4724] focus:outline-none transition-all"
+                            />
+                        </div>
+                        <div className="space-y-1">
+                            <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                End Date <span className="text-red-500">*</span>
+                            </label>
+                            <input
+                                type="date"
+                                name="endDate"
+                                value={formData.endDate}
+                                onChange={handleInputChange}
+                                required
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#EB4724] focus:outline-none transition-all"
+                            />
                         </div>
                     </div>
 
@@ -330,18 +304,15 @@ export default function AnnouncementsPage() {
                         <button
                             type="submit"
                             disabled={isSubmitting}
-                            className="flex items-center gap-2 px-6 py-2 text-sm font-medium text-white bg-gradient-to-r from-[#651313] to-[#EB4724] rounded-lg hover:opacity-90 transition-all shadow-md disabled:opacity-50"
+                            className="w-full bg-[#EB4724] text-white py-3 rounded-xl font-bold hover:bg-[#d63d1a] transition-all flex items-center justify-center gap-2 disabled:opacity-50"
                         >
                             {isSubmitting ? (
                                 <>
                                     <div className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                                    Sending...
+                                    {editingId ? "Updating..." : "Sending..."}
                                 </>
                             ) : (
-                                <>
-                                    <Send className="h-4 w-4" />
-                                    Send Announcement
-                                </>
+                                editingId ? "Update Announcement" : "Send Announcement"
                             )}
                         </button>
                     </div>

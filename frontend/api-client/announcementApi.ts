@@ -5,13 +5,8 @@ export interface Announcement {
     _id: string;
     title: string;
     message: string;
-    recipients: Array<{
-        _id: string;
-        fullname: string;
-        email: string;
-    }>;
-    sendEmail: boolean;
-    sentAt?: string;
+    startDate: string;
+    endDate: string;
     createdBy: {
         _id: string;
         fullname: string;
@@ -25,10 +20,25 @@ export interface Announcement {
 export const createAnnouncement = (data: {
     title: string;
     message: string;
-    sendEmail?: boolean;
-    recipients?: string[];
+    startDate: string;
+    endDate: string;
 }) => {
     return api.post("/announcements", data);
+};
+
+// 📝 UPDATE ANNOUNCEMENT
+export const updateAnnouncement = (id: string, data: {
+    title?: string;
+    message?: string;
+    startDate?: string;
+    endDate?: string;
+}) => {
+    return api.patch(`/announcements/${id}`, data);
+};
+
+// 📄 GET ACTIVE ANNOUNCEMENTS (PUBLIC)
+export const getActiveAnnouncements = () => {
+    return api.get("/announcements/active");
 };
 
 // 📄 GET ALL ANNOUNCEMENTS

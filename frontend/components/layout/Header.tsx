@@ -8,6 +8,8 @@ import { Bell, User, LogOut, ShoppingCart } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { isAuthenticated, getUser, clearAuth, isAdmin, isManager, isAdminOrManager } from "@/utils/auth";
 import { logout as apiLogout } from "../../api-client/authApi";
+import { getActiveAnnouncements, Announcement } from "../../api-client/announcementApi";
+import { Megaphone, X } from "lucide-react";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -29,6 +31,8 @@ export default function Header() {
   const [isAdminUser, setIsAdminUser] = useState(false);
   const [isStaff, setIsStaff] = useState(false);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+  const [activeAnnouncement, setActiveAnnouncement] = useState<Announcement | null>(null);
+  const [showBanner, setShowBanner] = useState(true);
 
   useEffect(() => {
     setIsLoggedIn(isAuthenticated());
@@ -42,6 +46,19 @@ export default function Header() {
       setIsAdminUser(false);
       setIsStaff(false);
     }
+
+    const fetchAnnouncement = async () => {
+      try {
+        const res = await getActiveAnnouncements();
+        if (res.data?.success && res.data?.data?.length > 0) {
+          // Get the latest active announcement
+          setActiveAnnouncement(res.data.data[0]);
+        }
+      } catch (err) {
+        console.error("Error fetching active announcement:", err);
+      }
+    };
+    fetchAnnouncement();
 
     if (typeof window === "undefined") return;
     const setCurrentHash = () => setHash(window.location.hash || "");
@@ -77,7 +94,33 @@ export default function Header() {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 w-full z-50">
+    <header className="fixed top-0 left-0 right-0 w-full z-50 shadow-sm transition-all duration-300">
+      {/* Announcement Banner */}
+      {showBanner && activeAnnouncement && (
+        <div className="bg-[#EB4724] text-white py-1.5 md:py-2 px-4 shadow-inner">
+          <div className="mx-auto max-w-7xl flex items-center justify-between">
+            <div className="flex-1 flex items-center justify-center gap-2 md:gap-4 overflow-hidden">
+               <div className="flex-shrink-0 bg-white/20 p-1.5 rounded-full animate-pulse">
+                  <Megaphone className="h-4 w-4 md:h-5 md:w-5 text-white" />
+               </div>
+               <div className="flex flex-col md:flex-row items-center gap-1 md:gap-2 overflow-hidden">
+                  <span className="font-bold text-xs md:text-sm uppercase tracking-wider whitespace-nowrap bg-white/20 px-2 py-0.5 rounded leading-none">
+                    Announcement
+                  </span>
+                  <span className="font-semibold text-xs md:text-base truncate max-w-[200px] sm:max-w-md md:max-w-none">
+                    {activeAnnouncement.title}: <span className="font-normal opacity-90">{activeAnnouncement.message}</span>
+                  </span>
+               </div>
+            </div>
+            <button 
+              onClick={() => setShowBanner(false)}
+              className="flex-shrink-0 ml-4 p-1 hover:bg-white/10 rounded-full transition-colors"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+      )}
       {/* Top bar logic... */}
       <div className="flex flex-wrap md:flex-nowrap items-center justify-center gap-3 bg-[#651313] py-1.5 text-sm font-medium text-white sm:px-6 md:gap-6 md:py-2 md:text-base leading-tight">
         <span className="text-base md:text-lg">+252 61 8553566</span>

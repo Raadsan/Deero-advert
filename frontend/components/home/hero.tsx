@@ -73,7 +73,7 @@ export default function Hero() {
 
   return (
     <section className="relative overflow-hidden bg-[linear-gradient(to_right,#651313_0%,#651313_60%,#EB4724_100%)] text-white">
-      <div className="mx-auto flex max-w-6xl flex-col gap-12 px-4 py-14 sm:px-10 lg:flex-row lg:items-center lg:py-4 2xl:py-20 min-h-[500px] lg:min-h-[450px] 2xl:min-h-[600px]">
+      <div className="mx-auto flex max-w-6xl flex-col gap-12 px-4 py-14 sm:px-10 lg:flex-row lg:items-center lg:py-10 2xl:py-20 min-h-[500px] lg:min-h-[400px] 2xl:min-h-[600px]">
         <button
           type="button"
           aria-label="Previous slide"
@@ -111,7 +111,7 @@ export default function Hero() {
             </AnimatePresence>
           </div>
 
-          <div className="relative lg:w-1/2 flex justify-center items-center w-full min-h-[350px] sm:min-h-[450px] lg:min-h-[500px]">
+          <div className="relative lg:w-1/2 flex justify-center items-center w-full min-h-[350px] sm:min-h-[450px] lg:min-h-[400px]">
             <AnimatePresence mode="wait">
               <motion.div
                 key={active}
@@ -126,7 +126,7 @@ export default function Hero() {
                   alt={slide.title}
                   width={620}
                   height={400}
-                  className="h-auto w-full max-w-[620px] object-contain lg:max-w-none"
+                  className="h-auto w-full max-w-[620px] object-contain lg:max-w-[500px] 2xl:max-w-none lg:scale-95 transition-all duration-500"
                   priority
                 />
               </motion.div>

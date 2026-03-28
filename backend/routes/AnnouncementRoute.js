@@ -1,29 +1,36 @@
 // routes/announcementRoutes.js
 import express from "express";
 import {
-    createAnnouncementForUsers,
+    createAnnouncement,
+    getActiveAnnouncements,
     getAnnouncements,
+    updateAnnouncement,
     getAnnouncementById,
     deleteAnnouncement,
 } from "../controllers/AnnouncementController.js";
 import { protect } from "../middlewares/authMiddleware.js";
 
-
 const router = express.Router();
 
-// Apply protection to all announcement routes
+// Public route for active announcements
+router.get("/active", getActiveAnnouncements);
+
+// Protected routes
 router.use(protect);
 
-// Send announcement to all users (and create)
-router.post("/", createAnnouncementForUsers);
+// Create announcement
+router.post("/", createAnnouncement);
 
-// Get all announcements
+// Update announcement
+router.patch("/:id", updateAnnouncement);
+
+// Get all announcements (for management)
 router.get("/", getAnnouncements);
 
 // Get single announcement
-router.get("/:id", protect, getAnnouncementById);
+router.get("/:id", getAnnouncementById);
 
 // Delete announcement
-router.delete("/:id", protect, deleteAnnouncement);
+router.delete("/:id", deleteAnnouncement);
 
 export default router;
