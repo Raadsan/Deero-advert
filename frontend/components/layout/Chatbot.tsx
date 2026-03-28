@@ -94,7 +94,7 @@ export default function Chatbot() {
     <div className="fixed bottom-6 right-6 z-[9999] flex flex-col items-end gap-4">
       {/* Chat Window */}
       {isOpen && (
-        <div className="w-[320px] sm:w-[380px] h-[500px] sm:h-[600px] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-gray-200 animate-in fade-in slide-in-from-bottom-10 duration-300">
+        <div className="w-[320px] sm:w-[380px] lg:w-[320px] h-[500px] sm:h-[600px] lg:h-[550px] max-h-[calc(100vh-120px)] lg:max-h-[calc(100vh-140px)] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-gray-200 animate-in fade-in slide-in-from-bottom-10 duration-300">
           {/* Header - Brand Maroon */}
           <div className="bg-[#651313] p-4 flex items-center justify-between shadow-md">
             <div className="flex items-center gap-3">
@@ -162,23 +162,19 @@ export default function Chatbot() {
       )}
 
       {/* Toggle Buttons (Matching user photo colors) */}
-      <div className="flex flex-col gap-3 scale-110 sm:scale-100 items-end">
+      <div className="flex flex-col gap-3 scale-110 sm:scale-100 lg:scale-[0.80] items-end">
          {/* Chat Toggle - Yellow Circle */}
-         <button
-          onClick={() => setIsOpen(!isOpen)}
-          className={`w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all hover:scale-110 active:scale-95 ${
-            isOpen ? "bg-[#651313] rotate-90" : "bg-[#F7B5A7] animate-bounce-subtle"
-          }`}
-          style={{ animationDuration: '3s' }}
-        >
-          {isOpen ? (
-            <X className="w-7 h-7 text-white" />
-          ) : (
-             <div className="relative">
+         {!isOpen && (
+            <button
+              onClick={() => setIsOpen(true)}
+              className="w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all hover:scale-110 active:scale-95 bg-[#F7B5A7] animate-bounce-subtle"
+              style={{ animationDuration: '3s' }}
+            >
+              <div className="relative">
                 <MessageCircle className="w-7 h-7 text-[#1a1a1a]" />
-             </div>
-          )}
-        </button>
+              </div>
+            </button>
+         )}
 
         {/* WhatsApp Button - Green Circle */}
         <a

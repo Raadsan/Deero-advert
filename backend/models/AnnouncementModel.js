@@ -1,4 +1,3 @@
-// models/Announcement.js
 import mongoose from "mongoose";
 
 const announcementSchema = new mongoose.Schema(
@@ -14,27 +13,21 @@ const announcementSchema = new mongoose.Schema(
       required: true,
     },
 
-    // who receives this announcement
-    recipients: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-        required: true,
-      },
-    ],
-
-    sendEmail: {
-      type: Boolean,
-      default: false,
+    // START DATE
+    startDate: {
+      type: Date,
+      required: true,
     },
 
-    sentAt: {
+    // END DATE
+    endDate: {
       type: Date,
+      required: true,
     },
 
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User", // admin / manager
+      ref: "User",
       required: true,
     },
   },
