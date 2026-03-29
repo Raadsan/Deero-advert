@@ -78,12 +78,12 @@ export default function Hero() {
           type="button"
           aria-label="Previous slide"
           onClick={prev}
-          className="absolute left-3 top-1/2 hidden -translate-y-1/2 text-white transition hover:scale-110 lg:inline-flex z-20"
+          className="absolute left-3 top-1/2 lg:top-[240px] hidden -translate-y-1/2 text-white transition hover:scale-110 lg:inline-flex z-20"
         >
           <ChevronLeftIcon className="h-8 w-8" />
         </button>
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between w-full gap-10 ">
-          <div className="space-y-6 lg:w-1/2 w-full flex flex-col justify-center">
+          <div className="space-y-6 lg:w-1/2 w-full flex flex-col justify-center min-h-[300px] sm:min-h-[350px] lg:min-h-[400px]">
             <AnimatePresence mode="wait" initial={false}>
               <motion.div
                 key={active}
@@ -139,7 +139,7 @@ export default function Hero() {
           type="button"
           aria-label="Next slide"
           onClick={next}
-          className="absolute right-3 top-1/2 hidden -translate-y-1/2 text-white transition hover:scale-110 lg:inline-flex z-20"
+          className="absolute right-3 top-1/2 lg:top-[240px] hidden -translate-y-1/2 text-white transition hover:scale-110 lg:inline-flex z-20"
         >
           <ChevronRightIcon className="h-8 w-8" />
         </button>
