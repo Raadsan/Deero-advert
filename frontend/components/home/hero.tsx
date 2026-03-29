@@ -17,7 +17,7 @@ const slides: Slide[] = [
     title: "Graphic Design",
     description:
       "We offer range of graphic design services encompasses logo design, UI design, event branding, and brand identity. With our expertise, we create captivating and memorable brands that resonate with the public, leaving a lasting impression.",
-    image: "/home-images/graphic design.png",
+    image: "/home-images/graphic-design.png",
   },
   {
     title: "Digital Marketing",
@@ -29,19 +29,19 @@ const slides: Slide[] = [
     title: "Web Solutions",
     description:
       "We offer complete web services, including web design, domain registration, domain transfer, SSL certificates, and web hosting. We create responsive websites that look wonderful on any device, including smartphones, tablets, and desktop computers.",
-    image: "/home-images/web solution.png",
+    image: "/home-images/web-solution.png",
   },
   {
     title: "Event Branding",
     description:
       "Full suite of event branding and consulting, from digital strategy and social media to on-site branding and highlight videos.",
-    image: "/home-images/event branding.png",
+    image: "/home-images/event-branding.png",
   },
   {
     title: "Digital Consulting",
     description:
       "We offer a full suite of digital consulting services, including digital marketing, branding consulting, event consulting, assisting with content creation, digital media, and communication consulting.",
-    image: "/home-images/digital consulting.png",
+    image: "/home-images/digital-consulting.png",
   },
 ];
 
