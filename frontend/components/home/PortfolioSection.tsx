@@ -185,13 +185,13 @@ export default function PortfolioSection({ showHeader = true, limit, paddingClas
                                         </div>
                                     </div>
 
-                                    <button
-                                        onClick={() => handlePortfolioClick(item)}
-                                        className="group w-full px-12 py-5 bg-[#651313] hover:bg-[#EC4724] text-white font-semibold text-lg rounded-full transition-colors duration-300 flex items-center justify-center gap-2"
+                                    <Link
+                                        href={`/portfolio/${slugify(item.title)}`}
+                                        className="group w-full px-12 py-5 bg-[#651313] hover:bg-[#EC4724] text-white font-semibold text-lg rounded-full transition-colors duration-300 flex items-center justify-center gap-2 text-center"
                                     >
                                         <span>Full project</span>
                                         <ArrowRight className="w-5 h-5 opacity-0 translate-x-[-10px] group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
-                                    </button>
+                                    </Link>
                                 </div>
 
                                 {/* Right Image Area */}

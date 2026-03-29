@@ -3,9 +3,18 @@ import Portfolio from "../models/PortfolioModel.js";
 // ➕ Create Portfolio
 export const createPortfolio = async (req, res) => {
   try {
-    const { title, description, industry, Industry, year, Year } = req.body;
+    let { title, description, industry, Industry, year, Year, projectDirection } = req.body;
     const finalIndustry = industry || Industry;
     const finalYear = year || Year;
+
+    // Handle projectDirection if it's a string instead of an array (likely from multipart/form-data)
+    if (typeof projectDirection === 'string') {
+      try {
+        projectDirection = JSON.parse(projectDirection);
+      } catch (e) {
+        projectDirection = projectDirection.split(',').map(s => s.trim()).filter(Boolean);
+      }
+    }
 
     if (!req.files?.mainImage) {
       return res.status(400).json({
@@ -21,6 +30,7 @@ export const createPortfolio = async (req, res) => {
       description,
       industry: finalIndustry,
       year: finalYear,
+      projectDirection: projectDirection || [],
       mainImage,
       gallery: galleryImages,
     });
@@ -56,7 +66,15 @@ export const getPortfolioById = async (req, res) => {
 // 📝 Update Portfolio (mainImage optional, add new gallery images)
 export const updatePortfolio = async (req, res) => {
   try {
-    const { title, description, industry, Industry, year, Year } = req.body;
+    let { 
+      title, 
+      description, 
+      industry, 
+      Industry, 
+      year, 
+      Year, 
+      projectDirection
+    } = req.body;
     const finalIndustry = industry || Industry;
     const finalYear = year || Year;
 
@@ -74,6 +92,19 @@ export const updatePortfolio = async (req, res) => {
 
     // update year if provided
     if (finalYear) portfolio.year = finalYear;
+
+    // update projectDirection if provided
+    if (projectDirection) {
+      if (typeof projectDirection === 'string') {
+        try {
+          portfolio.projectDirection = JSON.parse(projectDirection) || [];
+        } catch (e) {
+          portfolio.projectDirection = projectDirection.split(',').map(s => s.trim()).filter(Boolean);
+        }
+      } else if (Array.isArray(projectDirection)) {
+        portfolio.projectDirection = projectDirection;
+      }
+    }
 
     // replace mainImage if uploaded
     // With upload.any(), files are in req.files as array, filter by fieldname
