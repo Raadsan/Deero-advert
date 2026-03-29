@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { X, MessageCircle, Bot } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 interface Message {
   role: "user" | "bot";
@@ -41,7 +42,15 @@ const COMMON_QUESTIONS = [
 ];
 
 export default function Chatbot() {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  
+  // Hide on dashboard and system pages
+  const isDashboard = pathname.startsWith("/dashboard") || 
+                     pathname.startsWith("/management") || 
+                     pathname.startsWith("/configuration") || 
+                     pathname.startsWith("/payments");
+
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "bot",
@@ -58,6 +67,8 @@ export default function Chatbot() {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  if (isDashboard) return null;
 
   const handleSend = (text: string) => {
     if (!text.trim()) return;
