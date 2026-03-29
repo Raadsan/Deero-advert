@@ -128,7 +128,7 @@ export default function Hero() {
                   alt={slide.title}
                   width={620}
                   height={400}
-                  className="h-auto w-full max-w-[620px] object-contain lg:max-w-[500px] 2xl:max-w-none lg:scale-95 transition-all duration-500"
+                  className="h-auto w-full max-w-[620px] object-contain lg:max-w-[500px] 2xl:max-w-none lg:scale-95"
                   priority
                 />
               </motion.div>
