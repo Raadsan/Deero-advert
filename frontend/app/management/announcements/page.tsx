@@ -72,7 +72,7 @@ export default function AnnouncementsPage() {
                 endDate: formData.endDate,
             };
 
-            const res = editingId 
+            const res = editingId
                 ? await updateAnnouncement(editingId, data)
                 : await createAnnouncement(data);
 
