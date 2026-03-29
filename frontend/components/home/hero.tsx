@@ -86,39 +86,20 @@ export default function Hero() {
         </button>
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between w-full gap-10 ">
           <div className="space-y-6 lg:w-1/2 w-full flex flex-col justify-center min-h-[300px] sm:min-h-[350px] lg:min-h-[400px]">
-            {isMounted ? (
-              <AnimatePresence mode="wait" initial={false}>
-                <motion.div
-                  key={active}
-                  initial={{ opacity: 0, y: 80 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 80 }}
-                  transition={{ duration: 0.8 }}
-                  className="space-y-6 w-full"
-                >
-                  <h1 className="text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">
-                    {slide.title}
-                  </h1>
-                  <p className="max-w-2xl text-lg leading-8 text-white/90">
-                    {slide.description}
-                  </p>
-                  <div className="flex items-center gap-4">
-                    <button
-                      onClick={handleSeeMore}
-                      className="rounded-md bg-[#c88a66] px-10 py-3 pl-8 text-base font-semibold text-white shadow transition hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-                    >
-                      See More
-                    </button>
-                  </div>
-                </motion.div>
-              </AnimatePresence>
-            ) : (
-              <div className="space-y-6 w-full">
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={active}
+                initial={isMounted ? { opacity: 0, y: 80 } : false}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 80 }}
+                transition={{ duration: 0.8 }}
+                className="space-y-6 w-full"
+              >
                 <h1 className="text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">
-                  {slides[0].title}
+                  {slide.title}
                 </h1>
                 <p className="max-w-2xl text-lg leading-8 text-white/90">
-                  {slides[0].description}
+                  {slide.description}
                 </p>
                 <div className="flex items-center gap-4">
                   <button
@@ -128,43 +109,30 @@ export default function Hero() {
                     See More
                   </button>
                 </div>
-              </div>
-            )}
+              </motion.div>
+            </AnimatePresence>
           </div>
 
           <div className="relative lg:w-1/2 flex justify-center items-center w-full min-h-[350px] sm:min-h-[450px] lg:min-h-[400px]">
-            {isMounted ? (
-              <AnimatePresence mode="wait" initial={false}>
-                <motion.div
-                  key={active}
-                  initial={{ opacity: 0, y: -80 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -80 }}
-                  transition={{ duration: 0.8 }}
-                  className="relative z-10 w-full flex justify-center"
-                >
-                  <Image
-                    src={slide.image}
-                    alt={slide.title}
-                    width={620}
-                    height={400}
-                    className="h-auto w-full max-w-[620px] object-contain lg:max-w-[500px] 2xl:max-w-none lg:scale-95 transition-all duration-500"
-                    priority
-                  />
-                </motion.div>
-              </AnimatePresence>
-            ) : (
-              <div className="relative z-10 w-full flex justify-center">
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={active}
+                initial={isMounted ? { opacity: 0, y: -80 } : false}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -80 }}
+                transition={{ duration: 0.8 }}
+                className="relative z-10 w-full flex justify-center"
+              >
                 <Image
-                  src={slides[0].image}
-                  alt={slides[0].title}
+                  src={slide.image}
+                  alt={slide.title}
                   width={620}
                   height={400}
-                  className="h-auto w-full max-w-[620px] object-contain lg:max-w-[500px] 2xl:max-w-none lg:scale-95"
+                  className="h-auto w-full max-w-[620px] object-contain lg:max-w-[500px] 2xl:max-w-none lg:scale-95 transition-all duration-500"
                   priority
                 />
-              </div>
-            )}
+              </motion.div>
+            </AnimatePresence>
           </div>
         </div>
 
