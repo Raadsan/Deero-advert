@@ -84,7 +84,7 @@ export default function Hero() {
         </button>
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between w-full gap-10 ">
           <div className="space-y-6 lg:w-1/2 w-full flex flex-col justify-center">
-            <AnimatePresence mode="wait">
+            <AnimatePresence mode="wait" initial={false}>
               <motion.div
                 key={active}
                 initial={{ opacity: 0, y: 80 }}
@@ -112,7 +112,7 @@ export default function Hero() {
           </div>
 
           <div className="relative lg:w-1/2 flex justify-center items-center w-full min-h-[350px] sm:min-h-[450px] lg:min-h-[400px]">
-            <AnimatePresence mode="wait">
+            <AnimatePresence mode="wait" initial={false}>
               <motion.div
                 key={active}
                 initial={{ opacity: 0, y: -80 }}
