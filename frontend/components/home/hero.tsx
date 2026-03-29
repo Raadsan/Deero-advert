@@ -49,11 +49,12 @@ export default function Hero() {
   const [active, setActive] = useState(0);
   const total = useMemo(() => slides.length, []);
   const router = useRouter();
-
   const [isMounted, setIsMounted] = useState(false);
+  const [firstLoad, setFirstLoad] = useState(true);
   useEffect(() => {
     setIsMounted(true);
     const id = setInterval(() => {
+      setFirstLoad(false);
       setActive((prev) => (prev + 1) % total);
     }, 5500);
     return () => clearInterval(id);
@@ -61,9 +62,18 @@ export default function Hero() {
 
   const slide = slides[active];
 
-  const goTo = (idx: number) => setActive(idx);
-  const next = () => setActive((prev) => (prev + 1) % total);
-  const prev = () => setActive((prev) => (prev - 1 + total) % total);
+  const goTo = (idx: number) => {
+    setFirstLoad(false);
+    setActive(idx);
+  };
+  const next = () => {
+    setFirstLoad(false);
+    setActive((prev) => (prev + 1) % total);
+  };
+  const prev = () => {
+    setFirstLoad(false);
+    setActive((prev) => (prev - 1 + total) % total);
+  };
 
   const handleSeeMore = () => {
     if (slide.title === "Digital Consulting") {
@@ -89,7 +99,7 @@ export default function Hero() {
             <AnimatePresence mode="wait" initial={false}>
               <motion.div
                 key={active}
-                initial={isMounted ? { opacity: 0, y: 80 } : false}
+                initial={isMounted && !firstLoad ? { opacity: 0, y: 80 } : false}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 80 }}
                 transition={{ duration: 0.8 }}
@@ -117,7 +127,7 @@ export default function Hero() {
             <AnimatePresence mode="wait" initial={false}>
               <motion.div
                 key={active}
-                initial={isMounted ? { opacity: 0, y: -80 } : false}
+                initial={isMounted && !firstLoad ? { opacity: 0, y: -80 } : false}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -80 }}
                 transition={{ duration: 0.8 }}
