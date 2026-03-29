@@ -88,34 +88,38 @@ export default function PortfolioDetailPage() {
             <main className="pt-[220px] pb-24 px-4 sm:px-10">
                 <div className="mx-auto max-w-7xl">
                     
-                    {/* Hero Section */}
+                    {/* Hero Section - Full Edge-to-Edge Fill */}
                     <motion.div 
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="w-full bg-white rounded-[40px] overflow-hidden shadow-2xl mb-16 relative aspect-video md:aspect-[21/9] lg:aspect-[2.4/1]"
+                        className="w-full bg-white rounded-[40px] overflow-hidden shadow-2xl mb-16 relative h-[350px] md:h-[550px] flex items-center justify-center p-0 group"
                     >
                         {loading ? (
                             <div className="w-full h-full bg-white/50 animate-pulse" />
                         ) : (
-                            <Image
-                                src={getImageUrl(portfolio?.mainImage) || "/logo deero-02 .svg"}
-                                alt={portfolio?.title}
-                                fill
-                                className="object-cover"
-                                priority
-                                unoptimized
-                                onError={(e) => {
-                                    const target = e.target as HTMLImageElement;
-                                    target.src = "/logo deero-02 .svg";
-                                }}
-                            />
+                            <div className="relative w-full h-full">
+                                <Image
+                                    src={getImageUrl(portfolio?.mainImage) || "/logo deero-02 .svg"}
+                                    alt={portfolio?.title || "Project Image"}
+                                    fill
+                                    className="object-cover"
+                                    priority
+                                    unoptimized
+                                    onError={(e) => {
+                                        const target = e.target as HTMLImageElement;
+                                        target.src = "/logo deero-02 .svg";
+                                    }}
+                                />
+                                {/* Overlay gradient for better button visibility */}
+                                <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-transparent pointer-events-none" />
+                            </div>
                         )}
                         
                         <button 
                             onClick={() => router.back()}
-                            className="absolute top-6 left-6 z-20 bg-white/90 hover:bg-[#651313] hover:text-white text-[#651313] p-3 rounded-full transition-all shadow-lg"
+                            className="absolute top-6 left-6 z-20 bg-white/90 hover:bg-[#651313] hover:text-white text-[#651313] p-3 rounded-full transition-all shadow-lg backdrop-blur-sm"
                         >
-                            <ArrowLeft className="w-6 h-6" />
+                            <ArrowLeft className="w-5 h-5 md:w-6 md:h-6" />
                         </button>
                     </motion.div>
 
@@ -167,8 +171,6 @@ export default function PortfolioDetailPage() {
                             viewport={{ once: true }}
                             className="pt-16 border-t border-[#651313]/10"
                         >
-                            <h2 className="text-3xl md:text-5xl font-bold text-[#651313] mb-12 capitalize tracking-tight">Project Visuals Gallery</h2>
-                            
                             <div className="grid grid-cols-1 md:grid-cols-12 gap-4 auto-rows-[250px] md:auto-rows-[300px]">
                                 {galleryImages.map((img: string, i: number) => {
                                     // Cinematic Pattern: 1st is full width, then staggered mosaic
@@ -188,14 +190,13 @@ export default function PortfolioDetailPage() {
                                             initial={{ opacity: 0, scale: 0.95 }}
                                             whileInView={{ opacity: 1, scale: 1 }}
                                             transition={{ delay: i * 0.05 }}
-                                            className={`${spanClass} relative rounded-[24px] overflow-hidden cursor-pointer hover:shadow-2xl transition-all duration-500 group shadow-md border border-[#651313]/5 bg-white`}
-                                            onClick={() => setSelectedImage(img)}
+                                            className={`${spanClass} relative rounded-[24px] overflow-hidden shadow-md border border-[#651313]/5 bg-white`}
                                         >
                                             <Image
                                                 src={getImageUrl(img) || "/logo deero-02 .svg"}
                                                 alt={`Project gallery ${i + 1}`}
                                                 fill
-                                                className="object-cover transition-transform duration-700 group-hover:scale-110"
+                                                className="object-cover"
                                                 unoptimized
                                             />
                                         </motion.div>
@@ -206,6 +207,37 @@ export default function PortfolioDetailPage() {
                     )}
                 </div>
             </main>
+
+            {/* Call To Action Section */}
+            <section className="bg-white pb-24 px-4 sm:px-10">
+                <div className="mx-auto max-w-5xl bg-[#651313] rounded-[40px] py-10 md:py-14 px-8 text-center shadow-xl overflow-hidden relative group">
+                    {/* Background Detail */}
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-32 -mt-32 blur-3xl group-hover:bg-white/10 transition-all duration-700" />
+                    <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/5 rounded-full -ml-32 -mb-32 blur-3xl group-hover:bg-white/10 transition-all duration-700" />
+                    
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                    >
+                        <h2 className="text-2xl md:text-4xl font-bold text-white mb-4 tracking-tight leading-tight">
+                            Build Your Vision with Professional Design
+                        </h2>
+                        <p className="text-white/70 text-base md:text-lg mb-8 max-w-2xl mx-auto leading-relaxed">
+                            Ready to transform your brand into a visual masterpiece? Let's discuss how we can bring your next project to life.
+                        </p>
+                        <button 
+                            onClick={() => window.open("https://wa.me/252618553566", "_blank")}
+                            className="bg-white text-[#651313] hover:bg-[#EC4724] hover:text-white px-8 py-4 rounded-full font-bold text-base md:text-lg shadow-xl active:scale-95 flex items-center gap-2 mx-auto"
+                        >
+                            Book A Call Now
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                            </svg>
+                        </button>
+                    </motion.div>
+                </div>
+            </section>
 
             <ImageModal
                 isOpen={!!selectedImage}
