@@ -88,16 +88,16 @@ export default function PortfolioDetailPage() {
             <main className="pt-[220px] pb-24 px-4 sm:px-10">
                 <div className="mx-auto max-w-7xl">
                     
-                    {/* Hero Section - Full Edge-to-Edge Fill */}
+                    {/* Hero Section - Pure Image Display */}
                     <motion.div 
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="w-full bg-white rounded-[40px] overflow-hidden shadow-2xl mb-16 relative h-[350px] md:h-[550px] flex items-center justify-center p-0 group"
+                        className="w-full mb-16 relative flex items-center justify-center"
                     >
                         {loading ? (
-                            <div className="w-full h-full bg-white/50 animate-pulse" />
+                            <div className="w-full h-[500px] bg-gray-50 animate-pulse rounded-[40px]" />
                         ) : (
-                            <div className="relative w-full h-full">
+                            <div className="relative w-full h-[600px] rounded-[24px] overflow-hidden shadow-md border border-[#651313]/5">
                                 <Image
                                     src={getImageUrl(portfolio?.mainImage) || "/logo deero-02 .svg"}
                                     alt={portfolio?.title || "Project Image"}
@@ -110,17 +110,10 @@ export default function PortfolioDetailPage() {
                                         target.src = "/logo deero-02 .svg";
                                     }}
                                 />
-                                {/* Overlay gradient for better button visibility */}
-                                <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-transparent pointer-events-none" />
                             </div>
                         )}
-                        
-                        <button 
-                            onClick={() => router.back()}
-                            className="absolute top-6 left-6 z-20 bg-white/90 hover:bg-[#651313] hover:text-white text-[#651313] p-3 rounded-full transition-all shadow-lg backdrop-blur-sm"
-                        >
-                            <ArrowLeft className="w-5 h-5 md:w-6 md:h-6" />
-                        </button>
+
+
                     </motion.div>
 
                     {/* Information Section */}
