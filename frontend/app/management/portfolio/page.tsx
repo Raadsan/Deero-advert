@@ -30,6 +30,7 @@ export default function PortfolioManagementPage() {
         description: "",
         year: "",
         industry: "",
+        projectDirection: "",
         mainImage: null as File | null,
         mainImagePreview: "",
         galleryImages: [] as File[],
@@ -54,6 +55,7 @@ export default function PortfolioManagementPage() {
                     title: p.title || "",
                     description: p.description || "",
                     industry: p.industry || "",
+                    projectDirection: Array.isArray(p.projectDirection) ? p.projectDirection.join(", ") : (p.projectDirection || ""),
                     year: p.year || "",
                     mainImage: getImageUrl(p.mainImage),
                     gallery: p.gallery || [],
@@ -141,6 +143,7 @@ export default function PortfolioManagementPage() {
         formDataToSend.append("description", formData.description);
         formDataToSend.append("year", formData.year);
         formDataToSend.append("industry", formData.industry);
+        formDataToSend.append("projectDirection", formData.projectDirection);
 
         if (formData.mainImage) {
             formDataToSend.append("mainImage", formData.mainImage);
@@ -201,6 +204,7 @@ export default function PortfolioManagementPage() {
             description: portfolio.description || "",
             year: portfolio.year || "",
             industry: portfolio.industry || "",
+            projectDirection: portfolio.projectDirection || "",
             mainImage: null,
             mainImagePreview: portfolio.mainImage,
             galleryImages: [],
@@ -217,6 +221,7 @@ export default function PortfolioManagementPage() {
             description: "",
             year: "",
             industry: "",
+            projectDirection: "",
             mainImage: null,
             mainImagePreview: "",
             galleryImages: [],
@@ -266,6 +271,15 @@ export default function PortfolioManagementPage() {
             ),
         },
         { label: "Industry", key: "industry" },
+        { 
+            label: "Project Direction", 
+            key: "projectDirection",
+            render: (row: any) => (
+                <span className="text-xs text-gray-500">
+                    {Array.isArray(row.projectDirection) ? row.projectDirection.join(", ") : row.projectDirection}
+                </span>
+            )
+        },
         { label: "Year", key: "year" },
         {
             label: "Date",
@@ -442,6 +456,22 @@ export default function PortfolioManagementPage() {
                                 placeholder="e.g. Healthcare"
                             />
                         </div>
+                    </div>
+
+                    {/* Project Direction */}
+                    <div className="space-y-1">
+                        <label className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">
+                            Project Direction (comma separated)
+                        </label>
+                        <input
+                            type="text"
+                            name="projectDirection"
+                            value={formData.projectDirection}
+                            onChange={handleInputChange}
+                            className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#EB4724] focus:border-[#EB4724]"
+                            placeholder="e.g. Logo, Brand Identity, Web design"
+                        />
+                        <p className="text-[9px] text-gray-400">Enter categories separated by commas</p>
                     </div>
 
                     {/* Gallery Images */}

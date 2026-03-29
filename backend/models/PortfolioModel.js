@@ -23,6 +23,7 @@ const portfolioSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    projectDirection: [String],
     gallery: [
       {
         type: String, // array of image paths
