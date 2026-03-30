@@ -27,4 +27,6 @@ if (serviceAccount && !admin.apps.length) {
   console.log("Warning: Firebase service account not found.");
 }
 
+export const firebaseInitialized = Boolean(serviceAccount);
 export default admin;
+
