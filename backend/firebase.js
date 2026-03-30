@@ -6,11 +6,15 @@ let serviceAccount;
 if (process.env.FIREBASE_SERVICE_ACCOUNT) {
   try {
     serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
-    console.log("✅ FIREBASE_SERVICE_ACCOUNT si sax ah ayaa loo akhriyay!");
+    // ✅ Fix for Railway newline issue in private_key
+    if (serviceAccount && serviceAccount.private_key) {
+      serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, '\n');
+    }
+    console.log("✅ FIREBASE_SERVICE_ACCOUNT si sax ah ayaa loo akhriyay (Private Key Fixed!)");
   } catch (error) {
     console.error("❌ Cilad baa ka dhacday akhriska FIREBASE_SERVICE_ACCOUNT:");
-    console.error("➡️ Value-ga ay heshay:", process.env.FIREBASE_SERVICE_ACCOUNT);
-    console.error("➡️ Faahfaahinta ciladda:", error.message);
+    console.error("➡️ Value-ga ay heshay:", process.env.FIREBASE_SERVICE_ACCOUNT ? "Hadaad aragto qoraal, wuu jiraa" : "Ma jiro");
+    console.log("➡️ Error details:", error.message);
   }
 } 
 // 2. Haddii kale, fiiri haddii uu file-ka jiro (Local)
