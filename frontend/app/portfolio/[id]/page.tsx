@@ -25,7 +25,7 @@ export default function PortfolioDetailPage() {
         const fetchPortfolio = async () => {
             try {
                 setLoading(true);
-                
+
                 const isId = /^[0-9a-fA-F]{24}$/.test(identifier);
 
                 if (isId) {
@@ -50,7 +50,7 @@ export default function PortfolioDetailPage() {
                     items = data;
                 }
 
-                const found = items.find((p: any) => 
+                const found = items.find((p: any) =>
                     p._id === identifier || (p.title && slugify(p.title) === identifier)
                 );
 
@@ -84,12 +84,12 @@ export default function PortfolioDetailPage() {
     return (
         <div className="bg-white min-h-screen">
             <Header />
-            
+
             <main className="pt-[220px] pb-24 px-4 sm:px-10">
                 <div className="mx-auto max-w-7xl">
-                    
+
                     {/* Hero Section - Pure Image Display */}
-                    <motion.div 
+                    <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         className="w-full mb-16 relative flex items-center justify-center"
@@ -117,7 +117,7 @@ export default function PortfolioDetailPage() {
                     </motion.div>
 
                     {/* Information Section */}
-                    <motion.div 
+                    <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.2 }}
@@ -126,7 +126,7 @@ export default function PortfolioDetailPage() {
                         <h1 className="text-4xl md:text-7xl font-bold text-[#651313] mb-8 tracking-tighter capitalize leading-none">
                             {portfolio?.title}
                         </h1>
-                        
+
                         <div className="space-y-6 mb-12">
                             <h3 className="text-xl md:text-2xl font-bold text-[#651313]">Project Description</h3>
                             <p className="text-gray-700 text-lg md:text-xl leading-relaxed whitespace-pre-wrap">
@@ -158,7 +158,7 @@ export default function PortfolioDetailPage() {
 
                     {/* Gallery Section - Cinematic Bento Grid */}
                     {galleryImages.length > 0 && (
-                        <motion.div 
+                        <motion.div
                             initial={{ opacity: 0, y: 30 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
@@ -168,18 +168,47 @@ export default function PortfolioDetailPage() {
                                 {galleryImages.map((img: string, i: number) => {
                                     // Cinematic Pattern: 1st is full width, then staggered mosaic
                                     let spanClass = "col-span-1 md:col-span-4 row-span-1";
-                                    
-                                    if (i === 0) spanClass = "col-span-1 md:col-span-12 row-span-2"; // First Image: Cinematic Span (Double row height)
-                                    else if (i === 1) spanClass = "col-span-1 md:col-span-6 row-span-1"; 
-                                    else if (i === 2) spanClass = "col-span-1 md:col-span-3 row-span-1"; 
-                                    else if (i === 3) spanClass = "col-span-1 md:col-span-3 row-span-1"; 
-                                    else if (i === 4) spanClass = "col-span-1 md:col-span-3 row-span-1"; 
-                                    else if (i === 5) spanClass = "col-span-1 md:col-span-6 row-span-1";
-                                    else if (i === 6) spanClass = "col-span-1 md:col-span-3 row-span-1";
-                                    
+
+                                    if (i === 0) {
+                                        // Row 1: Cinematic Full Width
+                                        spanClass = "col-span-1 md:col-span-12 row-span-2";
+                                    } else if (i === 1) {
+                                        // Row 2 Left
+                                        spanClass = "col-span-1 md:col-span-4 row-span-1";
+                                    } else if (i === 2) {
+                                        // Row 2 Middle
+                                        spanClass = "col-span-1 md:col-span-5 row-span-1";
+                                    } else if (i === 3) {
+                                        // Row 2 Right (Top Right)
+                                        spanClass = "col-span-1 md:col-span-3 row-span-1";
+                                    } else if (i === 4) {
+                                        // Row 3 Left
+                                        spanClass = "col-span-1 md:col-span-6 row-span-1";
+                                    } else if (i === 5) {
+                                        // Row 3 Middle
+                                        spanClass = "col-span-1 md:col-span-3 row-span-1";
+                                    } else if (i === 6) {
+                                        // Row 3+4 Right (Tall / Vertical span)
+                                        spanClass = "col-span-1 md:col-span-3 row-span-2";
+                                    } else if (i === 7) {
+                                        // Row 4 Left
+                                        spanClass = "col-span-1 md:col-span-5 row-span-1";
+                                    } else if (i === 8) {
+                                        // Row 4 Middle
+                                        spanClass = "col-span-1 md:col-span-4 row-span-1";
+                                    } else if ((i - 9) % 6 < 3) {
+                                        // Zigzag Pattern continues for remaining images
+                                        if ((i - 9) % 3 === 0) spanClass = "col-span-1 md:col-span-3 row-span-1";
+                                        else if ((i - 9) % 3 === 1) spanClass = "col-span-1 md:col-span-6 row-span-1";
+                                        else spanClass = "col-span-1 md:col-span-3 row-span-1";
+                                    } else {
+                                        if ((i - 9) % 3 === 0) spanClass = "col-span-1 md:col-span-6 row-span-1";
+                                        else spanClass = "col-span-1 md:col-span-3 row-span-1";
+                                    }
+
                                     return (
-                                        <motion.div 
-                                            key={i} 
+                                        <motion.div
+                                            key={i}
                                             initial={{ opacity: 0, scale: 0.95 }}
                                             whileInView={{ opacity: 1, scale: 1 }}
                                             transition={{ delay: i * 0.05 }}
@@ -207,7 +236,7 @@ export default function PortfolioDetailPage() {
                     {/* Background Detail */}
                     <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-32 -mt-32 blur-3xl group-hover:bg-white/10 transition-all duration-700" />
                     <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/5 rounded-full -ml-32 -mb-32 blur-3xl group-hover:bg-white/10 transition-all duration-700" />
-                    
+
                     <motion.div
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -219,7 +248,7 @@ export default function PortfolioDetailPage() {
                         <p className="text-white/70 text-base md:text-lg mb-8 max-w-2xl mx-auto leading-relaxed">
                             Ready to transform your brand into a visual masterpiece? Let's discuss how we can bring your next project to life.
                         </p>
-                        <button 
+                        <button
                             onClick={() => window.open("https://wa.me/252618553566", "_blank")}
                             className="bg-white text-[#651313] hover:bg-[#EC4724] hover:text-white px-8 py-4 rounded-full font-bold text-base md:text-lg shadow-xl active:scale-95 flex items-center gap-2 mx-auto"
                         >
@@ -261,7 +290,7 @@ export default function PortfolioDetailPage() {
                     </div>
                 )}
             </ImageModal>
-            
+
             <Footer />
         </div>
     );

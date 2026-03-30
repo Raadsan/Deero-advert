@@ -14,6 +14,8 @@ import {
     updateMajorClient,
 } from "@/api-client/majorClientApi";
 import { getImageUrl } from "@/utils/url";
+import { compressImage } from "@/utils/compressImage";
+
 
 export default function MajorClientsPage() {
     const [data, setData] = useState<any[]>([]);
@@ -64,27 +66,17 @@ export default function MajorClientsPage() {
     };
 
     // Handle file input change (multiple files)
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
             const selectedFiles = Array.from(e.target.files);
+            const compressedFiles = await Promise.all(selectedFiles.map(file => compressImage(file)));
+            const newPreviews = compressedFiles.map((file) => URL.createObjectURL(file));
 
-            // Filter files larger than 50MB
-            const validFiles = selectedFiles.filter(file => file.size <= 50 * 1024 * 1024);
-            const invalidFiles = selectedFiles.filter(file => file.size > 50 * 1024 * 1024);
-
-            if (invalidFiles.length > 0) {
-                alert(`${invalidFiles.length} file(s) are too large and were skipped. Max size is 50MB.`);
-            }
-
-            if (validFiles.length > 0) {
-                const newPreviews = validFiles.map((file) => URL.createObjectURL(file));
-
-                setFormData((prev) => ({
-                    ...prev,
-                    images: [...prev.images, ...validFiles],
-                    imagePreviews: [...prev.imagePreviews, ...newPreviews],
-                }));
-            }
+            setFormData((prev) => ({
+                ...prev,
+                images: [...prev.images, ...compressedFiles],
+                imagePreviews: [...prev.imagePreviews, ...newPreviews],
+            }));
 
             e.target.value = ""; // Clear input to allow re-selecting same files if needed
         }

@@ -9,6 +9,8 @@ import { Edit, Trash2, Camera, Plus, X } from "lucide-react";
 import Image from "next/image";
 import { getAllServices, createService, updateService, deleteService } from "@/api-client/serviceApi";
 import { getImageUrl } from "@/utils/url";
+import { compressImage } from "@/utils/compressImage";
+
 
 type Service = any;
 
@@ -145,19 +147,14 @@ export default function AdminServicesPage() {
   };
 
   // Handle file input change
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // Add file size check (50MB)
-      if (file.size > 50 * 1024 * 1024) {
-        alert("File is too large. Please select an image smaller than 50MB.");
-        e.target.value = ""; // clear input
-        return;
-      }
+      const compressed = await compressImage(file);
       setFormData((prev) => ({
         ...prev,
-        serviceIcon: file,
-        serviceIconPreview: URL.createObjectURL(file),
+        serviceIcon: compressed,
+        serviceIconPreview: URL.createObjectURL(compressed),
       }));
     }
   };

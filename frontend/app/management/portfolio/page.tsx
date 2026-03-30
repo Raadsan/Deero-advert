@@ -15,6 +15,8 @@ import {
     deleteGalleryImage,
 } from "@/api-client/portfolioApi";
 import { getImageUrl } from "@/utils/url";
+import { compressImage } from "@/utils/compressImage";
+
 
 export default function PortfolioManagementPage() {
     const [data, setData] = useState<any[]>([]);
@@ -81,33 +83,26 @@ export default function PortfolioManagementPage() {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleMainImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleMainImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
-            if (file.size > 50 * 1024 * 1024) {
-                alert("File is too large. Please select an image smaller than 50MB.");
-                e.target.value = "";
-                return;
-            }
+            const compressed = await compressImage(file);
             setFormData((prev) => ({
                 ...prev,
-                mainImage: file,
-                mainImagePreview: URL.createObjectURL(file),
+                mainImage: compressed,
+                mainImagePreview: URL.createObjectURL(compressed),
             }));
         }
     };
 
-    const handleGalleryImagesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleGalleryImagesChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = Array.from(e.target.files || []);
         if (files.length > 0) {
-            const validFiles = files.filter(f => f.size <= 50 * 1024 * 1024);
-            if (validFiles.length !== files.length) {
-                alert("Some files were too large and were skipped.");
-            }
-            const previews = validFiles.map(f => URL.createObjectURL(f));
+            const compressedFiles = await Promise.all(files.map(f => compressImage(f)));
+            const previews = compressedFiles.map(f => URL.createObjectURL(f));
             setFormData((prev) => ({
                 ...prev,
-                galleryImages: [...prev.galleryImages, ...validFiles],
+                galleryImages: [...prev.galleryImages, ...compressedFiles],
                 galleryPreviews: [...prev.galleryPreviews, ...previews],
             }));
         }
