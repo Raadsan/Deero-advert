@@ -21,8 +21,6 @@ import sendEmail from "../utils/sendEmail.js";
  * POST /api/announcements
  * Body: { "title": "...", "message": "...", "startDate": "...", "endDate": "..." }
  */
-
-
 export const createAnnouncement = async (req, res) => {
     try {
         const { title, message, startDate, endDate } = req.body;
@@ -128,6 +126,8 @@ export const getActiveAnnouncements = async (req, res) => {
         res.status(500).json({ success: false, message: error.message });
     }
 };
+
+
 
 /**
  * Get all announcements

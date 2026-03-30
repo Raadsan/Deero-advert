@@ -14,6 +14,8 @@ import {
   deleteTestimonial,
 } from "@/api-client/testimonialApi";
 import { getImageUrl } from "@/utils/url";
+import { compressImage } from "@/utils/compressImage";
+
 
 export default function TestimonialsPage() {
   const [data, setData] = useState<any[]>([]);
@@ -70,19 +72,14 @@ export default function TestimonialsPage() {
   };
 
   // Handle file input change
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // Add file size check (50MB)
-      if (file.size > 50 * 1024 * 1024) {
-        alert("File is too large. Please select an image smaller than 50MB.");
-        e.target.value = ""; // clear input
-        return;
-      }
+      const compressed = await compressImage(file);
       setFormData((prev) => ({
         ...prev,
-        clientImage: file,
-        clientImagePreview: URL.createObjectURL(file),
+        clientImage: compressed,
+        clientImagePreview: URL.createObjectURL(compressed),
       }));
     }
   };

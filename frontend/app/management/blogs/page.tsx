@@ -14,6 +14,8 @@ import {
   deleteBlog,
 } from "@/api-client/blogsApi";
 import { getImageUrl } from "@/utils/url";
+import { compressImage } from "@/utils/compressImage";
+
 
 export default function AdminBlogsPage() {
   const [loading, setLoading] = useState(true);
@@ -64,18 +66,14 @@ export default function AdminBlogsPage() {
   const truncate = (s: string, n = 100) => (s?.length > n ? s.slice(0, n) + "..." : s);
 
   // Handle file input changes
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (file.size > 50 * 1024 * 1024) {
-        alert("File is too large. Please select an image smaller than 50MB.");
-        e.target.value = ""; // clear input
-        return;
-      }
+      const compressed = await compressImage(file);
       setForm((prev) => ({
         ...prev,
-        featuredImage: file,
-        featuredImagePreview: URL.createObjectURL(file),
+        featuredImage: compressed,
+        featuredImagePreview: URL.createObjectURL(compressed),
       }));
     }
   };

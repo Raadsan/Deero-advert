@@ -15,6 +15,8 @@ import {
   Achievement,
 } from "@/api-client/achievementApi";
 import { getImageUrl } from "@/utils/url";
+import { compressImage } from "@/utils/compressImage";
+
 
 export default function AchievementsPage() {
   const [data, setData] = useState<any[]>([]);
@@ -64,19 +66,14 @@ export default function AchievementsPage() {
   };
 
   // Handle file input change
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // Add file size check (50MB)
-      if (file.size > 50 * 1024 * 1024) {
-        alert("File is too large. Please select an image smaller than 50MB.");
-        e.target.value = ""; // clear input
-        return;
-      }
+      const compressed = await compressImage(file);
       setFormData((prev) => ({
         ...prev,
-        icon: file,
-        iconPreview: URL.createObjectURL(file),
+        icon: compressed,
+        iconPreview: URL.createObjectURL(compressed),
       }));
     }
   };
