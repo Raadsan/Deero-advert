@@ -1,6 +1,6 @@
 // controllers/announcementController.js
 import Announcement from "../models/AnnouncementModel.js";
-import admin from '../firebase.js';
+import admin, { firebaseInitialized } from '../firebase.js';
 import DeviceToken from '../models/DeviceTokenModel.js';
 import User from "../models/UserModel.js";
 import Role from "../models/roleModel.js";
@@ -44,6 +44,9 @@ export const createAnnouncement = async (req, res) => {
         });
 
         // ✅ Dir FCM Push Notification isla markiiba dhamaan devices-ka
+        if (!firebaseInitialized) {
+            console.log('⚠️ Firebase not initialized — skipping FCM push notification');
+        } else {
         try {
             const allTokens = await DeviceToken.find().select('token');
             const tokenList = allTokens.map(t => t.token).filter(Boolean);
@@ -88,6 +91,7 @@ export const createAnnouncement = async (req, res) => {
             // FCM error announcement-ka ha joojiyo
             console.error('⚠️ FCM push error (announcement DB ayaa la kaydiyay):', fcmError.message);
         }
+        } // End of firebaseInitialized check
 
         return res.status(201).json({
             success: true,
