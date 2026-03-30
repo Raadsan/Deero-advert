@@ -17,7 +17,7 @@ const slides: Slide[] = [
     title: "Graphic Design",
     description:
       "We offer range of graphic design services encompasses logo design, UI design, event branding, and brand identity. With our expertise, we create captivating and memorable brands that resonate with the public, leaving a lasting impression.",
-    image: "/home-images/graphic design.png",
+    image: "/home-images/graphic-design.png",
   },
   {
     title: "Digital Marketing",
@@ -29,19 +29,19 @@ const slides: Slide[] = [
     title: "Web Solutions",
     description:
       "We offer complete web services, including web design, domain registration, domain transfer, SSL certificates, and web hosting. We create responsive websites that look wonderful on any device, including smartphones, tablets, and desktop computers.",
-    image: "/home-images/web solution.png",
+    image: "/home-images/web-solution.png",
   },
   {
     title: "Event Branding",
     description:
       "Full suite of event branding and consulting, from digital strategy and social media to on-site branding and highlight videos.",
-    image: "/home-images/event branding.png",
+    image: "/home-images/event-branding.png",
   },
   {
     title: "Digital Consulting",
     description:
       "We offer a full suite of digital consulting services, including digital marketing, branding consulting, event consulting, assisting with content creation, digital media, and communication consulting.",
-    image: "/home-images/digital consulting.png",
+    image: "/home-images/digital-consulting.png",
   },
 ];
 
@@ -49,9 +49,12 @@ export default function Hero() {
   const [active, setActive] = useState(0);
   const total = useMemo(() => slides.length, []);
   const router = useRouter();
-
+  const [isMounted, setIsMounted] = useState(false);
+  const [firstLoad, setFirstLoad] = useState(true);
   useEffect(() => {
+    setIsMounted(true);
     const id = setInterval(() => {
+      setFirstLoad(false);
       setActive((prev) => (prev + 1) % total);
     }, 5500);
     return () => clearInterval(id);
@@ -59,9 +62,18 @@ export default function Hero() {
 
   const slide = slides[active];
 
-  const goTo = (idx: number) => setActive(idx);
-  const next = () => setActive((prev) => (prev + 1) % total);
-  const prev = () => setActive((prev) => (prev - 1 + total) % total);
+  const goTo = (idx: number) => {
+    setFirstLoad(false);
+    setActive(idx);
+  };
+  const next = () => {
+    setFirstLoad(false);
+    setActive((prev) => (prev + 1) % total);
+  };
+  const prev = () => {
+    setFirstLoad(false);
+    setActive((prev) => (prev - 1 + total) % total);
+  };
 
   const handleSeeMore = () => {
     if (slide.title === "Digital Consulting") {
@@ -78,7 +90,7 @@ export default function Hero() {
           type="button"
           aria-label="Previous slide"
           onClick={prev}
-          className="absolute left-3 top-1/2 hidden -translate-y-1/2 text-white transition hover:scale-110 lg:inline-flex z-20"
+          className="absolute left-3 top-1/2 lg:top-[240px] hidden -translate-y-1/2 text-white transition hover:scale-110 lg:inline-flex z-20"
         >
           <ChevronLeftIcon className="h-8 w-8" />
         </button>
@@ -87,7 +99,7 @@ export default function Hero() {
             <AnimatePresence mode="wait">
               <motion.div
                 key={active}
-                initial={{ opacity: 0, y: 80 }}
+                initial={isMounted && !firstLoad ? { opacity: 0, y: 80 } : false}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 80 }}
                 transition={{ duration: 0.8 }}
@@ -115,7 +127,7 @@ export default function Hero() {
             <AnimatePresence mode="wait">
               <motion.div
                 key={active}
-                initial={{ opacity: 0, y: -80 }}
+                initial={isMounted && !firstLoad ? { opacity: 0, y: -80 } : false}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -80 }}
                 transition={{ duration: 0.8 }}
@@ -139,7 +151,7 @@ export default function Hero() {
           type="button"
           aria-label="Next slide"
           onClick={next}
-          className="absolute right-3 top-1/2 hidden -translate-y-1/2 text-white transition hover:scale-110 lg:inline-flex z-20"
+          className="absolute right-3 top-1/2 lg:top-[240px] hidden -translate-y-1/2 text-white transition hover:scale-110 lg:inline-flex z-20"
         >
           <ChevronRightIcon className="h-8 w-8" />
         </button>

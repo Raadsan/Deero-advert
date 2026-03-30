@@ -7,10 +7,14 @@ import {
     updateAnnouncement,
     getAnnouncementById,
     deleteAnnouncement,
+    saveDeviceToken,
 } from "../controllers/AnnouncementController.js";
 import { protect } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
+
+// ✅ Public: Flutter app waxay token u diraysaa (login iyo la'aanba)
+router.post("/save-token", saveDeviceToken);
 
 // Public route for active announcements
 router.get("/active", getActiveAnnouncements);

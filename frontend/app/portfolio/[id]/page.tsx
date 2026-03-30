@@ -25,7 +25,6 @@ export default function PortfolioDetailPage() {
         const fetchPortfolio = async () => {
             try {
                 setLoading(true);
-
                 const isId = /^[0-9a-fA-F]{24}$/.test(identifier);
 
                 if (isId) {
@@ -126,7 +125,6 @@ export default function PortfolioDetailPage() {
                         <h1 className="text-4xl md:text-7xl font-bold text-[#651313] mb-8 tracking-tighter capitalize leading-none">
                             {portfolio?.title}
                         </h1>
-
                         <div className="space-y-6 mb-12">
                             <h3 className="text-xl md:text-2xl font-bold text-[#651313]">Project Description</h3>
                             <p className="text-gray-700 text-lg md:text-xl leading-relaxed whitespace-pre-wrap">
@@ -236,7 +234,6 @@ export default function PortfolioDetailPage() {
                     {/* Background Detail */}
                     <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-32 -mt-32 blur-3xl group-hover:bg-white/10 transition-all duration-700" />
                     <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/5 rounded-full -ml-32 -mb-32 blur-3xl group-hover:bg-white/10 transition-all duration-700" />
-
                     <motion.div
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -290,7 +287,7 @@ export default function PortfolioDetailPage() {
                     </div>
                 )}
             </ImageModal>
-
+            
             <Footer />
         </div>
     );
