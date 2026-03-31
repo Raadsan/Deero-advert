@@ -207,6 +207,17 @@ export default function Chatbot() {
                   icon: <Instagram className="w-5 h-5 text-white" />,
                 },
                 {
+                  label: "Behance",
+                  href: "https://www.behance.net/deeroadvert",
+                  icon: (
+                    <img 
+                      src="/home-images/behance.png" 
+                      alt="Behance" 
+                      className="w-5 h-5 object-contain invert brightness-0 grayscale"
+                    />
+                  ),
+                },
+                {
                   label: "WhatsApp",
                   href: "https://wa.me/252618553566",
                   icon: <MessageCircle className="w-5 h-5 text-white" />,
@@ -219,7 +230,7 @@ export default function Chatbot() {
                   exit={{ opacity: 0, scale: 0, y: 20 }}
                   transition={{ 
                     duration: 0.2, 
-                    delay: (4 - index) * 0.05,
+                    delay: (5 - index) * 0.05,
                     type: "spring",
                     stiffness: 260,
                     damping: 20
@@ -245,15 +256,13 @@ export default function Chatbot() {
         {/* Action Buttons Stacked Vertically */}
         <div className="flex flex-col items-end gap-3">
           {/* Social Links Label & Toggle (Now on top) */}
-          <div className="flex items-center gap-3 relative">
+          <div className="flex items-center gap-3 relative group">
             {!isSocialOpen && (
-              <motion.div 
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="bg-black py-1 px-4 rounded-full shadow-lg hidden sm:block h-fit"
+              <div 
+                className="bg-black py-1 px-4 rounded-full shadow-lg hidden sm:block h-fit opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
               >
                 <span className="text-white text-[11px] font-bold tracking-wider uppercase">Social Links</span>
-              </motion.div>
+              </div>
             )}
             
             <button
@@ -270,7 +279,7 @@ export default function Chatbot() {
               
               {!isSocialOpen && (
                 <span className="absolute -top-1 -right-1 w-6 h-6 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-white shadow-sm">
-                  5
+                  6 
                 </span>
               )}
             </button>
@@ -278,14 +287,12 @@ export default function Chatbot() {
 
           {/* Chat Toggle (Now at the bottom) */}
           {!isOpen && (
-            <div className="flex items-center gap-3 relative">
-              <motion.div 
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="bg-black py-1 px-4 rounded-full shadow-lg hidden sm:block h-fit"
+            <div className="flex items-center gap-3 relative group">
+              <div 
+                className="bg-black py-1 px-4 rounded-full shadow-lg hidden sm:block h-fit opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
               >
                 <span className="text-white text-[11px] font-bold tracking-wider uppercase">Chats</span>
-              </motion.div>
+              </div>
               
               <motion.button
                 initial={{ opacity: 0, scale: 0.5 }}
