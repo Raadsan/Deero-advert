@@ -22,7 +22,7 @@ export default function Footer() {
                             className="w-[180px] md:w-[210px] lg:w-[230px] h-auto object-contain self-start"
                         />
                         <p className="text-white/80 text-sm leading-relaxed max-w-[320px]">
-                           Deero Advertising Agency is one of the innovative digital service providers in Somalia, founded in 2019 to offer a wide range of digital creative services
+                            Deero Advertising Agency is one of the innovative digital service providers in Somalia, founded in 2019 to offer a wide range of digital creative services
                         </p>
                     </div>
 
@@ -151,9 +151,9 @@ export default function Footer() {
                                     href: "https://www.behance.net/deeroadvert",
                                     label: "Behance",
                                     icon: (
-                                        <img 
-                                            src="/home-images/behance.png" 
-                                            alt="Behance" 
+                                        <img
+                                            src="/home-images/behance.png"
+                                            alt="Behance"
                                             className="w-5 h-5 object-contain invert brightness-0 grayscale"
                                         />
                                     )

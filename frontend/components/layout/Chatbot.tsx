@@ -276,7 +276,7 @@ export default function Chatbot() {
                 setIsSocialOpen(nextState);
                 if (nextState) setIsOpen(false);
               }}
-              className={`w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all transform hover:scale-110 active:scale-95 border-4 border-white z-20 transition-colors ${isSocialOpen ? 'bg-[#651313]' : 'bg-[#EB4724]'
+              className={`w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all transform hover:scale-110 active:scale-95 z-20 transition-colors ${isSocialOpen ? 'bg-[#651313]' : 'bg-[#EB4724]'
                 }`}
             >
               {isSocialOpen ? (
@@ -309,7 +309,7 @@ export default function Chatbot() {
                   setIsOpen(true);
                   setIsSocialOpen(false);
                 }}
-                className="w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all hover:scale-110 active:scale-95 bg-[#F7B5A7] border-4 border-white z-20"
+                className="w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all hover:scale-110 active:scale-95 bg-[#F7B5A7] z-20"
               >
                 <MessageCircle className="w-7 h-7 text-[#1a1a1a]" />
               </motion.button>
