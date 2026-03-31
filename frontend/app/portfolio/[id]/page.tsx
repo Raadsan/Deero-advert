@@ -9,7 +9,7 @@ import { getPortfolios, getPortfolioById } from "@/api-client/portfolioApi";
 import { getImageUrl, slugify } from "@/utils/url";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import ImageModal from "@/components/layout/ImageModal";
 
 export default function PortfolioDetailPage() {
@@ -18,6 +18,8 @@ export default function PortfolioDetailPage() {
     const identifier = params.id as string;
 
     const [portfolio, setPortfolio] = useState<any>(null);
+    const [nextProject, setNextProject] = useState<any>(null);
+    const [prevProject, setPrevProject] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
@@ -27,33 +29,43 @@ export default function PortfolioDetailPage() {
                 setLoading(true);
                 const isId = /^[0-9a-fA-F]{24}$/.test(identifier);
 
-                if (isId) {
-                    try {
-                        const singleResponse = await getPortfolioById(identifier);
-                        if (singleResponse.data.success && singleResponse.data.portfolio) {
-                            setPortfolio(singleResponse.data.portfolio);
-                            return;
-                        }
-                    } catch (e) {
-                        console.log("Direct ID fetch failed, falling back to slug search");
-                    }
-                }
-
                 const response = await getPortfolios();
                 const data = response.data;
-                let items = [];
+                let items: any[] = [];
 
                 if (data.success) {
-                    items = Array.isArray(data.portfolios) ? data.portfolios : (data.portfolio ? [data.portfolio] : []);
+                    items = Array.isArray(data.portfolios) ? [...data.portfolios].reverse() : (data.portfolio ? [data.portfolio] : []);
                 } else if (Array.isArray(data)) {
-                    items = data;
+                    items = [...data].reverse();
                 }
 
-                const found = items.find((p: any) =>
+                const currentIndex = items.findIndex((p: any) =>
                     p._id === identifier || (p.title && slugify(p.title) === identifier)
                 );
 
-                setPortfolio(found);
+                if (currentIndex !== -1) {
+                    setPortfolio(items[currentIndex]);
+                    
+                    if (items.length > 1) {
+                        const nextIdx = currentIndex + 1;
+                        const prevIdx = currentIndex - 1;
+                        setNextProject(nextIdx < items.length ? items[nextIdx] : null);
+                        setPrevProject(prevIdx >= 0 ? items[prevIdx] : null);
+                    }
+                } else {
+                    // Fallback to direct ID fetch if not found in list (e.g. unlisted)
+                    if (isId) {
+                        try {
+                            const singleResponse = await getPortfolioById(identifier);
+                            if (singleResponse.data.success && singleResponse.data.portfolio) {
+                                setPortfolio(singleResponse.data.portfolio);
+                            }
+                        } catch (e) {
+                            console.log("Direct ID fetch failed");
+                        }
+                    }
+                }
+
             } catch (error) {
                 console.error("Error fetching portfolio:", error);
             } finally {
@@ -223,6 +235,53 @@ export default function PortfolioDetailPage() {
                                     );
                                 })}
                             </div>
+                        </motion.div>
+                    )}
+
+                    {/* Navigation - Prev & Next Project */}
+                    {(prevProject || nextProject) && (
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            className="pt-16 pb-8 border-t border-[#651313]/10 mt-16 flex flex-row justify-center items-center gap-4 md:gap-10"
+                        >
+                            {/* Prev Arrow */}
+                            <button
+                                onClick={() => {
+                                     if (!prevProject) return;
+                                     const url = prevProject.title ? `/portfolio/${slugify(prevProject.title)}` : `/portfolio/${prevProject._id}`;
+                                     router.push(url);
+                                }}
+                                className={`w-14 h-14 md:w-16 md:h-16 rounded-full bg-[#fcd7c3]/30 hover:bg-[#651313] text-[#651313] hover:text-white flex items-center justify-center transition-all shadow-sm active:scale-95 shrink-0 group ${!prevProject ? 'invisible' : ''}`}
+                            >
+                                <ArrowLeft className="w-6 h-6 md:w-8 md:h-8 group-hover:-translate-x-1 transition-transform" />
+                            </button>
+
+                            {/* Center Title (Next Project) */}
+                            <div className="text-center group cursor-pointer px-4"
+                                 onClick={() => {
+                                      if (!nextProject) return;
+                                      const url = nextProject.title ? `/portfolio/${slugify(nextProject.title)}` : `/portfolio/${nextProject._id}`;
+                                      router.push(url);
+                                 }}
+                            >
+                                <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold text-[#651313] group-hover:text-[#EB4724] transition-colors capitalize">
+                                    Next Project
+                                </h2>
+                            </div>
+
+                            {/* Next Arrow */}
+                            <button
+                                onClick={() => {
+                                     if (!nextProject) return;
+                                     const url = nextProject.title ? `/portfolio/${slugify(nextProject.title)}` : `/portfolio/${nextProject._id}`;
+                                     router.push(url);
+                                }}
+                                className={`w-14 h-14 md:w-16 md:h-16 rounded-full bg-[#fcd7c3]/30 hover:bg-[#651313] text-[#651313] hover:text-white flex items-center justify-center transition-all shadow-sm active:scale-95 shrink-0 group ${!nextProject ? 'invisible' : ''}`}
+                            >
+                                <ArrowRight className="w-6 h-6 md:w-8 md:h-8 group-hover:translate-x-1 transition-transform" />
+                            </button>
                         </motion.div>
                     )}
                 </div>
