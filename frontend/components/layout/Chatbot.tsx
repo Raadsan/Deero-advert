@@ -47,12 +47,12 @@ export default function Chatbot() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [isSocialOpen, setIsSocialOpen] = useState(false);
-  
+
   // Hide on dashboard and system pages
-  const isDashboard = pathname.startsWith("/dashboard") || 
-                     pathname.startsWith("/management") || 
-                     pathname.startsWith("/configuration") || 
-                     pathname.startsWith("/payments");
+  const isDashboard = pathname.startsWith("/dashboard") ||
+    pathname.startsWith("/management") ||
+    pathname.startsWith("/configuration") ||
+    pathname.startsWith("/payments");
 
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -94,8 +94,8 @@ export default function Chatbot() {
 
       const botResponse: Message = {
         role: "bot",
-        content: questionMatch 
-          ? questionMatch.answer 
+        content: questionMatch
+          ? questionMatch.answer
           : "Thank you for your message! Our team will get back to you shortly. For immediate assistance, feel free to contact us at +252 61 8553566.",
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       };
@@ -123,7 +123,7 @@ export default function Chatbot() {
                 </div>
               </div>
             </div>
-            <button 
+            <button
               onClick={() => setIsOpen(false)}
               className="text-white/70 hover:text-white transition-colors p-1"
             >
@@ -139,11 +139,10 @@ export default function Chatbot() {
                 className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
               >
                 <div
-                  className={`max-w-[85%] p-3 rounded-2xl shadow-sm ${
-                    msg.role === "user"
+                  className={`max-w-[85%] p-3 rounded-2xl shadow-sm ${msg.role === "user"
                       ? "bg-[#EB4724] text-white rounded-tr-none text-right"
                       : "bg-[#F3F4F6] text-gray-800 rounded-tl-none border border-gray-100 text-left"
-                  }`}
+                    }`}
                 >
                   <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.content}</p>
                   <span className={`text-[10px] mt-1 block opacity-60 ${msg.role === "user" ? "text-right" : "text-left"}`}>
@@ -211,9 +210,9 @@ export default function Chatbot() {
                     label: "Behance",
                     href: "https://www.behance.net/deeroadvert",
                     icon: (
-                      <img 
-                        src="/home-images/behance.png" 
-                        alt="Behance" 
+                      <img
+                        src="/home-images/behance.png"
+                        alt="Behance"
                         className="w-5 h-5 object-contain invert brightness-0 grayscale"
                       />
                     ),
@@ -221,7 +220,14 @@ export default function Chatbot() {
                   {
                     label: "WhatsApp",
                     href: "https://wa.me/252618553566",
-                    icon: <MessageCircle className="w-5 h-5 text-white" />,
+                    icon: (
+                      <svg
+                        viewBox="0 0 24 24"
+                        className="w-8 h-8 text-white fill-current"
+                      >
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.72.937 3.659 1.435 5.631 1.436h.008c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                      </svg>
+                    ),
                   },
                 ].map((social, index) => (
                   <motion.div
@@ -229,8 +235,8 @@ export default function Chatbot() {
                     initial={{ opacity: 0, scale: 0, y: 20 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0, y: 20 }}
-                    transition={{ 
-                      duration: 0.2, 
+                    transition={{
+                      duration: 0.2,
                       delay: (5 - index) * 0.05,
                       type: "spring",
                       stiffness: 260,
@@ -257,32 +263,31 @@ export default function Chatbot() {
           {/* Social Links Label & Toggle (Now on top) */}
           <div className="flex items-center gap-3 relative group">
             {!isSocialOpen && (
-              <div 
+              <div
                 className="bg-black py-1 px-4 rounded-full shadow-lg hidden sm:block h-fit opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
               >
                 <span className="text-white text-[11px] font-bold tracking-wider uppercase">Social Links</span>
               </div>
             )}
-            
+
             <button
               onClick={() => {
                 const nextState = !isSocialOpen;
                 setIsSocialOpen(nextState);
                 if (nextState) setIsOpen(false);
               }}
-              className={`w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all transform hover:scale-110 active:scale-95 border-4 border-white z-20 ${
-                isSocialOpen ? 'bg-blue-700' : 'bg-[#EB4724]'
-              }`}
+              className={`w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all transform hover:scale-110 active:scale-95 border-4 border-white z-20 transition-colors ${isSocialOpen ? 'bg-[#651313]' : 'bg-[#EB4724]'
+                }`}
             >
               {isSocialOpen ? (
                 <X className="w-8 h-8 text-white" />
               ) : (
                 <Share2 className="w-8 h-8 text-white" />
               )}
-              
+
               {!isSocialOpen && (
                 <span className="absolute -top-1 -right-1 w-6 h-6 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-white shadow-sm">
-                  6 
+                  6
                 </span>
               )}
             </button>
@@ -291,12 +296,12 @@ export default function Chatbot() {
           {/* Chat Toggle (Now at the bottom) */}
           {!isOpen && (
             <div className="flex items-center gap-3 relative group">
-              <div 
+              <div
                 className="bg-black py-1 px-4 rounded-full shadow-lg hidden sm:block h-fit opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
               >
                 <span className="text-white text-[11px] font-bold tracking-wider uppercase">Chats</span>
               </div>
-              
+
               <motion.button
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={{ opacity: 1, scale: 1 }}
