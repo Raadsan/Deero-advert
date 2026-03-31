@@ -173,16 +173,24 @@ export default function PortfolioSection({ showHeader = true, limit, paddingClas
                                         </p>
                                     </div>
 
-                                    {/* Year and Industry */}
-                                    <div className="flex gap-12 mb-8">
-                                        <div>
+                                    {/* Project Details */}
+                                    <div className="flex flex-row items-start gap-4 md:gap-12 mb-8 flex-wrap lg:flex-nowrap">
+                                        <div className="shrink-0">
                                             <p className="text-lg font-bold text-[#1a1a1a] mb-1">Year:</p>
                                             <p className="text-base text-gray-500 font-medium">{item.year || "N/A"}</p>
                                         </div>
-                                        <div>
+                                        <div className="shrink-0">
                                             <p className="text-lg font-bold text-[#1a1a1a] mb-1">Industry:</p>
-                                            <p className="text-base text-gray-500 font-medium">{item.industry || "N/A"}</p>
+                                            <p className="text-base text-gray-500 font-medium capitalize">{item.industry || "N/A"}</p>
                                         </div>
+                                        {item.projectDirection && item.projectDirection.length > 0 && (
+                                            <div className="flex-1 min-w-[150px]">
+                                                <p className="text-lg font-bold text-[#1a1a1a] mb-1">Project Direction:</p>
+                                                <p className="text-base text-gray-500 font-medium capitalize leading-relaxed">
+                                                    {item.projectDirection.join(", ")}
+                                                </p>
+                                            </div>
+                                        )}
                                     </div>
 
                                     <Link
