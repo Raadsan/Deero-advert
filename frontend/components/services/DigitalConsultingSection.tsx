@@ -23,7 +23,7 @@ export default function DigitalConsultingSection({ service, onPurchase }: Digita
                     <div className="relative w-full max-w-[420px] flex items-center justify-center">
                         <div className="relative w-full aspect-square">
                             <Image
-                                src="/home-images/digital consulting.png"
+                                src="/home-images/digital-consulting.png"
                                 alt="Digital Consulting"
                                 fill
                                 className="object-contain"
