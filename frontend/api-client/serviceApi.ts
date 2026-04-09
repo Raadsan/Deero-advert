@@ -25,20 +25,12 @@ export const getServiceById = async (id: string): Promise<Service> => {
 };
 
 export const createService = async (formData: FormData) => {
-  const response = await axios.post("/service/create", formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
+  const response = await axios.post("/service/create", formData);
   return response.data;
 };
 
 export const updateService = async (id: string, formData: FormData) => {
-  const response = await axios.patch(`/service/${id}`, formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
+  const response = await axios.patch(`/service/${id}`, formData);
   return response.data;
 };
 

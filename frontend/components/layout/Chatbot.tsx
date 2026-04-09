@@ -51,6 +51,7 @@ export default function Chatbot() {
   // Hide on dashboard and system pages
   const isDashboard = pathname.startsWith("/dashboard") ||
     pathname.startsWith("/management") ||
+    pathname.startsWith("/config") ||
     pathname.startsWith("/configuration") ||
     pathname.startsWith("/payments");
 

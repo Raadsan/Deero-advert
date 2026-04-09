@@ -162,7 +162,7 @@ export default function PortfolioSection({ showHeader = true, limit, paddingClas
                                 transition={{ duration: 0.8, delay: index * 0.1 }}
                                 className={`bg-white rounded-3xl overflow-hidden shadow-sm flex flex-col ${index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} min-h-[400px] lg:gap-12`}
                             >
-                                {/* Left Content Area */}
+                                {/* Left Content Area */} 
                                 <div className="lg:w-1/2 p-8 md:p-12 flex flex-col justify-between">
                                     <div>
                                         <h3 className="text-2xl md:text-3xl font-semibold text-[#651313] mb-4 tracking-tighter capitalize">

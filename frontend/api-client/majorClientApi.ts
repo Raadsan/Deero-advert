@@ -14,11 +14,7 @@ export const getMajorClients = async () => {
 };
 
 export const createMajorClient = async (formData: FormData) => {
-    const response = await api.post("/majorclients", formData, {
-        headers: {
-            "Content-Type": "multipart/form-data",
-        },
-    });
+    const response = await api.post("/majorclients", formData);
     return response.data;
 };
 
@@ -28,11 +24,7 @@ export const deleteMajorClient = async (id: string) => {
 };
 
 export const updateMajorClient = async (id: string, formData: FormData) => {
-    const response = await api.put(`/majorclients/${id}`, formData, {
-        headers: {
-            "Content-Type": "multipart/form-data",
-        },
-    });
+    const response = await api.put(`/majorclients/${id}`, formData);
     return response.data;
 };
 
