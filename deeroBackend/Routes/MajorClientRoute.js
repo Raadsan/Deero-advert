@@ -11,9 +11,9 @@ import { protect } from "../middlewares/authMiddleware.js";
 const router = express.Router();
 
 router.get("/", getClients);
-router.post("/", protect, upload.single('images'), createClient);
-router.patch("/:id", protect, upload.single('images'), updateClient);
-router.put("/:id", protect, upload.single('images'), updateClient);
+router.post("/", protect, upload.array('images'), createClient);
+router.patch("/:id", protect, upload.array('images'), updateClient);
+router.put("/:id", protect, upload.array('images'), updateClient);
 router.delete("/:id", protect, deleteClient);
 
 export default router;

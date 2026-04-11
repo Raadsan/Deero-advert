@@ -1,7 +1,14 @@
-export const API_BASE_URL = (process.env.NEXT_PUBLIC_API_URL || "https://deero-advert-production.up.railway.app/api").replace("/api", "");
+const getBaseURL = () => {
+    if (typeof window !== "undefined" && window.location.hostname === "localhost") {
+        return "http://localhost:5000";
+    }
+    return (process.env.NEXT_PUBLIC_API_URL || "https://deero-advert-production-a27c.up.railway.app/api").replace("/api", "");
+};
 
-export const getImageUrl = (path: string | undefined) => {
-    if (!path || path === "") return null;
+export const API_BASE_URL = getBaseURL();
+
+export const getImageUrl = (path: any) => {
+    if (!path || typeof path !== "string" || path === "") return null;
     if (path.startsWith("http")) return path;
 
     // Normalize backslashes to forward slashes for Windows paths

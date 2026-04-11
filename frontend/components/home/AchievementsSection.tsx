@@ -67,8 +67,8 @@ export default function AchievementsSection() {
 
                 // Extract all images from all clients (flattening the array if multiple images per client)
                 const allimages = fetchedClients.flatMap((client: any) =>
-                    client.images.map((img: string, idx: number) => {
-                        const imageUrl = getImageUrl(img);
+                    (client.images || []).map((img: any, idx: number) => {
+                        const imageUrl = getImageUrl(img.imagePath);
 
                         return {
                             id: `${client._id}-${idx}`,

@@ -13,7 +13,7 @@ import { protect } from "../middlewares/authMiddleware.js";
 const router = express.Router();
 
 // Protected user CRUD routes
-router.get("/", protect, getUsers);
+router.get("/", getUsers);
 router.get("/:id", protect, getUserById);
 router.post("/", signup);
 router.patch("/:id", protect, updateUser);

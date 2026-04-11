@@ -40,9 +40,9 @@ export default function MajorClientsPage() {
             const clients = [...clientsData].reverse();
             setData(
                 clients.map((c: any) => ({
-                    id: c._id,
+                    id: c.id,
                     description: c.description,
-                    images: (c.images || []).map((img: string) => getImageUrl(img)),
+                    images: (c.images || []).map((img: any) => getImageUrl(img.imagePath)),
                     createdAt: c.createdAt,
                 }))
             );
@@ -112,7 +112,7 @@ export default function MajorClientsPage() {
 
         // Append new images
         formData.images.forEach((file) => {
-            formDataToSend.append("image", file);
+            formDataToSend.append("images", file);
         });
 
         try {

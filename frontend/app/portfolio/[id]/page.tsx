@@ -45,7 +45,7 @@ export default function PortfolioDetailPage() {
 
                 if (currentIndex !== -1) {
                     setPortfolio(items[currentIndex]);
-                    
+
                     if (items.length > 1) {
                         const nextIdx = currentIndex + 1;
                         const prevIdx = currentIndex - 1;
@@ -90,7 +90,7 @@ export default function PortfolioDetailPage() {
         );
     }
 
-    const galleryImages = portfolio?.gallery || [];
+    const galleryImages = (portfolio?.gallery || []).map((g: any) => g.imagePath);
 
     return (
         <div className="bg-white min-h-screen">
@@ -139,12 +139,12 @@ export default function PortfolioDetailPage() {
                         </h1>
                         <div className="space-y-6 mb-12">
                             <h3 className="text-xl md:text-2xl font-bold text-[#651313]">Project Description</h3>
-                            <p className="text-gray-700 text-lg md:text-xl leading-relaxed whitespace-pre-wrap">
+                            <p className="text-gray-700 text-lg md:text-xl leading-relaxed whitespace-pre-wrap break-all">
                                 {portfolio?.description || "No description provided."}
                             </p>
                         </div>
 
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-12 pt-8 border-t border-[#651313]/10 mb-20">
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-12 pt-8 border-t border-[#651313]/10 mb-20">
                             <div>
                                 <p className="text-[#1a1a1a] font-bold text-xl mb-1">Year:</p>
                                 <p className="text-gray-500 text-lg md:text-xl font-medium">{portfolio?.year || "N/A"}</p>
@@ -154,9 +154,9 @@ export default function PortfolioDetailPage() {
                                 <p className="text-gray-500 text-lg md:text-xl font-medium capitalize">{portfolio?.industry || "N/A"}</p>
                             </div>
                             {portfolio?.projectDirection && portfolio.projectDirection.length > 0 && (
-                                <div className="col-span-2 md:col-span-1">
+                                <div className="col-span-2 md:col-span-2">
                                     <p className="text-[#1a1a1a] font-bold text-xl mb-2">Project direction:</p>
-                                    <ul className="space-y-1">
+                                    <ul className="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-2">
                                         {portfolio.projectDirection.map((item: string, i: number) => (
                                             <li key={i} className="text-gray-500 text-lg md:text-xl font-medium">{item}</li>
                                         ))}
@@ -249,9 +249,9 @@ export default function PortfolioDetailPage() {
                             {/* Prev Arrow */}
                             <button
                                 onClick={() => {
-                                     if (!prevProject) return;
-                                     const url = prevProject.title ? `/portfolio/${slugify(prevProject.title)}` : `/portfolio/${prevProject._id}`;
-                                     router.push(url);
+                                    if (!prevProject) return;
+                                    const url = prevProject.title ? `/portfolio/${slugify(prevProject.title)}` : `/portfolio/${prevProject._id}`;
+                                    router.push(url);
                                 }}
                                 className={`w-14 h-14 md:w-16 md:h-16 rounded-full bg-[#fcd7c3]/30 hover:bg-[#651313] text-[#651313] hover:text-white flex items-center justify-center transition-all shadow-sm active:scale-95 shrink-0 group ${!prevProject ? 'invisible' : ''}`}
                             >
@@ -260,11 +260,11 @@ export default function PortfolioDetailPage() {
 
                             {/* Center Title (Next Project) */}
                             <div className="text-center group cursor-pointer px-4"
-                                 onClick={() => {
-                                      if (!nextProject) return;
-                                      const url = nextProject.title ? `/portfolio/${slugify(nextProject.title)}` : `/portfolio/${nextProject._id}`;
-                                      router.push(url);
-                                 }}
+                                onClick={() => {
+                                    if (!nextProject) return;
+                                    const url = nextProject.title ? `/portfolio/${slugify(nextProject.title)}` : `/portfolio/${nextProject._id}`;
+                                    router.push(url);
+                                }}
                             >
                                 <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold text-[#651313] group-hover:text-[#EB4724] transition-colors capitalize">
                                     Next Project
@@ -274,9 +274,9 @@ export default function PortfolioDetailPage() {
                             {/* Next Arrow */}
                             <button
                                 onClick={() => {
-                                     if (!nextProject) return;
-                                     const url = nextProject.title ? `/portfolio/${slugify(nextProject.title)}` : `/portfolio/${nextProject._id}`;
-                                     router.push(url);
+                                    if (!nextProject) return;
+                                    const url = nextProject.title ? `/portfolio/${slugify(nextProject.title)}` : `/portfolio/${nextProject._id}`;
+                                    router.push(url);
                                 }}
                                 className={`w-14 h-14 md:w-16 md:h-16 rounded-full bg-[#fcd7c3]/30 hover:bg-[#651313] text-[#651313] hover:text-white flex items-center justify-center transition-all shadow-sm active:scale-95 shrink-0 group ${!nextProject ? 'invisible' : ''}`}
                             >
@@ -346,7 +346,7 @@ export default function PortfolioDetailPage() {
                     </div>
                 )}
             </ImageModal>
-            
+
             <Footer />
         </div>
     );

@@ -7,15 +7,15 @@ export const createClient = async (req, res) => {
     const { description } = req.body;
 
     if (!description) return res.status(400).json({ success: false, message: "Description is required" });
-    if (!req.file) return res.status(400).json({ success: false, message: "An image is required" });
+    if (!req.files || req.files.length === 0) return res.status(400).json({ success: false, message: "At least one image is required" });
 
-    const imagePath = req.file.path.replace(/\\/g, "/");
+    const imagePaths = req.files.map(file => file.path.replace(/\\/g, "/"));
 
     const client = await prisma.majorClient.create({
       data: {
         description,
         images: {
-          create: [{ imagePath }]
+          create: imagePaths.map(path => ({ imagePath: path }))
         }
       },
       include: { images: true }
@@ -74,15 +74,55 @@ export const deleteClient = async (req, res) => {
 export const updateClient = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
-    const { description } = req.body;
-    
+    let { description, existingImages } = req.body;
+
+    // existingImages might be a string (if one) or undefined (if none)
+    if (typeof existingImages === 'string') {
+        existingImages = [existingImages];
+    } else if (!existingImages) {
+        existingImages = [];
+    }
+
     const updateData = {};
     if (description) updateData.description = description;
 
-    if (req.file) {
-      const imagePath = req.file.path.replace(/\\/g, "/");
+    // 1. Handle deletion of images not in existingImages
+    // Fetch current images first
+    const currentClient = await prisma.majorClient.findUnique({
+        where: { id },
+        include: { images: true }
+    });
+
+    if (!currentClient) return res.status(404).json({ success: false, message: "Client not found" });
+
+    // Delete images that are not in existingImages
+    for (const currentImg of currentClient.images) {
+        // We need to compare currentImg.imagePath with existingImages
+        // existingImages from frontend are full URLs or relative paths depending on getImageUrl
+        // Let's check how getImageUrl is implemented to be sure
+        const isStillThere = existingImages.some(ei => ei.includes(currentImg.imagePath));
+        
+        if (!isStillThere) {
+            // Delete from database
+            await prisma.majorClientImage.delete({ where: { id: currentImg.id } });
+            
+            // Optional: Delete from filesystem/Cloudinary if not needed
+            // If it's Cloudinary, we might need public_id, but here let's just keep it simple or use fs.unlink if local
+             if (currentImg.imagePath && !currentImg.imagePath.startsWith("http")) {
+                try {
+                    await fs.unlink(currentImg.imagePath);
+                } catch (err) {
+                    console.log(`File ${currentImg.imagePath} not found during cleanup.`);
+                }
+            }
+        }
+    }
+
+    // 2. Add new images
+    if (req.files && req.files.length > 0) {
+      const imagePaths = req.files.map(file => file.path.replace(/\\/g, "/"));
       updateData.images = {
-        create: [{ imagePath }]
+        create: imagePaths.map(path => ({ imagePath: path }))
       };
     }
 
@@ -94,6 +134,7 @@ export const updateClient = async (req, res) => {
 
     res.json({ success: true, client });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ success: false, message: error.message });
   }
 };
