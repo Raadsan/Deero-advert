@@ -4,7 +4,7 @@ const getBaseURL = () => {
   if (typeof window !== "undefined" && window.location.hostname === "localhost") {
     return "http://localhost:5000/api";
   }
-  return process.env.NEXT_PUBLIC_API_URL || "https://deero-advert-production-c83e.up.railway.app/";
+  return process.env.NEXT_PUBLIC_API_URL || "https://deero-advert-production-c83e.up.railway.app/api";
 };
 
 const api = axios.create({
