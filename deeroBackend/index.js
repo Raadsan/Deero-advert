@@ -66,7 +66,7 @@ app.use((req, res, next) => {
 app.get("/", (req, res) => {
   res.send("Deero Advert Backend (MySQL/Prisma) is running!");
 });
-// welcome
+
 // API Routes
 app.use("/api/users", userRoute);
 app.use("/api/roles", roleRoute);
