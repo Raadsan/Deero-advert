@@ -11,6 +11,7 @@ const api = axios.create({
   baseURL: getBaseURL(),
 });
 
+// welcome
 
 // Add token to requests
 api.interceptors.request.use(
