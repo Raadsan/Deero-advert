@@ -24,6 +24,7 @@ export default function Home() {
         <HostingPackages />
         <AchievementsSection />
         <RecentBlogs />
+        {/* teamwork */}
         <TeamSection />
         <TestimonialsSection />
         <NewsletterSection />
