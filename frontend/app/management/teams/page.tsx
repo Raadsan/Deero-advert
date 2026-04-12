@@ -31,8 +31,9 @@ export default function TeamsManagementPage() {
         name: "",
         position: "",
         facebook: "",
-        twitter: "",
-        linkedin: "",
+        behance: "",
+        tiktok: "",
+        whatsapp: "",
         image: null as File | null,
         imagePreview: "",
     });
@@ -95,8 +96,9 @@ export default function TeamsManagementPage() {
 
         const socials = [
             { platform: "facebook", url: formData.facebook },
-            { platform: "twitter", url: formData.twitter },
-            { platform: "linkedin", url: formData.linkedin },
+            { platform: "behance", url: formData.behance },
+            { platform: "tiktok", url: formData.tiktok },
+            { platform: "whatsapp", url: formData.whatsapp },
         ].filter(s => s.url); // Only send platforms with URLs
 
         formDataToSend.append("socials", JSON.stringify(socials));
@@ -148,15 +150,17 @@ export default function TeamsManagementPage() {
         setEditingId(member._id);
 
         const facebook = member.socials?.find((s: any) => s.platform === "facebook")?.url || "";
-        const twitter = member.socials?.find((s: any) => s.platform === "twitter")?.url || "";
-        const linkedin = member.socials?.find((s: any) => s.platform === "linkedin")?.url || "";
+        const behance = member.socials?.find((s: any) => s.platform === "behance")?.url || "";
+        const tiktok = member.socials?.find((s: any) => s.platform === "tiktok")?.url || "";
+        const whatsapp = member.socials?.find((s: any) => s.platform === "whatsapp")?.url || "";
 
         setFormData({
             name: member.name,
             position: member.position,
             facebook,
-            twitter,
-            linkedin,
+            behance,
+            tiktok,
+            whatsapp,
             image: null,
             imagePreview: member.image,
         });
@@ -169,8 +173,9 @@ export default function TeamsManagementPage() {
             name: "",
             position: "",
             facebook: "",
-            twitter: "",
-            linkedin: "",
+            behance: "",
+            tiktok: "",
+            whatsapp: "",
             image: null,
             imagePreview: "",
         });
@@ -373,24 +378,36 @@ export default function TeamsManagementPage() {
                         </div>
 
                         <div className="space-y-0.5">
-                            <label className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Twitter/X URL</label>
+                            <label className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Behance URL</label>
                             <input
                                 type="url"
-                                name="twitter"
-                                placeholder="https://twitter.com/..."
-                                value={formData.twitter}
+                                name="behance"
+                                placeholder="https://behance.net/..."
+                                value={formData.behance}
                                 onChange={handleInputChange}
                                 className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#EB4724] focus:border-[#EB4724]"
                             />
                         </div>
 
                         <div className="space-y-0.5">
-                            <label className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">LinkedIn URL</label>
+                            <label className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">TikTok URL</label>
                             <input
                                 type="url"
-                                name="linkedin"
-                                placeholder="https://linkedin.com/in/..."
-                                value={formData.linkedin}
+                                name="tiktok"
+                                placeholder="https://tiktok.com/@..."
+                                value={formData.tiktok}
+                                onChange={handleInputChange}
+                                className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#EB4724] focus:border-[#EB4724]"
+                            />
+                        </div>
+
+                        <div className="space-y-0.5">
+                            <label className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">WhatsApp Number</label>
+                            <input
+                                type="text"
+                                name="whatsapp"
+                                placeholder="+252..."
+                                value={formData.whatsapp}
                                 onChange={handleInputChange}
                                 className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#EB4724] focus:border-[#EB4724]"
                             />
