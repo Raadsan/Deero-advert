@@ -237,11 +237,27 @@ export const saveDeviceToken = async (req, res) => {
             }
         }
 
-        const deviceToken = await prisma.deviceToken.upsert({
-            where: { token },
-            update: { userId: linkedUserId },
-            create: { token, userId: linkedUserId },
-        });
+        let deviceToken;
+        try {
+            deviceToken = await prisma.deviceToken.upsert({
+                where: { token },
+                update: { userId: linkedUserId },
+                create: { token, userId: linkedUserId },
+            });
+        } catch (firstErr) {
+            // FK / edge cases: kaydi token guest ah (production-ka hore ama userId khalad)
+            if (firstErr?.code === "P2003") {
+                console.warn("⚠️ save-token: P2003 FK — retrying with userId null (guest token)");
+                deviceToken = await prisma.deviceToken.upsert({
+                    where: { token },
+                    update: { userId: null },
+                    create: { token, userId: null },
+                });
+                linkedUserId = null;
+            } else {
+                throw firstErr;
+            }
+        }
 
         console.log(`✅ FCM token la kaydiyay | userId: ${linkedUserId ?? "guest"}`);
         return res.status(200).json({ success: true, message: "Token saved successfully", data: deviceToken });
