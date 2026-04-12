@@ -168,7 +168,7 @@ export default function PortfolioSection({ showHeader = true, limit, paddingClas
                                         <h3 className="text-2xl md:text-3xl font-semibold text-[#651313] mb-4 tracking-tighter capitalize">
                                             {item.title}
                                         </h3>
-                                        <p className="text-gray-600 text-base leading-relaxed mb-8 max-w-xl line-clamp-4">
+                                        <p className="text-gray-600 text-base leading-relaxed mb-8 max-w-xl line-clamp-4 break-all">
                                             {item.description}
                                         </p>
                                     </div>
