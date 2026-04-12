@@ -1,0 +1,303 @@
+generator client {
+  provider        = "prisma-client-js"
+  output          = "../generated/prisma"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model User {
+  id             Int            @id @default(autoincrement())
+  fullname       String
+  email          String         @unique
+  password       String
+  phone          String?
+  companyName    String?
+  streetAddress  String?
+  streetAddress2 String?
+  city           String?
+  state          String?
+  country        String         @default("Somalia")
+  roleId         Int
+  role           Role           @relation(fields: [roleId], references: [id])
+  announcements  Announcement[]
+  transactions   Transaction[]
+  deviceTokens   DeviceToken[]
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+}
+
+model Role {
+  id          Int             @id @default(autoincrement())
+  name        String          @unique
+  description String?
+  users       User[]
+  permissions RolePermission?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+}
+
+model RolePermission {
+  id          Int                    @id @default(autoincrement())
+  roleId      Int                    @unique
+  role        Role                   @relation(fields: [roleId], references: [id])
+  menusAccess PermissionMenuAccess[]
+  createdAt   DateTime               @default(now())
+  updatedAt   DateTime               @updatedAt
+}
+
+model PermissionMenuAccess {
+  id           Int                 @id @default(autoincrement())
+  permissionId Int
+  permission   RolePermission      @relation(fields: [permissionId], references: [id])
+  menuId       Int
+  menu         Menu                @relation(fields: [menuId], references: [id])
+  subMenus     PermissionSubMenu[]
+}
+
+model PermissionSubMenu {
+  id                     Int                  @id @default(autoincrement())
+  permissionMenuAccessId Int
+  permissionMenuAccess   PermissionMenuAccess @relation(fields: [permissionMenuAccessId], references: [id])
+  subMenuId              Int
+}
+
+model Menu {
+  id            Int                    @id @default(autoincrement())
+  title         String                 @unique
+  icon          String?
+  url           String?
+  isCollapsible Boolean                @default(false)
+  subMenus      SubMenu[]
+  permissions   PermissionMenuAccess[]
+  createdAt     DateTime               @default(now())
+  updatedAt     DateTime               @updatedAt
+}
+
+model SubMenu {
+  id        Int      @id @default(autoincrement())
+  menuId    Int
+  menu      Menu     @relation(fields: [menuId], references: [id])
+  title     String
+  url       String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Blog {
+  id            Int       @id @default(autoincrement())
+  title         String
+  slug          String    @unique
+  content       String    @db.LongText
+  author        String
+  featuredImage String
+  publishedDate DateTime?
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+}
+
+model Achievement {
+  id        Int      @id @default(autoincrement())
+  title     String
+  count     Int
+  icon      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Announcement {
+  id          Int      @id @default(autoincrement())
+  title       String
+  message     String   @db.LongText
+  startDate   DateTime
+  endDate     DateTime
+  createdById Int
+  createdBy   User     @relation(fields: [createdById], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Career {
+  id          Int      @id @default(autoincrement())
+  title       String
+  type        String   @default("Full-time") // Full-time, Part-time, Internship
+  location    String
+  description String   @db.LongText
+  postedDate  DateTime
+  expireDate  DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model DomainPrice {
+  id        Int      @id @default(autoincrement())
+  tld       String   @unique
+  price     Float
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model EventNews {
+  id          Int      @id @default(autoincrement())
+  title       String
+  type        String // event, news
+  date        DateTime
+  description String   @db.LongText
+  isPublished Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model HostingPackage {
+  id           Int           @id @default(autoincrement())
+  name         String
+  desc         String?       @db.LongText
+  price        Float
+  pudgeText    String?
+  features     Json? // Custom scalar string array
+  createdAt    DateTime      @default(now())
+  transactions Transaction[]
+}
+
+model Portfolio {
+  id               Int                @id @default(autoincrement())
+  title            String
+  mainImage        String
+  description      String?            @db.LongText
+  year             String?
+  industry         String?
+  projectDirection Json? // String array
+  gallery          PortfolioGallery[]
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+}
+
+model PortfolioGallery {
+  id          Int       @id @default(autoincrement())
+  portfolioId Int
+  portfolio   Portfolio @relation(fields: [portfolioId], references: [id])
+  imagePath   String
+}
+
+model Team {
+  id        Int          @id @default(autoincrement())
+  name      String
+  position  String
+  image     String
+  socials   TeamSocial[]
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+}
+
+model TeamSocial {
+  id       Int    @id @default(autoincrement())
+  teamId   Int
+  team     Team   @relation(fields: [teamId], references: [id])
+  platform String // facebook, twitter, linkedin, github etc
+  url      String
+}
+
+model Testimonial {
+  id          Int      @id @default(autoincrement())
+  clientName  String
+  clientTitle String
+  clientImage String
+  message     String   @db.LongText
+  rating      Int      @default(5)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Transaction {
+  id                 Int             @id @default(autoincrement())
+  domainName         String?
+  serviceId          Int?
+  service            Service?        @relation(fields: [serviceId], references: [id])
+  hostingPackageId   Int?
+  hostingPackage     HostingPackage? @relation(fields: [hostingPackageId], references: [id])
+  packageId          String?
+  userId             Int
+  user               User            @relation(fields: [userId], references: [id])
+  type               String // register, service_payment, hosting_payment
+  amount             Float
+  status             String          @default("pending") // pending, completed, failed
+  paymentReferenceId String?
+  currency           String          @default("USD")
+  description        String?         @db.LongText
+  paymentMethod      String? // evc, zaad, card
+  completedAt        DateTime?
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+}
+
+model Contact {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  phone     String
+  subject   String
+  message   String   @db.LongText
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model MajorClient {
+  id          Int                @id @default(autoincrement())
+  description String             @db.LongText
+  images      MajorClientImage[]
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+}
+
+model MajorClientImage {
+  id            Int         @id @default(autoincrement())
+  majorClientId Int
+  majorClient   MajorClient @relation(fields: [majorClientId], references: [id])
+  imagePath     String
+}
+
+model Service {
+  id           Int              @id @default(autoincrement())
+  serviceTitle String
+  serviceIcon  String
+  packages     ServicePackage[]
+  transactions Transaction[]
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+}
+
+model ServicePackage {
+  id           Int                     @id @default(autoincrement())
+  serviceId    Int
+  service      Service                 @relation(fields: [serviceId], references: [id])
+  packageTitle String
+  price        Float
+  features     ServicePackageFeature[]
+}
+
+model ServicePackageFeature {
+  id               Int            @id @default(autoincrement())
+  servicePackageId Int
+  servicePackage   ServicePackage @relation(fields: [servicePackageId], references: [id])
+  feature          String
+}
+
+model Subscriber {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model DeviceToken {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  userId    Int?
+  user      User?    @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
