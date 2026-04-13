@@ -19,6 +19,11 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  */
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>
 /**
+ * Model BonusHistory
+ * 
+ */
+export type BonusHistory = $Result.DefaultSelection<Prisma.$BonusHistoryPayload>
+/**
  * Model Role
  * 
  */
@@ -284,6 +289,16 @@ export class PrismaClient<
     * ```
     */
   get user(): Prisma.UserDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.bonusHistory`: Exposes CRUD operations for the **BonusHistory** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more BonusHistories
+    * const bonusHistories = await prisma.bonusHistory.findMany()
+    * ```
+    */
+  get bonusHistory(): Prisma.BonusHistoryDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.role`: Exposes CRUD operations for the **Role** model.
@@ -989,6 +1004,7 @@ export namespace Prisma {
 
   export const ModelName: {
     User: 'User',
+    BonusHistory: 'BonusHistory',
     Role: 'Role',
     RolePermission: 'RolePermission',
     PermissionMenuAccess: 'PermissionMenuAccess',
@@ -1031,7 +1047,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "role" | "rolePermission" | "permissionMenuAccess" | "permissionSubMenu" | "menu" | "subMenu" | "blog" | "achievement" | "announcement" | "career" | "domainPrice" | "eventNews" | "hostingPackage" | "portfolio" | "portfolioGallery" | "team" | "teamSocial" | "testimonial" | "transaction" | "contact" | "majorClient" | "majorClientImage" | "service" | "servicePackage" | "servicePackageFeature" | "subscriber" | "deviceToken"
+      modelProps: "user" | "bonusHistory" | "role" | "rolePermission" | "permissionMenuAccess" | "permissionSubMenu" | "menu" | "subMenu" | "blog" | "achievement" | "announcement" | "career" | "domainPrice" | "eventNews" | "hostingPackage" | "portfolio" | "portfolioGallery" | "team" | "teamSocial" | "testimonial" | "transaction" | "contact" | "majorClient" | "majorClientImage" | "service" | "servicePackage" | "servicePackageFeature" | "subscriber" | "deviceToken"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1098,6 +1114,72 @@ export namespace Prisma {
           count: {
             args: Prisma.UserCountArgs<ExtArgs>
             result: $Utils.Optional<UserCountAggregateOutputType> | number
+          }
+        }
+      }
+      BonusHistory: {
+        payload: Prisma.$BonusHistoryPayload<ExtArgs>
+        fields: Prisma.BonusHistoryFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.BonusHistoryFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BonusHistoryPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.BonusHistoryFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BonusHistoryPayload>
+          }
+          findFirst: {
+            args: Prisma.BonusHistoryFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BonusHistoryPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.BonusHistoryFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BonusHistoryPayload>
+          }
+          findMany: {
+            args: Prisma.BonusHistoryFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BonusHistoryPayload>[]
+          }
+          create: {
+            args: Prisma.BonusHistoryCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BonusHistoryPayload>
+          }
+          createMany: {
+            args: Prisma.BonusHistoryCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.BonusHistoryDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BonusHistoryPayload>
+          }
+          update: {
+            args: Prisma.BonusHistoryUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BonusHistoryPayload>
+          }
+          deleteMany: {
+            args: Prisma.BonusHistoryDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.BonusHistoryUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.BonusHistoryUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BonusHistoryPayload>
+          }
+          aggregate: {
+            args: Prisma.BonusHistoryAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBonusHistory>
+          }
+          groupBy: {
+            args: Prisma.BonusHistoryGroupByArgs<ExtArgs>
+            result: $Utils.Optional<BonusHistoryGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.BonusHistoryCountArgs<ExtArgs>
+            result: $Utils.Optional<BonusHistoryCountAggregateOutputType> | number
           }
         }
       }
@@ -2992,6 +3074,7 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     user?: UserOmit
+    bonusHistory?: BonusHistoryOmit
     role?: RoleOmit
     rolePermission?: RolePermissionOmit
     permissionMenuAccess?: PermissionMenuAccessOmit
@@ -3099,12 +3182,14 @@ export namespace Prisma {
    */
 
   export type UserCountOutputType = {
+    bonusHistory: number
     announcements: number
     transactions: number
     deviceTokens: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    bonusHistory?: boolean | UserCountOutputTypeCountBonusHistoryArgs
     announcements?: boolean | UserCountOutputTypeCountAnnouncementsArgs
     transactions?: boolean | UserCountOutputTypeCountTransactionsArgs
     deviceTokens?: boolean | UserCountOutputTypeCountDeviceTokensArgs
@@ -3119,6 +3204,13 @@ export namespace Prisma {
      * Select specific fields to fetch from the UserCountOutputType
      */
     select?: UserCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountBonusHistoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BonusHistoryWhereInput
   }
 
   /**
@@ -3490,11 +3582,13 @@ export namespace Prisma {
   export type UserAvgAggregateOutputType = {
     id: number | null
     roleId: number | null
+    bonus: number | null
   }
 
   export type UserSumAggregateOutputType = {
     id: number | null
     roleId: number | null
+    bonus: number | null
   }
 
   export type UserMinAggregateOutputType = {
@@ -3510,6 +3604,9 @@ export namespace Prisma {
     state: string | null
     country: string | null
     roleId: number | null
+    bonus: number | null
+    registerSource: string | null
+    bonusStatus: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -3527,6 +3624,9 @@ export namespace Prisma {
     state: string | null
     country: string | null
     roleId: number | null
+    bonus: number | null
+    registerSource: string | null
+    bonusStatus: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -3544,6 +3644,9 @@ export namespace Prisma {
     state: number
     country: number
     roleId: number
+    bonus: number
+    registerSource: number
+    bonusStatus: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -3553,11 +3656,13 @@ export namespace Prisma {
   export type UserAvgAggregateInputType = {
     id?: true
     roleId?: true
+    bonus?: true
   }
 
   export type UserSumAggregateInputType = {
     id?: true
     roleId?: true
+    bonus?: true
   }
 
   export type UserMinAggregateInputType = {
@@ -3573,6 +3678,9 @@ export namespace Prisma {
     state?: true
     country?: true
     roleId?: true
+    bonus?: true
+    registerSource?: true
+    bonusStatus?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -3590,6 +3698,9 @@ export namespace Prisma {
     state?: true
     country?: true
     roleId?: true
+    bonus?: true
+    registerSource?: true
+    bonusStatus?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -3607,6 +3718,9 @@ export namespace Prisma {
     state?: true
     country?: true
     roleId?: true
+    bonus?: true
+    registerSource?: true
+    bonusStatus?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -3711,6 +3825,9 @@ export namespace Prisma {
     state: string | null
     country: string
     roleId: number
+    bonus: number
+    registerSource: string
+    bonusStatus: string
     createdAt: Date
     updatedAt: Date
     _count: UserCountAggregateOutputType | null
@@ -3747,9 +3864,13 @@ export namespace Prisma {
     state?: boolean
     country?: boolean
     roleId?: boolean
+    bonus?: boolean
+    registerSource?: boolean
+    bonusStatus?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     role?: boolean | RoleDefaultArgs<ExtArgs>
+    bonusHistory?: boolean | User$bonusHistoryArgs<ExtArgs>
     announcements?: boolean | User$announcementsArgs<ExtArgs>
     transactions?: boolean | User$transactionsArgs<ExtArgs>
     deviceTokens?: boolean | User$deviceTokensArgs<ExtArgs>
@@ -3771,13 +3892,17 @@ export namespace Prisma {
     state?: boolean
     country?: boolean
     roleId?: boolean
+    bonus?: boolean
+    registerSource?: boolean
+    bonusStatus?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fullname" | "email" | "password" | "phone" | "companyName" | "streetAddress" | "streetAddress2" | "city" | "state" | "country" | "roleId" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fullname" | "email" | "password" | "phone" | "companyName" | "streetAddress" | "streetAddress2" | "city" | "state" | "country" | "roleId" | "bonus" | "registerSource" | "bonusStatus" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     role?: boolean | RoleDefaultArgs<ExtArgs>
+    bonusHistory?: boolean | User$bonusHistoryArgs<ExtArgs>
     announcements?: boolean | User$announcementsArgs<ExtArgs>
     transactions?: boolean | User$transactionsArgs<ExtArgs>
     deviceTokens?: boolean | User$deviceTokensArgs<ExtArgs>
@@ -3788,6 +3913,7 @@ export namespace Prisma {
     name: "User"
     objects: {
       role: Prisma.$RolePayload<ExtArgs>
+      bonusHistory: Prisma.$BonusHistoryPayload<ExtArgs>[]
       announcements: Prisma.$AnnouncementPayload<ExtArgs>[]
       transactions: Prisma.$TransactionPayload<ExtArgs>[]
       deviceTokens: Prisma.$DeviceTokenPayload<ExtArgs>[]
@@ -3805,6 +3931,9 @@ export namespace Prisma {
       state: string | null
       country: string
       roleId: number
+      bonus: number
+      registerSource: string
+      bonusStatus: string
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["user"]>
@@ -4148,6 +4277,7 @@ export namespace Prisma {
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     role<T extends RoleDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RoleDefaultArgs<ExtArgs>>): Prisma__RoleClient<$Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    bonusHistory<T extends User$bonusHistoryArgs<ExtArgs> = {}>(args?: Subset<T, User$bonusHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BonusHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     announcements<T extends User$announcementsArgs<ExtArgs> = {}>(args?: Subset<T, User$announcementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AnnouncementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     transactions<T extends User$transactionsArgs<ExtArgs> = {}>(args?: Subset<T, User$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     deviceTokens<T extends User$deviceTokensArgs<ExtArgs> = {}>(args?: Subset<T, User$deviceTokensArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DeviceTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -4192,6 +4322,9 @@ export namespace Prisma {
     readonly state: FieldRef<"User", 'String'>
     readonly country: FieldRef<"User", 'String'>
     readonly roleId: FieldRef<"User", 'Int'>
+    readonly bonus: FieldRef<"User", 'Int'>
+    readonly registerSource: FieldRef<"User", 'String'>
+    readonly bonusStatus: FieldRef<"User", 'String'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
   }
@@ -4542,6 +4675,30 @@ export namespace Prisma {
   }
 
   /**
+   * User.bonusHistory
+   */
+  export type User$bonusHistoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BonusHistory
+     */
+    select?: BonusHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BonusHistory
+     */
+    omit?: BonusHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BonusHistoryInclude<ExtArgs> | null
+    where?: BonusHistoryWhereInput
+    orderBy?: BonusHistoryOrderByWithRelationInput | BonusHistoryOrderByWithRelationInput[]
+    cursor?: BonusHistoryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BonusHistoryScalarFieldEnum | BonusHistoryScalarFieldEnum[]
+  }
+
+  /**
    * User.announcements
    */
   export type User$announcementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4629,6 +4786,993 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: UserInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model BonusHistory
+   */
+
+  export type AggregateBonusHistory = {
+    _count: BonusHistoryCountAggregateOutputType | null
+    _avg: BonusHistoryAvgAggregateOutputType | null
+    _sum: BonusHistorySumAggregateOutputType | null
+    _min: BonusHistoryMinAggregateOutputType | null
+    _max: BonusHistoryMaxAggregateOutputType | null
+  }
+
+  export type BonusHistoryAvgAggregateOutputType = {
+    id: number | null
+    userId: number | null
+    amount: number | null
+  }
+
+  export type BonusHistorySumAggregateOutputType = {
+    id: number | null
+    userId: number | null
+    amount: number | null
+  }
+
+  export type BonusHistoryMinAggregateOutputType = {
+    id: number | null
+    userId: number | null
+    amount: number | null
+    reason: string | null
+    type: string | null
+    createdAt: Date | null
+  }
+
+  export type BonusHistoryMaxAggregateOutputType = {
+    id: number | null
+    userId: number | null
+    amount: number | null
+    reason: string | null
+    type: string | null
+    createdAt: Date | null
+  }
+
+  export type BonusHistoryCountAggregateOutputType = {
+    id: number
+    userId: number
+    amount: number
+    reason: number
+    type: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type BonusHistoryAvgAggregateInputType = {
+    id?: true
+    userId?: true
+    amount?: true
+  }
+
+  export type BonusHistorySumAggregateInputType = {
+    id?: true
+    userId?: true
+    amount?: true
+  }
+
+  export type BonusHistoryMinAggregateInputType = {
+    id?: true
+    userId?: true
+    amount?: true
+    reason?: true
+    type?: true
+    createdAt?: true
+  }
+
+  export type BonusHistoryMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    amount?: true
+    reason?: true
+    type?: true
+    createdAt?: true
+  }
+
+  export type BonusHistoryCountAggregateInputType = {
+    id?: true
+    userId?: true
+    amount?: true
+    reason?: true
+    type?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type BonusHistoryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BonusHistory to aggregate.
+     */
+    where?: BonusHistoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BonusHistories to fetch.
+     */
+    orderBy?: BonusHistoryOrderByWithRelationInput | BonusHistoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: BonusHistoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BonusHistories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BonusHistories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned BonusHistories
+    **/
+    _count?: true | BonusHistoryCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: BonusHistoryAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: BonusHistorySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: BonusHistoryMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: BonusHistoryMaxAggregateInputType
+  }
+
+  export type GetBonusHistoryAggregateType<T extends BonusHistoryAggregateArgs> = {
+        [P in keyof T & keyof AggregateBonusHistory]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBonusHistory[P]>
+      : GetScalarType<T[P], AggregateBonusHistory[P]>
+  }
+
+
+
+
+  export type BonusHistoryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BonusHistoryWhereInput
+    orderBy?: BonusHistoryOrderByWithAggregationInput | BonusHistoryOrderByWithAggregationInput[]
+    by: BonusHistoryScalarFieldEnum[] | BonusHistoryScalarFieldEnum
+    having?: BonusHistoryScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: BonusHistoryCountAggregateInputType | true
+    _avg?: BonusHistoryAvgAggregateInputType
+    _sum?: BonusHistorySumAggregateInputType
+    _min?: BonusHistoryMinAggregateInputType
+    _max?: BonusHistoryMaxAggregateInputType
+  }
+
+  export type BonusHistoryGroupByOutputType = {
+    id: number
+    userId: number
+    amount: number
+    reason: string
+    type: string
+    createdAt: Date
+    _count: BonusHistoryCountAggregateOutputType | null
+    _avg: BonusHistoryAvgAggregateOutputType | null
+    _sum: BonusHistorySumAggregateOutputType | null
+    _min: BonusHistoryMinAggregateOutputType | null
+    _max: BonusHistoryMaxAggregateOutputType | null
+  }
+
+  type GetBonusHistoryGroupByPayload<T extends BonusHistoryGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<BonusHistoryGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof BonusHistoryGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], BonusHistoryGroupByOutputType[P]>
+            : GetScalarType<T[P], BonusHistoryGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type BonusHistorySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    amount?: boolean
+    reason?: boolean
+    type?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["bonusHistory"]>
+
+
+
+  export type BonusHistorySelectScalar = {
+    id?: boolean
+    userId?: boolean
+    amount?: boolean
+    reason?: boolean
+    type?: boolean
+    createdAt?: boolean
+  }
+
+  export type BonusHistoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "amount" | "reason" | "type" | "createdAt", ExtArgs["result"]["bonusHistory"]>
+  export type BonusHistoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $BonusHistoryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "BonusHistory"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      userId: number
+      amount: number
+      reason: string
+      type: string
+      createdAt: Date
+    }, ExtArgs["result"]["bonusHistory"]>
+    composites: {}
+  }
+
+  type BonusHistoryGetPayload<S extends boolean | null | undefined | BonusHistoryDefaultArgs> = $Result.GetResult<Prisma.$BonusHistoryPayload, S>
+
+  type BonusHistoryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<BonusHistoryFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: BonusHistoryCountAggregateInputType | true
+    }
+
+  export interface BonusHistoryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['BonusHistory'], meta: { name: 'BonusHistory' } }
+    /**
+     * Find zero or one BonusHistory that matches the filter.
+     * @param {BonusHistoryFindUniqueArgs} args - Arguments to find a BonusHistory
+     * @example
+     * // Get one BonusHistory
+     * const bonusHistory = await prisma.bonusHistory.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends BonusHistoryFindUniqueArgs>(args: SelectSubset<T, BonusHistoryFindUniqueArgs<ExtArgs>>): Prisma__BonusHistoryClient<$Result.GetResult<Prisma.$BonusHistoryPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one BonusHistory that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {BonusHistoryFindUniqueOrThrowArgs} args - Arguments to find a BonusHistory
+     * @example
+     * // Get one BonusHistory
+     * const bonusHistory = await prisma.bonusHistory.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends BonusHistoryFindUniqueOrThrowArgs>(args: SelectSubset<T, BonusHistoryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BonusHistoryClient<$Result.GetResult<Prisma.$BonusHistoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BonusHistory that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BonusHistoryFindFirstArgs} args - Arguments to find a BonusHistory
+     * @example
+     * // Get one BonusHistory
+     * const bonusHistory = await prisma.bonusHistory.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends BonusHistoryFindFirstArgs>(args?: SelectSubset<T, BonusHistoryFindFirstArgs<ExtArgs>>): Prisma__BonusHistoryClient<$Result.GetResult<Prisma.$BonusHistoryPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BonusHistory that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BonusHistoryFindFirstOrThrowArgs} args - Arguments to find a BonusHistory
+     * @example
+     * // Get one BonusHistory
+     * const bonusHistory = await prisma.bonusHistory.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends BonusHistoryFindFirstOrThrowArgs>(args?: SelectSubset<T, BonusHistoryFindFirstOrThrowArgs<ExtArgs>>): Prisma__BonusHistoryClient<$Result.GetResult<Prisma.$BonusHistoryPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more BonusHistories that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BonusHistoryFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all BonusHistories
+     * const bonusHistories = await prisma.bonusHistory.findMany()
+     * 
+     * // Get first 10 BonusHistories
+     * const bonusHistories = await prisma.bonusHistory.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const bonusHistoryWithIdOnly = await prisma.bonusHistory.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends BonusHistoryFindManyArgs>(args?: SelectSubset<T, BonusHistoryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BonusHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a BonusHistory.
+     * @param {BonusHistoryCreateArgs} args - Arguments to create a BonusHistory.
+     * @example
+     * // Create one BonusHistory
+     * const BonusHistory = await prisma.bonusHistory.create({
+     *   data: {
+     *     // ... data to create a BonusHistory
+     *   }
+     * })
+     * 
+     */
+    create<T extends BonusHistoryCreateArgs>(args: SelectSubset<T, BonusHistoryCreateArgs<ExtArgs>>): Prisma__BonusHistoryClient<$Result.GetResult<Prisma.$BonusHistoryPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many BonusHistories.
+     * @param {BonusHistoryCreateManyArgs} args - Arguments to create many BonusHistories.
+     * @example
+     * // Create many BonusHistories
+     * const bonusHistory = await prisma.bonusHistory.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends BonusHistoryCreateManyArgs>(args?: SelectSubset<T, BonusHistoryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a BonusHistory.
+     * @param {BonusHistoryDeleteArgs} args - Arguments to delete one BonusHistory.
+     * @example
+     * // Delete one BonusHistory
+     * const BonusHistory = await prisma.bonusHistory.delete({
+     *   where: {
+     *     // ... filter to delete one BonusHistory
+     *   }
+     * })
+     * 
+     */
+    delete<T extends BonusHistoryDeleteArgs>(args: SelectSubset<T, BonusHistoryDeleteArgs<ExtArgs>>): Prisma__BonusHistoryClient<$Result.GetResult<Prisma.$BonusHistoryPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one BonusHistory.
+     * @param {BonusHistoryUpdateArgs} args - Arguments to update one BonusHistory.
+     * @example
+     * // Update one BonusHistory
+     * const bonusHistory = await prisma.bonusHistory.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends BonusHistoryUpdateArgs>(args: SelectSubset<T, BonusHistoryUpdateArgs<ExtArgs>>): Prisma__BonusHistoryClient<$Result.GetResult<Prisma.$BonusHistoryPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more BonusHistories.
+     * @param {BonusHistoryDeleteManyArgs} args - Arguments to filter BonusHistories to delete.
+     * @example
+     * // Delete a few BonusHistories
+     * const { count } = await prisma.bonusHistory.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends BonusHistoryDeleteManyArgs>(args?: SelectSubset<T, BonusHistoryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BonusHistories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BonusHistoryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many BonusHistories
+     * const bonusHistory = await prisma.bonusHistory.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends BonusHistoryUpdateManyArgs>(args: SelectSubset<T, BonusHistoryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one BonusHistory.
+     * @param {BonusHistoryUpsertArgs} args - Arguments to update or create a BonusHistory.
+     * @example
+     * // Update or create a BonusHistory
+     * const bonusHistory = await prisma.bonusHistory.upsert({
+     *   create: {
+     *     // ... data to create a BonusHistory
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the BonusHistory we want to update
+     *   }
+     * })
+     */
+    upsert<T extends BonusHistoryUpsertArgs>(args: SelectSubset<T, BonusHistoryUpsertArgs<ExtArgs>>): Prisma__BonusHistoryClient<$Result.GetResult<Prisma.$BonusHistoryPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of BonusHistories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BonusHistoryCountArgs} args - Arguments to filter BonusHistories to count.
+     * @example
+     * // Count the number of BonusHistories
+     * const count = await prisma.bonusHistory.count({
+     *   where: {
+     *     // ... the filter for the BonusHistories we want to count
+     *   }
+     * })
+    **/
+    count<T extends BonusHistoryCountArgs>(
+      args?: Subset<T, BonusHistoryCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], BonusHistoryCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a BonusHistory.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BonusHistoryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends BonusHistoryAggregateArgs>(args: Subset<T, BonusHistoryAggregateArgs>): Prisma.PrismaPromise<GetBonusHistoryAggregateType<T>>
+
+    /**
+     * Group by BonusHistory.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BonusHistoryGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends BonusHistoryGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: BonusHistoryGroupByArgs['orderBy'] }
+        : { orderBy?: BonusHistoryGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, BonusHistoryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBonusHistoryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the BonusHistory model
+   */
+  readonly fields: BonusHistoryFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for BonusHistory.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__BonusHistoryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the BonusHistory model
+   */
+  interface BonusHistoryFieldRefs {
+    readonly id: FieldRef<"BonusHistory", 'Int'>
+    readonly userId: FieldRef<"BonusHistory", 'Int'>
+    readonly amount: FieldRef<"BonusHistory", 'Int'>
+    readonly reason: FieldRef<"BonusHistory", 'String'>
+    readonly type: FieldRef<"BonusHistory", 'String'>
+    readonly createdAt: FieldRef<"BonusHistory", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * BonusHistory findUnique
+   */
+  export type BonusHistoryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BonusHistory
+     */
+    select?: BonusHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BonusHistory
+     */
+    omit?: BonusHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BonusHistoryInclude<ExtArgs> | null
+    /**
+     * Filter, which BonusHistory to fetch.
+     */
+    where: BonusHistoryWhereUniqueInput
+  }
+
+  /**
+   * BonusHistory findUniqueOrThrow
+   */
+  export type BonusHistoryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BonusHistory
+     */
+    select?: BonusHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BonusHistory
+     */
+    omit?: BonusHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BonusHistoryInclude<ExtArgs> | null
+    /**
+     * Filter, which BonusHistory to fetch.
+     */
+    where: BonusHistoryWhereUniqueInput
+  }
+
+  /**
+   * BonusHistory findFirst
+   */
+  export type BonusHistoryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BonusHistory
+     */
+    select?: BonusHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BonusHistory
+     */
+    omit?: BonusHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BonusHistoryInclude<ExtArgs> | null
+    /**
+     * Filter, which BonusHistory to fetch.
+     */
+    where?: BonusHistoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BonusHistories to fetch.
+     */
+    orderBy?: BonusHistoryOrderByWithRelationInput | BonusHistoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BonusHistories.
+     */
+    cursor?: BonusHistoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BonusHistories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BonusHistories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BonusHistories.
+     */
+    distinct?: BonusHistoryScalarFieldEnum | BonusHistoryScalarFieldEnum[]
+  }
+
+  /**
+   * BonusHistory findFirstOrThrow
+   */
+  export type BonusHistoryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BonusHistory
+     */
+    select?: BonusHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BonusHistory
+     */
+    omit?: BonusHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BonusHistoryInclude<ExtArgs> | null
+    /**
+     * Filter, which BonusHistory to fetch.
+     */
+    where?: BonusHistoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BonusHistories to fetch.
+     */
+    orderBy?: BonusHistoryOrderByWithRelationInput | BonusHistoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BonusHistories.
+     */
+    cursor?: BonusHistoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BonusHistories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BonusHistories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BonusHistories.
+     */
+    distinct?: BonusHistoryScalarFieldEnum | BonusHistoryScalarFieldEnum[]
+  }
+
+  /**
+   * BonusHistory findMany
+   */
+  export type BonusHistoryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BonusHistory
+     */
+    select?: BonusHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BonusHistory
+     */
+    omit?: BonusHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BonusHistoryInclude<ExtArgs> | null
+    /**
+     * Filter, which BonusHistories to fetch.
+     */
+    where?: BonusHistoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BonusHistories to fetch.
+     */
+    orderBy?: BonusHistoryOrderByWithRelationInput | BonusHistoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing BonusHistories.
+     */
+    cursor?: BonusHistoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BonusHistories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BonusHistories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BonusHistories.
+     */
+    distinct?: BonusHistoryScalarFieldEnum | BonusHistoryScalarFieldEnum[]
+  }
+
+  /**
+   * BonusHistory create
+   */
+  export type BonusHistoryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BonusHistory
+     */
+    select?: BonusHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BonusHistory
+     */
+    omit?: BonusHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BonusHistoryInclude<ExtArgs> | null
+    /**
+     * The data needed to create a BonusHistory.
+     */
+    data: XOR<BonusHistoryCreateInput, BonusHistoryUncheckedCreateInput>
+  }
+
+  /**
+   * BonusHistory createMany
+   */
+  export type BonusHistoryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many BonusHistories.
+     */
+    data: BonusHistoryCreateManyInput | BonusHistoryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * BonusHistory update
+   */
+  export type BonusHistoryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BonusHistory
+     */
+    select?: BonusHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BonusHistory
+     */
+    omit?: BonusHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BonusHistoryInclude<ExtArgs> | null
+    /**
+     * The data needed to update a BonusHistory.
+     */
+    data: XOR<BonusHistoryUpdateInput, BonusHistoryUncheckedUpdateInput>
+    /**
+     * Choose, which BonusHistory to update.
+     */
+    where: BonusHistoryWhereUniqueInput
+  }
+
+  /**
+   * BonusHistory updateMany
+   */
+  export type BonusHistoryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update BonusHistories.
+     */
+    data: XOR<BonusHistoryUpdateManyMutationInput, BonusHistoryUncheckedUpdateManyInput>
+    /**
+     * Filter which BonusHistories to update
+     */
+    where?: BonusHistoryWhereInput
+    /**
+     * Limit how many BonusHistories to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * BonusHistory upsert
+   */
+  export type BonusHistoryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BonusHistory
+     */
+    select?: BonusHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BonusHistory
+     */
+    omit?: BonusHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BonusHistoryInclude<ExtArgs> | null
+    /**
+     * The filter to search for the BonusHistory to update in case it exists.
+     */
+    where: BonusHistoryWhereUniqueInput
+    /**
+     * In case the BonusHistory found by the `where` argument doesn't exist, create a new BonusHistory with this data.
+     */
+    create: XOR<BonusHistoryCreateInput, BonusHistoryUncheckedCreateInput>
+    /**
+     * In case the BonusHistory was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<BonusHistoryUpdateInput, BonusHistoryUncheckedUpdateInput>
+  }
+
+  /**
+   * BonusHistory delete
+   */
+  export type BonusHistoryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BonusHistory
+     */
+    select?: BonusHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BonusHistory
+     */
+    omit?: BonusHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BonusHistoryInclude<ExtArgs> | null
+    /**
+     * Filter which BonusHistory to delete.
+     */
+    where: BonusHistoryWhereUniqueInput
+  }
+
+  /**
+   * BonusHistory deleteMany
+   */
+  export type BonusHistoryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BonusHistories to delete
+     */
+    where?: BonusHistoryWhereInput
+    /**
+     * Limit how many BonusHistories to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * BonusHistory without action
+   */
+  export type BonusHistoryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BonusHistory
+     */
+    select?: BonusHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BonusHistory
+     */
+    omit?: BonusHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BonusHistoryInclude<ExtArgs> | null
   }
 
 
@@ -31238,11 +32382,26 @@ export namespace Prisma {
     state: 'state',
     country: 'country',
     roleId: 'roleId',
+    bonus: 'bonus',
+    registerSource: 'registerSource',
+    bonusStatus: 'bonusStatus',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+  export const BonusHistoryScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    amount: 'amount',
+    reason: 'reason',
+    type: 'type',
+    createdAt: 'createdAt'
+  };
+
+  export type BonusHistoryScalarFieldEnum = (typeof BonusHistoryScalarFieldEnum)[keyof typeof BonusHistoryScalarFieldEnum]
 
 
   export const RoleScalarFieldEnum: {
@@ -31605,10 +32764,20 @@ export namespace Prisma {
     streetAddress2: 'streetAddress2',
     city: 'city',
     state: 'state',
-    country: 'country'
+    country: 'country',
+    registerSource: 'registerSource',
+    bonusStatus: 'bonusStatus'
   };
 
   export type UserOrderByRelevanceFieldEnum = (typeof UserOrderByRelevanceFieldEnum)[keyof typeof UserOrderByRelevanceFieldEnum]
+
+
+  export const BonusHistoryOrderByRelevanceFieldEnum: {
+    reason: 'reason',
+    type: 'type'
+  };
+
+  export type BonusHistoryOrderByRelevanceFieldEnum = (typeof BonusHistoryOrderByRelevanceFieldEnum)[keyof typeof BonusHistoryOrderByRelevanceFieldEnum]
 
 
   export const RoleOrderByRelevanceFieldEnum: {
@@ -31908,9 +33077,13 @@ export namespace Prisma {
     state?: StringNullableFilter<"User"> | string | null
     country?: StringFilter<"User"> | string
     roleId?: IntFilter<"User"> | number
+    bonus?: IntFilter<"User"> | number
+    registerSource?: StringFilter<"User"> | string
+    bonusStatus?: StringFilter<"User"> | string
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     role?: XOR<RoleScalarRelationFilter, RoleWhereInput>
+    bonusHistory?: BonusHistoryListRelationFilter
     announcements?: AnnouncementListRelationFilter
     transactions?: TransactionListRelationFilter
     deviceTokens?: DeviceTokenListRelationFilter
@@ -31929,9 +33102,13 @@ export namespace Prisma {
     state?: SortOrderInput | SortOrder
     country?: SortOrder
     roleId?: SortOrder
+    bonus?: SortOrder
+    registerSource?: SortOrder
+    bonusStatus?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     role?: RoleOrderByWithRelationInput
+    bonusHistory?: BonusHistoryOrderByRelationAggregateInput
     announcements?: AnnouncementOrderByRelationAggregateInput
     transactions?: TransactionOrderByRelationAggregateInput
     deviceTokens?: DeviceTokenOrderByRelationAggregateInput
@@ -31954,9 +33131,13 @@ export namespace Prisma {
     state?: StringNullableFilter<"User"> | string | null
     country?: StringFilter<"User"> | string
     roleId?: IntFilter<"User"> | number
+    bonus?: IntFilter<"User"> | number
+    registerSource?: StringFilter<"User"> | string
+    bonusStatus?: StringFilter<"User"> | string
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     role?: XOR<RoleScalarRelationFilter, RoleWhereInput>
+    bonusHistory?: BonusHistoryListRelationFilter
     announcements?: AnnouncementListRelationFilter
     transactions?: TransactionListRelationFilter
     deviceTokens?: DeviceTokenListRelationFilter
@@ -31975,6 +33156,9 @@ export namespace Prisma {
     state?: SortOrderInput | SortOrder
     country?: SortOrder
     roleId?: SortOrder
+    bonus?: SortOrder
+    registerSource?: SortOrder
+    bonusStatus?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: UserCountOrderByAggregateInput
@@ -32000,8 +33184,74 @@ export namespace Prisma {
     state?: StringNullableWithAggregatesFilter<"User"> | string | null
     country?: StringWithAggregatesFilter<"User"> | string
     roleId?: IntWithAggregatesFilter<"User"> | number
+    bonus?: IntWithAggregatesFilter<"User"> | number
+    registerSource?: StringWithAggregatesFilter<"User"> | string
+    bonusStatus?: StringWithAggregatesFilter<"User"> | string
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
+  }
+
+  export type BonusHistoryWhereInput = {
+    AND?: BonusHistoryWhereInput | BonusHistoryWhereInput[]
+    OR?: BonusHistoryWhereInput[]
+    NOT?: BonusHistoryWhereInput | BonusHistoryWhereInput[]
+    id?: IntFilter<"BonusHistory"> | number
+    userId?: IntFilter<"BonusHistory"> | number
+    amount?: IntFilter<"BonusHistory"> | number
+    reason?: StringFilter<"BonusHistory"> | string
+    type?: StringFilter<"BonusHistory"> | string
+    createdAt?: DateTimeFilter<"BonusHistory"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type BonusHistoryOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    amount?: SortOrder
+    reason?: SortOrder
+    type?: SortOrder
+    createdAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+    _relevance?: BonusHistoryOrderByRelevanceInput
+  }
+
+  export type BonusHistoryWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: BonusHistoryWhereInput | BonusHistoryWhereInput[]
+    OR?: BonusHistoryWhereInput[]
+    NOT?: BonusHistoryWhereInput | BonusHistoryWhereInput[]
+    userId?: IntFilter<"BonusHistory"> | number
+    amount?: IntFilter<"BonusHistory"> | number
+    reason?: StringFilter<"BonusHistory"> | string
+    type?: StringFilter<"BonusHistory"> | string
+    createdAt?: DateTimeFilter<"BonusHistory"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type BonusHistoryOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    amount?: SortOrder
+    reason?: SortOrder
+    type?: SortOrder
+    createdAt?: SortOrder
+    _count?: BonusHistoryCountOrderByAggregateInput
+    _avg?: BonusHistoryAvgOrderByAggregateInput
+    _max?: BonusHistoryMaxOrderByAggregateInput
+    _min?: BonusHistoryMinOrderByAggregateInput
+    _sum?: BonusHistorySumOrderByAggregateInput
+  }
+
+  export type BonusHistoryScalarWhereWithAggregatesInput = {
+    AND?: BonusHistoryScalarWhereWithAggregatesInput | BonusHistoryScalarWhereWithAggregatesInput[]
+    OR?: BonusHistoryScalarWhereWithAggregatesInput[]
+    NOT?: BonusHistoryScalarWhereWithAggregatesInput | BonusHistoryScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"BonusHistory"> | number
+    userId?: IntWithAggregatesFilter<"BonusHistory"> | number
+    amount?: IntWithAggregatesFilter<"BonusHistory"> | number
+    reason?: StringWithAggregatesFilter<"BonusHistory"> | string
+    type?: StringWithAggregatesFilter<"BonusHistory"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"BonusHistory"> | Date | string
   }
 
   export type RoleWhereInput = {
@@ -33726,9 +34976,13 @@ export namespace Prisma {
     city?: string | null
     state?: string | null
     country?: string
+    bonus?: number
+    registerSource?: string
+    bonusStatus?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     role: RoleCreateNestedOneWithoutUsersInput
+    bonusHistory?: BonusHistoryCreateNestedManyWithoutUserInput
     announcements?: AnnouncementCreateNestedManyWithoutCreatedByInput
     transactions?: TransactionCreateNestedManyWithoutUserInput
     deviceTokens?: DeviceTokenCreateNestedManyWithoutUserInput
@@ -33747,8 +35001,12 @@ export namespace Prisma {
     state?: string | null
     country?: string
     roleId: number
+    bonus?: number
+    registerSource?: string
+    bonusStatus?: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    bonusHistory?: BonusHistoryUncheckedCreateNestedManyWithoutUserInput
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutCreatedByInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
     deviceTokens?: DeviceTokenUncheckedCreateNestedManyWithoutUserInput
@@ -33765,9 +35023,13 @@ export namespace Prisma {
     city?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     country?: StringFieldUpdateOperationsInput | string
+    bonus?: IntFieldUpdateOperationsInput | number
+    registerSource?: StringFieldUpdateOperationsInput | string
+    bonusStatus?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    bonusHistory?: BonusHistoryUpdateManyWithoutUserNestedInput
     announcements?: AnnouncementUpdateManyWithoutCreatedByNestedInput
     transactions?: TransactionUpdateManyWithoutUserNestedInput
     deviceTokens?: DeviceTokenUpdateManyWithoutUserNestedInput
@@ -33786,8 +35048,12 @@ export namespace Prisma {
     state?: NullableStringFieldUpdateOperationsInput | string | null
     country?: StringFieldUpdateOperationsInput | string
     roleId?: IntFieldUpdateOperationsInput | number
+    bonus?: IntFieldUpdateOperationsInput | number
+    registerSource?: StringFieldUpdateOperationsInput | string
+    bonusStatus?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bonusHistory?: BonusHistoryUncheckedUpdateManyWithoutUserNestedInput
     announcements?: AnnouncementUncheckedUpdateManyWithoutCreatedByNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
     deviceTokens?: DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
@@ -33806,6 +35072,9 @@ export namespace Prisma {
     state?: string | null
     country?: string
     roleId: number
+    bonus?: number
+    registerSource?: string
+    bonusStatus?: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -33821,6 +35090,9 @@ export namespace Prisma {
     city?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     country?: StringFieldUpdateOperationsInput | string
+    bonus?: IntFieldUpdateOperationsInput | number
+    registerSource?: StringFieldUpdateOperationsInput | string
+    bonusStatus?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -33838,8 +35110,70 @@ export namespace Prisma {
     state?: NullableStringFieldUpdateOperationsInput | string | null
     country?: StringFieldUpdateOperationsInput | string
     roleId?: IntFieldUpdateOperationsInput | number
+    bonus?: IntFieldUpdateOperationsInput | number
+    registerSource?: StringFieldUpdateOperationsInput | string
+    bonusStatus?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BonusHistoryCreateInput = {
+    amount: number
+    reason: string
+    type?: string
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutBonusHistoryInput
+  }
+
+  export type BonusHistoryUncheckedCreateInput = {
+    id?: number
+    userId: number
+    amount: number
+    reason: string
+    type?: string
+    createdAt?: Date | string
+  }
+
+  export type BonusHistoryUpdateInput = {
+    amount?: IntFieldUpdateOperationsInput | number
+    reason?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutBonusHistoryNestedInput
+  }
+
+  export type BonusHistoryUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    amount?: IntFieldUpdateOperationsInput | number
+    reason?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BonusHistoryCreateManyInput = {
+    id?: number
+    userId: number
+    amount: number
+    reason: string
+    type?: string
+    createdAt?: Date | string
+  }
+
+  export type BonusHistoryUpdateManyMutationInput = {
+    amount?: IntFieldUpdateOperationsInput | number
+    reason?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BonusHistoryUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    amount?: IntFieldUpdateOperationsInput | number
+    reason?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type RoleCreateInput = {
@@ -35571,6 +36905,12 @@ export namespace Prisma {
     isNot?: RoleWhereInput
   }
 
+  export type BonusHistoryListRelationFilter = {
+    every?: BonusHistoryWhereInput
+    some?: BonusHistoryWhereInput
+    none?: BonusHistoryWhereInput
+  }
+
   export type AnnouncementListRelationFilter = {
     every?: AnnouncementWhereInput
     some?: AnnouncementWhereInput
@@ -35592,6 +36932,10 @@ export namespace Prisma {
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
+  }
+
+  export type BonusHistoryOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type AnnouncementOrderByRelationAggregateInput = {
@@ -35625,6 +36969,9 @@ export namespace Prisma {
     state?: SortOrder
     country?: SortOrder
     roleId?: SortOrder
+    bonus?: SortOrder
+    registerSource?: SortOrder
+    bonusStatus?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -35632,6 +36979,7 @@ export namespace Prisma {
   export type UserAvgOrderByAggregateInput = {
     id?: SortOrder
     roleId?: SortOrder
+    bonus?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -35647,6 +36995,9 @@ export namespace Prisma {
     state?: SortOrder
     country?: SortOrder
     roleId?: SortOrder
+    bonus?: SortOrder
+    registerSource?: SortOrder
+    bonusStatus?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -35664,6 +37015,9 @@ export namespace Prisma {
     state?: SortOrder
     country?: SortOrder
     roleId?: SortOrder
+    bonus?: SortOrder
+    registerSource?: SortOrder
+    bonusStatus?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -35671,6 +37025,7 @@ export namespace Prisma {
   export type UserSumOrderByAggregateInput = {
     id?: SortOrder
     roleId?: SortOrder
+    bonus?: SortOrder
   }
 
   export type IntWithAggregatesFilter<$PrismaModel = never> = {
@@ -35737,6 +37092,56 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type UserScalarRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
+  }
+
+  export type BonusHistoryOrderByRelevanceInput = {
+    fields: BonusHistoryOrderByRelevanceFieldEnum | BonusHistoryOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type BonusHistoryCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    amount?: SortOrder
+    reason?: SortOrder
+    type?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type BonusHistoryAvgOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    amount?: SortOrder
+  }
+
+  export type BonusHistoryMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    amount?: SortOrder
+    reason?: SortOrder
+    type?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type BonusHistoryMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    amount?: SortOrder
+    reason?: SortOrder
+    type?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type BonusHistorySumOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    amount?: SortOrder
   }
 
   export type UserListRelationFilter = {
@@ -36144,11 +37549,6 @@ export namespace Prisma {
   export type AchievementSumOrderByAggregateInput = {
     id?: SortOrder
     count?: SortOrder
-  }
-
-  export type UserScalarRelationFilter = {
-    is?: UserWhereInput
-    isNot?: UserWhereInput
   }
 
   export type AnnouncementOrderByRelevanceInput = {
@@ -37176,6 +38576,13 @@ export namespace Prisma {
     connect?: RoleWhereUniqueInput
   }
 
+  export type BonusHistoryCreateNestedManyWithoutUserInput = {
+    create?: XOR<BonusHistoryCreateWithoutUserInput, BonusHistoryUncheckedCreateWithoutUserInput> | BonusHistoryCreateWithoutUserInput[] | BonusHistoryUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: BonusHistoryCreateOrConnectWithoutUserInput | BonusHistoryCreateOrConnectWithoutUserInput[]
+    createMany?: BonusHistoryCreateManyUserInputEnvelope
+    connect?: BonusHistoryWhereUniqueInput | BonusHistoryWhereUniqueInput[]
+  }
+
   export type AnnouncementCreateNestedManyWithoutCreatedByInput = {
     create?: XOR<AnnouncementCreateWithoutCreatedByInput, AnnouncementUncheckedCreateWithoutCreatedByInput> | AnnouncementCreateWithoutCreatedByInput[] | AnnouncementUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: AnnouncementCreateOrConnectWithoutCreatedByInput | AnnouncementCreateOrConnectWithoutCreatedByInput[]
@@ -37195,6 +38602,13 @@ export namespace Prisma {
     connectOrCreate?: DeviceTokenCreateOrConnectWithoutUserInput | DeviceTokenCreateOrConnectWithoutUserInput[]
     createMany?: DeviceTokenCreateManyUserInputEnvelope
     connect?: DeviceTokenWhereUniqueInput | DeviceTokenWhereUniqueInput[]
+  }
+
+  export type BonusHistoryUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<BonusHistoryCreateWithoutUserInput, BonusHistoryUncheckedCreateWithoutUserInput> | BonusHistoryCreateWithoutUserInput[] | BonusHistoryUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: BonusHistoryCreateOrConnectWithoutUserInput | BonusHistoryCreateOrConnectWithoutUserInput[]
+    createMany?: BonusHistoryCreateManyUserInputEnvelope
+    connect?: BonusHistoryWhereUniqueInput | BonusHistoryWhereUniqueInput[]
   }
 
   export type AnnouncementUncheckedCreateNestedManyWithoutCreatedByInput = {
@@ -37226,6 +38640,14 @@ export namespace Prisma {
     set?: string | null
   }
 
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
   }
@@ -37236,6 +38658,20 @@ export namespace Prisma {
     upsert?: RoleUpsertWithoutUsersInput
     connect?: RoleWhereUniqueInput
     update?: XOR<XOR<RoleUpdateToOneWithWhereWithoutUsersInput, RoleUpdateWithoutUsersInput>, RoleUncheckedUpdateWithoutUsersInput>
+  }
+
+  export type BonusHistoryUpdateManyWithoutUserNestedInput = {
+    create?: XOR<BonusHistoryCreateWithoutUserInput, BonusHistoryUncheckedCreateWithoutUserInput> | BonusHistoryCreateWithoutUserInput[] | BonusHistoryUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: BonusHistoryCreateOrConnectWithoutUserInput | BonusHistoryCreateOrConnectWithoutUserInput[]
+    upsert?: BonusHistoryUpsertWithWhereUniqueWithoutUserInput | BonusHistoryUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: BonusHistoryCreateManyUserInputEnvelope
+    set?: BonusHistoryWhereUniqueInput | BonusHistoryWhereUniqueInput[]
+    disconnect?: BonusHistoryWhereUniqueInput | BonusHistoryWhereUniqueInput[]
+    delete?: BonusHistoryWhereUniqueInput | BonusHistoryWhereUniqueInput[]
+    connect?: BonusHistoryWhereUniqueInput | BonusHistoryWhereUniqueInput[]
+    update?: BonusHistoryUpdateWithWhereUniqueWithoutUserInput | BonusHistoryUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: BonusHistoryUpdateManyWithWhereWithoutUserInput | BonusHistoryUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: BonusHistoryScalarWhereInput | BonusHistoryScalarWhereInput[]
   }
 
   export type AnnouncementUpdateManyWithoutCreatedByNestedInput = {
@@ -37280,12 +38716,18 @@ export namespace Prisma {
     deleteMany?: DeviceTokenScalarWhereInput | DeviceTokenScalarWhereInput[]
   }
 
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
+  export type BonusHistoryUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<BonusHistoryCreateWithoutUserInput, BonusHistoryUncheckedCreateWithoutUserInput> | BonusHistoryCreateWithoutUserInput[] | BonusHistoryUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: BonusHistoryCreateOrConnectWithoutUserInput | BonusHistoryCreateOrConnectWithoutUserInput[]
+    upsert?: BonusHistoryUpsertWithWhereUniqueWithoutUserInput | BonusHistoryUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: BonusHistoryCreateManyUserInputEnvelope
+    set?: BonusHistoryWhereUniqueInput | BonusHistoryWhereUniqueInput[]
+    disconnect?: BonusHistoryWhereUniqueInput | BonusHistoryWhereUniqueInput[]
+    delete?: BonusHistoryWhereUniqueInput | BonusHistoryWhereUniqueInput[]
+    connect?: BonusHistoryWhereUniqueInput | BonusHistoryWhereUniqueInput[]
+    update?: BonusHistoryUpdateWithWhereUniqueWithoutUserInput | BonusHistoryUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: BonusHistoryUpdateManyWithWhereWithoutUserInput | BonusHistoryUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: BonusHistoryScalarWhereInput | BonusHistoryScalarWhereInput[]
   }
 
   export type AnnouncementUncheckedUpdateManyWithoutCreatedByNestedInput = {
@@ -37328,6 +38770,20 @@ export namespace Prisma {
     update?: DeviceTokenUpdateWithWhereUniqueWithoutUserInput | DeviceTokenUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: DeviceTokenUpdateManyWithWhereWithoutUserInput | DeviceTokenUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: DeviceTokenScalarWhereInput | DeviceTokenScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutBonusHistoryInput = {
+    create?: XOR<UserCreateWithoutBonusHistoryInput, UserUncheckedCreateWithoutBonusHistoryInput>
+    connectOrCreate?: UserCreateOrConnectWithoutBonusHistoryInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutBonusHistoryNestedInput = {
+    create?: XOR<UserCreateWithoutBonusHistoryInput, UserUncheckedCreateWithoutBonusHistoryInput>
+    connectOrCreate?: UserCreateOrConnectWithoutBonusHistoryInput
+    upsert?: UserUpsertWithoutBonusHistoryInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutBonusHistoryInput, UserUpdateWithoutBonusHistoryInput>, UserUncheckedUpdateWithoutBonusHistoryInput>
   }
 
   export type UserCreateNestedManyWithoutRoleInput = {
@@ -38372,6 +39828,31 @@ export namespace Prisma {
     create: XOR<RoleCreateWithoutUsersInput, RoleUncheckedCreateWithoutUsersInput>
   }
 
+  export type BonusHistoryCreateWithoutUserInput = {
+    amount: number
+    reason: string
+    type?: string
+    createdAt?: Date | string
+  }
+
+  export type BonusHistoryUncheckedCreateWithoutUserInput = {
+    id?: number
+    amount: number
+    reason: string
+    type?: string
+    createdAt?: Date | string
+  }
+
+  export type BonusHistoryCreateOrConnectWithoutUserInput = {
+    where: BonusHistoryWhereUniqueInput
+    create: XOR<BonusHistoryCreateWithoutUserInput, BonusHistoryUncheckedCreateWithoutUserInput>
+  }
+
+  export type BonusHistoryCreateManyUserInputEnvelope = {
+    data: BonusHistoryCreateManyUserInput | BonusHistoryCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type AnnouncementCreateWithoutCreatedByInput = {
     title: string
     message: string
@@ -38497,6 +39978,34 @@ export namespace Prisma {
     permissions?: RolePermissionUncheckedUpdateOneWithoutRoleNestedInput
   }
 
+  export type BonusHistoryUpsertWithWhereUniqueWithoutUserInput = {
+    where: BonusHistoryWhereUniqueInput
+    update: XOR<BonusHistoryUpdateWithoutUserInput, BonusHistoryUncheckedUpdateWithoutUserInput>
+    create: XOR<BonusHistoryCreateWithoutUserInput, BonusHistoryUncheckedCreateWithoutUserInput>
+  }
+
+  export type BonusHistoryUpdateWithWhereUniqueWithoutUserInput = {
+    where: BonusHistoryWhereUniqueInput
+    data: XOR<BonusHistoryUpdateWithoutUserInput, BonusHistoryUncheckedUpdateWithoutUserInput>
+  }
+
+  export type BonusHistoryUpdateManyWithWhereWithoutUserInput = {
+    where: BonusHistoryScalarWhereInput
+    data: XOR<BonusHistoryUpdateManyMutationInput, BonusHistoryUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type BonusHistoryScalarWhereInput = {
+    AND?: BonusHistoryScalarWhereInput | BonusHistoryScalarWhereInput[]
+    OR?: BonusHistoryScalarWhereInput[]
+    NOT?: BonusHistoryScalarWhereInput | BonusHistoryScalarWhereInput[]
+    id?: IntFilter<"BonusHistory"> | number
+    userId?: IntFilter<"BonusHistory"> | number
+    amount?: IntFilter<"BonusHistory"> | number
+    reason?: StringFilter<"BonusHistory"> | string
+    type?: StringFilter<"BonusHistory"> | string
+    createdAt?: DateTimeFilter<"BonusHistory"> | Date | string
+  }
+
   export type AnnouncementUpsertWithWhereUniqueWithoutCreatedByInput = {
     where: AnnouncementWhereUniqueInput
     update: XOR<AnnouncementUpdateWithoutCreatedByInput, AnnouncementUncheckedUpdateWithoutCreatedByInput>
@@ -38592,6 +40101,112 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"DeviceToken"> | Date | string
   }
 
+  export type UserCreateWithoutBonusHistoryInput = {
+    fullname: string
+    email: string
+    password: string
+    phone?: string | null
+    companyName?: string | null
+    streetAddress?: string | null
+    streetAddress2?: string | null
+    city?: string | null
+    state?: string | null
+    country?: string
+    bonus?: number
+    registerSource?: string
+    bonusStatus?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role: RoleCreateNestedOneWithoutUsersInput
+    announcements?: AnnouncementCreateNestedManyWithoutCreatedByInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    deviceTokens?: DeviceTokenCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutBonusHistoryInput = {
+    id?: number
+    fullname: string
+    email: string
+    password: string
+    phone?: string | null
+    companyName?: string | null
+    streetAddress?: string | null
+    streetAddress2?: string | null
+    city?: string | null
+    state?: string | null
+    country?: string
+    roleId: number
+    bonus?: number
+    registerSource?: string
+    bonusStatus?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    announcements?: AnnouncementUncheckedCreateNestedManyWithoutCreatedByInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    deviceTokens?: DeviceTokenUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutBonusHistoryInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutBonusHistoryInput, UserUncheckedCreateWithoutBonusHistoryInput>
+  }
+
+  export type UserUpsertWithoutBonusHistoryInput = {
+    update: XOR<UserUpdateWithoutBonusHistoryInput, UserUncheckedUpdateWithoutBonusHistoryInput>
+    create: XOR<UserCreateWithoutBonusHistoryInput, UserUncheckedCreateWithoutBonusHistoryInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutBonusHistoryInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutBonusHistoryInput, UserUncheckedUpdateWithoutBonusHistoryInput>
+  }
+
+  export type UserUpdateWithoutBonusHistoryInput = {
+    fullname?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    companyName?: NullableStringFieldUpdateOperationsInput | string | null
+    streetAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    streetAddress2?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: StringFieldUpdateOperationsInput | string
+    bonus?: IntFieldUpdateOperationsInput | number
+    registerSource?: StringFieldUpdateOperationsInput | string
+    bonusStatus?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    announcements?: AnnouncementUpdateManyWithoutCreatedByNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    deviceTokens?: DeviceTokenUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutBonusHistoryInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    fullname?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    companyName?: NullableStringFieldUpdateOperationsInput | string | null
+    streetAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    streetAddress2?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: StringFieldUpdateOperationsInput | string
+    roleId?: IntFieldUpdateOperationsInput | number
+    bonus?: IntFieldUpdateOperationsInput | number
+    registerSource?: StringFieldUpdateOperationsInput | string
+    bonusStatus?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    announcements?: AnnouncementUncheckedUpdateManyWithoutCreatedByNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    deviceTokens?: DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
+  }
+
   export type UserCreateWithoutRoleInput = {
     fullname: string
     email: string
@@ -38603,8 +40218,12 @@ export namespace Prisma {
     city?: string | null
     state?: string | null
     country?: string
+    bonus?: number
+    registerSource?: string
+    bonusStatus?: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    bonusHistory?: BonusHistoryCreateNestedManyWithoutUserInput
     announcements?: AnnouncementCreateNestedManyWithoutCreatedByInput
     transactions?: TransactionCreateNestedManyWithoutUserInput
     deviceTokens?: DeviceTokenCreateNestedManyWithoutUserInput
@@ -38622,8 +40241,12 @@ export namespace Prisma {
     city?: string | null
     state?: string | null
     country?: string
+    bonus?: number
+    registerSource?: string
+    bonusStatus?: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    bonusHistory?: BonusHistoryUncheckedCreateNestedManyWithoutUserInput
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutCreatedByInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
     deviceTokens?: DeviceTokenUncheckedCreateNestedManyWithoutUserInput
@@ -38689,6 +40312,9 @@ export namespace Prisma {
     state?: StringNullableFilter<"User"> | string | null
     country?: StringFilter<"User"> | string
     roleId?: IntFilter<"User"> | number
+    bonus?: IntFilter<"User"> | number
+    registerSource?: StringFilter<"User"> | string
+    bonusStatus?: StringFilter<"User"> | string
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
   }
@@ -39154,9 +40780,13 @@ export namespace Prisma {
     city?: string | null
     state?: string | null
     country?: string
+    bonus?: number
+    registerSource?: string
+    bonusStatus?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     role: RoleCreateNestedOneWithoutUsersInput
+    bonusHistory?: BonusHistoryCreateNestedManyWithoutUserInput
     transactions?: TransactionCreateNestedManyWithoutUserInput
     deviceTokens?: DeviceTokenCreateNestedManyWithoutUserInput
   }
@@ -39174,8 +40804,12 @@ export namespace Prisma {
     state?: string | null
     country?: string
     roleId: number
+    bonus?: number
+    registerSource?: string
+    bonusStatus?: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    bonusHistory?: BonusHistoryUncheckedCreateNestedManyWithoutUserInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
     deviceTokens?: DeviceTokenUncheckedCreateNestedManyWithoutUserInput
   }
@@ -39207,9 +40841,13 @@ export namespace Prisma {
     city?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     country?: StringFieldUpdateOperationsInput | string
+    bonus?: IntFieldUpdateOperationsInput | number
+    registerSource?: StringFieldUpdateOperationsInput | string
+    bonusStatus?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    bonusHistory?: BonusHistoryUpdateManyWithoutUserNestedInput
     transactions?: TransactionUpdateManyWithoutUserNestedInput
     deviceTokens?: DeviceTokenUpdateManyWithoutUserNestedInput
   }
@@ -39227,8 +40865,12 @@ export namespace Prisma {
     state?: NullableStringFieldUpdateOperationsInput | string | null
     country?: StringFieldUpdateOperationsInput | string
     roleId?: IntFieldUpdateOperationsInput | number
+    bonus?: IntFieldUpdateOperationsInput | number
+    registerSource?: StringFieldUpdateOperationsInput | string
+    bonusStatus?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bonusHistory?: BonusHistoryUncheckedUpdateManyWithoutUserNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
     deviceTokens?: DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -39554,9 +41196,13 @@ export namespace Prisma {
     city?: string | null
     state?: string | null
     country?: string
+    bonus?: number
+    registerSource?: string
+    bonusStatus?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     role: RoleCreateNestedOneWithoutUsersInput
+    bonusHistory?: BonusHistoryCreateNestedManyWithoutUserInput
     announcements?: AnnouncementCreateNestedManyWithoutCreatedByInput
     deviceTokens?: DeviceTokenCreateNestedManyWithoutUserInput
   }
@@ -39574,8 +41220,12 @@ export namespace Prisma {
     state?: string | null
     country?: string
     roleId: number
+    bonus?: number
+    registerSource?: string
+    bonusStatus?: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    bonusHistory?: BonusHistoryUncheckedCreateNestedManyWithoutUserInput
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutCreatedByInput
     deviceTokens?: DeviceTokenUncheckedCreateNestedManyWithoutUserInput
   }
@@ -39665,9 +41315,13 @@ export namespace Prisma {
     city?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     country?: StringFieldUpdateOperationsInput | string
+    bonus?: IntFieldUpdateOperationsInput | number
+    registerSource?: StringFieldUpdateOperationsInput | string
+    bonusStatus?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    bonusHistory?: BonusHistoryUpdateManyWithoutUserNestedInput
     announcements?: AnnouncementUpdateManyWithoutCreatedByNestedInput
     deviceTokens?: DeviceTokenUpdateManyWithoutUserNestedInput
   }
@@ -39685,8 +41339,12 @@ export namespace Prisma {
     state?: NullableStringFieldUpdateOperationsInput | string | null
     country?: StringFieldUpdateOperationsInput | string
     roleId?: IntFieldUpdateOperationsInput | number
+    bonus?: IntFieldUpdateOperationsInput | number
+    registerSource?: StringFieldUpdateOperationsInput | string
+    bonusStatus?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bonusHistory?: BonusHistoryUncheckedUpdateManyWithoutUserNestedInput
     announcements?: AnnouncementUncheckedUpdateManyWithoutCreatedByNestedInput
     deviceTokens?: DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -40034,9 +41692,13 @@ export namespace Prisma {
     city?: string | null
     state?: string | null
     country?: string
+    bonus?: number
+    registerSource?: string
+    bonusStatus?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     role: RoleCreateNestedOneWithoutUsersInput
+    bonusHistory?: BonusHistoryCreateNestedManyWithoutUserInput
     announcements?: AnnouncementCreateNestedManyWithoutCreatedByInput
     transactions?: TransactionCreateNestedManyWithoutUserInput
   }
@@ -40054,8 +41716,12 @@ export namespace Prisma {
     state?: string | null
     country?: string
     roleId: number
+    bonus?: number
+    registerSource?: string
+    bonusStatus?: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    bonusHistory?: BonusHistoryUncheckedCreateNestedManyWithoutUserInput
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutCreatedByInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
   }
@@ -40087,9 +41753,13 @@ export namespace Prisma {
     city?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     country?: StringFieldUpdateOperationsInput | string
+    bonus?: IntFieldUpdateOperationsInput | number
+    registerSource?: StringFieldUpdateOperationsInput | string
+    bonusStatus?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    bonusHistory?: BonusHistoryUpdateManyWithoutUserNestedInput
     announcements?: AnnouncementUpdateManyWithoutCreatedByNestedInput
     transactions?: TransactionUpdateManyWithoutUserNestedInput
   }
@@ -40107,10 +41777,22 @@ export namespace Prisma {
     state?: NullableStringFieldUpdateOperationsInput | string | null
     country?: StringFieldUpdateOperationsInput | string
     roleId?: IntFieldUpdateOperationsInput | number
+    bonus?: IntFieldUpdateOperationsInput | number
+    registerSource?: StringFieldUpdateOperationsInput | string
+    bonusStatus?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bonusHistory?: BonusHistoryUncheckedUpdateManyWithoutUserNestedInput
     announcements?: AnnouncementUncheckedUpdateManyWithoutCreatedByNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type BonusHistoryCreateManyUserInput = {
+    id?: number
+    amount: number
+    reason: string
+    type?: string
+    createdAt?: Date | string
   }
 
   export type AnnouncementCreateManyCreatedByInput = {
@@ -40146,6 +41828,29 @@ export namespace Prisma {
     token: string
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type BonusHistoryUpdateWithoutUserInput = {
+    amount?: IntFieldUpdateOperationsInput | number
+    reason?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BonusHistoryUncheckedUpdateWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    amount?: IntFieldUpdateOperationsInput | number
+    reason?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BonusHistoryUncheckedUpdateManyWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    amount?: IntFieldUpdateOperationsInput | number
+    reason?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AnnouncementUpdateWithoutCreatedByInput = {
@@ -40262,6 +41967,9 @@ export namespace Prisma {
     city?: string | null
     state?: string | null
     country?: string
+    bonus?: number
+    registerSource?: string
+    bonusStatus?: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -40277,8 +41985,12 @@ export namespace Prisma {
     city?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     country?: StringFieldUpdateOperationsInput | string
+    bonus?: IntFieldUpdateOperationsInput | number
+    registerSource?: StringFieldUpdateOperationsInput | string
+    bonusStatus?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bonusHistory?: BonusHistoryUpdateManyWithoutUserNestedInput
     announcements?: AnnouncementUpdateManyWithoutCreatedByNestedInput
     transactions?: TransactionUpdateManyWithoutUserNestedInput
     deviceTokens?: DeviceTokenUpdateManyWithoutUserNestedInput
@@ -40296,8 +42008,12 @@ export namespace Prisma {
     city?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     country?: StringFieldUpdateOperationsInput | string
+    bonus?: IntFieldUpdateOperationsInput | number
+    registerSource?: StringFieldUpdateOperationsInput | string
+    bonusStatus?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bonusHistory?: BonusHistoryUncheckedUpdateManyWithoutUserNestedInput
     announcements?: AnnouncementUncheckedUpdateManyWithoutCreatedByNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
     deviceTokens?: DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
@@ -40315,6 +42031,9 @@ export namespace Prisma {
     city?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     country?: StringFieldUpdateOperationsInput | string
+    bonus?: IntFieldUpdateOperationsInput | number
+    registerSource?: StringFieldUpdateOperationsInput | string
+    bonusStatus?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

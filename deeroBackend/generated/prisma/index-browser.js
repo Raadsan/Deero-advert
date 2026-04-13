@@ -133,8 +133,20 @@ exports.Prisma.UserScalarFieldEnum = {
   state: 'state',
   country: 'country',
   roleId: 'roleId',
+  bonus: 'bonus',
+  registerSource: 'registerSource',
+  bonusStatus: 'bonusStatus',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.BonusHistoryScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  amount: 'amount',
+  reason: 'reason',
+  type: 'type',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.RoleScalarFieldEnum = {
@@ -407,7 +419,14 @@ exports.Prisma.UserOrderByRelevanceFieldEnum = {
   streetAddress2: 'streetAddress2',
   city: 'city',
   state: 'state',
-  country: 'country'
+  country: 'country',
+  registerSource: 'registerSource',
+  bonusStatus: 'bonusStatus'
+};
+
+exports.Prisma.BonusHistoryOrderByRelevanceFieldEnum = {
+  reason: 'reason',
+  type: 'type'
 };
 
 exports.Prisma.RoleOrderByRelevanceFieldEnum = {
@@ -559,6 +578,7 @@ exports.Prisma.DeviceTokenOrderByRelevanceFieldEnum = {
 
 exports.Prisma.ModelName = {
   User: 'User',
+  BonusHistory: 'BonusHistory',
   Role: 'Role',
   RolePermission: 'RolePermission',
   PermissionMenuAccess: 'PermissionMenuAccess',

@@ -6,7 +6,6 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -24,7 +23,7 @@ model User {
   roleId          Int
   role            Role           @relation(fields: [roleId], references: [id])
   bonus           Int            @default(0)
-  useBonus: true gudaha request body-ga si nidaamku u ogaado inuu qofku rabo inuu isticmaalo bonus-ka.  String         @default("website")
+  registerSource  String         @default("website")
   bonusStatus     String         @default("BonusNotAvailable") // Added Status
   bonusHistory    BonusHistory[]
   announcements   Announcement[]
