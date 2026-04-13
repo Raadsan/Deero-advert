@@ -8,7 +8,7 @@ const FCM_MAX_TOKENS_PER_BATCH = 500;
  */
 export const createAnnouncement = async (req, res) => {
     try {
-        const { title, message, startDate, endDate } = req.body;
+        const { title, message, startDate, endDate, linkUrl } = req.body;
 
         if (!title || !message || !startDate || !endDate) {
             return res.status(400).json({
@@ -21,6 +21,7 @@ export const createAnnouncement = async (req, res) => {
             data: {
                 title,
                 message,
+                linkUrl: linkUrl?.trim() || null,
                 startDate: new Date(startDate),
                 endDate: new Date(endDate),
                 createdById: req.user.id,
@@ -67,6 +68,7 @@ export const createAnnouncement = async (req, res) => {
                                 click_action: "FLUTTER_NOTIFICATION_CLICK",
                                 type: "announcement",
                                 announcementId: String(announcement.id),
+                                linkUrl: announcement.linkUrl || "",
                             },
                         });
                         console.log(
@@ -162,7 +164,7 @@ export const getAnnouncementById = async (req, res) => {
  */
 export const updateAnnouncement = async (req, res) => {
     try {
-        const { title, message, startDate, endDate } = req.body;
+        const { title, message, startDate, endDate, linkUrl } = req.body;
         const id = parseInt(req.params.id);
 
         const data = {};
@@ -170,6 +172,7 @@ export const updateAnnouncement = async (req, res) => {
         if (message) data.message = message;
         if (startDate) data.startDate = new Date(startDate);
         if (endDate) data.endDate = new Date(endDate);
+        if (typeof linkUrl === "string") data.linkUrl = linkUrl.trim() || null;
 
         const announcement = await prisma.announcement.update({
             where: { id },

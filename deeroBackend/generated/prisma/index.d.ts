@@ -13680,6 +13680,7 @@ export namespace Prisma {
     id: number | null
     title: string | null
     message: string | null
+    linkUrl: string | null
     startDate: Date | null
     endDate: Date | null
     createdById: number | null
@@ -13691,6 +13692,7 @@ export namespace Prisma {
     id: number | null
     title: string | null
     message: string | null
+    linkUrl: string | null
     startDate: Date | null
     endDate: Date | null
     createdById: number | null
@@ -13702,6 +13704,7 @@ export namespace Prisma {
     id: number
     title: number
     message: number
+    linkUrl: number
     startDate: number
     endDate: number
     createdById: number
@@ -13725,6 +13728,7 @@ export namespace Prisma {
     id?: true
     title?: true
     message?: true
+    linkUrl?: true
     startDate?: true
     endDate?: true
     createdById?: true
@@ -13736,6 +13740,7 @@ export namespace Prisma {
     id?: true
     title?: true
     message?: true
+    linkUrl?: true
     startDate?: true
     endDate?: true
     createdById?: true
@@ -13747,6 +13752,7 @@ export namespace Prisma {
     id?: true
     title?: true
     message?: true
+    linkUrl?: true
     startDate?: true
     endDate?: true
     createdById?: true
@@ -13845,6 +13851,7 @@ export namespace Prisma {
     id: number
     title: string
     message: string
+    linkUrl: string | null
     startDate: Date
     endDate: Date
     createdById: number
@@ -13875,6 +13882,7 @@ export namespace Prisma {
     id?: boolean
     title?: boolean
     message?: boolean
+    linkUrl?: boolean
     startDate?: boolean
     endDate?: boolean
     createdById?: boolean
@@ -13889,6 +13897,7 @@ export namespace Prisma {
     id?: boolean
     title?: boolean
     message?: boolean
+    linkUrl?: boolean
     startDate?: boolean
     endDate?: boolean
     createdById?: boolean
@@ -13896,7 +13905,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type AnnouncementOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "message" | "startDate" | "endDate" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["announcement"]>
+  export type AnnouncementOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "message" | "linkUrl" | "startDate" | "endDate" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["announcement"]>
   export type AnnouncementInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -13910,6 +13919,7 @@ export namespace Prisma {
       id: number
       title: string
       message: string
+      linkUrl: string | null
       startDate: Date
       endDate: Date
       createdById: number
@@ -14288,6 +14298,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Announcement", 'Int'>
     readonly title: FieldRef<"Announcement", 'String'>
     readonly message: FieldRef<"Announcement", 'String'>
+    readonly linkUrl: FieldRef<"Announcement", 'String'>
     readonly startDate: FieldRef<"Announcement", 'DateTime'>
     readonly endDate: FieldRef<"Announcement", 'DateTime'>
     readonly createdById: FieldRef<"Announcement", 'Int'>
@@ -32499,6 +32510,7 @@ export namespace Prisma {
     id: 'id',
     title: 'title',
     message: 'message',
+    linkUrl: 'linkUrl',
     startDate: 'startDate',
     endDate: 'endDate',
     createdById: 'createdById',
@@ -32826,7 +32838,8 @@ export namespace Prisma {
 
   export const AnnouncementOrderByRelevanceFieldEnum: {
     title: 'title',
-    message: 'message'
+    message: 'message',
+    linkUrl: 'linkUrl'
   };
 
   export type AnnouncementOrderByRelevanceFieldEnum = (typeof AnnouncementOrderByRelevanceFieldEnum)[keyof typeof AnnouncementOrderByRelevanceFieldEnum]
@@ -33746,6 +33759,7 @@ export namespace Prisma {
     id?: IntFilter<"Announcement"> | number
     title?: StringFilter<"Announcement"> | string
     message?: StringFilter<"Announcement"> | string
+    linkUrl?: StringNullableFilter<"Announcement"> | string | null
     startDate?: DateTimeFilter<"Announcement"> | Date | string
     endDate?: DateTimeFilter<"Announcement"> | Date | string
     createdById?: IntFilter<"Announcement"> | number
@@ -33758,6 +33772,7 @@ export namespace Prisma {
     id?: SortOrder
     title?: SortOrder
     message?: SortOrder
+    linkUrl?: SortOrderInput | SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
     createdById?: SortOrder
@@ -33774,6 +33789,7 @@ export namespace Prisma {
     NOT?: AnnouncementWhereInput | AnnouncementWhereInput[]
     title?: StringFilter<"Announcement"> | string
     message?: StringFilter<"Announcement"> | string
+    linkUrl?: StringNullableFilter<"Announcement"> | string | null
     startDate?: DateTimeFilter<"Announcement"> | Date | string
     endDate?: DateTimeFilter<"Announcement"> | Date | string
     createdById?: IntFilter<"Announcement"> | number
@@ -33786,6 +33802,7 @@ export namespace Prisma {
     id?: SortOrder
     title?: SortOrder
     message?: SortOrder
+    linkUrl?: SortOrderInput | SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
     createdById?: SortOrder
@@ -33805,6 +33822,7 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"Announcement"> | number
     title?: StringWithAggregatesFilter<"Announcement"> | string
     message?: StringWithAggregatesFilter<"Announcement"> | string
+    linkUrl?: StringNullableWithAggregatesFilter<"Announcement"> | string | null
     startDate?: DateTimeWithAggregatesFilter<"Announcement"> | Date | string
     endDate?: DateTimeWithAggregatesFilter<"Announcement"> | Date | string
     createdById?: IntWithAggregatesFilter<"Announcement"> | number
@@ -35644,6 +35662,7 @@ export namespace Prisma {
   export type AnnouncementCreateInput = {
     title: string
     message: string
+    linkUrl?: string | null
     startDate: Date | string
     endDate: Date | string
     createdAt?: Date | string
@@ -35655,6 +35674,7 @@ export namespace Prisma {
     id?: number
     title: string
     message: string
+    linkUrl?: string | null
     startDate: Date | string
     endDate: Date | string
     createdById: number
@@ -35665,6 +35685,7 @@ export namespace Prisma {
   export type AnnouncementUpdateInput = {
     title?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
+    linkUrl?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -35676,6 +35697,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
+    linkUrl?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     createdById?: IntFieldUpdateOperationsInput | number
@@ -35687,6 +35709,7 @@ export namespace Prisma {
     id?: number
     title: string
     message: string
+    linkUrl?: string | null
     startDate: Date | string
     endDate: Date | string
     createdById: number
@@ -35697,6 +35720,7 @@ export namespace Prisma {
   export type AnnouncementUpdateManyMutationInput = {
     title?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
+    linkUrl?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -35707,6 +35731,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
+    linkUrl?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     createdById?: IntFieldUpdateOperationsInput | number
@@ -37561,6 +37586,7 @@ export namespace Prisma {
     id?: SortOrder
     title?: SortOrder
     message?: SortOrder
+    linkUrl?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
     createdById?: SortOrder
@@ -37577,6 +37603,7 @@ export namespace Prisma {
     id?: SortOrder
     title?: SortOrder
     message?: SortOrder
+    linkUrl?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
     createdById?: SortOrder
@@ -37588,6 +37615,7 @@ export namespace Prisma {
     id?: SortOrder
     title?: SortOrder
     message?: SortOrder
+    linkUrl?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
     createdById?: SortOrder
@@ -39856,6 +39884,7 @@ export namespace Prisma {
   export type AnnouncementCreateWithoutCreatedByInput = {
     title: string
     message: string
+    linkUrl?: string | null
     startDate: Date | string
     endDate: Date | string
     createdAt?: Date | string
@@ -39866,6 +39895,7 @@ export namespace Prisma {
     id?: number
     title: string
     message: string
+    linkUrl?: string | null
     startDate: Date | string
     endDate: Date | string
     createdAt?: Date | string
@@ -40029,6 +40059,7 @@ export namespace Prisma {
     id?: IntFilter<"Announcement"> | number
     title?: StringFilter<"Announcement"> | string
     message?: StringFilter<"Announcement"> | string
+    linkUrl?: StringNullableFilter<"Announcement"> | string | null
     startDate?: DateTimeFilter<"Announcement"> | Date | string
     endDate?: DateTimeFilter<"Announcement"> | Date | string
     createdById?: IntFilter<"Announcement"> | number
@@ -41799,6 +41830,7 @@ export namespace Prisma {
     id?: number
     title: string
     message: string
+    linkUrl?: string | null
     startDate: Date | string
     endDate: Date | string
     createdAt?: Date | string
@@ -41856,6 +41888,7 @@ export namespace Prisma {
   export type AnnouncementUpdateWithoutCreatedByInput = {
     title?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
+    linkUrl?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -41866,6 +41899,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
+    linkUrl?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -41876,6 +41910,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
+    linkUrl?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string

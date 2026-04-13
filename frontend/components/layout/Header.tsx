@@ -107,9 +107,21 @@ export default function Header() {
                   <span className="font-bold text-xs md:text-sm uppercase tracking-wider whitespace-nowrap bg-white/20 px-2 py-0.5 rounded leading-none">
                     Announcement
                   </span>
-                  <span className="font-semibold text-xs md:text-base truncate max-w-[200px] sm:max-w-md md:max-w-none">
-                    {activeAnnouncement.title}: <span className="font-normal opacity-90">{activeAnnouncement.message}</span>
-                  </span>
+                  {activeAnnouncement.linkUrl ? (
+                    <a
+                      href={activeAnnouncement.linkUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-semibold text-xs md:text-base truncate max-w-[200px] sm:max-w-md md:max-w-none underline-offset-2 hover:underline"
+                      title={activeAnnouncement.linkUrl}
+                    >
+                      {activeAnnouncement.title}: <span className="font-normal opacity-90">{activeAnnouncement.message}</span>
+                    </a>
+                  ) : (
+                    <span className="font-semibold text-xs md:text-base truncate max-w-[200px] sm:max-w-md md:max-w-none">
+                      {activeAnnouncement.title}: <span className="font-normal opacity-90">{activeAnnouncement.message}</span>
+                    </span>
+                  )}
                </div>
             </div>
             <button 

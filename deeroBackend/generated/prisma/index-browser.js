@@ -220,6 +220,7 @@ exports.Prisma.AnnouncementScalarFieldEnum = {
   id: 'id',
   title: 'title',
   message: 'message',
+  linkUrl: 'linkUrl',
   startDate: 'startDate',
   endDate: 'endDate',
   createdById: 'createdById',
@@ -460,7 +461,8 @@ exports.Prisma.AchievementOrderByRelevanceFieldEnum = {
 
 exports.Prisma.AnnouncementOrderByRelevanceFieldEnum = {
   title: 'title',
-  message: 'message'
+  message: 'message',
+  linkUrl: 'linkUrl'
 };
 
 exports.Prisma.CareerOrderByRelevanceFieldEnum = {

@@ -5,7 +5,7 @@ import React, { useState, useEffect } from "react";
 import DataTable from "@/components/layout/DataTable";
 import Modal from "@/components/layout/Modal";
 import DeleteConfirmModal from "@/components/layout/DeleteConfirmModal";
-import { Edit2, Trash2, Megaphone } from "lucide-react";
+import { Edit2, Trash2, Megaphone, Link as LinkIcon } from "lucide-react";
 import {
     getAllAnnouncements,
     createAnnouncement,
@@ -26,6 +26,7 @@ export default function AnnouncementsPage() {
     const [formData, setFormData] = useState({
         title: "",
         message: "",
+        linkUrl: "",
         startDate: "",
         endDate: "",
     });
@@ -68,6 +69,7 @@ export default function AnnouncementsPage() {
             const data = {
                 title: formData.title,
                 message: formData.message,
+                linkUrl: formData.linkUrl.trim() || undefined,
                 startDate: formData.startDate,
                 endDate: formData.endDate,
             };
@@ -96,6 +98,7 @@ export default function AnnouncementsPage() {
         setFormData({
             title: ann.title,
             message: ann.message,
+            linkUrl: ann.linkUrl || "",
             startDate: ann.startDate ? new Date(ann.startDate).toISOString().split('T')[0] : "",
             endDate: ann.endDate ? new Date(ann.endDate).toISOString().split('T')[0] : "",
         });
@@ -130,6 +133,7 @@ export default function AnnouncementsPage() {
         setFormData({
             title: "",
             message: "",
+            linkUrl: "",
             startDate: "",
             endDate: "",
         });
@@ -184,6 +188,25 @@ export default function AnnouncementsPage() {
                     {row.endDate ? new Date(row.endDate).toLocaleDateString() : "-"}
                 </div>
             )
+        },
+        {
+            label: "Link",
+            key: "linkUrl",
+            render: (row: Announcement) =>
+                row.linkUrl ? (
+                    <a
+                        href={row.linkUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-xs text-blue-600 hover:underline"
+                        title={row.linkUrl}
+                    >
+                        <LinkIcon className="h-3.5 w-3.5" />
+                        Open Link
+                    </a>
+                ) : (
+                    <span className="text-xs text-gray-400">No link</span>
+                ),
         },
         {
             label: "Actions",
@@ -261,6 +284,20 @@ export default function AnnouncementsPage() {
                             rows={4}
                             placeholder="Type your announcement message here..."
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#EB4724] focus:outline-none transition-all resize-none"
+                        />
+                    </div>
+
+                    <div className="space-y-1">
+                        <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">
+                            Click Link (Optional)
+                        </label>
+                        <input
+                            type="url"
+                            name="linkUrl"
+                            value={formData.linkUrl}
+                            onChange={handleInputChange}
+                            placeholder="https://wa.me/... or https://tiktok.com/..."
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#EB4724] focus:outline-none transition-all"
                         />
                     </div>
 
