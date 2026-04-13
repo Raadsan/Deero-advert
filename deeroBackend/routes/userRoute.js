@@ -7,10 +7,14 @@ import {
   getUsers,
   getUserById,
   updateUser,
-  deleteUser
+  deleteUser,
+  getBonusHistory
 } from "../controllers/userController.js";
 import { protect } from "../middlewares/authMiddleware.js";
 const router = express.Router();
+
+// Bonus History route
+router.get("/:id/bonus-history", protect, getBonusHistory);
 
 // Protected user CRUD routes
 router.get("/", getUsers);
