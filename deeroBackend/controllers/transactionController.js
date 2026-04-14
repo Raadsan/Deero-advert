@@ -49,10 +49,14 @@ export const createTransaction = async (req, res) => {
       const selectedPackage = packages.find(pkg => (pkg.id || pkg._id) == packageId);
       
       data.serviceId = service.id;
-      data.packageId = packageId.toString();
+      data.packageId = packageId ? packageId.toString() : null;
       transactionType = "service_payment";
-      if (!data.description && selectedPackage) {
-        data.description = `Payment for ${service.serviceTitle} - ${selectedPackage.packageTitle}`;
+      
+      if (!data.description || data.description.trim() === "") {
+        data.description = `Payment for ${service.serviceTitle}`;
+        if (selectedPackage && selectedPackage.packageTitle) {
+          data.description += ` - ${selectedPackage.packageTitle}`;
+        }
       }
     } else if (hostingPackageId) {
       const pkg = await prisma.hostingPackage.findUnique({ where: { id: parseInt(hostingPackageId) } });
@@ -79,7 +83,7 @@ export const createTransaction = async (req, res) => {
         transactionId: transaction.id.toString(),
         accountNo,
         amount: data.amount,
-        description: data.description
+        description: data.description || "Deero Payment"
       });
       
       const status = paymentResponse.responseCode === "2001" ? "completed" : "failed";
