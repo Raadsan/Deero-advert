@@ -1,11 +1,14 @@
 import { prisma } from "../lib/prisma.js";
+import admin, { firebaseInitialized } from "../firebase.js";
+
+const FCM_MAX_TOKENS_PER_BATCH = 500;
 
 /**
  * Create Announcement
  */
 export const createAnnouncement = async (req, res) => {
     try {
-        const { title, message, startDate, endDate } = req.body;
+        const { title, message, startDate, endDate, linkUrl } = req.body;
 
         if (!title || !message || !startDate || !endDate) {
             return res.status(400).json({
@@ -18,14 +21,71 @@ export const createAnnouncement = async (req, res) => {
             data: {
                 title,
                 message,
+                linkUrl: linkUrl?.trim() || null,
                 startDate: new Date(startDate),
                 endDate: new Date(endDate),
                 createdById: req.user.id,
             },
         });
 
-        // FCM push notifications skipped as per request to focus on controllers
-        
+        if (!firebaseInitialized) {
+            console.log("⚠️ Firebase not initialized — skipping FCM push notification");
+        } else {
+            try {
+                const allTokens = await prisma.deviceToken.findMany({
+                    select: { token: true },
+                });
+                const tokenList = allTokens.map((t) => t.token).filter(Boolean);
+
+                console.log("📱 \n=== REGISTERED DEVICES ===");
+                console.log(tokenList);
+                console.log("==========================\n");
+
+                if (tokenList.length > 0) {
+                    for (let i = 0; i < tokenList.length; i += FCM_MAX_TOKENS_PER_BATCH) {
+                        const batch = tokenList.slice(i, i + FCM_MAX_TOKENS_PER_BATCH);
+                        const fcmResponse = await admin.messaging().sendEachForMulticast({
+                            tokens: batch,
+                            notification: {
+                                title,
+                                body: message,
+                            },
+                            android: {
+                                priority: "high",
+                                notification: {
+                                    sound: "default",
+                                },
+                            },
+                            apns: {
+                                payload: {
+                                    aps: {
+                                        sound: "default",
+                                        badge: 1,
+                                    },
+                                },
+                            },
+                            data: {
+                                click_action: "FLUTTER_NOTIFICATION_CLICK",
+                                type: "announcement",
+                                announcementId: String(announcement.id),
+                                linkUrl: announcement.linkUrl || "",
+                            },
+                        });
+                        console.log(
+                            `✅ FCM push => success: ${fcmResponse.successCount} | failed: ${fcmResponse.failureCount}`
+                        );
+                    }
+                } else {
+                    console.log("⚠️ FCM push: registered devices kuma jiraan wali");
+                }
+            } catch (fcmError) {
+                console.error(
+                    "⚠️ FCM push error (announcement DB ayaa la kaydiyay):",
+                    fcmError.message
+                );
+            }
+        }
+
         return res.status(201).json({
             success: true,
             message: "Announcement created successfully",
@@ -104,7 +164,7 @@ export const getAnnouncementById = async (req, res) => {
  */
 export const updateAnnouncement = async (req, res) => {
     try {
-        const { title, message, startDate, endDate } = req.body;
+        const { title, message, startDate, endDate, linkUrl } = req.body;
         const id = parseInt(req.params.id);
 
         const data = {};
@@ -112,6 +172,7 @@ export const updateAnnouncement = async (req, res) => {
         if (message) data.message = message;
         if (startDate) data.startDate = new Date(startDate);
         if (endDate) data.endDate = new Date(endDate);
+        if (typeof linkUrl === "string") data.linkUrl = linkUrl.trim() || null;
 
         const announcement = await prisma.announcement.update({
             where: { id },
@@ -145,6 +206,15 @@ export const deleteAnnouncement = async (req, res) => {
     }
 };
 
+/** MySQL User.id only — reject Mongo ObjectId / invalid strings (parseInt would lie). */
+function parseMysqlUserId(raw) {
+    if (raw == null || raw === "") return null;
+    const s = String(raw).trim();
+    if (!/^\d+$/.test(s)) return null;
+    const n = Number.parseInt(s, 10);
+    return Number.isFinite(n) && n > 0 ? n : null;
+}
+
 /**
  * Save Device Token
  */
@@ -156,12 +226,43 @@ export const saveDeviceToken = async (req, res) => {
             return res.status(400).json({ success: false, message: "Token is required" });
         }
 
-        const deviceToken = await prisma.deviceToken.upsert({
-            where: { token },
-            update: { userId: userId ? parseInt(userId) : null },
-            create: { token, userId: userId ? parseInt(userId) : null },
-        });
+        let linkedUserId = parseMysqlUserId(userId);
+        if (linkedUserId != null) {
+            const user = await prisma.user.findUnique({
+                where: { id: linkedUserId },
+                select: { id: true },
+            });
+            if (!user) {
+                console.warn(
+                    `⚠️ save-token: userId ${linkedUserId} ma jiro User table — token guest (null userId)`
+                );
+                linkedUserId = null;
+            }
+        }
 
+        let deviceToken;
+        try {
+            deviceToken = await prisma.deviceToken.upsert({
+                where: { token },
+                update: { userId: linkedUserId },
+                create: { token, userId: linkedUserId },
+            });
+        } catch (firstErr) {
+            // FK / edge cases: kaydi token guest ah (production-ka hore ama userId khalad)
+            if (firstErr?.code === "P2003") {
+                console.warn("⚠️ save-token: P2003 FK — retrying with userId null (guest token)");
+                deviceToken = await prisma.deviceToken.upsert({
+                    where: { token },
+                    update: { userId: null },
+                    create: { token, userId: null },
+                });
+                linkedUserId = null;
+            } else {
+                throw firstErr;
+            }
+        }
+
+        console.log(`✅ FCM token la kaydiyay | userId: ${linkedUserId ?? "guest"}`);
         return res.status(200).json({ success: true, message: "Token saved successfully", data: deviceToken });
     } catch (error) {
         console.error("Error saving device token:", error);

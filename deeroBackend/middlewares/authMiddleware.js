@@ -17,7 +17,13 @@ export const protect = async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
-    console.error("Auth error:", error);
+    const name = error?.name;
+    if (name === "JsonWebTokenError" || name === "TokenExpiredError") {
+      // Token hore / JWT_SECRET kala duwan — caadi; ha buuxin logs-ka Railway
+      console.warn(`Auth: ${name} (${error.message})`);
+    } else {
+      console.error("Auth error:", error);
+    }
     res.status(401).json({ message: "Unauthorized" });
   }
 };

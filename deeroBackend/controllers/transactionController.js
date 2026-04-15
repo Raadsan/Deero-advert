@@ -18,9 +18,17 @@ export const createTransaction = async (req, res) => {
     const user = await prisma.user.findUnique({ where: { id: parseInt(userId) } });
     if (!user) return res.status(404).json({ message: "User not found" });
 
+    const { useBonus } = req.body;
+    let finalAmount = parseFloat(amount);
+
+    // Apply 50% Discount if Bonus is available and requested
+    if (useBonus && user.bonusStatus === "BonusAvailable") {
+      finalAmount = finalAmount / 2;
+    }
+
     let data = {
         userId: user.id,
-        amount: parseFloat(amount),
+        amount: finalAmount,
         description: description || "",
         status: "pending",
         paymentMethod: paymentMethod || (accountNo ? "waafi" : "mail-in")
@@ -94,11 +102,99 @@ export const createTransaction = async (req, res) => {
       });
     }
 
+    // Award bonus points on successful transaction
+    if (transaction.status === "completed") {
+      const { useBonus } = req.body;
+      if (useBonus && user.bonusStatus === "BonusAvailable") {
+        // Reset process: Milestone reached and used!
+        await prisma.user.update({
+          where: { id: user.id },
+          data: {
+            bonus: 15, // Starting point after claim
+            bonusStatus: "BonusNotAvailable",
+            bonusHistory: {
+              create: {
+                amount: 0,
+                reason: "Bonus Milestone Claimed - 50% Discount Applied",
+                type: "claim"
+              }
+            }
+          }
+        });
+      } else {
+        await handleBonusPoints(transaction.userId, transaction.type);
+      }
+    }
+
     res.json({ success: true, message: "Transaction completed successfully", transaction, paymentResponse });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Server error", error: err.message });
   }
+};
+
+/**
+ * 🎁 BONUS LOGIC HELPER
+ */
+const handleBonusPoints = async (userId, transactionType) => {
+    try {
+        const user = await prisma.user.findUnique({ where: { id: userId } });
+        if (!user) return;
+
+        // Count all previous COMPLETED transactions for this user
+        const completedCount = await prisma.transaction.count({
+            where: {
+                userId: userId,
+                status: "completed"
+            }
+        });
+
+        let pointsToAdd = 0;
+        let reason = "";
+
+        if (completedCount === 1) {
+            pointsToAdd = 15;
+            reason = "1st Purchase Bonus (+15)";
+        } else if (completedCount === 2) {
+            pointsToAdd = 30;
+            reason = "2nd Purchase Bonus (+30)";
+        } else if (completedCount === 3) {
+            pointsToAdd = 40;
+            reason = "3rd Purchase Bonus (+40)";
+        } else {
+            // Any further purchases
+            pointsToAdd = 10; 
+            reason = "Additional Purchase Bonus";
+        }
+
+        let newBonus = user.bonus + pointsToAdd;
+        let finalStatus = user.bonusStatus;
+
+        // Check if milestone 100 is reached
+        if (newBonus >= 100) {
+            finalStatus = "BonusAvailable";
+            newBonus = 100; // Cap at 100 until claimed
+            reason = "Milestone Reached! (50% Free Benefit) - Status: BonusAvailable";
+        }
+
+        // Update User and Log History
+        await prisma.user.update({
+            where: { id: userId },
+            data: {
+                bonus: newBonus,
+                bonusStatus: finalStatus,
+                bonusHistory: {
+                    create: {
+                        amount: pointsToAdd,
+                        reason: reason,
+                        type: "add"
+                    }
+                }
+            }
+        });
+    } catch (error) {
+        console.error("Bonus Error:", error);
+    }
 };
 
 export const getAllTransactions = async (req, res) => {

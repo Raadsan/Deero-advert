@@ -15,7 +15,8 @@ const router = express.Router();
 router.get("/active", getActiveAnnouncements);
 router.post("/save-token", saveDeviceToken);
 
-router.get("/", protect, getAnnouncements);
+// Public: app & guests can list announcements (no JWT). Mutations stay protected.
+router.get("/", getAnnouncements);
 router.get("/:id", protect, getAnnouncementById);
 router.post("/", protect, createAnnouncement);
 router.patch("/:id", protect, updateAnnouncement);

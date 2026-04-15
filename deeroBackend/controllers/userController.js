@@ -10,7 +10,8 @@ export const signup = async (req, res) => {
   try {
     const {
       fullname, email, password, phone, role,
-      companyName, streetAddress, streetAddress2, city, state, country
+      companyName, streetAddress, streetAddress2, city, state, country,
+      registerSource // Added registerSource
     } = req.body;
 
     if (!fullname || !email || !password || !phone) {
@@ -61,6 +62,10 @@ export const signup = async (req, res) => {
       roleId = userRole.id;
     }
 
+    // Determine registration source and initial bonus
+    const source = registerSource === "mobile" ? "mobile" : "website";
+    const initialBonus = source === "mobile" ? 15 : 0;
+
     const user = await prisma.user.create({
       data: {
         fullname,
@@ -74,6 +79,16 @@ export const signup = async (req, res) => {
         state,
         country: country || "Somalia",
         roleId: roleId,
+        registerSource: source,
+        bonus: initialBonus,
+        // If it's mobile registration, create the first bonus history record
+        bonusHistory: initialBonus > 0 ? {
+          create: {
+            amount: initialBonus,
+            reason: "Registration Bonus (Mobile)",
+            type: "add"
+          }
+        } : undefined
       },
       include: { role: true }
     });
@@ -92,6 +107,9 @@ export const signup = async (req, res) => {
         fullname: user.fullname,
         email: user.email,
         phone: user.phone,
+        bonus: user.bonus,
+        bonusStatus: user.bonusStatus,
+        registerSource: user.registerSource,
         companyName: user.companyName,
         streetAddress: user.streetAddress,
         city: user.city,
@@ -129,7 +147,16 @@ export const login = async (req, res) => {
     res.status(200).json({
       message: "Login successful",
       token,
-      user: { id: user.id, fullname: user.fullname, email: user.email, phone: user.phone, role: user.role }
+      user: {
+        id: user.id,
+        fullname: user.fullname,
+        email: user.email,
+        phone: user.phone,
+        bonus: user.bonus,
+        bonusStatus: user.bonusStatus,
+        registerSource: user.registerSource,
+        role: user.role
+      }
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -280,5 +307,19 @@ export const deleteUser = async (req, res) => {
     res.json({ message: "User deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+};
+
+// GET BONUS HISTORY
+export const getBonusHistory = async (req, res) => {
+  try {
+    const userId = parseInt(req.params.id);
+    const history = await prisma.bonusHistory.findMany({
+      where: { userId },
+      orderBy: { createdAt: 'desc' }
+    });
+    res.json({ success: true, history });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
   }
 };

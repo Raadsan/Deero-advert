@@ -5,6 +5,7 @@ export interface Announcement {
     _id: string;
     title: string;
     message: string;
+    linkUrl?: string;
     startDate: string;
     endDate: string;
     createdBy: {
@@ -20,6 +21,7 @@ export interface Announcement {
 export const createAnnouncement = (data: {
     title: string;
     message: string;
+    linkUrl?: string;
     startDate: string;
     endDate: string;
 }) => {
@@ -30,6 +32,7 @@ export const createAnnouncement = (data: {
 export const updateAnnouncement = (id: string, data: {
     title?: string;
     message?: string;
+    linkUrl?: string;
     startDate?: string;
     endDate?: string;
 }) => {
