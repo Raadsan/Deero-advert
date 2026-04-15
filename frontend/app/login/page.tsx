@@ -52,8 +52,8 @@ function LoginContent() {
     try {
       const res = await loginUser(loginData);
       if (res.data.token) {
-        localStorage.setItem("token", res.data.token);
-        localStorage.setItem("user", JSON.stringify(res.data.user));
+        sessionStorage.setItem("token", res.data.token);
+        sessionStorage.setItem("user", JSON.stringify(res.data.user));
         setSuccess("Login successful! Redirecting...");
         setTimeout(() => {
           // Redirect to dashboard or requested page

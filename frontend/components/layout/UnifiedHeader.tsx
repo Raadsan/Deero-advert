@@ -12,7 +12,7 @@ export default function UnifiedHeader({ onMenuClick }: { onMenuClick: () => void
     const [portalTitle, setPortalTitle] = useState("Portal");
 
     useEffect(() => {
-        const userData = localStorage.getItem("user");
+        const userData = sessionStorage.getItem("user");
         if (userData) {
             try {
                 const parsedUser = JSON.parse(userData);

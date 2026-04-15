@@ -28,9 +28,9 @@ export const forgotPassword = (email: string) => {
 
 // Logout
 export const logout = () => {
-  // Clear token and user from localStorage
-  localStorage.removeItem("token");
-  localStorage.removeItem("user");
+  // Clear token and user from sessionStorage
+  sessionStorage.removeItem("token");
+  sessionStorage.removeItem("user");
   // Return a resolved promise for consistency
   return Promise.resolve();
 };
