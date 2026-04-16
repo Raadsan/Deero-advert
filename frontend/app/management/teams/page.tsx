@@ -30,10 +30,11 @@ export default function TeamsManagementPage() {
     const [formData, setFormData] = useState({
         name: "",
         position: "",
+        description: "",
         facebook: "",
-        behance: "",
+        linkedin: "",
         tiktok: "",
-        whatsapp: "",
+        instagram: "",
         image: null as File | null,
         imagePreview: "",
     });
@@ -48,9 +49,10 @@ export default function TeamsManagementPage() {
 
             setData(
                 items.reverse().map((t: any) => ({
-                    _id: t._id,
+                    _id: t.id || t._id,
                     name: t.name || t.fullname || "",
                     position: t.position || t.title || "",
+                    description: t.description || "",
                     image: getImageUrl(t.image),
                     socials: t.socials || [],
                     createdAt: t.createdAt,
@@ -69,7 +71,7 @@ export default function TeamsManagementPage() {
     }, []);
 
     const handleInputChange = (
-        e: React.ChangeEvent<HTMLInputElement>
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
@@ -93,12 +95,13 @@ export default function TeamsManagementPage() {
         const formDataToSend = new FormData();
         formDataToSend.append("name", formData.name);
         formDataToSend.append("position", formData.position);
+        formDataToSend.append("description", formData.description);
 
         const socials = [
             { platform: "facebook", url: formData.facebook },
-            { platform: "behance", url: formData.behance },
+            { platform: "linkedin", url: formData.linkedin },
             { platform: "tiktok", url: formData.tiktok },
-            { platform: "whatsapp", url: formData.whatsapp },
+            { platform: "instagram", url: formData.instagram },
         ].filter(s => s.url); // Only send platforms with URLs
 
         formDataToSend.append("socials", JSON.stringify(socials));
@@ -150,17 +153,18 @@ export default function TeamsManagementPage() {
         setEditingId(member._id);
 
         const facebook = member.socials?.find((s: any) => s.platform === "facebook")?.url || "";
-        const behance = member.socials?.find((s: any) => s.platform === "behance")?.url || "";
+        const linkedin = member.socials?.find((s: any) => s.platform === "linkedin")?.url || "";
         const tiktok = member.socials?.find((s: any) => s.platform === "tiktok")?.url || "";
-        const whatsapp = member.socials?.find((s: any) => s.platform === "whatsapp")?.url || "";
+        const instagram = member.socials?.find((s: any) => s.platform === "instagram")?.url || "";
 
         setFormData({
             name: member.name,
             position: member.position,
+            description: member.description || "",
             facebook,
-            behance,
+            linkedin,
             tiktok,
-            whatsapp,
+            instagram,
             image: null,
             imagePreview: member.image,
         });
@@ -172,10 +176,11 @@ export default function TeamsManagementPage() {
         setFormData({
             name: "",
             position: "",
+            description: "",
             facebook: "",
-            behance: "",
+            linkedin: "",
             tiktok: "",
-            whatsapp: "",
+            instagram: "",
             image: null,
             imagePreview: "",
         });
@@ -200,6 +205,7 @@ export default function TeamsManagementPage() {
         },
         { label: "Name", key: "name" },
         { label: "Position", key: "position" },
+        { label: "Description", key: "description", render: (row: any) => row.description ? <span className="text-xs truncate max-w-[150px] inline-block">{row.description}</span> : undefined },
         {
             label: "Socials",
             key: "socials",
@@ -362,6 +368,20 @@ export default function TeamsManagementPage() {
                         </div>
                     </div>
 
+                    <div className="space-y-0.5">
+                        <label className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">
+                            Description
+                        </label>
+                        <textarea
+                            name="description"
+                            rows={3}
+                            value={formData.description}
+                            onChange={handleInputChange}
+                            className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#EB4724] focus:border-[#EB4724]"
+                            placeholder="Brief bio or description..."
+                        />
+                    </div>
+
                     <div className="space-y-3 pt-2">
                         <p className="text-[10px] uppercase font-bold text-gray-500 tracking-wider border-b pb-1">Social Media Links</p>
 
@@ -378,12 +398,12 @@ export default function TeamsManagementPage() {
                         </div>
 
                         <div className="space-y-0.5">
-                            <label className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Behance URL</label>
+                            <label className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">LinkedIn URL</label>
                             <input
                                 type="url"
-                                name="behance"
-                                placeholder="https://behance.net/..."
-                                value={formData.behance}
+                                name="linkedin"
+                                placeholder="https://linkedin.com/in/..."
+                                value={formData.linkedin}
                                 onChange={handleInputChange}
                                 className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#EB4724] focus:border-[#EB4724]"
                             />
@@ -402,12 +422,12 @@ export default function TeamsManagementPage() {
                         </div>
 
                         <div className="space-y-0.5">
-                            <label className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">WhatsApp Number</label>
+                            <label className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Instagram URL</label>
                             <input
-                                type="text"
-                                name="whatsapp"
-                                placeholder="+252..."
-                                value={formData.whatsapp}
+                                type="url"
+                                name="instagram"
+                                placeholder="https://instagram.com/..."
+                                value={formData.instagram}
                                 onChange={handleInputChange}
                                 className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#EB4724] focus:border-[#EB4724]"
                             />

@@ -20549,6 +20549,7 @@ export namespace Prisma {
     id: number | null
     name: string | null
     position: string | null
+    description: string | null
     image: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -20558,6 +20559,7 @@ export namespace Prisma {
     id: number | null
     name: string | null
     position: string | null
+    description: string | null
     image: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -20567,6 +20569,7 @@ export namespace Prisma {
     id: number
     name: number
     position: number
+    description: number
     image: number
     createdAt: number
     updatedAt: number
@@ -20586,6 +20589,7 @@ export namespace Prisma {
     id?: true
     name?: true
     position?: true
+    description?: true
     image?: true
     createdAt?: true
     updatedAt?: true
@@ -20595,6 +20599,7 @@ export namespace Prisma {
     id?: true
     name?: true
     position?: true
+    description?: true
     image?: true
     createdAt?: true
     updatedAt?: true
@@ -20604,6 +20609,7 @@ export namespace Prisma {
     id?: true
     name?: true
     position?: true
+    description?: true
     image?: true
     createdAt?: true
     updatedAt?: true
@@ -20700,6 +20706,7 @@ export namespace Prisma {
     id: number
     name: string
     position: string
+    description: string | null
     image: string
     createdAt: Date
     updatedAt: Date
@@ -20728,6 +20735,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     position?: boolean
+    description?: boolean
     image?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -20741,12 +20749,13 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     position?: boolean
+    description?: boolean
     image?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type TeamOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "position" | "image" | "createdAt" | "updatedAt", ExtArgs["result"]["team"]>
+  export type TeamOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "position" | "description" | "image" | "createdAt" | "updatedAt", ExtArgs["result"]["team"]>
   export type TeamInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     socials?: boolean | Team$socialsArgs<ExtArgs>
     _count?: boolean | TeamCountOutputTypeDefaultArgs<ExtArgs>
@@ -20761,6 +20770,7 @@ export namespace Prisma {
       id: number
       name: string
       position: string
+      description: string | null
       image: string
       createdAt: Date
       updatedAt: Date
@@ -21137,6 +21147,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Team", 'Int'>
     readonly name: FieldRef<"Team", 'String'>
     readonly position: FieldRef<"Team", 'String'>
+    readonly description: FieldRef<"Team", 'String'>
     readonly image: FieldRef<"Team", 'String'>
     readonly createdAt: FieldRef<"Team", 'DateTime'>
     readonly updatedAt: FieldRef<"Team", 'DateTime'>
@@ -32603,6 +32614,7 @@ export namespace Prisma {
     id: 'id',
     name: 'name',
     position: 'position',
+    description: 'description',
     image: 'image',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -32918,6 +32930,7 @@ export namespace Prisma {
   export const TeamOrderByRelevanceFieldEnum: {
     name: 'name',
     position: 'position',
+    description: 'description',
     image: 'image'
   };
 
@@ -34236,6 +34249,7 @@ export namespace Prisma {
     id?: IntFilter<"Team"> | number
     name?: StringFilter<"Team"> | string
     position?: StringFilter<"Team"> | string
+    description?: StringNullableFilter<"Team"> | string | null
     image?: StringFilter<"Team"> | string
     createdAt?: DateTimeFilter<"Team"> | Date | string
     updatedAt?: DateTimeFilter<"Team"> | Date | string
@@ -34246,6 +34260,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     position?: SortOrder
+    description?: SortOrderInput | SortOrder
     image?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -34260,6 +34275,7 @@ export namespace Prisma {
     NOT?: TeamWhereInput | TeamWhereInput[]
     name?: StringFilter<"Team"> | string
     position?: StringFilter<"Team"> | string
+    description?: StringNullableFilter<"Team"> | string | null
     image?: StringFilter<"Team"> | string
     createdAt?: DateTimeFilter<"Team"> | Date | string
     updatedAt?: DateTimeFilter<"Team"> | Date | string
@@ -34270,6 +34286,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     position?: SortOrder
+    description?: SortOrderInput | SortOrder
     image?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -34287,6 +34304,7 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"Team"> | number
     name?: StringWithAggregatesFilter<"Team"> | string
     position?: StringWithAggregatesFilter<"Team"> | string
+    description?: StringNullableWithAggregatesFilter<"Team"> | string | null
     image?: StringWithAggregatesFilter<"Team"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Team"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Team"> | Date | string
@@ -36151,6 +36169,7 @@ export namespace Prisma {
   export type TeamCreateInput = {
     name: string
     position: string
+    description?: string | null
     image: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -36161,6 +36180,7 @@ export namespace Prisma {
     id?: number
     name: string
     position: string
+    description?: string | null
     image: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -36170,6 +36190,7 @@ export namespace Prisma {
   export type TeamUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
     position?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     image?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -36180,6 +36201,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     position?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     image?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -36190,6 +36212,7 @@ export namespace Prisma {
     id?: number
     name: string
     position: string
+    description?: string | null
     image: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -36198,6 +36221,7 @@ export namespace Prisma {
   export type TeamUpdateManyMutationInput = {
     name?: StringFieldUpdateOperationsInput | string
     position?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     image?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -36207,6 +36231,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     position?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     image?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -38005,6 +38030,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     position?: SortOrder
+    description?: SortOrder
     image?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -38018,6 +38044,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     position?: SortOrder
+    description?: SortOrder
     image?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -38027,6 +38054,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     position?: SortOrder
+    description?: SortOrder
     image?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -41123,6 +41151,7 @@ export namespace Prisma {
   export type TeamCreateWithoutSocialsInput = {
     name: string
     position: string
+    description?: string | null
     image: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -41132,6 +41161,7 @@ export namespace Prisma {
     id?: number
     name: string
     position: string
+    description?: string | null
     image: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -41156,6 +41186,7 @@ export namespace Prisma {
   export type TeamUpdateWithoutSocialsInput = {
     name?: StringFieldUpdateOperationsInput | string
     position?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     image?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -41165,6 +41196,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     position?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     image?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string

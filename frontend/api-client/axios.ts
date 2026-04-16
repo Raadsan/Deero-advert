@@ -2,7 +2,7 @@ import axios from "axios";
 
 const getBaseURL = () => {
   if (typeof window !== "undefined" && window.location.hostname === "localhost") {
-    return "https://deero-advert-production-c83e.up.railway.app/api";
+    return "http://localhost:5000/api";
   }
   return process.env.NEXT_PUBLIC_API_URL || "https://deero-advert-production-c83e.up.railway.app/api";
 };

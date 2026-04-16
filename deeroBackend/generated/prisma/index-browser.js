@@ -292,6 +292,7 @@ exports.Prisma.TeamScalarFieldEnum = {
   id: 'id',
   name: 'name',
   position: 'position',
+  description: 'description',
   image: 'image',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -514,6 +515,7 @@ exports.Prisma.PortfolioGalleryOrderByRelevanceFieldEnum = {
 exports.Prisma.TeamOrderByRelevanceFieldEnum = {
   name: 'name',
   position: 'position',
+  description: 'description',
   image: 'image'
 };
 
