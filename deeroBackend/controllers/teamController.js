@@ -3,7 +3,7 @@ import { prisma } from "../lib/prisma.js";
 /* ➕ CREATE TEAM MEMBER */
 export const createTeam = async (req, res) => {
     try {
-        const { name, position, socials } = req.body;
+        const { name, position, description, socials } = req.body;
 
         if (!req.file) return res.status(400).json({ message: "Image is required" });
 
@@ -16,6 +16,7 @@ export const createTeam = async (req, res) => {
             data: {
                 name,
                 position,
+                description,
                 image: req.file.path.replace(/\\/g, "/"),
                 socials: {
                     create: (parsedSocials || []).map(s => ({
@@ -50,11 +51,12 @@ export const getTeams = async (req, res) => {
 export const updateTeam = async (req, res) => {
     try {
         const id = parseInt(req.params.id);
-        const { name, position, socials } = req.body;
+        const { name, position, description, socials } = req.body;
 
         const data = {};
-        if (name) data.name = name;
-        if (position) data.position = position;
+        if (name !== undefined) data.name = name;
+        if (position !== undefined) data.position = position;
+        if (description !== undefined) data.description = description;
         if (req.file) data.image = req.file.path.replace(/\\/g, "/");
 
         if (socials !== undefined) {

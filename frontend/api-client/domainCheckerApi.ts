@@ -1,4 +1,4 @@
-// frontend/api/domainApi.ts
+import api from "./axios";
 
 export interface DomainCheckResult {
     domain: string;
@@ -19,24 +19,11 @@ export interface DomainPrice {
     duration: string;
 }
 
-// Helper to get API URL with fallback
-const getApiUrl = () => {
-    if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
-        return 'http://localhost:5000/api';
-    }
-    const url = process.env.NEXT_PUBLIC_API_URL;
-    if (!url || url === 'undefined') return 'https://deero-advert-production-a27c.up.railway.app/api';
-    return url;
-};
-
 // Fetch all active domain prices from backend
 export const fetchAllDomainPrices = async (): Promise<DomainPrice[]> => {
     try {
-        const res = await fetch(`${getApiUrl()}/domain-prices`, {
-            method: "GET",
-            cache: "no-store",
-        });
-        const data = await res.json();
+        const res = await api.get("/domain-prices");
+        const data = res.data;
 
         if (data.success && Array.isArray(data.data)) {
             return data.data
@@ -58,17 +45,10 @@ export const fetchAllDomainPrices = async (): Promise<DomainPrice[]> => {
 export const checkDomainAvailability = async (
     domain: string
 ): Promise<DomainCheckResponse> => {
-    const res = await fetch(
-        `${getApiUrl()}/domain/check?domain=${encodeURIComponent(domain)}`,
-        {
-            method: "GET",
-            cache: "no-store",
-        }
-    );
+    const res = await api.get(`/domains/check?domain=${encodeURIComponent(domain)}`);
+    const data = res.data;
 
-    const data = await res.json();
-
-    if (!res.ok) {
+    if (!data.success) {
         throw new Error(data?.message || "Failed to check domain");
     }
 

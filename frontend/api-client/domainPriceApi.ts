@@ -18,7 +18,7 @@ export const createDomainPrice = (data: { tld: string; price: number; isActive?:
 };
 
 export const updateDomainPrice = (id: string, data: { tld?: string; price?: number; isActive?: boolean }) => {
-    return api.put(`/domain-prices/${id}`, data);
+    return api.patch(`/domain-prices/${id}`, data);
 };
 
 

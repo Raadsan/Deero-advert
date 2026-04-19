@@ -108,9 +108,9 @@ export default function CheckoutForm() {
 
             console.log("DEBUG: Auth Success, user:", userData);
 
-            // Save auth to localStorage (mimic auth utility behavior)
-            localStorage.setItem("user", JSON.stringify(userData));
-            localStorage.setItem("token", userToken);
+            // Save auth to sessionStorage (mimic auth utility behavior)
+            sessionStorage.setItem("user", JSON.stringify(userData));
+            sessionStorage.setItem("token", userToken);
 
             // Process each item in cart
             for (const item of cartItems) {

@@ -2,12 +2,12 @@
 
 export const getToken = (): string | null => {
     if (typeof window === "undefined") return null;
-    return localStorage.getItem("token");
+    return sessionStorage.getItem("token");
 };
 
 export const getUser = (): any | null => {
     if (typeof window === "undefined") return null;
-    const userData = localStorage.getItem("user");
+    const userData = sessionStorage.getItem("user");
     if (!userData) return null;
     try {
         return JSON.parse(userData);
@@ -17,7 +17,7 @@ export const getUser = (): any | null => {
 };
 
 export const isAuthenticated = (): boolean => {
-    return !!getToken();
+    return !!getToken() && !!getUser();
 };
 
 export const isAdmin = (): boolean => {
@@ -58,7 +58,7 @@ export const getUserId = (): string | null => {
 
 export const clearAuth = (): void => {
     if (typeof window === "undefined") return;
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("user");
 };
 

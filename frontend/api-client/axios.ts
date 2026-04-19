@@ -2,7 +2,7 @@ import axios from "axios";
 
 const getBaseURL = () => {
   if (typeof window !== "undefined" && window.location.hostname === "localhost") {
-    return "https://deero-advert-production-c83e.up.railway.app/api";
+    return "http://localhost:5000/api";
   }
   return process.env.NEXT_PUBLIC_API_URL || "https://deero-advert-production-c83e.up.railway.app/api";
 };
@@ -13,14 +13,14 @@ const api = axios.create({
 
 
 
+import { getToken, clearAuth } from "@/utils/auth";
+
 // Add token to requests
 api.interceptors.request.use(
   (config) => {
-    if (typeof window !== "undefined") {
-      const token = localStorage.getItem("token");
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
+    const token = getToken();
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   }, 
@@ -35,9 +35,8 @@ api.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401 && !error.config.url?.includes("login")) {
       // Unauthorized - clear auth and redirect to login
+      clearAuth();
       if (typeof window !== "undefined") {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
         window.location.href = "/login";
       }
     }

@@ -47,10 +47,11 @@ app.use((req, res, next) => {
       if (newObj.id && !newObj._id) newObj._id = String(newObj.id);
       
       for (const key in newObj) {
-        // Recursively apply to children
+        
+        
         newObj[key] = addAlias(newObj[key]);
         
-        // After recursive call, check if this key itself is an ID that needs stringifying
+       
         if (typeof key === 'string' && key.toLowerCase().endsWith('id') && newObj[key] !== null && newObj[key] !== undefined && typeof newObj[key] !== 'object') {
              newObj[key] = String(newObj[key]);
         }
