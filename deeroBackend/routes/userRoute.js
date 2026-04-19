@@ -8,7 +8,8 @@ import {
   getUserById,
   updateUser,
   deleteUser,
-  getBonusHistory
+  getBonusHistory,
+  googleLogin
 } from "../controllers/userController.js";
 import { protect } from "../middlewares/authMiddleware.js";
 const router = express.Router();
@@ -26,6 +27,7 @@ router.delete("/:id", protect, deleteUser);
 // Public authentication routes
 router.post("/signup", signup);
 router.post("/login", login);
+router.post("/google-login", googleLogin);
 router.post("/forgot-password", forgotPassword);
 router.post("/reset-password/:token", resetPassword);
 

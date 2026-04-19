@@ -164,6 +164,83 @@ export const login = async (req, res) => {
 };
 
 /**
+ * 🔐 GOOGLE LOGIN / SYNC
+ */
+export const googleLogin = async (req, res) => {
+  try {
+    const { email, name, googleId, image } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
+    }
+
+    let user = await prisma.user.findUnique({
+      where: { email: email.toLowerCase() },
+      include: { role: true }
+    });
+
+    if (!user) {
+      // Create a new user if not exists
+      let userRole = await prisma.role.findUnique({ where: { name: "user" } });
+      if (!userRole) {
+        userRole = await prisma.role.create({
+          data: { name: "user", description: "Standard user" }
+        });
+      }
+
+      // Default password for Google users (they won't use it to login traditionally)
+      const hashedPassword = await bcrypt.hash(googleId || Math.random().toString(36), 10);
+
+      // Mobile users usually get 15 bonus points
+      const initialBonus = 15;
+
+      user = await prisma.user.create({
+        data: {
+          fullname: name || email.split("@")[0],
+          email: email.toLowerCase(),
+          password: hashedPassword,
+          roleId: userRole.id,
+          registerSource: "mobile", // Assuming Google sign-in is primarily from mobile/app
+          bonus: initialBonus,
+          bonusHistory: {
+            create: {
+              amount: initialBonus,
+              reason: "Registration Bonus (Google)",
+              type: "add"
+            }
+          }
+        },
+        include: { role: true }
+      });
+    }
+
+    const token = jwt.sign(
+      { userId: user.id, email: user.email, role: user.role },
+      process.env.JWT_SECRET || "secret",
+      { expiresIn: "7d" }
+    );
+
+    res.status(200).json({
+      message: "Google login successful",
+      token,
+      user: {
+        id: user.id,
+        fullname: user.fullname,
+        email: user.email,
+        phone: user.phone,
+        bonus: user.bonus,
+        bonusStatus: user.bonusStatus,
+        registerSource: user.registerSource,
+        role: user.role
+      }
+    });
+  } catch (error) {
+    console.error("Google Login Error:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+/**
  * 🔑 FORGOT PASSWORD
  */
 export const forgotPassword = async (req, res) => {
