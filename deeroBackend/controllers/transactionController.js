@@ -19,19 +19,24 @@ export const createTransaction = async (req, res) => {
     if (!user) return res.status(404).json({ message: "User not found" });
 
     const { useBonus } = req.body;
-    let finalAmount = parseFloat(amount);
+    let originalAmount = parseFloat(amount);
+    let discountApplied = 0;
+    let finalAmount = originalAmount;
 
     // Apply 50% Discount if Bonus is available and requested
     if (useBonus && user.bonusStatus === "BonusAvailable") {
-      finalAmount = finalAmount / 2;
+      discountApplied = originalAmount / 2;
+      finalAmount = originalAmount - discountApplied;
     }
 
     let data = {
-        userId: user.id,
-        amount: finalAmount,
-        description: description || "",
-        status: "pending",
-        paymentMethod: paymentMethod || (accountNo ? "waafi" : "mail-in")
+      userId: user.id,
+      amount: finalAmount,
+      originalAmount: originalAmount,
+      discountApplied: discountApplied,
+      description: description || "",
+      status: "pending",
+      paymentMethod: paymentMethod || (accountNo ? "waafi" : "mail-in")
     };
 
     let transactionType = "register";
@@ -43,15 +48,15 @@ export const createTransaction = async (req, res) => {
     } else if (serviceId) {
       const service = await prisma.service.findUnique({ where: { id: parseInt(serviceId) } });
       if (!service) return res.status(404).json({ message: "Service not found" });
-      
+
       // packages is Json in Prisma
       const packages = service.packages || [];
       const selectedPackage = packages.find(pkg => (pkg.id || pkg._id) == packageId);
-      
+
       data.serviceId = service.id;
       data.packageId = packageId ? packageId.toString() : null;
       transactionType = "service_payment";
-      
+
       if (!data.description || data.description.trim() === "") {
         data.description = `Payment for ${service.serviceTitle}`;
         if (selectedPackage && selectedPackage.packageTitle) {
@@ -85,13 +90,13 @@ export const createTransaction = async (req, res) => {
         amount: data.amount,
         description: data.description || "Deero Payment"
       });
-      
+
       const status = paymentResponse.responseCode === "2001" ? "completed" : "failed";
       transaction = await prisma.transaction.update({
         where: { id: transaction.id },
-        data: { 
-            status, 
-            paymentReferenceId: paymentResponse.referenceId || transaction.id.toString() 
+        data: {
+          status,
+          paymentReferenceId: paymentResponse.referenceId || transaction.id.toString()
         },
         include: { user: true, service: true, hostingPackage: true }
       });
@@ -141,64 +146,64 @@ export const createTransaction = async (req, res) => {
  * 🎁 BONUS LOGIC HELPER
  */
 const handleBonusPoints = async (userId, transactionType) => {
-    try {
-        const user = await prisma.user.findUnique({ where: { id: userId } });
-        if (!user) return;
+  try {
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    if (!user) return;
 
-        // Count all previous COMPLETED transactions for this user
-        const completedCount = await prisma.transaction.count({
-            where: {
-                userId: userId,
-                status: "completed"
-            }
-        });
+    // Count all previous COMPLETED transactions for this user
+    const completedCount = await prisma.transaction.count({
+      where: {
+        userId: userId,
+        status: "completed"
+      }
+    });
 
-        let pointsToAdd = 0;
-        let reason = "";
+    let pointsToAdd = 0;
+    let reason = "";
 
-        if (completedCount === 1) {
-            pointsToAdd = 15;
-            reason = "1st Purchase Bonus (+15)";
-        } else if (completedCount === 2) {
-            pointsToAdd = 30;
-            reason = "2nd Purchase Bonus (+30)";
-        } else if (completedCount === 3) {
-            pointsToAdd = 40;
-            reason = "3rd Purchase Bonus (+40)";
-        } else {
-            // Any further purchases
-            pointsToAdd = 10; 
-            reason = "Additional Purchase Bonus";
-        }
-
-        let newBonus = user.bonus + pointsToAdd;
-        let finalStatus = user.bonusStatus;
-
-        // Check if milestone 100 is reached
-        if (newBonus >= 100) {
-            finalStatus = "BonusAvailable";
-            newBonus = 100; // Cap at 100 until claimed
-            reason = "Milestone Reached! (50% Free Benefit) - Status: BonusAvailable";
-        }
-
-        // Update User and Log History
-        await prisma.user.update({
-            where: { id: userId },
-            data: {
-                bonus: newBonus,
-                bonusStatus: finalStatus,
-                bonusHistory: {
-                    create: {
-                        amount: pointsToAdd,
-                        reason: reason,
-                        type: "add"
-                    }
-                }
-            }
-        });
-    } catch (error) {
-        console.error("Bonus Error:", error);
+    if (completedCount === 1) {
+      pointsToAdd = 15;
+      reason = "1st Purchase Bonus (+15)";
+    } else if (completedCount === 2) {
+      pointsToAdd = 30;
+      reason = "2nd Purchase Bonus (+30)";
+    } else if (completedCount === 3) {
+      pointsToAdd = 40;
+      reason = "3rd Purchase Bonus (+40)";
+    } else {
+      // Any further purchases
+      pointsToAdd = 10;
+      reason = "Additional Purchase Bonus";
     }
+
+    let newBonus = user.bonus + pointsToAdd;
+    let finalStatus = user.bonusStatus;
+
+    // Check if milestone 100 is reached
+    if (newBonus >= 100) {
+      finalStatus = "BonusAvailable";
+      newBonus = 100; // Cap at 100 until claimed
+      reason = "Milestone Reached! (50% Free Benefit) - Status: BonusAvailable";
+    }
+
+    // Update User and Log History
+    await prisma.user.update({
+      where: { id: userId },
+      data: {
+        bonus: newBonus,
+        bonusStatus: finalStatus,
+        bonusHistory: {
+          create: {
+            amount: pointsToAdd,
+            reason: reason,
+            type: "add"
+          }
+        }
+      }
+    });
+  } catch (error) {
+    console.error("Bonus Error:", error);
+  }
 };
 
 export const getAllTransactions = async (req, res) => {
@@ -281,11 +286,11 @@ export const getRevenueAnalytics = async (req, res) => {
     sixMonthsAgo.setDate(1);
 
     const { userId } = req.query;
-    
+
     // Prisma doesn't support $year/$month in groupBy easily for SQLite/MySQL without raw query
     // But I can fetch and aggregate in JS or use raw SQL. 
     // For simplicity and compatibility, I'll fetch and aggregate in JS for now.
-    
+
     const transactions = await prisma.transaction.findMany({
       where: {
         status: "completed",

@@ -9,7 +9,7 @@ import {
   updateUser,
   deleteUser,
   getBonusHistory,
-  googleLogin
+  googleLogin,
 } from "../controllers/userController.js";
 import { protect } from "../middlewares/authMiddleware.js";
 const router = express.Router();
