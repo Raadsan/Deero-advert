@@ -57,16 +57,65 @@ export const getMenuById = async (req, res) => {
 // UPDATE Menu
 export const updateMenu = async (req, res) => {
   try {
-    const { title, icon, url, isCollapsible } = req.body;
-    const menu = await prisma.menu.update({
-      where: { id: parseInt(req.params.id) },
-      data: { title, icon, url, isCollapsible },
-      include: { subMenus: true }
+    const { title, icon, url, isCollapsible, subMenus } = req.body;
+    const menuId = parseInt(req.params.id);
+
+    // Use a transaction to ensure both menu and submenus are updated
+    const menu = await prisma.$transaction(async (tx) => {
+      // 1. Update the main menu
+      const updatedMenu = await tx.menu.update({
+        where: { id: menuId },
+        data: { title, icon, url, isCollapsible },
+      });
+
+      if (subMenus && Array.isArray(subMenus)) {
+        // 2. Get existing submenu IDs to identify which ones to delete
+        const existingSubMenus = await tx.subMenu.findMany({
+          where: { menuId },
+          select: { id: true },
+        });
+        const existingIds = existingSubMenus.map((s) => s.id);
+        const incomingIds = subMenus
+          .map((s) => (s.id ? parseInt(s.id) : s._id ? parseInt(s._id) : null))
+          .filter(Boolean);
+
+        // 3. Delete submenus that are no longer in the list
+        const idsToDelete = existingIds.filter((id) => !incomingIds.includes(id));
+        if (idsToDelete.length > 0) {
+          await tx.subMenu.deleteMany({
+            where: { id: { in: idsToDelete } },
+          });
+        }
+
+        // 4. Update existing or create new submenus
+        for (const sm of subMenus) {
+          const smId = sm.id ? parseInt(sm.id) : sm._id ? parseInt(sm._id) : null;
+          if (smId) {
+            // Update existing
+            await tx.subMenu.update({
+              where: { id: smId },
+              data: { title: sm.title, url: sm.url },
+            });
+          } else {
+            // Create new
+            await tx.subMenu.create({
+              data: { title: sm.title, url: sm.url, menuId },
+            });
+          }
+        }
+      }
+
+      return await tx.menu.findUnique({
+        where: { id: menuId },
+        include: { subMenus: true },
+      });
     });
+
     res.json({ success: true, menu });
   } catch (err) {
     if (err.code === "P2002") return res.status(400).json({ success: false, message: "Menu title must be unique" });
     if (err.code === "P2025") return res.status(404).json({ success: false, message: "Menu not found" });
+    console.error("Update Menu Error:", err);
     res.status(500).json({ success: false, message: err.message });
   }
 };
