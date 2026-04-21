@@ -23478,6 +23478,8 @@ export namespace Prisma {
     hostingPackageId: number | null
     userId: number | null
     amount: number | null
+    originalAmount: number | null
+    discountApplied: number | null
   }
 
   export type TransactionSumAggregateOutputType = {
@@ -23486,6 +23488,8 @@ export namespace Prisma {
     hostingPackageId: number | null
     userId: number | null
     amount: number | null
+    originalAmount: number | null
+    discountApplied: number | null
   }
 
   export type TransactionMinAggregateOutputType = {
@@ -23497,6 +23501,8 @@ export namespace Prisma {
     userId: number | null
     type: string | null
     amount: number | null
+    originalAmount: number | null
+    discountApplied: number | null
     status: string | null
     paymentReferenceId: string | null
     currency: string | null
@@ -23516,6 +23522,8 @@ export namespace Prisma {
     userId: number | null
     type: string | null
     amount: number | null
+    originalAmount: number | null
+    discountApplied: number | null
     status: string | null
     paymentReferenceId: string | null
     currency: string | null
@@ -23535,6 +23543,8 @@ export namespace Prisma {
     userId: number
     type: number
     amount: number
+    originalAmount: number
+    discountApplied: number
     status: number
     paymentReferenceId: number
     currency: number
@@ -23553,6 +23563,8 @@ export namespace Prisma {
     hostingPackageId?: true
     userId?: true
     amount?: true
+    originalAmount?: true
+    discountApplied?: true
   }
 
   export type TransactionSumAggregateInputType = {
@@ -23561,6 +23573,8 @@ export namespace Prisma {
     hostingPackageId?: true
     userId?: true
     amount?: true
+    originalAmount?: true
+    discountApplied?: true
   }
 
   export type TransactionMinAggregateInputType = {
@@ -23572,6 +23586,8 @@ export namespace Prisma {
     userId?: true
     type?: true
     amount?: true
+    originalAmount?: true
+    discountApplied?: true
     status?: true
     paymentReferenceId?: true
     currency?: true
@@ -23591,6 +23607,8 @@ export namespace Prisma {
     userId?: true
     type?: true
     amount?: true
+    originalAmount?: true
+    discountApplied?: true
     status?: true
     paymentReferenceId?: true
     currency?: true
@@ -23610,6 +23628,8 @@ export namespace Prisma {
     userId?: true
     type?: true
     amount?: true
+    originalAmount?: true
+    discountApplied?: true
     status?: true
     paymentReferenceId?: true
     currency?: true
@@ -23716,6 +23736,8 @@ export namespace Prisma {
     userId: number
     type: string
     amount: number
+    originalAmount: number | null
+    discountApplied: number | null
     status: string
     paymentReferenceId: string | null
     currency: string
@@ -23754,6 +23776,8 @@ export namespace Prisma {
     userId?: boolean
     type?: boolean
     amount?: boolean
+    originalAmount?: boolean
+    discountApplied?: boolean
     status?: boolean
     paymentReferenceId?: boolean
     currency?: boolean
@@ -23778,6 +23802,8 @@ export namespace Prisma {
     userId?: boolean
     type?: boolean
     amount?: boolean
+    originalAmount?: boolean
+    discountApplied?: boolean
     status?: boolean
     paymentReferenceId?: boolean
     currency?: boolean
@@ -23788,7 +23814,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type TransactionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "domainName" | "serviceId" | "hostingPackageId" | "packageId" | "userId" | "type" | "amount" | "status" | "paymentReferenceId" | "currency" | "description" | "paymentMethod" | "completedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["transaction"]>
+  export type TransactionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "domainName" | "serviceId" | "hostingPackageId" | "packageId" | "userId" | "type" | "amount" | "originalAmount" | "discountApplied" | "status" | "paymentReferenceId" | "currency" | "description" | "paymentMethod" | "completedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["transaction"]>
   export type TransactionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     service?: boolean | Transaction$serviceArgs<ExtArgs>
     hostingPackage?: boolean | Transaction$hostingPackageArgs<ExtArgs>
@@ -23811,6 +23837,8 @@ export namespace Prisma {
       userId: number
       type: string
       amount: number
+      originalAmount: number | null
+      discountApplied: number | null
       status: string
       paymentReferenceId: string | null
       currency: string
@@ -24199,6 +24227,8 @@ export namespace Prisma {
     readonly userId: FieldRef<"Transaction", 'Int'>
     readonly type: FieldRef<"Transaction", 'String'>
     readonly amount: FieldRef<"Transaction", 'Float'>
+    readonly originalAmount: FieldRef<"Transaction", 'Float'>
+    readonly discountApplied: FieldRef<"Transaction", 'Float'>
     readonly status: FieldRef<"Transaction", 'String'>
     readonly paymentReferenceId: FieldRef<"Transaction", 'String'>
     readonly currency: FieldRef<"Transaction", 'String'>
@@ -32656,6 +32686,8 @@ export namespace Prisma {
     userId: 'userId',
     type: 'type',
     amount: 'amount',
+    originalAmount: 'originalAmount',
+    discountApplied: 'discountApplied',
     status: 'status',
     paymentReferenceId: 'paymentReferenceId',
     currency: 'currency',
@@ -34445,6 +34477,8 @@ export namespace Prisma {
     userId?: IntFilter<"Transaction"> | number
     type?: StringFilter<"Transaction"> | string
     amount?: FloatFilter<"Transaction"> | number
+    originalAmount?: FloatNullableFilter<"Transaction"> | number | null
+    discountApplied?: FloatNullableFilter<"Transaction"> | number | null
     status?: StringFilter<"Transaction"> | string
     paymentReferenceId?: StringNullableFilter<"Transaction"> | string | null
     currency?: StringFilter<"Transaction"> | string
@@ -34467,6 +34501,8 @@ export namespace Prisma {
     userId?: SortOrder
     type?: SortOrder
     amount?: SortOrder
+    originalAmount?: SortOrderInput | SortOrder
+    discountApplied?: SortOrderInput | SortOrder
     status?: SortOrder
     paymentReferenceId?: SortOrderInput | SortOrder
     currency?: SortOrder
@@ -34493,6 +34529,8 @@ export namespace Prisma {
     userId?: IntFilter<"Transaction"> | number
     type?: StringFilter<"Transaction"> | string
     amount?: FloatFilter<"Transaction"> | number
+    originalAmount?: FloatNullableFilter<"Transaction"> | number | null
+    discountApplied?: FloatNullableFilter<"Transaction"> | number | null
     status?: StringFilter<"Transaction"> | string
     paymentReferenceId?: StringNullableFilter<"Transaction"> | string | null
     currency?: StringFilter<"Transaction"> | string
@@ -34515,6 +34553,8 @@ export namespace Prisma {
     userId?: SortOrder
     type?: SortOrder
     amount?: SortOrder
+    originalAmount?: SortOrderInput | SortOrder
+    discountApplied?: SortOrderInput | SortOrder
     status?: SortOrder
     paymentReferenceId?: SortOrderInput | SortOrder
     currency?: SortOrder
@@ -34542,6 +34582,8 @@ export namespace Prisma {
     userId?: IntWithAggregatesFilter<"Transaction"> | number
     type?: StringWithAggregatesFilter<"Transaction"> | string
     amount?: FloatWithAggregatesFilter<"Transaction"> | number
+    originalAmount?: FloatNullableWithAggregatesFilter<"Transaction"> | number | null
+    discountApplied?: FloatNullableWithAggregatesFilter<"Transaction"> | number | null
     status?: StringWithAggregatesFilter<"Transaction"> | string
     paymentReferenceId?: StringNullableWithAggregatesFilter<"Transaction"> | string | null
     currency?: StringWithAggregatesFilter<"Transaction"> | string
@@ -36361,6 +36403,8 @@ export namespace Prisma {
     packageId?: string | null
     type: string
     amount: number
+    originalAmount?: number | null
+    discountApplied?: number | null
     status?: string
     paymentReferenceId?: string | null
     currency?: string
@@ -36383,6 +36427,8 @@ export namespace Prisma {
     userId: number
     type: string
     amount: number
+    originalAmount?: number | null
+    discountApplied?: number | null
     status?: string
     paymentReferenceId?: string | null
     currency?: string
@@ -36398,6 +36444,8 @@ export namespace Prisma {
     packageId?: NullableStringFieldUpdateOperationsInput | string | null
     type?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
+    originalAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    discountApplied?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: StringFieldUpdateOperationsInput | string
     paymentReferenceId?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
@@ -36420,6 +36468,8 @@ export namespace Prisma {
     userId?: IntFieldUpdateOperationsInput | number
     type?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
+    originalAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    discountApplied?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: StringFieldUpdateOperationsInput | string
     paymentReferenceId?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
@@ -36439,6 +36489,8 @@ export namespace Prisma {
     userId: number
     type: string
     amount: number
+    originalAmount?: number | null
+    discountApplied?: number | null
     status?: string
     paymentReferenceId?: string | null
     currency?: string
@@ -36454,6 +36506,8 @@ export namespace Prisma {
     packageId?: NullableStringFieldUpdateOperationsInput | string | null
     type?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
+    originalAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    discountApplied?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: StringFieldUpdateOperationsInput | string
     paymentReferenceId?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
@@ -36473,6 +36527,8 @@ export namespace Prisma {
     userId?: IntFieldUpdateOperationsInput | number
     type?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
+    originalAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    discountApplied?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: StringFieldUpdateOperationsInput | string
     paymentReferenceId?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
@@ -38166,6 +38222,17 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
+  export type FloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
   export type ServiceNullableScalarRelationFilter = {
     is?: ServiceWhereInput | null
     isNot?: ServiceWhereInput | null
@@ -38191,6 +38258,8 @@ export namespace Prisma {
     userId?: SortOrder
     type?: SortOrder
     amount?: SortOrder
+    originalAmount?: SortOrder
+    discountApplied?: SortOrder
     status?: SortOrder
     paymentReferenceId?: SortOrder
     currency?: SortOrder
@@ -38207,6 +38276,8 @@ export namespace Prisma {
     hostingPackageId?: SortOrder
     userId?: SortOrder
     amount?: SortOrder
+    originalAmount?: SortOrder
+    discountApplied?: SortOrder
   }
 
   export type TransactionMaxOrderByAggregateInput = {
@@ -38218,6 +38289,8 @@ export namespace Prisma {
     userId?: SortOrder
     type?: SortOrder
     amount?: SortOrder
+    originalAmount?: SortOrder
+    discountApplied?: SortOrder
     status?: SortOrder
     paymentReferenceId?: SortOrder
     currency?: SortOrder
@@ -38237,6 +38310,8 @@ export namespace Prisma {
     userId?: SortOrder
     type?: SortOrder
     amount?: SortOrder
+    originalAmount?: SortOrder
+    discountApplied?: SortOrder
     status?: SortOrder
     paymentReferenceId?: SortOrder
     currency?: SortOrder
@@ -38253,6 +38328,8 @@ export namespace Prisma {
     hostingPackageId?: SortOrder
     userId?: SortOrder
     amount?: SortOrder
+    originalAmount?: SortOrder
+    discountApplied?: SortOrder
   }
 
   export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -38269,6 +38346,22 @@ export namespace Prisma {
     _sum?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedIntNullableFilter<$PrismaModel>
     _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
   export type ContactOrderByRelevanceInput = {
@@ -39356,6 +39449,14 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type NullableFloatFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type ServiceUpdateOneWithoutTransactionsNestedInput = {
     create?: XOR<ServiceCreateWithoutTransactionsInput, ServiceUncheckedCreateWithoutTransactionsInput>
     connectOrCreate?: ServiceCreateOrConnectWithoutTransactionsInput
@@ -39835,6 +39936,17 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | null
@@ -39851,7 +39963,7 @@ export namespace Prisma {
     _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
-  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+  export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel> | null
     in?: number[] | null
     notIn?: number[] | null
@@ -39859,7 +39971,12 @@ export namespace Prisma {
     lte?: number | FloatFieldRefInput<$PrismaModel>
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
   export type RoleCreateWithoutUsersInput = {
@@ -39945,6 +40062,8 @@ export namespace Prisma {
     packageId?: string | null
     type: string
     amount: number
+    originalAmount?: number | null
+    discountApplied?: number | null
     status?: string
     paymentReferenceId?: string | null
     currency?: string
@@ -39965,6 +40084,8 @@ export namespace Prisma {
     packageId?: string | null
     type: string
     amount: number
+    originalAmount?: number | null
+    discountApplied?: number | null
     status?: string
     paymentReferenceId?: string | null
     currency?: string
@@ -40123,6 +40244,8 @@ export namespace Prisma {
     userId?: IntFilter<"Transaction"> | number
     type?: StringFilter<"Transaction"> | string
     amount?: FloatFilter<"Transaction"> | number
+    originalAmount?: FloatNullableFilter<"Transaction"> | number | null
+    discountApplied?: FloatNullableFilter<"Transaction"> | number | null
     status?: StringFilter<"Transaction"> | string
     paymentReferenceId?: StringNullableFilter<"Transaction"> | string | null
     currency?: StringFilter<"Transaction"> | string
@@ -40939,6 +41062,8 @@ export namespace Prisma {
     packageId?: string | null
     type: string
     amount: number
+    originalAmount?: number | null
+    discountApplied?: number | null
     status?: string
     paymentReferenceId?: string | null
     currency?: string
@@ -40959,6 +41084,8 @@ export namespace Prisma {
     userId: number
     type: string
     amount: number
+    originalAmount?: number | null
+    discountApplied?: number | null
     status?: string
     paymentReferenceId?: string | null
     currency?: string
@@ -41526,6 +41653,8 @@ export namespace Prisma {
     packageId?: string | null
     type: string
     amount: number
+    originalAmount?: number | null
+    discountApplied?: number | null
     status?: string
     paymentReferenceId?: string | null
     currency?: string
@@ -41546,6 +41675,8 @@ export namespace Prisma {
     userId: number
     type: string
     amount: number
+    originalAmount?: number | null
+    discountApplied?: number | null
     status?: string
     paymentReferenceId?: string | null
     currency?: string
@@ -41877,6 +42008,8 @@ export namespace Prisma {
     packageId?: string | null
     type: string
     amount: number
+    originalAmount?: number | null
+    discountApplied?: number | null
     status?: string
     paymentReferenceId?: string | null
     currency?: string
@@ -41954,6 +42087,8 @@ export namespace Prisma {
     packageId?: NullableStringFieldUpdateOperationsInput | string | null
     type?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
+    originalAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    discountApplied?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: StringFieldUpdateOperationsInput | string
     paymentReferenceId?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
@@ -41974,6 +42109,8 @@ export namespace Prisma {
     packageId?: NullableStringFieldUpdateOperationsInput | string | null
     type?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
+    originalAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    discountApplied?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: StringFieldUpdateOperationsInput | string
     paymentReferenceId?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
@@ -41992,6 +42129,8 @@ export namespace Prisma {
     packageId?: NullableStringFieldUpdateOperationsInput | string | null
     type?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
+    originalAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    discountApplied?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: StringFieldUpdateOperationsInput | string
     paymentReferenceId?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
@@ -42205,6 +42344,8 @@ export namespace Prisma {
     userId: number
     type: string
     amount: number
+    originalAmount?: number | null
+    discountApplied?: number | null
     status?: string
     paymentReferenceId?: string | null
     currency?: string
@@ -42220,6 +42361,8 @@ export namespace Prisma {
     packageId?: NullableStringFieldUpdateOperationsInput | string | null
     type?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
+    originalAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    discountApplied?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: StringFieldUpdateOperationsInput | string
     paymentReferenceId?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
@@ -42240,6 +42383,8 @@ export namespace Prisma {
     userId?: IntFieldUpdateOperationsInput | number
     type?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
+    originalAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    discountApplied?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: StringFieldUpdateOperationsInput | string
     paymentReferenceId?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
@@ -42258,6 +42403,8 @@ export namespace Prisma {
     userId?: IntFieldUpdateOperationsInput | number
     type?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
+    originalAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    discountApplied?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: StringFieldUpdateOperationsInput | string
     paymentReferenceId?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
@@ -42343,6 +42490,8 @@ export namespace Prisma {
     userId: number
     type: string
     amount: number
+    originalAmount?: number | null
+    discountApplied?: number | null
     status?: string
     paymentReferenceId?: string | null
     currency?: string
@@ -42377,6 +42526,8 @@ export namespace Prisma {
     packageId?: NullableStringFieldUpdateOperationsInput | string | null
     type?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
+    originalAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    discountApplied?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: StringFieldUpdateOperationsInput | string
     paymentReferenceId?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
@@ -42397,6 +42548,8 @@ export namespace Prisma {
     userId?: IntFieldUpdateOperationsInput | number
     type?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
+    originalAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    discountApplied?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: StringFieldUpdateOperationsInput | string
     paymentReferenceId?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
@@ -42415,6 +42568,8 @@ export namespace Prisma {
     userId?: IntFieldUpdateOperationsInput | number
     type?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
+    originalAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    discountApplied?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: StringFieldUpdateOperationsInput | string
     paymentReferenceId?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string

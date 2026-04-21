@@ -239,6 +239,8 @@ model Transaction {
   user               User            @relation(fields: [userId], references: [id])
   type               String          // register, service_payment, hosting_payment
   amount             Float
+  originalAmount     Float?          @default(0)
+  discountApplied    Float?          @default(0)
   status             String          @default("pending") // pending, completed, failed
   paymentReferenceId String?
   currency           String          @default("USD")
