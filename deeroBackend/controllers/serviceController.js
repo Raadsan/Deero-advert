@@ -44,7 +44,7 @@ export const CreateService = async (req, res) => {
 
         let packagesData = packages;
         if (typeof packages === "string") {
-            try { packagesData = JSON.parse(packages); } catch (e) {}
+            try { packagesData = JSON.parse(packages); } catch (e) { }
         }
 
         const newService = await prisma.service.create({
@@ -125,7 +125,7 @@ export const updateServiceById = async (req, res) => {
         if (packages) {
             let packagesData = packages;
             if (typeof packages === "string") {
-                try { packagesData = JSON.parse(packages); } catch (e) {}
+                try { packagesData = JSON.parse(packages); } catch (e) { }
             }
             if (Array.isArray(packagesData)) {
                 // Cascading update: delete and recreate

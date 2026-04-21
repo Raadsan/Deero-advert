@@ -358,11 +358,11 @@ export const updateUser = async (req, res) => {
   try {
     const data = { ...req.body };
     if (data.password) data.password = await bcrypt.hash(data.password, 10);
-    
+
     // Remove relation fields if they are in body but not as proper IDs
     if (data.role) {
-       data.roleId = parseInt(data.role);
-       delete data.role;
+      data.roleId = parseInt(data.role);
+      delete data.role;
     }
 
     const user = await prisma.user.update({

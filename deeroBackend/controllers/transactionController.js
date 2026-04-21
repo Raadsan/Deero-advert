@@ -214,33 +214,42 @@ export const getAllTransactions = async (req, res) => {
     });
     res.json({ success: true, transactions });
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    console.error("Error in getAllTransactions:", err);
+    res.status(500).json({ message: "Server error", error: err.message });
   }
 };
 
 export const getTransactionById = async (req, res) => {
   try {
+    const id = parseInt(req.params.id);
+    if (isNaN(id)) return res.status(400).json({ message: "Invalid transaction ID" });
+
     const transaction = await prisma.transaction.findUnique({
-      where: { id: parseInt(req.params.id) },
+      where: { id },
       include: { user: true, service: true, hostingPackage: true }
     });
     if (!transaction) return res.status(404).json({ message: "Transaction not found" });
     res.json({ success: true, transaction });
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    console.error("Error in getTransactionById:", err);
+    res.status(500).json({ message: "Server error", error: err.message });
   }
 };
 
 export const getTransactionsByUser = async (req, res) => {
   try {
+    const userId = parseInt(req.params.userId);
+    if (isNaN(userId)) return res.status(400).json({ message: "Invalid user ID" });
+
     const transactions = await prisma.transaction.findMany({
-      where: { userId: parseInt(req.params.userId) },
+      where: { userId },
       include: { user: true, service: true, hostingPackage: true },
       orderBy: { createdAt: 'desc' }
     });
     res.json({ success: true, transactions });
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    console.error("Error in getTransactionsByUser:", err);
+    res.status(500).json({ message: "Server error", error: err.message });
   }
 };
 
@@ -259,23 +268,31 @@ export const getTransactionsByType = async (req, res) => {
 
 export const updateTransaction = async (req, res) => {
   try {
+    const id = parseInt(req.params.id);
+    if (isNaN(id)) return res.status(400).json({ message: "Invalid transaction ID" });
+
     const transaction = await prisma.transaction.update({
-      where: { id: parseInt(req.params.id) },
+      where: { id },
       data: req.body,
       include: { user: true, service: true, hostingPackage: true }
     });
     res.json({ success: true, transaction });
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    console.error("Error in updateTransaction:", err);
+    res.status(500).json({ message: "Server error", error: err.message });
   }
 };
 
 export const deleteTransaction = async (req, res) => {
   try {
-    await prisma.transaction.delete({ where: { id: parseInt(req.params.id) } });
+    const id = parseInt(req.params.id);
+    if (isNaN(id)) return res.status(400).json({ message: "Invalid transaction ID" });
+
+    await prisma.transaction.delete({ where: { id } });
     res.json({ success: true, message: "Transaction deleted successfully" });
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    console.error("Error in deleteTransaction:", err);
+    res.status(500).json({ message: "Server error", error: err.message });
   }
 };
 
@@ -284,18 +301,24 @@ export const getRevenueAnalytics = async (req, res) => {
     const sixMonthsAgo = new Date();
     sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 5);
     sixMonthsAgo.setDate(1);
+    sixMonthsAgo.setHours(0, 0, 0, 0);
 
-    const { userId } = req.query;
+    const { userId: userIdQuery } = req.query;
+    let userId = undefined;
 
-    // Prisma doesn't support $year/$month in groupBy easily for SQLite/MySQL without raw query
-    // But I can fetch and aggregate in JS or use raw SQL. 
-    // For simplicity and compatibility, I'll fetch and aggregate in JS for now.
+    if (userIdQuery && userIdQuery !== 'null' && userIdQuery !== 'undefined') {
+      userId = parseInt(userIdQuery);
+      if (isNaN(userId)) {
+        console.warn(`getRevenueAnalytics: Invalid userId query received: "${userIdQuery}"`);
+        userId = undefined;
+      }
+    }
 
     const transactions = await prisma.transaction.findMany({
       where: {
         status: "completed",
         createdAt: { gte: sixMonthsAgo },
-        userId: userId ? parseInt(userId) : undefined
+        userId: userId
       },
       select: { amount: true, createdAt: true }
     });
@@ -325,7 +348,7 @@ export const getRevenueAnalytics = async (req, res) => {
 
     res.json({ success: true, data: formattedData.slice(-6) });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Server error" });
+    console.error("Error in getRevenueAnalytics:", err);
+    res.status(500).json({ message: "Server error", error: err.message });
   }
 };
