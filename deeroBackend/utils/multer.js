@@ -7,14 +7,14 @@ const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: "deero-uploads",
-    allowed_formats: ["jpg", "jpeg", "png", "gif", "webp", "svg", "pdf"],
+    allowed_formats: ["jpg", "jpeg", "png", "gif", "webp", "svg", "pdf", "mp4", "webm", "ogg", "mov", "avi", "mkv"],
     resource_type: "auto",
   },
 });
 
 const fileFilter = (req, file, cb) => {
-  const allowedExtensions = /jpeg|jpg|png|gif|webp|svg|pdf|html|htm/;
-  const allowedMimetypes = /image\/|application\/pdf|text\/html/;
+  const allowedExtensions = /jpeg|jpg|png|gif|webp|svg|pdf|html|htm|mp4|webm|ogg|mov|avi|mkv/;
+  const allowedMimetypes = /image\/|application\/pdf|text\/html|video\//;
 
   const isExtensionValid = allowedExtensions.test(path.extname(file.originalname).toLowerCase());
   const isMimetypeValid = allowedMimetypes.test(file.mimetype);

@@ -195,6 +195,14 @@ exports.Prisma.SubMenuScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.VideoScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  url: 'url',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.BlogScalarFieldEnum = {
   id: 'id',
   title: 'title',
@@ -449,6 +457,11 @@ exports.Prisma.SubMenuOrderByRelevanceFieldEnum = {
   url: 'url'
 };
 
+exports.Prisma.VideoOrderByRelevanceFieldEnum = {
+  title: 'title',
+  url: 'url'
+};
+
 exports.Prisma.BlogOrderByRelevanceFieldEnum = {
   title: 'title',
   slug: 'slug',
@@ -591,6 +604,7 @@ exports.Prisma.ModelName = {
   PermissionSubMenu: 'PermissionSubMenu',
   Menu: 'Menu',
   SubMenu: 'SubMenu',
+  Video: 'Video',
   Blog: 'Blog',
   Achievement: 'Achievement',
   Announcement: 'Announcement',

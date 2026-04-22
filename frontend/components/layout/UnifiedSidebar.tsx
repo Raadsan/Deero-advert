@@ -24,7 +24,8 @@ import {
     ShoppingBag,
     Globe,
     CreditCard,
-    User
+    User,
+    Video
 } from "lucide-react";
 import Image from "next/image";
 import { logout } from "@/api-client/authApi";
@@ -78,6 +79,8 @@ const iconMap: Record<string, LucideIcon> = {
     "major-clients": Users,
     domains: Globe,
     teams: Users,
+    video: Video,
+    videos: Video,
     management: LayoutDashboard,
 };
 

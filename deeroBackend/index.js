@@ -3,7 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { prisma } from "./lib/prisma.js";
 
-// Import Routes
+// Import Routes (Updated for Video Support)
 import userRoute from "./routes/userRoute.js";
 import roleRoute from "./routes/roleRoute.js";
 import blogsRoute from "./routes/blogsRoute.js";
@@ -24,6 +24,7 @@ import subscriberRoutes from "./routes/subscriberRoutes.js";
 import teamRoute from "./routes/teamRoute.js";
 import testimonialRoutes from "./routes/testimonialRoutes.js";
 import transactionRoutes from "./routes/transactionRoutes.js";
+import videoRoute from "./routes/videoRoute.js";
 import multerErrorHandler from "./middlewares/multerErrorHandler.js";
 
 dotenv.config();
@@ -93,6 +94,7 @@ app.use("/api/subscribers", subscriberRoutes);
 app.use("/api/teams", teamRoute);
 app.use("/api/testimonials", testimonialRoutes);
 app.use("/api/transactions", transactionRoutes);
+app.use("/api/videos", videoRoute);
 
 // Error Handling Middleware
 app.use(multerErrorHandler);
