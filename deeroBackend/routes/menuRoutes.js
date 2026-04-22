@@ -18,9 +18,9 @@ router.get("/", getMenus);
 router.get("/user/:roleId", getUserMenus);
 router.get("/:id", getMenuById);
 
-router.post("/", createMenu);
+router.post("/", protect, createMenu);
 router.patch("/:id", protect, updateMenu);
-router.delete("/:id", deleteMenu);
+router.delete("/:id", protect, deleteMenu);
 
 router.post("/:id/submenu", protect, addSubMenu);
 router.patch("/:menuId/submenu/:subMenuId", protect, updateSubMenu);

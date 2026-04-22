@@ -13,8 +13,8 @@ const router = express.Router();
 router.get("/", protect, getAllPermissions);
 router.get("/role/:roleId", protect, getPermissionsByRole);
 
-router.post("/", createOrUpdatePermission);
-router.post("/role/:roleId/add-menu", addMenuAccess);
+router.post("/", protect, createOrUpdatePermission);
+router.post("/role/:roleId/add-menu", protect, addMenuAccess);
 router.delete("/role/:roleId/menu/:menuId", protect, removeMenuAccess);
 
 export default router;
