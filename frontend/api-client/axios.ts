@@ -1,10 +1,15 @@
 import axios from "axios";
 
 const getBaseURL = () => {
-  if (typeof window !== "undefined" && window.location.hostname === "localhost") {
-    return "http://localhost:5000/api";
+  if (process.env.NEXT_PUBLIC_API_URL) {
+    return process.env.NEXT_PUBLIC_API_URL;
   }
-  // return process.env.NEXT_PUBLIC_API_URL || "https://deero-advert-production-c83e.up.railway.app/api";
+  
+  if (typeof window !== "undefined") {
+    return `${window.location.protocol}//${window.location.hostname}:8000/api`;
+  }
+  
+  return "http://localhost:8000/api";
 };
 
 const api = axios.create({
