@@ -1,6 +1,6 @@
 import { prisma } from "../lib/prisma.js";
 
-// Create Careers
+// Create Careers...
 export const createCareer = async (req, res) => {
     try {
         const { title, type, location, description, postedDate, expireDate } = req.body;
