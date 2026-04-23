@@ -5,12 +5,13 @@ import React, { useState, useEffect } from "react";
 import DataTable from "@/components/layout/DataTable";
 import Modal from "@/components/layout/Modal";
 import DeleteConfirmModal from "@/components/layout/DeleteConfirmModal";
-import { Edit, Trash2, UserPlus } from "lucide-react";
+import { Edit, Trash2, UserPlus, Eye } from "lucide-react";
 import {
   getAllUsers,
   createUser,
   deleteUser,
   updateUser,
+  getUserById
 } from "@/api-client/usersApi";
 import { getAllRoles } from "@/api-client/roleApi";
 
@@ -31,6 +32,11 @@ export default function UsersPage() {
     id: "", // for editing
   });
   const [isEditing, setIsEditing] = useState(false);
+
+  // For viewing user details
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<any>(null);
+  const [loadingUser, setLoadingUser] = useState(false);
 
   // Fetch users and roles from backend
   const fetchData = async () => {
@@ -148,6 +154,22 @@ export default function UsersPage() {
     setFormData({ fullname: "", email: "", password: "", phone: "", role: "", id: "" });
   };
 
+  const handleView = async (id: string) => {
+    setIsViewModalOpen(true);
+    setLoadingUser(true);
+    setSelectedUser(null);
+    try {
+      const res = await getUserById(id);
+      // Depending on axios setup, response might be in res.data or res itself
+      setSelectedUser(res.data ? res.data : res);
+    } catch (error) {
+      console.error(error);
+      alert("Failed to load user details");
+    } finally {
+      setLoadingUser(false);
+    }
+  };
+
 
   const columns = [
     {
@@ -189,11 +211,27 @@ export default function UsersPage() {
       },
     },
     {
+      label: "Source",
+      key: "registerSource",
+      render: (row: any) => (
+        <span className="text-xs font-medium text-gray-500 capitalize">
+          {row.registerSource || "website"}
+        </span>
+      )
+    },
+    {
       label: "Actions",
       key: "actions",
       width: "150px",
       render: (row: any) => (
         <div className="flex gap-2">
+          <button
+            className="p-2 rounded-lg hover:bg-green-50 text-green-600 transition-colors"
+            title="View Details"
+            onClick={() => handleView(row._id || row.id)}
+          >
+            <Eye className="h-4 w-4" />
+          </button>
           <button
             className="p-2 rounded-lg hover:bg-blue-50 text-blue-600 transition-colors"
             title="Edit"
@@ -204,7 +242,7 @@ export default function UsersPage() {
           <button
             className="p-2 rounded-lg hover:bg-red-50 text-red-600 transition-colors"
             title="Delete"
-            onClick={() => handleDelete(row._id, row.fullname)}
+            onClick={() => handleDelete(row._id || row.id, row.fullname)}
           >
             <Trash2 className="h-4 w-4" />
           </button>
@@ -338,6 +376,112 @@ export default function UsersPage() {
             </button>
           </div>
         </form>
+      </Modal>
+
+      {/* User Details Modal */}
+      <Modal
+        isOpen={isViewModalOpen}
+        onClose={() => setIsViewModalOpen(false)}
+        title="User Details"
+      >
+        {loadingUser ? (
+          <div className="p-8 text-center text-gray-500">Loading user details...</div>
+        ) : selectedUser ? (
+          <div className="space-y-6">
+            <div className="grid grid-cols-2 gap-4 text-sm">
+              <div>
+                <p className="text-gray-500 text-xs uppercase font-bold tracking-wider">Fullname</p>
+                <p className="font-medium">{selectedUser.fullname}</p>
+              </div>
+              <div>
+                <p className="text-gray-500 text-xs uppercase font-bold tracking-wider">Email</p>
+                <p className="font-medium">{selectedUser.email}</p>
+              </div>
+              <div>
+                <p className="text-gray-500 text-xs uppercase font-bold tracking-wider">Phone</p>
+                <p className="font-medium">{selectedUser.phone || "N/A"}</p>
+              </div>
+              <div>
+                <p className="text-gray-500 text-xs uppercase font-bold tracking-wider">Register Source</p>
+                <p className="font-medium capitalize text-[#EB4724]">{selectedUser.registerSource || "website"}</p>
+              </div>
+              <div>
+                <p className="text-gray-500 text-xs uppercase font-bold tracking-wider">Bonus Points</p>
+                <p className="font-medium">{selectedUser.bonus || 0}</p>
+              </div>
+              <div>
+                <p className="text-gray-500 text-xs uppercase font-bold tracking-wider">Active Discounts</p>
+                <p className="font-medium">{selectedUser.discounts?.length || 0}</p>
+              </div>
+            </div>
+
+            {selectedUser.discounts && selectedUser.discounts.length > 0 && (
+              <div className="border-t border-gray-100 pt-4">
+                <h4 className="font-bold text-gray-800 mb-3 text-sm">Active Discounts Details</h4>
+                <div className="space-y-2 max-h-40 overflow-y-auto pr-2">
+                  {selectedUser.discounts.map((discount: any, idx: number) => (
+                    <div key={discount.id || idx} className="bg-orange-50 p-3 rounded-lg border border-orange-100 text-sm flex justify-between items-center">
+                      <div>
+                        <p className="font-medium text-orange-800 capitalize">
+                          {discount.targetType === "all" ? "Global Discount" : `${discount.targetType} Discount`}
+                        </p>
+                        <p className="text-xs text-orange-600">
+                          Value: {discount.discountType === "percentage" ? `${discount.discountValue}%` : `$${discount.discountValue}`}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        {discount.startDate && (
+                          <p className="text-[10px] text-orange-500">From: {new Date(discount.startDate).toLocaleDateString()}</p>
+                        )}
+                        {discount.endDate && (
+                          <p className="text-[10px] text-orange-500">Until: {new Date(discount.endDate).toLocaleDateString()}</p>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className="border-t border-gray-100 pt-4">
+              <h4 className="font-bold text-gray-800 mb-3 text-sm">Transaction History</h4>
+              {!selectedUser.transactions || selectedUser.transactions.length === 0 ? (
+                <p className="text-sm text-gray-500 italic">No transactions found for this user.</p>
+              ) : (
+                <div className="space-y-3 max-h-60 overflow-y-auto pr-2">
+                  {selectedUser.transactions.map((tx: any, idx: number) => (
+                    <div key={tx.id || idx} className="bg-gray-50 p-3 rounded-lg border border-gray-100 text-sm flex justify-between items-center">
+                      <div>
+                        <p className="font-medium text-gray-800 capitalize">{tx.type.replace('_', ' ')}</p>
+                        <p className="text-xs text-gray-500">
+                          {tx.service?.serviceTitle || tx.hostingPackage?.name || tx.domainName || tx.description || "Package"}
+                        </p>
+                        {tx.discountApplied > 0 && (
+                          <p className="text-xs text-green-600 font-medium mt-0.5">Discount Applied: ${tx.discountApplied.toFixed(2)}</p>
+                        )}
+                      </div>
+                      <div className="text-right">
+                        <p className="font-bold text-[#651313]">${tx.amount.toFixed(2)}</p>
+                        <p className="text-[10px] text-gray-400">{new Date(tx.createdAt).toLocaleDateString()}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            
+            <div className="flex justify-end pt-3">
+              <button
+                onClick={() => setIsViewModalOpen(false)}
+                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="p-8 text-center text-red-500">Failed to load user details.</div>
+        )}
       </Modal>
     </div>
   );

@@ -29,8 +29,24 @@ model User {
   announcements  Announcement[]
   transactions   Transaction[]
   deviceTokens   DeviceToken[]
+  discounts      Discount[]
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
+}
+
+model Discount {
+  id            Int       @id @default(autoincrement())
+  userId        Int? // If null, it's a global discount
+  user          User?     @relation(fields: [userId], references: [id])
+  targetType    String // "hosting", "domain", "service", "all"
+  targetId      String? // ID of the package/service
+  discountValue Float
+  discountType  String    @default("percentage") // "percentage" or "fixed"
+  status        String    @default("active") // "active", "used", "expired"
+  startDate     DateTime?
+  endDate       DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 }
 
 model BonusHistory {

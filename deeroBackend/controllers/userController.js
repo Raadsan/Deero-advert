@@ -155,7 +155,13 @@ export const login = async (req, res) => {
         bonus: user.bonus,
         bonusStatus: user.bonusStatus,
         registerSource: user.registerSource,
-        role: user.role
+        role: user.role,
+        discounts: await prisma.discount.findMany({
+          where: {
+            OR: [{ userId: user.id }, { userId: null }],
+            status: "active"
+          }
+        })
       }
     });
   } catch (error) {
@@ -331,7 +337,12 @@ export const resetPassword = async (req, res) => {
 export const getUsers = async (req, res) => {
   try {
     const users = await prisma.user.findMany({
-      include: { role: true }
+      include: { 
+        role: true,
+        _count: {
+          select: { discounts: true }
+        }
+      }
     });
     res.json(users);
   } catch (error) {
@@ -344,7 +355,19 @@ export const getUserById = async (req, res) => {
   try {
     const user = await prisma.user.findUnique({
       where: { id: parseInt(req.params.id) },
-      include: { role: true }
+      include: { 
+        role: true,
+        discounts: {
+          where: { status: "active" }
+        },
+        transactions: {
+          include: {
+            service: true,
+            hostingPackage: true
+          },
+          orderBy: { createdAt: 'desc' }
+        }
+      }
     });
     if (!user) return res.status(404).json({ message: "User not found" });
     res.json(user);

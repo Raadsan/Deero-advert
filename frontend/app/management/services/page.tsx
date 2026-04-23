@@ -5,7 +5,8 @@ import { useEffect, useState } from "react";
 import DataTable from "@/components/layout/DataTable";
 import Modal from "@/components/layout/Modal";
 import DeleteConfirmModal from "@/components/layout/DeleteConfirmModal";
-import { Edit, Trash2, Camera, Plus, X } from "lucide-react";
+import { Edit, Trash2, Camera, Plus, X, Ticket } from "lucide-react";
+import DiscountModal from "@/components/management/DiscountModal";
 import Image from "next/image";
 import { getAllServices, createService, updateService, deleteService } from "@/api-client/serviceApi";
 import { getImageUrl } from "@/utils/url";
@@ -28,6 +29,7 @@ export default function AdminServicesPage() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [deletingName, setDeletingName] = useState("");
+  const [discountModal, setDiscountModal] = useState<{ open: boolean, id: string, name: string }>({ open: false, id: "", name: "" });
   const truncate = (s: string, n = 80) => (s?.length > n ? s.slice(0, n) + "..." : s);
   const [formData, setFormData] = useState({
     serviceTitle: "",
@@ -344,6 +346,13 @@ export default function AdminServicesPage() {
           >
             <Trash2 className="h-4 w-4" />
           </button>
+          <button
+            onClick={() => setDiscountModal({ open: true, id: r._id, name: `${r.serviceTitle} - ${r.packageTitle}` })}
+            className="p-2 rounded-lg hover:bg-green-50 text-green-600 transition-colors"
+            title="Apply Discount"
+          >
+            <Ticket className="h-4 w-4" />
+          </button>
         </div>
       ),
     },
@@ -598,6 +607,14 @@ export default function AdminServicesPage() {
           </div>
         </form>
       </Modal>
+
+      <DiscountModal 
+        isOpen={discountModal.open}
+        onClose={() => setDiscountModal({ ...discountModal, open: false })}
+        targetType="service"
+        targetId={discountModal.id}
+        itemName={discountModal.name}
+      />
     </div>
   );
 }
