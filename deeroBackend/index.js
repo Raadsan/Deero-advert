@@ -25,6 +25,7 @@ import teamRoute from "./routes/teamRoute.js";
 import testimonialRoutes from "./routes/testimonialRoutes.js";
 import transactionRoutes from "./routes/transactionRoutes.js";
 import videoRoute from "./routes/videoRoute.js";
+import discountRoute from "./routes/discountRoute.js";
 import multerErrorHandler from "./middlewares/multerErrorHandler.js";
 
 dotenv.config();
@@ -46,15 +47,15 @@ app.use((req, res, next) => {
       if (Array.isArray(obj)) return obj.map(addAlias);
       const newObj = { ...obj };
       if (newObj.id && !newObj._id) newObj._id = String(newObj.id);
-      
+
       for (const key in newObj) {
-        
-        
+
+
         newObj[key] = addAlias(newObj[key]);
-        
-       
+
+
         if (typeof key === 'string' && key.toLowerCase().endsWith('id') && newObj[key] !== null && newObj[key] !== undefined && typeof newObj[key] !== 'object') {
-             newObj[key] = String(newObj[key]);
+          newObj[key] = String(newObj[key]);
         }
       }
       return newObj;
@@ -95,6 +96,7 @@ app.use("/api/teams", teamRoute);
 app.use("/api/testimonials", testimonialRoutes);
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/videos", videoRoute);
+app.use("/api/discounts", discountRoute);
 
 // Error Handling Middleware
 app.use(multerErrorHandler);
@@ -104,7 +106,7 @@ async function main() {
   try {
     await prisma.$connect();
     console.log("✅ Database connected successfully via Prisma");
-    
+
     app.listen(PORT, () => {
       console.log(`🚀 Server running on http://localhost:${PORT}`);
     });

@@ -140,6 +140,20 @@ exports.Prisma.UserScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.DiscountScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  targetType: 'targetType',
+  targetId: 'targetId',
+  discountValue: 'discountValue',
+  discountType: 'discountType',
+  status: 'status',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.BonusHistoryScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -436,6 +450,13 @@ exports.Prisma.UserOrderByRelevanceFieldEnum = {
   bonusStatus: 'bonusStatus'
 };
 
+exports.Prisma.DiscountOrderByRelevanceFieldEnum = {
+  targetType: 'targetType',
+  targetId: 'targetId',
+  discountType: 'discountType',
+  status: 'status'
+};
+
 exports.Prisma.BonusHistoryOrderByRelevanceFieldEnum = {
   reason: 'reason',
   type: 'type'
@@ -597,6 +618,7 @@ exports.Prisma.DeviceTokenOrderByRelevanceFieldEnum = {
 
 exports.Prisma.ModelName = {
   User: 'User',
+  Discount: 'Discount',
   BonusHistory: 'BonusHistory',
   Role: 'Role',
   RolePermission: 'RolePermission',

@@ -12,22 +12,86 @@ export const createTransaction = async (req, res) => {
       amount,
       description,
       accountNo,
-      paymentMethod
+      paymentMethod,
+      useBonus // Added useBonus
     } = req.body;
 
     const user = await prisma.user.findUnique({ where: { id: parseInt(userId) } });
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    const { useBonus } = req.body;
-    let originalAmount = parseFloat(amount);
+    const originalAmount = parseFloat(amount);
     let discountApplied = 0;
     let finalAmount = originalAmount;
+    let usedDiscountId = null; // Track which flex discount is used
 
-    // Apply 50% Discount if Bonus is available and requested
+    // Apply Discounts (Bonus or New Flexible Discount)
     if (useBonus && user.bonusStatus === "BonusAvailable") {
-      discountApplied = originalAmount / 2;
-      finalAmount = originalAmount - discountApplied;
+      discountApplied = originalAmount / 2; // 50% Bonus Discount
     }
+
+    // Check for Flexible Discounts (Global or User-specific)
+    let targetType = "";
+    let targetId = "";
+
+    if (domain) {
+      targetType = "domain";
+      targetId = domain.tld || "all";
+    } else if (serviceId) {
+      targetType = "service";
+      targetId = packageId ? packageId.toString() : "all";
+    } else if (hostingPackageId) {
+      targetType = "hosting";
+      targetId = hostingPackageId.toString();
+    }
+
+    const applicableDiscounts = await prisma.discount.findMany({
+      where: {
+        AND: [
+          { status: "active" },
+          {
+            OR: [
+              { userId: user.id },
+              { userId: null }
+            ]
+          },
+          {
+            OR: [
+              { targetType: targetType },
+              { targetType: "all" }
+            ]
+          },
+          {
+            OR: [
+              { targetId: targetId },
+              { targetId: "all" },
+              { targetId: null }
+            ]
+          }
+        ]
+      },
+      orderBy: { discountValue: 'desc' } // Take highest discount
+    });
+
+    if (applicableDiscounts.length > 0) {
+      const bestDiscount = applicableDiscounts[0];
+      let flexDiscount = 0;
+      if (bestDiscount.discountType === "percentage") {
+        flexDiscount = (originalAmount * bestDiscount.discountValue) / 100;
+      } else {
+        flexDiscount = bestDiscount.discountValue;
+      }
+
+      // If flex discount is better than bonus discount, use it. Or if no bonus used.
+      if (flexDiscount > discountApplied) {
+        discountApplied = flexDiscount;
+        if (bestDiscount.userId) {
+          usedDiscountId = bestDiscount.id;
+        }
+      }
+    }
+
+    finalAmount = originalAmount - discountApplied;
+    if (finalAmount < 0) finalAmount = 0;
 
     let data = {
       userId: user.id,
@@ -114,7 +178,7 @@ export const createTransaction = async (req, res) => {
     // Award bonus points on successful transaction
     if (transaction.status === "completed") {
       const { useBonus } = req.body;
-      if (useBonus && user.bonusStatus === "BonusAvailable") {
+      if (useBonus && user.bonusStatus === "BonusAvailable" && discountApplied === (originalAmount / 2)) {
         // Reset process: Milestone reached and used!
         await prisma.user.update({
           where: { id: user.id },
@@ -131,6 +195,13 @@ export const createTransaction = async (req, res) => {
           }
         });
       } else {
+        // If a specific flexible discount was used, mark it as used
+        if (usedDiscountId) {
+          await prisma.discount.update({
+            where: { id: usedDiscountId },
+            data: { status: "used" }
+          });
+        }
         await handleBonusPoints(transaction.userId, transaction.type);
       }
     }

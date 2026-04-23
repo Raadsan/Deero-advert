@@ -4,15 +4,17 @@ export const dynamic = 'force-static';
 import { useState, useEffect } from "react";
 import DataTable from "@/components/layout/DataTable";
 import { getAllPackages, createPackage, updatePackage, deletePackage, HostingPackage } from "@/api-client/hostingPackageApi";
-import { PencilIcon, TrashIcon, XMarkIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { PencilIcon, TrashIcon, XMarkIcon, PlusIcon, TicketIcon } from "@heroicons/react/24/outline";
 import { toast } from 'react-hot-toast';
 import { motion, AnimatePresence } from "framer-motion";
+import DiscountModal from "@/components/management/DiscountModal";
 
 export default function HostingPackageManagement() {
     const [packages, setPackages] = useState<HostingPackage[]>([]);
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingPackage, setEditingPackage] = useState<HostingPackage | null>(null);
+    const [discountModal, setDiscountModal] = useState<{ open: boolean, id: string, name: string }>({ open: false, id: "", name: "" });
 
     // Form State
     const [formData, setFormData] = useState({
@@ -131,6 +133,13 @@ export default function HostingPackageManagement() {
                     >
                         <TrashIcon className="h-4 w-4" />
                     </button>
+                    <button
+                        onClick={() => setDiscountModal({ open: true, id: row._id, name: row.name })}
+                        className="p-1.5 hover:bg-green-50 text-green-600 rounded-lg transition-colors"
+                        title="Apply Discount"
+                    >
+                        <TicketIcon className="h-4 w-4" />
+                    </button>
                 </div>
             ),
         },
@@ -247,6 +256,14 @@ export default function HostingPackageManagement() {
                     </div>
                 )}
             </AnimatePresence>
+
+            <DiscountModal 
+                isOpen={discountModal.open}
+                onClose={() => setDiscountModal({ ...discountModal, open: false })}
+                targetType="hosting"
+                targetId={discountModal.id}
+                itemName={discountModal.name}
+            />
         </div>
     );
 }

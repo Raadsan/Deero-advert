@@ -16,16 +16,19 @@ import {
     XMarkIcon, 
     PlusIcon, 
     CheckCircleIcon, 
-    XCircleIcon 
+    XCircleIcon,
+    TicketIcon 
 } from "@heroicons/react/24/outline";
 import { toast } from 'react-hot-toast';
 import { motion, AnimatePresence } from "framer-motion";
+import DiscountModal from "@/components/management/DiscountModal";
 
 export default function DomainPriceManagement() {
     const [prices, setPrices] = useState<DomainPriceRecord[]>([]);
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingPrice, setEditingPrice] = useState<DomainPriceRecord | null>(null);
+    const [discountModal, setDiscountModal] = useState<{ open: boolean, id: string, name: string }>({ open: false, id: "", name: "" });
 
     // Form State
     const [formData, setFormData] = useState({
@@ -162,6 +165,13 @@ export default function DomainPriceManagement() {
                     >
                         <TrashIcon className="h-4 w-4" />
                     </button>
+                    <button
+                        onClick={() => setDiscountModal({ open: true, id: row.tld, name: `Domain: ${row.tld}` })}
+                        className="p-1.5 hover:bg-green-50 text-green-600 rounded-lg transition-colors"
+                        title="Apply Discount"
+                    >
+                        <TicketIcon className="h-4 w-4" />
+                    </button>
                 </div>
             ),
         },
@@ -257,6 +267,14 @@ export default function DomainPriceManagement() {
                     </div>
                 )}
             </AnimatePresence>
+
+            <DiscountModal 
+                isOpen={discountModal.open}
+                onClose={() => setDiscountModal({ ...discountModal, open: false })}
+                targetType="domain"
+                targetId={discountModal.id}
+                itemName={discountModal.name}
+            />
         </div>
     );
 }
