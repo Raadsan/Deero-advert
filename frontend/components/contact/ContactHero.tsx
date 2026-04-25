@@ -69,8 +69,8 @@ export default function ContactHero() {
                 </div>
 
                 {/* Overlapping Info Cards */}
-                <div className="absolute left-0 right-0 -bottom-16 lg:-bottom-24 translate-y-1/2 px-4 pointer-events-auto">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="relative lg:absolute left-0 right-0 lg:-bottom-24 lg:translate-y-1/2 px-4 mt-16 lg:mt-0 -mb-16 lg:mb-0 pointer-events-auto z-20">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-y-14 lg:gap-8 max-w-5xl mx-auto">
                         {contactDetails.map((item, index) => (
                             <div
                                 key={index}

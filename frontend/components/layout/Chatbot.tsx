@@ -53,7 +53,10 @@ export default function Chatbot() {
     pathname.startsWith("/management") ||
     pathname.startsWith("/config") ||
     pathname.startsWith("/configuration") ||
-    pathname.startsWith("/payments");
+    pathname.startsWith("/payments") ||
+    pathname === "/login" ||
+    pathname === "/signup" ||
+    pathname.startsWith("/reset-password");
 
   const [messages, setMessages] = useState<Message[]>([
     {
