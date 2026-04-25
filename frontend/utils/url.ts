@@ -8,9 +8,11 @@ const getBaseURL = () => {
     if (typeof window !== "undefined") {
         const { protocol, hostname } = window.location;
         
-        // If on HTTPS, we likely use an Nginx proxy on port 443
-        if (protocol === "https:") {
-            return `https://${hostname}`;
+        // If on the domain (deeroadvert.so) or using HTTPS, use the Nginx proxy
+        const isDomain = hostname.includes("deeroadvert.so");
+        
+        if (isDomain || protocol === "https:") {
+            return `${protocol}//${hostname}`;
         }
         
         // Fallback for IP-based or local access (Backend is on port 8000)
