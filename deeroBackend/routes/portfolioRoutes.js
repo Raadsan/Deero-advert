@@ -20,7 +20,7 @@ const uploadFields = upload.fields([
 router.get("/", getAllPortfolios);
 router.get("/:id", getPortfolioById);
 router.post("/", protect, uploadFields, createPortfolio);
-router.patch("/:id", protect, upload.any(), updatePortfolio);
+router.patch("/:id", protect, uploadFields, updatePortfolio);
 router.delete("/:id", protect, deletePortfolio);
 router.post("/:id/delete-gallery-image", protect, deleteGalleryImage);
 

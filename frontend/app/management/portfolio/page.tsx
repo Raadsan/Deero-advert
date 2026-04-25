@@ -122,7 +122,10 @@ export default function PortfolioManagementPage() {
             await deleteGalleryImage(portfolioId, imagePath);
             setFormData((prev) => ({
                 ...prev,
-                existingGallery: prev.existingGallery.filter(img => img !== imagePath),
+                existingGallery: prev.existingGallery.filter((img: any) => {
+                    const currentImgPath = typeof img === 'string' ? img : img.imagePath;
+                    return currentImgPath !== imagePath;
+                }),
             }));
         } catch (err) {
             console.error("Failed to delete gallery image", err);
@@ -266,8 +269,8 @@ export default function PortfolioManagementPage() {
             ),
         },
         { label: "Industry", key: "industry" },
-        { 
-            label: "Project Direction", 
+        {
+            label: "Project Direction",
             key: "projectDirection",
             render: (row: any) => (
                 <span className="text-xs text-gray-500">
@@ -480,22 +483,25 @@ export default function PortfolioManagementPage() {
                             <div className="space-y-1">
                                 <p className="text-[9px] uppercase font-bold text-gray-400 tracking-wider">Existing Images</p>
                                 <div className="grid grid-cols-4 gap-2">
-                                    {formData.existingGallery.map((img, idx) => (
-                                        <div key={idx} className="relative group">
-                                            <img
-                                                src={getImageUrl(img) || "/logo deero-02 .svg"}
-                                                alt={`Gallery ${idx + 1}`}
-                                                className="h-16 w-full object-cover rounded border border-gray-200"
-                                            />
-                                            <button
-                                                type="button"
-                                                onClick={() => removeExistingGalleryImage(editingId, img)}
-                                                className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
-                                            >
-                                                <X className="h-3 w-3" />
-                                            </button>
-                                        </div>
-                                    ))}
+                                    {formData.existingGallery.map((img: any, idx) => {
+                                        const imgPath = typeof img === 'string' ? img : img.imagePath;
+                                        return (
+                                            <div key={idx} className="relative group">
+                                                <img
+                                                    src={getImageUrl(imgPath) || "/logo deero-02 .svg"}
+                                                    alt={`Gallery ${idx + 1}`}
+                                                    className="h-16 w-full object-cover rounded border border-gray-200"
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => removeExistingGalleryImage(editingId!, imgPath)}
+                                                    className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
+                                                >
+                                                    <X className="h-3 w-3" />
+                                                </button>
+                                            </div>
+                                        );
+                                    })}
                                 </div>
                             </div>
                         )}

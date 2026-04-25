@@ -156,9 +156,12 @@ export default function PortfolioDetailPage() {
                             {portfolio?.projectDirection && portfolio.projectDirection.length > 0 && (
                                 <div className="col-span-2 md:col-span-2">
                                     <p className="text-[#1a1a1a] font-bold text-xl mb-2">Project direction:</p>
-                                    <ul className="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-2">
+                                    <ul className="flex flex-wrap gap-x-6 gap-y-2">
                                         {portfolio.projectDirection.map((item: string, i: number) => (
-                                            <li key={i} className="text-gray-500 text-lg md:text-xl font-medium">{item}</li>
+                                            <li key={i} className="text-gray-500 text-lg md:text-xl font-medium">
+                                                {item}
+                                                {i < portfolio.projectDirection.length - 1 && <span className="ml-2">,</span>}
+                                            </li>
                                         ))}
                                     </ul>
                                 </div>

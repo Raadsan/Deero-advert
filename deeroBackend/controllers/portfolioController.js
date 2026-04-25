@@ -107,13 +107,13 @@ export const updatePortfolio = async (req, res) => {
       }
     }
 
-    const mainImageFile = req.files?.find?.((file) => file.fieldname === "mainImage") || req.files?.mainImage?.[0];
+    const mainImageFile = req.files?.mainImage?.[0] || req.files?.['mainImage']?.[0];
     if (mainImageFile) {
       data.mainImage = mainImageFile.path.replace(/\\/g, "/");
     }
 
     // Handle gallery additions
-    const galleryFiles = req.files?.filter?.((file) => file.fieldname === "gallery") || req.files?.gallery || [];
+    const galleryFiles = req.files?.gallery || req.files?.['gallery'] || [];
     if (galleryFiles.length > 0) {
         data.gallery = {
             create: galleryFiles.map(file => ({ imagePath: file.path.replace(/\\/g, "/") }))
