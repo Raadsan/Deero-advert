@@ -11,13 +11,16 @@ const getBaseURL = () => {
   if (typeof window !== "undefined") {
     const { protocol, hostname } = window.location;
     
-    // If on HTTPS, we likely use an Nginx proxy on port 443
-    if (protocol === "https:") {
-      return `https://${hostname}/api`;
+    // Check if we are accessing via IP or localhost
+    const isIPOrLocal = hostname === "localhost" || hostname === "127.0.0.1" || /^(\d{1,3}\.){3}\d{1,3}$/.test(hostname);
+
+    if (isIPOrLocal) {
+      // If using IP address, we must use port 8000
+      return `${protocol}//${hostname}:8000/api`;
+    } else {
+      // If using a domain (deeroadvert.so), use the Nginx proxy at /api
+      return `${protocol}//${hostname}/api`;
     }
-    
-    // Fallback for IP-based or local access (Backend is on port 8000)
-    return `${protocol}//${hostname}:8000/api`;
   }
   
   // 3. Server-side / Build-time default

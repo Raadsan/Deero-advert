@@ -8,13 +8,16 @@ const getBaseURL = () => {
     if (typeof window !== "undefined") {
         const { protocol, hostname } = window.location;
         
-        // If on HTTPS, assume proxied at root
-        if (protocol === "https:") {
-            return `https://${hostname}`;
+        // Check if we are accessing via IP or localhost
+        const isIPOrLocal = hostname === "localhost" || hostname === "127.0.0.1" || /^(\d{1,3}\.){3}\d{1,3}$/.test(hostname);
+
+        if (isIPOrLocal) {
+            // For IP, use port 8000
+            return `${protocol}//${hostname}:8000`;
+        } else {
+            // For Domain, use the Nginx proxy (root level)
+            return `${protocol}//${hostname}`;
         }
-        
-        // Fallback for IP or Local
-        return `${protocol}//${hostname}:8000`;
     }
 
     return "http://localhost:8000";
