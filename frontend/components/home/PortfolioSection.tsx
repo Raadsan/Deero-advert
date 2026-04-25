@@ -28,10 +28,8 @@ export default function PortfolioSection({ showHeader = true, limit, paddingClas
             try {
                 setLoading(true);
                 const response = await getPortfolios();
-                console.log("Raw API response:", response); // Debug log
 
                 const data = response.data;
-                console.log("Response data:", data); // Debug log
 
                 let items = [];
 
@@ -50,7 +48,6 @@ export default function PortfolioSection({ showHeader = true, limit, paddingClas
                     items = data.portfolios;
                 }
 
-                console.log("Parsed items before processing:", items); // Debug log
 
                 // Process image URLs
                 const processedItems = items.map((item: any) => {
@@ -61,7 +58,6 @@ export default function PortfolioSection({ showHeader = true, limit, paddingClas
                     };
                 });
 
-                console.log("Processed portfolios:", processedItems); // Debug log
                 setPortfolios(processedItems.reverse());
             } catch (err: any) {
                 console.error("Error fetching portfolios:", err);

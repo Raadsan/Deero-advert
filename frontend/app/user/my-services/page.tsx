@@ -51,8 +51,6 @@ export default function MyServicesPage() {
             label: "Service Name",
             key: "service",
             render: (row: any) => {
-                console.log('Transaction row:', row);
-                console.log('Service data:', row.service, 'Type:', typeof row.service);
 
                 let serviceName = "N/A";
                 if (typeof row.service === 'object' && row.service?.serviceTitle) {

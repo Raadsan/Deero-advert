@@ -67,7 +67,6 @@ export default function CheckoutForm() {
         setLoading(true);
         setError(null);
 
-        console.log("Checkout Submission Started", { formData, cartItems });
 
         try {
             let userId: string;
@@ -106,7 +105,6 @@ export default function CheckoutForm() {
                 userData = signupRes.data.user;
             }
 
-            console.log("DEBUG: Auth Success, user:", userData);
 
             // Save auth to sessionStorage (mimic auth utility behavior)
             sessionStorage.setItem("user", JSON.stringify(userData));

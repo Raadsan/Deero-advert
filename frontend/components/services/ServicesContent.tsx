@@ -82,7 +82,6 @@ export default function ServicesContent({
                 await new Promise(resolve => setTimeout(resolve, 100));
 
                 const res: any = await getAllServices();
-                console.log("Services API Raw Response:", res);
 
                 // Extremely robust parsing for different response formats
                 let servicesData = [];
@@ -99,7 +98,6 @@ export default function ServicesContent({
                     if (arrayProp) servicesData = arrayProp;
                 }
 
-                console.log("Parsed Services Data:", servicesData);
                 const rawResults: Service[] = servicesData;
 
                 // Group by title and merge packages
