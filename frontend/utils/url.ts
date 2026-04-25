@@ -1,8 +1,23 @@
 const getBaseURL = () => {
-    if (typeof window !== "undefined" && window.location.hostname === "localhost") {
-        return "http://localhost:5000";
+    // 1. Prioritize environment variable
+    if (process.env.NEXT_PUBLIC_API_URL) {
+        return process.env.NEXT_PUBLIC_API_URL.replace("/api", "");
     }
-    return (process.env.NEXT_PUBLIC_API_URL || "https://deero-advert-production-a27c.up.railway.app/api").replace("/api", "");
+
+    // 2. Client-side dynamic detection
+    if (typeof window !== "undefined") {
+        const { protocol, hostname } = window.location;
+        
+        // If on HTTPS, assume proxied at root
+        if (protocol === "https:") {
+            return `https://${hostname}`;
+        }
+        
+        // Fallback for IP or Local
+        return `${protocol}//${hostname}:8000`;
+    }
+
+    return "http://localhost:8000";
 };
 
 export const API_BASE_URL = getBaseURL();
