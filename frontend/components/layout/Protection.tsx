@@ -4,6 +4,11 @@ import { useEffect } from 'react';
 
 const Protection = () => {
   useEffect(() => {
+    // Only run this protection in production mode
+    if (process.env.NODE_ENV !== 'production') {
+      return;
+    }
+
     // Disable right-click
     const handleContextMenu = (e: MouseEvent) => {
       e.preventDefault();
