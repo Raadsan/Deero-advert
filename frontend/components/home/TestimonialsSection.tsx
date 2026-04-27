@@ -45,7 +45,21 @@ export default function TestimonialsSection() {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [dynamicTestimonials, setDynamicTestimonials] = useState<Testimonial[]>([]);
     const [loading, setLoading] = useState(true);
-    const visibleCount = 3;
+    const [visibleCount, setVisibleCount] = useState(3);
+
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth < 768) {
+                setVisibleCount(1);
+            } else {
+                setVisibleCount(3);
+            }
+        };
+
+        handleResize(); // Initial check on client
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     useEffect(() => {
         const fetch = async () => {

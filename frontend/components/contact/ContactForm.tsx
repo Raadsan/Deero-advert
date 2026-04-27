@@ -172,6 +172,20 @@ export default function ContactForm() {
                         </div>
                     </form>
                 </div>
+
+                {/* Map Container inside Contact Form Section */}
+                <div className="mt-12 w-full h-[400px] sm:h-[500px] rounded-3xl overflow-hidden shadow-2xl shadow-[#651313]/10 border-4 border-white relative z-10 bg-gray-100">
+                    <iframe 
+                        src="https://www.google.com/maps?q=Deero+Advert,+Digfeer+Rd,+Mogadishu&output=embed" 
+                        width="100%" 
+                        height="100%" 
+                        style={{ border: 0 }} 
+                        allowFullScreen 
+                        loading="lazy" 
+                        referrerPolicy="no-referrer-when-downgrade"
+                        className="w-full h-full"
+                    ></iframe>
+                </div>
             </div>
         </section>
     );

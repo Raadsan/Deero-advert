@@ -1,6 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  productionBrowserSourceMaps: false,
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production",
+  },
   images: {
     remotePatterns: [
       {
@@ -35,7 +39,7 @@ const nextConfig: NextConfig = {
     contentDispositionType: 'attachment',
     unoptimized: process.env.NODE_ENV === 'development',
   },
-  async redirects() {
+   async redirects() {
     return [
       {
         source: '/user-domains',

@@ -141,7 +141,6 @@ export default function UnifiedSidebar({ isOpen, onClose }: { isOpen?: boolean; 
                     }
                 } catch (innerErr: any) {
                     if (innerErr.code === "ERR_CANCELED" || innerErr.name === "CanceledError") {
-                        console.log("Menu fetch canceled");
                         return;
                     }
                     throw innerErr;

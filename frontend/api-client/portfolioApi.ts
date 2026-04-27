@@ -35,8 +35,6 @@ export const deletePortfolio = (id: string) => {
 
 /* 🗑 DELETE SINGLE GALLERY IMAGE */
 export const deleteGalleryImage = (id: string, imagePath: string) => {
-    return api.delete(`/portfolios/${id}/gallery`, {
-        data: { imagePath }
-    });
+    return api.post(`/portfolios/${id}/delete-gallery-image`, { imagePath });
 };
 
