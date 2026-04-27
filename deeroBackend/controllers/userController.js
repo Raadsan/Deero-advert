@@ -388,6 +388,10 @@ export const updateUser = async (req, res) => {
       delete data.role;
     }
 
+    if (req.file) {
+      data.image = req.file.path; // Cloudinary returns the URL in path
+    }
+
     const user = await prisma.user.update({
       where: { id: parseInt(req.params.id) },
       data: data,
