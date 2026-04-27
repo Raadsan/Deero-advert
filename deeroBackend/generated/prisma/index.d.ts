@@ -19,6 +19,11 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  */
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>
 /**
+ * Model GlobalSetting
+ * 
+ */
+export type GlobalSetting = $Result.DefaultSelection<Prisma.$GlobalSettingPayload>
+/**
  * Model Discount
  * 
  */
@@ -299,6 +304,16 @@ export class PrismaClient<
     * ```
     */
   get user(): Prisma.UserDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.globalSetting`: Exposes CRUD operations for the **GlobalSetting** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more GlobalSettings
+    * const globalSettings = await prisma.globalSetting.findMany()
+    * ```
+    */
+  get globalSetting(): Prisma.GlobalSettingDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.discount`: Exposes CRUD operations for the **Discount** model.
@@ -1034,6 +1049,7 @@ export namespace Prisma {
 
   export const ModelName: {
     User: 'User',
+    GlobalSetting: 'GlobalSetting',
     Discount: 'Discount',
     BonusHistory: 'BonusHistory',
     Role: 'Role',
@@ -1079,7 +1095,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "discount" | "bonusHistory" | "role" | "rolePermission" | "permissionMenuAccess" | "permissionSubMenu" | "menu" | "subMenu" | "video" | "blog" | "achievement" | "announcement" | "career" | "domainPrice" | "eventNews" | "hostingPackage" | "portfolio" | "portfolioGallery" | "team" | "teamSocial" | "testimonial" | "transaction" | "contact" | "majorClient" | "majorClientImage" | "service" | "servicePackage" | "servicePackageFeature" | "subscriber" | "deviceToken"
+      modelProps: "user" | "globalSetting" | "discount" | "bonusHistory" | "role" | "rolePermission" | "permissionMenuAccess" | "permissionSubMenu" | "menu" | "subMenu" | "video" | "blog" | "achievement" | "announcement" | "career" | "domainPrice" | "eventNews" | "hostingPackage" | "portfolio" | "portfolioGallery" | "team" | "teamSocial" | "testimonial" | "transaction" | "contact" | "majorClient" | "majorClientImage" | "service" | "servicePackage" | "servicePackageFeature" | "subscriber" | "deviceToken"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1146,6 +1162,72 @@ export namespace Prisma {
           count: {
             args: Prisma.UserCountArgs<ExtArgs>
             result: $Utils.Optional<UserCountAggregateOutputType> | number
+          }
+        }
+      }
+      GlobalSetting: {
+        payload: Prisma.$GlobalSettingPayload<ExtArgs>
+        fields: Prisma.GlobalSettingFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.GlobalSettingFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GlobalSettingPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.GlobalSettingFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GlobalSettingPayload>
+          }
+          findFirst: {
+            args: Prisma.GlobalSettingFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GlobalSettingPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.GlobalSettingFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GlobalSettingPayload>
+          }
+          findMany: {
+            args: Prisma.GlobalSettingFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GlobalSettingPayload>[]
+          }
+          create: {
+            args: Prisma.GlobalSettingCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GlobalSettingPayload>
+          }
+          createMany: {
+            args: Prisma.GlobalSettingCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.GlobalSettingDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GlobalSettingPayload>
+          }
+          update: {
+            args: Prisma.GlobalSettingUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GlobalSettingPayload>
+          }
+          deleteMany: {
+            args: Prisma.GlobalSettingDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.GlobalSettingUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.GlobalSettingUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GlobalSettingPayload>
+          }
+          aggregate: {
+            args: Prisma.GlobalSettingAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateGlobalSetting>
+          }
+          groupBy: {
+            args: Prisma.GlobalSettingGroupByArgs<ExtArgs>
+            result: $Utils.Optional<GlobalSettingGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.GlobalSettingCountArgs<ExtArgs>
+            result: $Utils.Optional<GlobalSettingCountAggregateOutputType> | number
           }
         }
       }
@@ -3238,6 +3320,7 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     user?: UserOmit
+    globalSetting?: GlobalSettingOmit
     discount?: DiscountOmit
     bonusHistory?: BonusHistoryOmit
     role?: RoleOmit
@@ -3758,12 +3841,14 @@ export namespace Prisma {
     id: number | null
     roleId: number | null
     bonus: number | null
+    discount: number | null
   }
 
   export type UserSumAggregateOutputType = {
     id: number | null
     roleId: number | null
     bonus: number | null
+    discount: number | null
   }
 
   export type UserMinAggregateOutputType = {
@@ -3772,6 +3857,7 @@ export namespace Prisma {
     email: string | null
     password: string | null
     phone: string | null
+    image: string | null
     companyName: string | null
     streetAddress: string | null
     streetAddress2: string | null
@@ -3782,6 +3868,7 @@ export namespace Prisma {
     bonus: number | null
     registerSource: string | null
     bonusStatus: string | null
+    discount: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -3792,6 +3879,7 @@ export namespace Prisma {
     email: string | null
     password: string | null
     phone: string | null
+    image: string | null
     companyName: string | null
     streetAddress: string | null
     streetAddress2: string | null
@@ -3802,6 +3890,7 @@ export namespace Prisma {
     bonus: number | null
     registerSource: string | null
     bonusStatus: string | null
+    discount: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -3812,6 +3901,7 @@ export namespace Prisma {
     email: number
     password: number
     phone: number
+    image: number
     companyName: number
     streetAddress: number
     streetAddress2: number
@@ -3822,6 +3912,7 @@ export namespace Prisma {
     bonus: number
     registerSource: number
     bonusStatus: number
+    discount: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -3832,12 +3923,14 @@ export namespace Prisma {
     id?: true
     roleId?: true
     bonus?: true
+    discount?: true
   }
 
   export type UserSumAggregateInputType = {
     id?: true
     roleId?: true
     bonus?: true
+    discount?: true
   }
 
   export type UserMinAggregateInputType = {
@@ -3846,6 +3939,7 @@ export namespace Prisma {
     email?: true
     password?: true
     phone?: true
+    image?: true
     companyName?: true
     streetAddress?: true
     streetAddress2?: true
@@ -3856,6 +3950,7 @@ export namespace Prisma {
     bonus?: true
     registerSource?: true
     bonusStatus?: true
+    discount?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -3866,6 +3961,7 @@ export namespace Prisma {
     email?: true
     password?: true
     phone?: true
+    image?: true
     companyName?: true
     streetAddress?: true
     streetAddress2?: true
@@ -3876,6 +3972,7 @@ export namespace Prisma {
     bonus?: true
     registerSource?: true
     bonusStatus?: true
+    discount?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -3886,6 +3983,7 @@ export namespace Prisma {
     email?: true
     password?: true
     phone?: true
+    image?: true
     companyName?: true
     streetAddress?: true
     streetAddress2?: true
@@ -3896,6 +3994,7 @@ export namespace Prisma {
     bonus?: true
     registerSource?: true
     bonusStatus?: true
+    discount?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -3993,6 +4092,7 @@ export namespace Prisma {
     email: string
     password: string
     phone: string | null
+    image: string | null
     companyName: string | null
     streetAddress: string | null
     streetAddress2: string | null
@@ -4003,6 +4103,7 @@ export namespace Prisma {
     bonus: number
     registerSource: string
     bonusStatus: string
+    discount: number | null
     createdAt: Date
     updatedAt: Date
     _count: UserCountAggregateOutputType | null
@@ -4032,6 +4133,7 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     phone?: boolean
+    image?: boolean
     companyName?: boolean
     streetAddress?: boolean
     streetAddress2?: boolean
@@ -4042,6 +4144,7 @@ export namespace Prisma {
     bonus?: boolean
     registerSource?: boolean
     bonusStatus?: boolean
+    discount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     role?: boolean | RoleDefaultArgs<ExtArgs>
@@ -4061,6 +4164,7 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     phone?: boolean
+    image?: boolean
     companyName?: boolean
     streetAddress?: boolean
     streetAddress2?: boolean
@@ -4071,11 +4175,12 @@ export namespace Prisma {
     bonus?: boolean
     registerSource?: boolean
     bonusStatus?: boolean
+    discount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fullname" | "email" | "password" | "phone" | "companyName" | "streetAddress" | "streetAddress2" | "city" | "state" | "country" | "roleId" | "bonus" | "registerSource" | "bonusStatus" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fullname" | "email" | "password" | "phone" | "image" | "companyName" | "streetAddress" | "streetAddress2" | "city" | "state" | "country" | "roleId" | "bonus" | "registerSource" | "bonusStatus" | "discount" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     role?: boolean | RoleDefaultArgs<ExtArgs>
     bonusHistory?: boolean | User$bonusHistoryArgs<ExtArgs>
@@ -4102,6 +4207,7 @@ export namespace Prisma {
       email: string
       password: string
       phone: string | null
+      image: string | null
       companyName: string | null
       streetAddress: string | null
       streetAddress2: string | null
@@ -4112,6 +4218,7 @@ export namespace Prisma {
       bonus: number
       registerSource: string
       bonusStatus: string
+      discount: number | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["user"]>
@@ -4494,6 +4601,7 @@ export namespace Prisma {
     readonly email: FieldRef<"User", 'String'>
     readonly password: FieldRef<"User", 'String'>
     readonly phone: FieldRef<"User", 'String'>
+    readonly image: FieldRef<"User", 'String'>
     readonly companyName: FieldRef<"User", 'String'>
     readonly streetAddress: FieldRef<"User", 'String'>
     readonly streetAddress2: FieldRef<"User", 'String'>
@@ -4504,6 +4612,7 @@ export namespace Prisma {
     readonly bonus: FieldRef<"User", 'Int'>
     readonly registerSource: FieldRef<"User", 'String'>
     readonly bonusStatus: FieldRef<"User", 'String'>
+    readonly discount: FieldRef<"User", 'Int'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
   }
@@ -4989,6 +5098,920 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: UserInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model GlobalSetting
+   */
+
+  export type AggregateGlobalSetting = {
+    _count: GlobalSettingCountAggregateOutputType | null
+    _avg: GlobalSettingAvgAggregateOutputType | null
+    _sum: GlobalSettingSumAggregateOutputType | null
+    _min: GlobalSettingMinAggregateOutputType | null
+    _max: GlobalSettingMaxAggregateOutputType | null
+  }
+
+  export type GlobalSettingAvgAggregateOutputType = {
+    id: number | null
+    globalDiscount: number | null
+  }
+
+  export type GlobalSettingSumAggregateOutputType = {
+    id: number | null
+    globalDiscount: number | null
+  }
+
+  export type GlobalSettingMinAggregateOutputType = {
+    id: number | null
+    globalDiscount: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type GlobalSettingMaxAggregateOutputType = {
+    id: number | null
+    globalDiscount: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type GlobalSettingCountAggregateOutputType = {
+    id: number
+    globalDiscount: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type GlobalSettingAvgAggregateInputType = {
+    id?: true
+    globalDiscount?: true
+  }
+
+  export type GlobalSettingSumAggregateInputType = {
+    id?: true
+    globalDiscount?: true
+  }
+
+  export type GlobalSettingMinAggregateInputType = {
+    id?: true
+    globalDiscount?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type GlobalSettingMaxAggregateInputType = {
+    id?: true
+    globalDiscount?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type GlobalSettingCountAggregateInputType = {
+    id?: true
+    globalDiscount?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type GlobalSettingAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which GlobalSetting to aggregate.
+     */
+    where?: GlobalSettingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GlobalSettings to fetch.
+     */
+    orderBy?: GlobalSettingOrderByWithRelationInput | GlobalSettingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: GlobalSettingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GlobalSettings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GlobalSettings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned GlobalSettings
+    **/
+    _count?: true | GlobalSettingCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: GlobalSettingAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: GlobalSettingSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: GlobalSettingMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: GlobalSettingMaxAggregateInputType
+  }
+
+  export type GetGlobalSettingAggregateType<T extends GlobalSettingAggregateArgs> = {
+        [P in keyof T & keyof AggregateGlobalSetting]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateGlobalSetting[P]>
+      : GetScalarType<T[P], AggregateGlobalSetting[P]>
+  }
+
+
+
+
+  export type GlobalSettingGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GlobalSettingWhereInput
+    orderBy?: GlobalSettingOrderByWithAggregationInput | GlobalSettingOrderByWithAggregationInput[]
+    by: GlobalSettingScalarFieldEnum[] | GlobalSettingScalarFieldEnum
+    having?: GlobalSettingScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: GlobalSettingCountAggregateInputType | true
+    _avg?: GlobalSettingAvgAggregateInputType
+    _sum?: GlobalSettingSumAggregateInputType
+    _min?: GlobalSettingMinAggregateInputType
+    _max?: GlobalSettingMaxAggregateInputType
+  }
+
+  export type GlobalSettingGroupByOutputType = {
+    id: number
+    globalDiscount: number | null
+    createdAt: Date
+    updatedAt: Date
+    _count: GlobalSettingCountAggregateOutputType | null
+    _avg: GlobalSettingAvgAggregateOutputType | null
+    _sum: GlobalSettingSumAggregateOutputType | null
+    _min: GlobalSettingMinAggregateOutputType | null
+    _max: GlobalSettingMaxAggregateOutputType | null
+  }
+
+  type GetGlobalSettingGroupByPayload<T extends GlobalSettingGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<GlobalSettingGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof GlobalSettingGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], GlobalSettingGroupByOutputType[P]>
+            : GetScalarType<T[P], GlobalSettingGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type GlobalSettingSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    globalDiscount?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["globalSetting"]>
+
+
+
+  export type GlobalSettingSelectScalar = {
+    id?: boolean
+    globalDiscount?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type GlobalSettingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "globalDiscount" | "createdAt" | "updatedAt", ExtArgs["result"]["globalSetting"]>
+
+  export type $GlobalSettingPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "GlobalSetting"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      globalDiscount: number | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["globalSetting"]>
+    composites: {}
+  }
+
+  type GlobalSettingGetPayload<S extends boolean | null | undefined | GlobalSettingDefaultArgs> = $Result.GetResult<Prisma.$GlobalSettingPayload, S>
+
+  type GlobalSettingCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<GlobalSettingFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: GlobalSettingCountAggregateInputType | true
+    }
+
+  export interface GlobalSettingDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['GlobalSetting'], meta: { name: 'GlobalSetting' } }
+    /**
+     * Find zero or one GlobalSetting that matches the filter.
+     * @param {GlobalSettingFindUniqueArgs} args - Arguments to find a GlobalSetting
+     * @example
+     * // Get one GlobalSetting
+     * const globalSetting = await prisma.globalSetting.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends GlobalSettingFindUniqueArgs>(args: SelectSubset<T, GlobalSettingFindUniqueArgs<ExtArgs>>): Prisma__GlobalSettingClient<$Result.GetResult<Prisma.$GlobalSettingPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one GlobalSetting that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {GlobalSettingFindUniqueOrThrowArgs} args - Arguments to find a GlobalSetting
+     * @example
+     * // Get one GlobalSetting
+     * const globalSetting = await prisma.globalSetting.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends GlobalSettingFindUniqueOrThrowArgs>(args: SelectSubset<T, GlobalSettingFindUniqueOrThrowArgs<ExtArgs>>): Prisma__GlobalSettingClient<$Result.GetResult<Prisma.$GlobalSettingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first GlobalSetting that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GlobalSettingFindFirstArgs} args - Arguments to find a GlobalSetting
+     * @example
+     * // Get one GlobalSetting
+     * const globalSetting = await prisma.globalSetting.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends GlobalSettingFindFirstArgs>(args?: SelectSubset<T, GlobalSettingFindFirstArgs<ExtArgs>>): Prisma__GlobalSettingClient<$Result.GetResult<Prisma.$GlobalSettingPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first GlobalSetting that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GlobalSettingFindFirstOrThrowArgs} args - Arguments to find a GlobalSetting
+     * @example
+     * // Get one GlobalSetting
+     * const globalSetting = await prisma.globalSetting.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends GlobalSettingFindFirstOrThrowArgs>(args?: SelectSubset<T, GlobalSettingFindFirstOrThrowArgs<ExtArgs>>): Prisma__GlobalSettingClient<$Result.GetResult<Prisma.$GlobalSettingPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more GlobalSettings that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GlobalSettingFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all GlobalSettings
+     * const globalSettings = await prisma.globalSetting.findMany()
+     * 
+     * // Get first 10 GlobalSettings
+     * const globalSettings = await prisma.globalSetting.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const globalSettingWithIdOnly = await prisma.globalSetting.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends GlobalSettingFindManyArgs>(args?: SelectSubset<T, GlobalSettingFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GlobalSettingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a GlobalSetting.
+     * @param {GlobalSettingCreateArgs} args - Arguments to create a GlobalSetting.
+     * @example
+     * // Create one GlobalSetting
+     * const GlobalSetting = await prisma.globalSetting.create({
+     *   data: {
+     *     // ... data to create a GlobalSetting
+     *   }
+     * })
+     * 
+     */
+    create<T extends GlobalSettingCreateArgs>(args: SelectSubset<T, GlobalSettingCreateArgs<ExtArgs>>): Prisma__GlobalSettingClient<$Result.GetResult<Prisma.$GlobalSettingPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many GlobalSettings.
+     * @param {GlobalSettingCreateManyArgs} args - Arguments to create many GlobalSettings.
+     * @example
+     * // Create many GlobalSettings
+     * const globalSetting = await prisma.globalSetting.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends GlobalSettingCreateManyArgs>(args?: SelectSubset<T, GlobalSettingCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a GlobalSetting.
+     * @param {GlobalSettingDeleteArgs} args - Arguments to delete one GlobalSetting.
+     * @example
+     * // Delete one GlobalSetting
+     * const GlobalSetting = await prisma.globalSetting.delete({
+     *   where: {
+     *     // ... filter to delete one GlobalSetting
+     *   }
+     * })
+     * 
+     */
+    delete<T extends GlobalSettingDeleteArgs>(args: SelectSubset<T, GlobalSettingDeleteArgs<ExtArgs>>): Prisma__GlobalSettingClient<$Result.GetResult<Prisma.$GlobalSettingPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one GlobalSetting.
+     * @param {GlobalSettingUpdateArgs} args - Arguments to update one GlobalSetting.
+     * @example
+     * // Update one GlobalSetting
+     * const globalSetting = await prisma.globalSetting.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends GlobalSettingUpdateArgs>(args: SelectSubset<T, GlobalSettingUpdateArgs<ExtArgs>>): Prisma__GlobalSettingClient<$Result.GetResult<Prisma.$GlobalSettingPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more GlobalSettings.
+     * @param {GlobalSettingDeleteManyArgs} args - Arguments to filter GlobalSettings to delete.
+     * @example
+     * // Delete a few GlobalSettings
+     * const { count } = await prisma.globalSetting.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends GlobalSettingDeleteManyArgs>(args?: SelectSubset<T, GlobalSettingDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more GlobalSettings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GlobalSettingUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many GlobalSettings
+     * const globalSetting = await prisma.globalSetting.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends GlobalSettingUpdateManyArgs>(args: SelectSubset<T, GlobalSettingUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one GlobalSetting.
+     * @param {GlobalSettingUpsertArgs} args - Arguments to update or create a GlobalSetting.
+     * @example
+     * // Update or create a GlobalSetting
+     * const globalSetting = await prisma.globalSetting.upsert({
+     *   create: {
+     *     // ... data to create a GlobalSetting
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the GlobalSetting we want to update
+     *   }
+     * })
+     */
+    upsert<T extends GlobalSettingUpsertArgs>(args: SelectSubset<T, GlobalSettingUpsertArgs<ExtArgs>>): Prisma__GlobalSettingClient<$Result.GetResult<Prisma.$GlobalSettingPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of GlobalSettings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GlobalSettingCountArgs} args - Arguments to filter GlobalSettings to count.
+     * @example
+     * // Count the number of GlobalSettings
+     * const count = await prisma.globalSetting.count({
+     *   where: {
+     *     // ... the filter for the GlobalSettings we want to count
+     *   }
+     * })
+    **/
+    count<T extends GlobalSettingCountArgs>(
+      args?: Subset<T, GlobalSettingCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], GlobalSettingCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a GlobalSetting.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GlobalSettingAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends GlobalSettingAggregateArgs>(args: Subset<T, GlobalSettingAggregateArgs>): Prisma.PrismaPromise<GetGlobalSettingAggregateType<T>>
+
+    /**
+     * Group by GlobalSetting.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GlobalSettingGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends GlobalSettingGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: GlobalSettingGroupByArgs['orderBy'] }
+        : { orderBy?: GlobalSettingGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, GlobalSettingGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetGlobalSettingGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the GlobalSetting model
+   */
+  readonly fields: GlobalSettingFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for GlobalSetting.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__GlobalSettingClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the GlobalSetting model
+   */
+  interface GlobalSettingFieldRefs {
+    readonly id: FieldRef<"GlobalSetting", 'Int'>
+    readonly globalDiscount: FieldRef<"GlobalSetting", 'Int'>
+    readonly createdAt: FieldRef<"GlobalSetting", 'DateTime'>
+    readonly updatedAt: FieldRef<"GlobalSetting", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * GlobalSetting findUnique
+   */
+  export type GlobalSettingFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GlobalSetting
+     */
+    select?: GlobalSettingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GlobalSetting
+     */
+    omit?: GlobalSettingOmit<ExtArgs> | null
+    /**
+     * Filter, which GlobalSetting to fetch.
+     */
+    where: GlobalSettingWhereUniqueInput
+  }
+
+  /**
+   * GlobalSetting findUniqueOrThrow
+   */
+  export type GlobalSettingFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GlobalSetting
+     */
+    select?: GlobalSettingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GlobalSetting
+     */
+    omit?: GlobalSettingOmit<ExtArgs> | null
+    /**
+     * Filter, which GlobalSetting to fetch.
+     */
+    where: GlobalSettingWhereUniqueInput
+  }
+
+  /**
+   * GlobalSetting findFirst
+   */
+  export type GlobalSettingFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GlobalSetting
+     */
+    select?: GlobalSettingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GlobalSetting
+     */
+    omit?: GlobalSettingOmit<ExtArgs> | null
+    /**
+     * Filter, which GlobalSetting to fetch.
+     */
+    where?: GlobalSettingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GlobalSettings to fetch.
+     */
+    orderBy?: GlobalSettingOrderByWithRelationInput | GlobalSettingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for GlobalSettings.
+     */
+    cursor?: GlobalSettingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GlobalSettings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GlobalSettings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GlobalSettings.
+     */
+    distinct?: GlobalSettingScalarFieldEnum | GlobalSettingScalarFieldEnum[]
+  }
+
+  /**
+   * GlobalSetting findFirstOrThrow
+   */
+  export type GlobalSettingFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GlobalSetting
+     */
+    select?: GlobalSettingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GlobalSetting
+     */
+    omit?: GlobalSettingOmit<ExtArgs> | null
+    /**
+     * Filter, which GlobalSetting to fetch.
+     */
+    where?: GlobalSettingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GlobalSettings to fetch.
+     */
+    orderBy?: GlobalSettingOrderByWithRelationInput | GlobalSettingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for GlobalSettings.
+     */
+    cursor?: GlobalSettingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GlobalSettings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GlobalSettings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GlobalSettings.
+     */
+    distinct?: GlobalSettingScalarFieldEnum | GlobalSettingScalarFieldEnum[]
+  }
+
+  /**
+   * GlobalSetting findMany
+   */
+  export type GlobalSettingFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GlobalSetting
+     */
+    select?: GlobalSettingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GlobalSetting
+     */
+    omit?: GlobalSettingOmit<ExtArgs> | null
+    /**
+     * Filter, which GlobalSettings to fetch.
+     */
+    where?: GlobalSettingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GlobalSettings to fetch.
+     */
+    orderBy?: GlobalSettingOrderByWithRelationInput | GlobalSettingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing GlobalSettings.
+     */
+    cursor?: GlobalSettingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GlobalSettings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GlobalSettings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GlobalSettings.
+     */
+    distinct?: GlobalSettingScalarFieldEnum | GlobalSettingScalarFieldEnum[]
+  }
+
+  /**
+   * GlobalSetting create
+   */
+  export type GlobalSettingCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GlobalSetting
+     */
+    select?: GlobalSettingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GlobalSetting
+     */
+    omit?: GlobalSettingOmit<ExtArgs> | null
+    /**
+     * The data needed to create a GlobalSetting.
+     */
+    data: XOR<GlobalSettingCreateInput, GlobalSettingUncheckedCreateInput>
+  }
+
+  /**
+   * GlobalSetting createMany
+   */
+  export type GlobalSettingCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many GlobalSettings.
+     */
+    data: GlobalSettingCreateManyInput | GlobalSettingCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * GlobalSetting update
+   */
+  export type GlobalSettingUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GlobalSetting
+     */
+    select?: GlobalSettingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GlobalSetting
+     */
+    omit?: GlobalSettingOmit<ExtArgs> | null
+    /**
+     * The data needed to update a GlobalSetting.
+     */
+    data: XOR<GlobalSettingUpdateInput, GlobalSettingUncheckedUpdateInput>
+    /**
+     * Choose, which GlobalSetting to update.
+     */
+    where: GlobalSettingWhereUniqueInput
+  }
+
+  /**
+   * GlobalSetting updateMany
+   */
+  export type GlobalSettingUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update GlobalSettings.
+     */
+    data: XOR<GlobalSettingUpdateManyMutationInput, GlobalSettingUncheckedUpdateManyInput>
+    /**
+     * Filter which GlobalSettings to update
+     */
+    where?: GlobalSettingWhereInput
+    /**
+     * Limit how many GlobalSettings to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * GlobalSetting upsert
+   */
+  export type GlobalSettingUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GlobalSetting
+     */
+    select?: GlobalSettingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GlobalSetting
+     */
+    omit?: GlobalSettingOmit<ExtArgs> | null
+    /**
+     * The filter to search for the GlobalSetting to update in case it exists.
+     */
+    where: GlobalSettingWhereUniqueInput
+    /**
+     * In case the GlobalSetting found by the `where` argument doesn't exist, create a new GlobalSetting with this data.
+     */
+    create: XOR<GlobalSettingCreateInput, GlobalSettingUncheckedCreateInput>
+    /**
+     * In case the GlobalSetting was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<GlobalSettingUpdateInput, GlobalSettingUncheckedUpdateInput>
+  }
+
+  /**
+   * GlobalSetting delete
+   */
+  export type GlobalSettingDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GlobalSetting
+     */
+    select?: GlobalSettingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GlobalSetting
+     */
+    omit?: GlobalSettingOmit<ExtArgs> | null
+    /**
+     * Filter which GlobalSetting to delete.
+     */
+    where: GlobalSettingWhereUniqueInput
+  }
+
+  /**
+   * GlobalSetting deleteMany
+   */
+  export type GlobalSettingDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which GlobalSettings to delete
+     */
+    where?: GlobalSettingWhereInput
+    /**
+     * Limit how many GlobalSettings to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * GlobalSetting without action
+   */
+  export type GlobalSettingDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GlobalSetting
+     */
+    select?: GlobalSettingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GlobalSetting
+     */
+    omit?: GlobalSettingOmit<ExtArgs> | null
   }
 
 
@@ -34612,6 +35635,7 @@ export namespace Prisma {
     email: 'email',
     password: 'password',
     phone: 'phone',
+    image: 'image',
     companyName: 'companyName',
     streetAddress: 'streetAddress',
     streetAddress2: 'streetAddress2',
@@ -34622,11 +35646,22 @@ export namespace Prisma {
     bonus: 'bonus',
     registerSource: 'registerSource',
     bonusStatus: 'bonusStatus',
+    discount: 'discount',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+  export const GlobalSettingScalarFieldEnum: {
+    id: 'id',
+    globalDiscount: 'globalDiscount',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type GlobalSettingScalarFieldEnum = (typeof GlobalSettingScalarFieldEnum)[keyof typeof GlobalSettingScalarFieldEnum]
 
 
   export const DiscountScalarFieldEnum: {
@@ -35028,6 +36063,7 @@ export namespace Prisma {
     email: 'email',
     password: 'password',
     phone: 'phone',
+    image: 'image',
     companyName: 'companyName',
     streetAddress: 'streetAddress',
     streetAddress2: 'streetAddress2',
@@ -35359,6 +36395,7 @@ export namespace Prisma {
     email?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
     phone?: StringNullableFilter<"User"> | string | null
+    image?: StringNullableFilter<"User"> | string | null
     companyName?: StringNullableFilter<"User"> | string | null
     streetAddress?: StringNullableFilter<"User"> | string | null
     streetAddress2?: StringNullableFilter<"User"> | string | null
@@ -35369,6 +36406,7 @@ export namespace Prisma {
     bonus?: IntFilter<"User"> | number
     registerSource?: StringFilter<"User"> | string
     bonusStatus?: StringFilter<"User"> | string
+    discount?: IntNullableFilter<"User"> | number | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     role?: XOR<RoleScalarRelationFilter, RoleWhereInput>
@@ -35385,6 +36423,7 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     phone?: SortOrderInput | SortOrder
+    image?: SortOrderInput | SortOrder
     companyName?: SortOrderInput | SortOrder
     streetAddress?: SortOrderInput | SortOrder
     streetAddress2?: SortOrderInput | SortOrder
@@ -35395,6 +36434,7 @@ export namespace Prisma {
     bonus?: SortOrder
     registerSource?: SortOrder
     bonusStatus?: SortOrder
+    discount?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     role?: RoleOrderByWithRelationInput
@@ -35415,6 +36455,7 @@ export namespace Prisma {
     fullname?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
     phone?: StringNullableFilter<"User"> | string | null
+    image?: StringNullableFilter<"User"> | string | null
     companyName?: StringNullableFilter<"User"> | string | null
     streetAddress?: StringNullableFilter<"User"> | string | null
     streetAddress2?: StringNullableFilter<"User"> | string | null
@@ -35425,6 +36466,7 @@ export namespace Prisma {
     bonus?: IntFilter<"User"> | number
     registerSource?: StringFilter<"User"> | string
     bonusStatus?: StringFilter<"User"> | string
+    discount?: IntNullableFilter<"User"> | number | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     role?: XOR<RoleScalarRelationFilter, RoleWhereInput>
@@ -35441,6 +36483,7 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     phone?: SortOrderInput | SortOrder
+    image?: SortOrderInput | SortOrder
     companyName?: SortOrderInput | SortOrder
     streetAddress?: SortOrderInput | SortOrder
     streetAddress2?: SortOrderInput | SortOrder
@@ -35451,6 +36494,7 @@ export namespace Prisma {
     bonus?: SortOrder
     registerSource?: SortOrder
     bonusStatus?: SortOrder
+    discount?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: UserCountOrderByAggregateInput
@@ -35469,6 +36513,7 @@ export namespace Prisma {
     email?: StringWithAggregatesFilter<"User"> | string
     password?: StringWithAggregatesFilter<"User"> | string
     phone?: StringNullableWithAggregatesFilter<"User"> | string | null
+    image?: StringNullableWithAggregatesFilter<"User"> | string | null
     companyName?: StringNullableWithAggregatesFilter<"User"> | string | null
     streetAddress?: StringNullableWithAggregatesFilter<"User"> | string | null
     streetAddress2?: StringNullableWithAggregatesFilter<"User"> | string | null
@@ -35479,8 +36524,58 @@ export namespace Prisma {
     bonus?: IntWithAggregatesFilter<"User"> | number
     registerSource?: StringWithAggregatesFilter<"User"> | string
     bonusStatus?: StringWithAggregatesFilter<"User"> | string
+    discount?: IntNullableWithAggregatesFilter<"User"> | number | null
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
+  }
+
+  export type GlobalSettingWhereInput = {
+    AND?: GlobalSettingWhereInput | GlobalSettingWhereInput[]
+    OR?: GlobalSettingWhereInput[]
+    NOT?: GlobalSettingWhereInput | GlobalSettingWhereInput[]
+    id?: IntFilter<"GlobalSetting"> | number
+    globalDiscount?: IntNullableFilter<"GlobalSetting"> | number | null
+    createdAt?: DateTimeFilter<"GlobalSetting"> | Date | string
+    updatedAt?: DateTimeFilter<"GlobalSetting"> | Date | string
+  }
+
+  export type GlobalSettingOrderByWithRelationInput = {
+    id?: SortOrder
+    globalDiscount?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type GlobalSettingWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: GlobalSettingWhereInput | GlobalSettingWhereInput[]
+    OR?: GlobalSettingWhereInput[]
+    NOT?: GlobalSettingWhereInput | GlobalSettingWhereInput[]
+    globalDiscount?: IntNullableFilter<"GlobalSetting"> | number | null
+    createdAt?: DateTimeFilter<"GlobalSetting"> | Date | string
+    updatedAt?: DateTimeFilter<"GlobalSetting"> | Date | string
+  }, "id">
+
+  export type GlobalSettingOrderByWithAggregationInput = {
+    id?: SortOrder
+    globalDiscount?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: GlobalSettingCountOrderByAggregateInput
+    _avg?: GlobalSettingAvgOrderByAggregateInput
+    _max?: GlobalSettingMaxOrderByAggregateInput
+    _min?: GlobalSettingMinOrderByAggregateInput
+    _sum?: GlobalSettingSumOrderByAggregateInput
+  }
+
+  export type GlobalSettingScalarWhereWithAggregatesInput = {
+    AND?: GlobalSettingScalarWhereWithAggregatesInput | GlobalSettingScalarWhereWithAggregatesInput[]
+    OR?: GlobalSettingScalarWhereWithAggregatesInput[]
+    NOT?: GlobalSettingScalarWhereWithAggregatesInput | GlobalSettingScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"GlobalSetting"> | number
+    globalDiscount?: IntNullableWithAggregatesFilter<"GlobalSetting"> | number | null
+    createdAt?: DateTimeWithAggregatesFilter<"GlobalSetting"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"GlobalSetting"> | Date | string
   }
 
   export type DiscountWhereInput = {
@@ -37425,6 +38520,7 @@ export namespace Prisma {
     email: string
     password: string
     phone?: string | null
+    image?: string | null
     companyName?: string | null
     streetAddress?: string | null
     streetAddress2?: string | null
@@ -37434,6 +38530,7 @@ export namespace Prisma {
     bonus?: number
     registerSource?: string
     bonusStatus?: string
+    discount?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     role: RoleCreateNestedOneWithoutUsersInput
@@ -37450,6 +38547,7 @@ export namespace Prisma {
     email: string
     password: string
     phone?: string | null
+    image?: string | null
     companyName?: string | null
     streetAddress?: string | null
     streetAddress2?: string | null
@@ -37460,6 +38558,7 @@ export namespace Prisma {
     bonus?: number
     registerSource?: string
     bonusStatus?: string
+    discount?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     bonusHistory?: BonusHistoryUncheckedCreateNestedManyWithoutUserInput
@@ -37474,6 +38573,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     companyName?: NullableStringFieldUpdateOperationsInput | string | null
     streetAddress?: NullableStringFieldUpdateOperationsInput | string | null
     streetAddress2?: NullableStringFieldUpdateOperationsInput | string | null
@@ -37483,6 +38583,7 @@ export namespace Prisma {
     bonus?: IntFieldUpdateOperationsInput | number
     registerSource?: StringFieldUpdateOperationsInput | string
     bonusStatus?: StringFieldUpdateOperationsInput | string
+    discount?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -37499,6 +38600,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     companyName?: NullableStringFieldUpdateOperationsInput | string | null
     streetAddress?: NullableStringFieldUpdateOperationsInput | string | null
     streetAddress2?: NullableStringFieldUpdateOperationsInput | string | null
@@ -37509,6 +38611,7 @@ export namespace Prisma {
     bonus?: IntFieldUpdateOperationsInput | number
     registerSource?: StringFieldUpdateOperationsInput | string
     bonusStatus?: StringFieldUpdateOperationsInput | string
+    discount?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     bonusHistory?: BonusHistoryUncheckedUpdateManyWithoutUserNestedInput
@@ -37524,6 +38627,7 @@ export namespace Prisma {
     email: string
     password: string
     phone?: string | null
+    image?: string | null
     companyName?: string | null
     streetAddress?: string | null
     streetAddress2?: string | null
@@ -37534,6 +38638,7 @@ export namespace Prisma {
     bonus?: number
     registerSource?: string
     bonusStatus?: string
+    discount?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -37543,6 +38648,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     companyName?: NullableStringFieldUpdateOperationsInput | string | null
     streetAddress?: NullableStringFieldUpdateOperationsInput | string | null
     streetAddress2?: NullableStringFieldUpdateOperationsInput | string | null
@@ -37552,6 +38658,7 @@ export namespace Prisma {
     bonus?: IntFieldUpdateOperationsInput | number
     registerSource?: StringFieldUpdateOperationsInput | string
     bonusStatus?: StringFieldUpdateOperationsInput | string
+    discount?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -37562,6 +38669,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     companyName?: NullableStringFieldUpdateOperationsInput | string | null
     streetAddress?: NullableStringFieldUpdateOperationsInput | string | null
     streetAddress2?: NullableStringFieldUpdateOperationsInput | string | null
@@ -37572,6 +38680,53 @@ export namespace Prisma {
     bonus?: IntFieldUpdateOperationsInput | number
     registerSource?: StringFieldUpdateOperationsInput | string
     bonusStatus?: StringFieldUpdateOperationsInput | string
+    discount?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GlobalSettingCreateInput = {
+    globalDiscount?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GlobalSettingUncheckedCreateInput = {
+    id?: number
+    globalDiscount?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GlobalSettingUpdateInput = {
+    globalDiscount?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GlobalSettingUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    globalDiscount?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GlobalSettingCreateManyInput = {
+    id?: number
+    globalDiscount?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GlobalSettingUpdateManyMutationInput = {
+    globalDiscount?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GlobalSettingUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    globalDiscount?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -39523,6 +40678,17 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type DateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[]
@@ -39606,6 +40772,7 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     phone?: SortOrder
+    image?: SortOrder
     companyName?: SortOrder
     streetAddress?: SortOrder
     streetAddress2?: SortOrder
@@ -39616,6 +40783,7 @@ export namespace Prisma {
     bonus?: SortOrder
     registerSource?: SortOrder
     bonusStatus?: SortOrder
+    discount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -39624,6 +40792,7 @@ export namespace Prisma {
     id?: SortOrder
     roleId?: SortOrder
     bonus?: SortOrder
+    discount?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -39632,6 +40801,7 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     phone?: SortOrder
+    image?: SortOrder
     companyName?: SortOrder
     streetAddress?: SortOrder
     streetAddress2?: SortOrder
@@ -39642,6 +40812,7 @@ export namespace Prisma {
     bonus?: SortOrder
     registerSource?: SortOrder
     bonusStatus?: SortOrder
+    discount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -39652,6 +40823,7 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     phone?: SortOrder
+    image?: SortOrder
     companyName?: SortOrder
     streetAddress?: SortOrder
     streetAddress2?: SortOrder
@@ -39662,6 +40834,7 @@ export namespace Prisma {
     bonus?: SortOrder
     registerSource?: SortOrder
     bonusStatus?: SortOrder
+    discount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -39670,6 +40843,7 @@ export namespace Prisma {
     id?: SortOrder
     roleId?: SortOrder
     bonus?: SortOrder
+    discount?: SortOrder
   }
 
   export type IntWithAggregatesFilter<$PrismaModel = never> = {
@@ -39724,6 +40898,22 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[]
@@ -39738,15 +40928,35 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  export type GlobalSettingCountOrderByAggregateInput = {
+    id?: SortOrder
+    globalDiscount?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type GlobalSettingAvgOrderByAggregateInput = {
+    id?: SortOrder
+    globalDiscount?: SortOrder
+  }
+
+  export type GlobalSettingMaxOrderByAggregateInput = {
+    id?: SortOrder
+    globalDiscount?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type GlobalSettingMinOrderByAggregateInput = {
+    id?: SortOrder
+    globalDiscount?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type GlobalSettingSumOrderByAggregateInput = {
+    id?: SortOrder
+    globalDiscount?: SortOrder
   }
 
   export type FloatFilter<$PrismaModel = never> = {
@@ -39834,22 +41044,6 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     discountValue?: SortOrder
-  }
-
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type FloatWithAggregatesFilter<$PrismaModel = never> = {
@@ -41447,6 +42641,14 @@ export namespace Prisma {
     divide?: number
   }
 
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
   }
@@ -41625,14 +42827,6 @@ export namespace Prisma {
     delete?: UserWhereInput | boolean
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutDiscountsInput, UserUpdateWithoutDiscountsInput>, UserUncheckedUpdateWithoutDiscountsInput>
-  }
-
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type UserCreateNestedOneWithoutBonusHistoryInput = {
@@ -42454,6 +43648,17 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type NestedDateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[]
@@ -42528,42 +43733,6 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
-  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[]
-    notIn?: Date[] | string[]
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
-  }
-
-  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | null
-    notIn?: Date[] | string[] | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | null
@@ -42589,6 +43758,31 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[]
+    notIn?: Date[] | string[]
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | null
+    notIn?: Date[] | string[] | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
   export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
@@ -43050,6 +44244,7 @@ export namespace Prisma {
     email: string
     password: string
     phone?: string | null
+    image?: string | null
     companyName?: string | null
     streetAddress?: string | null
     streetAddress2?: string | null
@@ -43059,6 +44254,7 @@ export namespace Prisma {
     bonus?: number
     registerSource?: string
     bonusStatus?: string
+    discount?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     role: RoleCreateNestedOneWithoutUsersInput
@@ -43074,6 +44270,7 @@ export namespace Prisma {
     email: string
     password: string
     phone?: string | null
+    image?: string | null
     companyName?: string | null
     streetAddress?: string | null
     streetAddress2?: string | null
@@ -43084,6 +44281,7 @@ export namespace Prisma {
     bonus?: number
     registerSource?: string
     bonusStatus?: string
+    discount?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     bonusHistory?: BonusHistoryUncheckedCreateNestedManyWithoutUserInput
@@ -43113,6 +44311,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     companyName?: NullableStringFieldUpdateOperationsInput | string | null
     streetAddress?: NullableStringFieldUpdateOperationsInput | string | null
     streetAddress2?: NullableStringFieldUpdateOperationsInput | string | null
@@ -43122,6 +44321,7 @@ export namespace Prisma {
     bonus?: IntFieldUpdateOperationsInput | number
     registerSource?: StringFieldUpdateOperationsInput | string
     bonusStatus?: StringFieldUpdateOperationsInput | string
+    discount?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -43137,6 +44337,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     companyName?: NullableStringFieldUpdateOperationsInput | string | null
     streetAddress?: NullableStringFieldUpdateOperationsInput | string | null
     streetAddress2?: NullableStringFieldUpdateOperationsInput | string | null
@@ -43147,6 +44348,7 @@ export namespace Prisma {
     bonus?: IntFieldUpdateOperationsInput | number
     registerSource?: StringFieldUpdateOperationsInput | string
     bonusStatus?: StringFieldUpdateOperationsInput | string
+    discount?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     bonusHistory?: BonusHistoryUncheckedUpdateManyWithoutUserNestedInput
@@ -43160,6 +44362,7 @@ export namespace Prisma {
     email: string
     password: string
     phone?: string | null
+    image?: string | null
     companyName?: string | null
     streetAddress?: string | null
     streetAddress2?: string | null
@@ -43169,6 +44372,7 @@ export namespace Prisma {
     bonus?: number
     registerSource?: string
     bonusStatus?: string
+    discount?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     role: RoleCreateNestedOneWithoutUsersInput
@@ -43184,6 +44388,7 @@ export namespace Prisma {
     email: string
     password: string
     phone?: string | null
+    image?: string | null
     companyName?: string | null
     streetAddress?: string | null
     streetAddress2?: string | null
@@ -43194,6 +44399,7 @@ export namespace Prisma {
     bonus?: number
     registerSource?: string
     bonusStatus?: string
+    discount?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutCreatedByInput
@@ -43223,6 +44429,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     companyName?: NullableStringFieldUpdateOperationsInput | string | null
     streetAddress?: NullableStringFieldUpdateOperationsInput | string | null
     streetAddress2?: NullableStringFieldUpdateOperationsInput | string | null
@@ -43232,6 +44439,7 @@ export namespace Prisma {
     bonus?: IntFieldUpdateOperationsInput | number
     registerSource?: StringFieldUpdateOperationsInput | string
     bonusStatus?: StringFieldUpdateOperationsInput | string
+    discount?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -43247,6 +44455,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     companyName?: NullableStringFieldUpdateOperationsInput | string | null
     streetAddress?: NullableStringFieldUpdateOperationsInput | string | null
     streetAddress2?: NullableStringFieldUpdateOperationsInput | string | null
@@ -43257,6 +44466,7 @@ export namespace Prisma {
     bonus?: IntFieldUpdateOperationsInput | number
     registerSource?: StringFieldUpdateOperationsInput | string
     bonusStatus?: StringFieldUpdateOperationsInput | string
+    discount?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     announcements?: AnnouncementUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -43270,6 +44480,7 @@ export namespace Prisma {
     email: string
     password: string
     phone?: string | null
+    image?: string | null
     companyName?: string | null
     streetAddress?: string | null
     streetAddress2?: string | null
@@ -43279,6 +44490,7 @@ export namespace Prisma {
     bonus?: number
     registerSource?: string
     bonusStatus?: string
+    discount?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     bonusHistory?: BonusHistoryCreateNestedManyWithoutUserInput
@@ -43294,6 +44506,7 @@ export namespace Prisma {
     email: string
     password: string
     phone?: string | null
+    image?: string | null
     companyName?: string | null
     streetAddress?: string | null
     streetAddress2?: string | null
@@ -43303,6 +44516,7 @@ export namespace Prisma {
     bonus?: number
     registerSource?: string
     bonusStatus?: string
+    discount?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     bonusHistory?: BonusHistoryUncheckedCreateNestedManyWithoutUserInput
@@ -43365,6 +44579,7 @@ export namespace Prisma {
     email?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
     phone?: StringNullableFilter<"User"> | string | null
+    image?: StringNullableFilter<"User"> | string | null
     companyName?: StringNullableFilter<"User"> | string | null
     streetAddress?: StringNullableFilter<"User"> | string | null
     streetAddress2?: StringNullableFilter<"User"> | string | null
@@ -43375,6 +44590,7 @@ export namespace Prisma {
     bonus?: IntFilter<"User"> | number
     registerSource?: StringFilter<"User"> | string
     bonusStatus?: StringFilter<"User"> | string
+    discount?: IntNullableFilter<"User"> | number | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
   }
@@ -43834,6 +45050,7 @@ export namespace Prisma {
     email: string
     password: string
     phone?: string | null
+    image?: string | null
     companyName?: string | null
     streetAddress?: string | null
     streetAddress2?: string | null
@@ -43843,6 +45060,7 @@ export namespace Prisma {
     bonus?: number
     registerSource?: string
     bonusStatus?: string
+    discount?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     role: RoleCreateNestedOneWithoutUsersInput
@@ -43858,6 +45076,7 @@ export namespace Prisma {
     email: string
     password: string
     phone?: string | null
+    image?: string | null
     companyName?: string | null
     streetAddress?: string | null
     streetAddress2?: string | null
@@ -43868,6 +45087,7 @@ export namespace Prisma {
     bonus?: number
     registerSource?: string
     bonusStatus?: string
+    discount?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     bonusHistory?: BonusHistoryUncheckedCreateNestedManyWithoutUserInput
@@ -43897,6 +45117,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     companyName?: NullableStringFieldUpdateOperationsInput | string | null
     streetAddress?: NullableStringFieldUpdateOperationsInput | string | null
     streetAddress2?: NullableStringFieldUpdateOperationsInput | string | null
@@ -43906,6 +45127,7 @@ export namespace Prisma {
     bonus?: IntFieldUpdateOperationsInput | number
     registerSource?: StringFieldUpdateOperationsInput | string
     bonusStatus?: StringFieldUpdateOperationsInput | string
+    discount?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -43921,6 +45143,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     companyName?: NullableStringFieldUpdateOperationsInput | string | null
     streetAddress?: NullableStringFieldUpdateOperationsInput | string | null
     streetAddress2?: NullableStringFieldUpdateOperationsInput | string | null
@@ -43931,6 +45154,7 @@ export namespace Prisma {
     bonus?: IntFieldUpdateOperationsInput | number
     registerSource?: StringFieldUpdateOperationsInput | string
     bonusStatus?: StringFieldUpdateOperationsInput | string
+    discount?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     bonusHistory?: BonusHistoryUncheckedUpdateManyWithoutUserNestedInput
@@ -44262,6 +45486,7 @@ export namespace Prisma {
     email: string
     password: string
     phone?: string | null
+    image?: string | null
     companyName?: string | null
     streetAddress?: string | null
     streetAddress2?: string | null
@@ -44271,6 +45496,7 @@ export namespace Prisma {
     bonus?: number
     registerSource?: string
     bonusStatus?: string
+    discount?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     role: RoleCreateNestedOneWithoutUsersInput
@@ -44286,6 +45512,7 @@ export namespace Prisma {
     email: string
     password: string
     phone?: string | null
+    image?: string | null
     companyName?: string | null
     streetAddress?: string | null
     streetAddress2?: string | null
@@ -44296,6 +45523,7 @@ export namespace Prisma {
     bonus?: number
     registerSource?: string
     bonusStatus?: string
+    discount?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     bonusHistory?: BonusHistoryUncheckedCreateNestedManyWithoutUserInput
@@ -44383,6 +45611,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     companyName?: NullableStringFieldUpdateOperationsInput | string | null
     streetAddress?: NullableStringFieldUpdateOperationsInput | string | null
     streetAddress2?: NullableStringFieldUpdateOperationsInput | string | null
@@ -44392,6 +45621,7 @@ export namespace Prisma {
     bonus?: IntFieldUpdateOperationsInput | number
     registerSource?: StringFieldUpdateOperationsInput | string
     bonusStatus?: StringFieldUpdateOperationsInput | string
+    discount?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -44407,6 +45637,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     companyName?: NullableStringFieldUpdateOperationsInput | string | null
     streetAddress?: NullableStringFieldUpdateOperationsInput | string | null
     streetAddress2?: NullableStringFieldUpdateOperationsInput | string | null
@@ -44417,6 +45648,7 @@ export namespace Prisma {
     bonus?: IntFieldUpdateOperationsInput | number
     registerSource?: StringFieldUpdateOperationsInput | string
     bonusStatus?: StringFieldUpdateOperationsInput | string
+    discount?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     bonusHistory?: BonusHistoryUncheckedUpdateManyWithoutUserNestedInput
@@ -44766,6 +45998,7 @@ export namespace Prisma {
     email: string
     password: string
     phone?: string | null
+    image?: string | null
     companyName?: string | null
     streetAddress?: string | null
     streetAddress2?: string | null
@@ -44775,6 +46008,7 @@ export namespace Prisma {
     bonus?: number
     registerSource?: string
     bonusStatus?: string
+    discount?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     role: RoleCreateNestedOneWithoutUsersInput
@@ -44790,6 +46024,7 @@ export namespace Prisma {
     email: string
     password: string
     phone?: string | null
+    image?: string | null
     companyName?: string | null
     streetAddress?: string | null
     streetAddress2?: string | null
@@ -44800,6 +46035,7 @@ export namespace Prisma {
     bonus?: number
     registerSource?: string
     bonusStatus?: string
+    discount?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     bonusHistory?: BonusHistoryUncheckedCreateNestedManyWithoutUserInput
@@ -44829,6 +46065,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     companyName?: NullableStringFieldUpdateOperationsInput | string | null
     streetAddress?: NullableStringFieldUpdateOperationsInput | string | null
     streetAddress2?: NullableStringFieldUpdateOperationsInput | string | null
@@ -44838,6 +46075,7 @@ export namespace Prisma {
     bonus?: IntFieldUpdateOperationsInput | number
     registerSource?: StringFieldUpdateOperationsInput | string
     bonusStatus?: StringFieldUpdateOperationsInput | string
+    discount?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -44853,6 +46091,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     companyName?: NullableStringFieldUpdateOperationsInput | string | null
     streetAddress?: NullableStringFieldUpdateOperationsInput | string | null
     streetAddress2?: NullableStringFieldUpdateOperationsInput | string | null
@@ -44863,6 +46102,7 @@ export namespace Prisma {
     bonus?: IntFieldUpdateOperationsInput | number
     registerSource?: StringFieldUpdateOperationsInput | string
     bonusStatus?: StringFieldUpdateOperationsInput | string
+    discount?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     bonusHistory?: BonusHistoryUncheckedUpdateManyWithoutUserNestedInput
@@ -45108,6 +46348,7 @@ export namespace Prisma {
     email: string
     password: string
     phone?: string | null
+    image?: string | null
     companyName?: string | null
     streetAddress?: string | null
     streetAddress2?: string | null
@@ -45117,6 +46358,7 @@ export namespace Prisma {
     bonus?: number
     registerSource?: string
     bonusStatus?: string
+    discount?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -45126,6 +46368,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     companyName?: NullableStringFieldUpdateOperationsInput | string | null
     streetAddress?: NullableStringFieldUpdateOperationsInput | string | null
     streetAddress2?: NullableStringFieldUpdateOperationsInput | string | null
@@ -45135,6 +46378,7 @@ export namespace Prisma {
     bonus?: IntFieldUpdateOperationsInput | number
     registerSource?: StringFieldUpdateOperationsInput | string
     bonusStatus?: StringFieldUpdateOperationsInput | string
+    discount?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     bonusHistory?: BonusHistoryUpdateManyWithoutUserNestedInput
@@ -45150,6 +46394,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     companyName?: NullableStringFieldUpdateOperationsInput | string | null
     streetAddress?: NullableStringFieldUpdateOperationsInput | string | null
     streetAddress2?: NullableStringFieldUpdateOperationsInput | string | null
@@ -45159,6 +46404,7 @@ export namespace Prisma {
     bonus?: IntFieldUpdateOperationsInput | number
     registerSource?: StringFieldUpdateOperationsInput | string
     bonusStatus?: StringFieldUpdateOperationsInput | string
+    discount?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     bonusHistory?: BonusHistoryUncheckedUpdateManyWithoutUserNestedInput
@@ -45174,6 +46420,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     companyName?: NullableStringFieldUpdateOperationsInput | string | null
     streetAddress?: NullableStringFieldUpdateOperationsInput | string | null
     streetAddress2?: NullableStringFieldUpdateOperationsInput | string | null
@@ -45183,6 +46430,7 @@ export namespace Prisma {
     bonus?: IntFieldUpdateOperationsInput | number
     registerSource?: StringFieldUpdateOperationsInput | string
     bonusStatus?: StringFieldUpdateOperationsInput | string
+    discount?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
