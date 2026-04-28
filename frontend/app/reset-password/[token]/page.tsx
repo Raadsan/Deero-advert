@@ -1,14 +1,16 @@
 "use client";
-export const dynamic = 'force-static';
+
 
 import { useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { Lock, Eye, EyeOff, ArrowLeft } from "lucide-react";
 import { resetPassword } from "../../../api-client/authApi";
 
 export default function ResetPasswordPage() {
     const params = useParams();
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const email = searchParams.get("email") || "";
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
@@ -21,6 +23,12 @@ export default function ResetPasswordPage() {
         setLoading(true);
         setError("");
         setSuccess("");
+
+        if (!email) {
+            setError("Email is missing from the link. Please request a new reset link.");
+            setLoading(false);
+            return;
+        }
 
         if (password !== confirmPassword) {
             setError("Passwords do not match");
@@ -35,7 +43,11 @@ export default function ResetPasswordPage() {
         }
 
         try {
-            await resetPassword(params.token as string, password);
+            await resetPassword({ 
+                email, 
+                code: params.token as string, 
+                password 
+            });
             setSuccess("Password reset successful! Redirecting to login...");
             setTimeout(() => {
                 router.push("/login");
