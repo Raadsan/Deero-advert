@@ -174,7 +174,7 @@ export const login = async (req, res) => {
  */
 export const googleLogin = async (req, res) => {
   try {
-    const { email, name, googleId, image } = req.body;
+    const { email, name, googleId, image, phone } = req.body;
 
     if (!email) {
       return res.status(400).json({ message: "Email is required" });
@@ -205,6 +205,7 @@ export const googleLogin = async (req, res) => {
           fullname: name || email.split("@")[0],
           email: email.toLowerCase(),
           password: hashedPassword,
+          phone: phone || "",
           roleId: userRole.id,
           registerSource: "mobile", // Assuming Google sign-in is primarily from mobile/app
           bonus: initialBonus,
@@ -216,6 +217,15 @@ export const googleLogin = async (req, res) => {
             }
           }
         },
+        include: { role: true }
+      });
+    }
+
+    // If user exists but has no phone, update it if phone is provided from Google
+    if (user && !user.phone && phone) {
+      user = await prisma.user.update({
+        where: { id: user.id },
+        data: { phone: phone },
         include: { role: true }
       });
     }
@@ -386,7 +396,7 @@ export const resetPassword = async (req, res) => {
 export const getUsers = async (req, res) => {
   try {
     const users = await prisma.user.findMany({
-      include: { 
+      include: {
         role: true,
         _count: {
           select: { discounts: true }
@@ -423,7 +433,7 @@ export const getUserById = async (req, res) => {
   try {
     const user = await prisma.user.findUnique({
       where: { id: parseInt(req.params.id) },
-      include: { 
+      include: {
         role: true,
         discounts: {
           where: { status: "active" }
@@ -459,6 +469,9 @@ export const updateUser = async (req, res) => {
     delete data.id;
     delete data.createdAt;
     delete data.updatedAt;
+    if (req.file) {
+      data.image = req.file.path; // Cloudinary returns the URL in path
+    }
 
     const user = await prisma.user.update({
       where: { id: parseInt(req.params.id) },

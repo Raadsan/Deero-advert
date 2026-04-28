@@ -1,4 +1,5 @@
 import express from "express";
+import upload from "../utils/multer.js";
 import {
   signup,
   login,
@@ -27,7 +28,7 @@ router.get("/:id/bonus-history", protect, getBonusHistory);
 router.get("/", getUsers);
 router.get("/:id", protect, getUserById);
 router.post("/", signup);
-router.patch("/:id", protect, updateUser);
+router.patch("/:id", protect, upload.single("image"), updateUser);
 router.delete("/:id", protect, deleteUser);
 
 // Public authentication routes
