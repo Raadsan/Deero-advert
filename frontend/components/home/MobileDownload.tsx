@@ -60,7 +60,7 @@ export default function MobileDownload() {
                             {/* Primary Phone */}
                             <div className="absolute inset-0 w-full h-full transform">
                                 <Image
-                                    src="/deero_app1.png"
+                                    src="/Deero_app1.png"
                                     alt="Deero Advert Mobile App"
                                     fill
                                     className="object-contain object-center"
