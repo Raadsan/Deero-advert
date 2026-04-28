@@ -63,6 +63,7 @@ export default function MobileDownload() {
                                     src="/Deero_app1.png"
                                     alt="Deero Advert Mobile App"
                                     fill
+                                    unoptimized={true}
                                     className="object-contain object-center"
                                 />
                             </div>
