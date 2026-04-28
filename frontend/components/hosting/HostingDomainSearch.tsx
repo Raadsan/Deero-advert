@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { checkDomainAvailability, DomainCheckResult, fetchAllDomainPrices, DomainPrice } from "../../api-client/domainCheckerApi";
 import { ExclamationCircleIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
 import { useRouter, useSearchParams } from "next/navigation";
-import { isAuthenticated, isAdminOrManager } from "@/utils/auth";
+import { isAuthenticated, isAdminOrManager, getUser, refreshUser } from "@/utils/auth";
 import { useCart } from "@/context/CartContext";
 
 export default function HostingDomainSearch({ transparent = false }: { transparent?: boolean }) {
@@ -20,9 +20,58 @@ export default function HostingDomainSearch({ transparent = false }: { transpare
     const [allPrices, setAllPrices] = useState<DomainPrice[]>([]);
     const [selectedDuration, setSelectedDuration] = useState(1);
 
+    useEffect(() => {
+        refreshUser();
+    }, []);
+
     // Use useSearchParams to get the query parameter
     // Note: We need to use useSearchParams from next/navigation
     const searchParams = useSearchParams();
+
+    const getDiscountedPrice = (domainName: string, basePrice: number) => {
+        const user = getUser();
+        if (!user || !user.discounts) {
+            return { finalPrice: basePrice, discount: 0, hasDiscount: false };
+        }
+
+        const tld = domainName.substring(domainName.lastIndexOf('.'));
+
+        const applicableDiscounts = user.discounts.filter((d: any) => {
+            const isTargetMatch = d.targetType === "domain" &&
+                (String(d.targetId) === String(tld) || d.targetId === "all");
+
+            const now = new Date();
+            const isDateValid = (!d.startDate || new Date(d.startDate) <= now) &&
+                (!d.endDate || new Date(d.endDate) >= now);
+
+            return isTargetMatch && isDateValid && d.status === "active";
+        });
+
+        if (applicableDiscounts.length === 0) return { finalPrice: basePrice, discount: 0, hasDiscount: false };
+
+        let bestPrice = basePrice;
+        let appliedDiscount = 0;
+
+        applicableDiscounts.forEach((d: any) => {
+            let currentDiscount = 0;
+            if (d.discountType === "percentage") {
+                currentDiscount = basePrice * (d.discountValue / 100);
+            } else if (d.discountType === "fixed") {
+                currentDiscount = d.discountValue;
+            }
+            const currentPrice = basePrice - currentDiscount;
+            if (currentPrice < bestPrice) {
+                bestPrice = currentPrice;
+                appliedDiscount = currentDiscount;
+            }
+        });
+
+        return {
+            finalPrice: bestPrice > 0 ? bestPrice : 0,
+            discount: appliedDiscount,
+            hasDiscount: appliedDiscount > 0
+        };
+    };
 
     useEffect(() => {
         const handleHashChange = () => {
@@ -231,49 +280,73 @@ export default function HostingDomainSearch({ transparent = false }: { transpare
 
                                                 return (
                                                     <div className="w-full bg-green-50 rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-                                                        {/* Left side - Available message */}
-                                                        <div className="flex items-center gap-3">
-                                                            <div className="bg-green-600 rounded-full p-1 shrink-0">
-                                                                <CheckCircleIcon className="w-5 h-5 text-white" />
-                                                            </div>
-                                                            <span className="font-semibold text-lg text-green-700">{match.domain} is available!</span>
-                                                        </div>
-
-                                                        {/* Right side - Duration, Price, and Button */}
-                                                        <div className="flex items-center gap-3 sm:gap-4 w-full sm:w-auto justify-between sm:justify-end">
-                                                            {/* Duration Dropdown */}
-                                                            <div className="relative">
-                                                                <select
-                                                                    value={selectedDuration}
-                                                                    onChange={(e) => setSelectedDuration(parseInt(e.target.value))}
-                                                                    className="appearance-none bg-white border border-gray-300 text-gray-700 py-2 pl-3 pr-8 rounded-md leading-tight focus:outline-none focus:border-green-500 text-sm font-medium cursor-pointer hover:border-green-400 transition-colors"
-                                                                >
-                                                                    {[1, 2, 3, 5, 10].map(year => (
-                                                                        <option key={year} value={year}>{year} year{year > 1 ? 's' : ''}</option>
-                                                                    ))}
-                                                                </select>
-                                                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-600">
-                                                                    <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
+                                                         {/* Left side - Available message */}
+                                                         <div className="flex flex-col">
+                                                            <div className="flex items-center gap-3">
+                                                                <div className="bg-green-600 rounded-full p-1 shrink-0">
+                                                                    <CheckCircleIcon className="w-5 h-5 text-white" />
                                                                 </div>
+                                                                <span className="font-semibold text-lg text-green-700">{match.domain} is available!</span>
                                                             </div>
-
-                                                            {/* Price Display */}
-                                                            <div className="font-bold text-lg text-gray-800 min-w-[70px] text-right">
-                                                                ${totalPrice}
-                                                            </div>
-
-                                                            {/* Add to Cart Button */}
-                                                            <button
-                                                                onClick={() => handleAddToCart(match.domain, totalPrice)}
-                                                                className={`whitespace-nowrap px-5 py-2 rounded-lg font-bold transition-all shadow-sm active:scale-95 ${isInCart(match.domain)
-                                                                    ? 'bg-gray-200 text-gray-600 hover:bg-gray-300'
-                                                                    : 'bg-[#EB4724] text-white hover:bg-[#d13d1d]'
-                                                                    }`}
-                                                            >
-                                                                {isInCart(match.domain) ? 'Remove from Cart' : 'Add to Cart'}
-                                                            </button>
-                                                        </div>
-                                                    </div>
+                                                         </div>
+ 
+                                                         {/* Right side - Duration, Price, and Button */}
+                                                         <div className="flex items-center gap-3 sm:gap-4 w-full sm:w-auto justify-between sm:justify-end">
+                                                             {/* Duration Dropdown */}
+                                                             <div className="relative">
+                                                                 <select
+                                                                     value={selectedDuration}
+                                                                     onChange={(e) => setSelectedDuration(parseInt(e.target.value))}
+                                                                     className="appearance-none bg-white border border-gray-300 text-gray-700 py-2 pl-3 pr-8 rounded-md leading-tight focus:outline-none focus:border-green-500 text-sm font-medium cursor-pointer hover:border-green-400 transition-colors"
+                                                                 >
+                                                                     {[1, 2, 3, 5, 10].map(year => (
+                                                                         <option key={year} value={year}>{year} year{year > 1 ? 's' : ''}</option>
+                                                                     ))}
+                                                                 </select>
+                                                                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-600">
+                                                                     <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
+                                                                 </div>
+                                                             </div>
+ 
+                                                             {/* Price Display */}
+                                                             <div className="text-right flex flex-col">
+                                                                {(() => {
+                                                                    const { finalPrice, hasDiscount, discount } = getDiscountedPrice(match.domain, basePrice * selectedDuration);
+                                                                    return (
+                                                                        <>
+                                                                             {hasDiscount && (
+                                                                                <div className="flex items-center justify-end gap-2 mb-0.5">
+                                                                                    <span className="text-xs text-gray-400 line-through">
+                                                                                        ${(basePrice * selectedDuration).toFixed(2)}
+                                                                                    </span>
+                                                                                    <span className="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-0.5 rounded-full">
+                                                                                        -{(((basePrice * selectedDuration - finalPrice) / (basePrice * selectedDuration)) * 100).toFixed(0)}% OFF
+                                                                                    </span>
+                                                                                </div>
+                                                                             )}
+                                                                             <span className="font-bold text-lg text-gray-800 min-w-[70px]">
+                                                                                 ${finalPrice.toFixed(2)}
+                                                                             </span>
+                                                                        </>
+                                                                    );
+                                                                })()}
+                                                             </div>
+ 
+                                                             {/* Add to Cart Button */}
+                                                             <button
+                                                                 onClick={() => {
+                                                                    const { finalPrice } = getDiscountedPrice(match.domain, basePrice * selectedDuration);
+                                                                    handleAddToCart(match.domain, String(finalPrice));
+                                                                 }}
+                                                                 className={`whitespace-nowrap px-5 py-2 rounded-lg font-bold transition-all shadow-sm active:scale-95 ${isInCart(match.domain)
+                                                                     ? 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+                                                                     : 'bg-[#EB4724] text-white hover:bg-[#d13d1d]'
+                                                                     }`}
+                                                             >
+                                                                 {isInCart(match.domain) ? 'Remove from Cart' : 'Add to Cart'}
+                                                             </button>
+                                                         </div>
+                                                     </div>
                                                 );
                                             }
                                         }
@@ -290,4 +363,3 @@ export default function HostingDomainSearch({ transparent = false }: { transpare
         </section>
     );
 }
-

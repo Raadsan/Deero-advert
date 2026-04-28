@@ -13,6 +13,7 @@ model User {
   fullname        String
   email           String         @unique
   password        String
+  image           String?
   phone           String?
   companyName     String?
   streetAddress   String?
@@ -33,6 +34,8 @@ model User {
   discount        Int?           @default(0)
   createdAt       DateTime       @default(now())
   updatedAt       DateTime       @updatedAt
+  resetCode       String?
+  resetCodeExpires DateTime?
 }
 
 model GlobalSetting {

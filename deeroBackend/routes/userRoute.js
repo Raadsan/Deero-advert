@@ -3,6 +3,7 @@ import {
   signup,
   login,
   forgotPassword,
+  verifyResetCode,
   resetPassword,
   getUsers,
   getUserById,
@@ -10,9 +11,14 @@ import {
   deleteUser,
   getBonusHistory,
   googleLogin,
+  getMe,
 } from "../controllers/userController.js";
 import { protect } from "../middlewares/authMiddleware.js";
+
 const router = express.Router();
+
+// Current User Profile
+router.get("/me", protect, getMe);
 
 // Bonus History route
 router.get("/:id/bonus-history", protect, getBonusHistory);
@@ -29,6 +35,7 @@ router.post("/signup", signup);
 router.post("/login", login);
 router.post("/google-login", googleLogin);
 router.post("/forgot-password", forgotPassword);
-router.post("/reset-password/:token", resetPassword);
+router.post("/verify-reset-code", verifyResetCode);
+router.post("/reset-password", resetPassword);
 
 export default router;

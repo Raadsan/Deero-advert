@@ -36,7 +36,9 @@ export default function DiscountModal({ isOpen, onClose, targetType, targetId, i
     const fetchUsers = async () => {
         try {
             const res = await getAllUsers();
-            setUsers(res.data);
+            // Only show users with role 'user'
+            const userOnly = res.data.filter((u: any) => u.role?.name === "user");
+            setUsers(userOnly);
         } catch (error) {
             console.error("Failed to fetch users", error);
         }

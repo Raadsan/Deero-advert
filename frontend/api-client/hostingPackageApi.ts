@@ -2,6 +2,7 @@ import api from "./axios";
 
 export interface HostingPackage {
     _id: string;
+    id?: string | number;
     name: string;
     desc?: string;
     price: number;

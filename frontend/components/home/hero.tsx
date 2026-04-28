@@ -90,20 +90,20 @@ export default function Hero() {
           type="button"
           aria-label="Previous slide"
           onClick={prev}
-          className="absolute left-3 top-1/2 lg:top-[240px] hidden -translate-y-1/2 text-white transition hover:scale-110 lg:inline-flex z-20"
+          className="absolute left-5 top-1/2 -translate-y-1/2 text-white/70 transition-all hover:text-white hover:scale-110 hidden lg:flex z-20"
         >
-          <ChevronLeftIcon className="h-8 w-8" />
+          <ChevronLeftIcon className="h-10 w-10" />
         </button>
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between w-full gap-10 ">
-          <div className="space-y-6 lg:w-1/2 w-full flex flex-col justify-center">
-            <AnimatePresence mode="wait">
+          <div className="space-y-6 lg:w-1/2 w-full flex flex-col justify-center min-h-[350px] sm:min-h-[400px] lg:h-[450px]">
+            <AnimatePresence mode="popLayout">
               <motion.div
                 key={active}
-                initial={isMounted && !firstLoad ? { opacity: 0, y: 80 } : false}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 80 }}
-                transition={{ duration: 0.8 }}
-                className="space-y-6 w-full"
+                initial={isMounted && !firstLoad ? { opacity: 0, x: 500 } : false}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -500 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                className="space-y-6 w-full min-h-[250px] flex flex-col justify-center"
               >
                 <h1 className="text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">
                   {slide.title}
@@ -123,14 +123,14 @@ export default function Hero() {
             </AnimatePresence>
           </div>
 
-          <div className="relative lg:w-1/2 flex justify-center items-center w-full min-h-[350px] sm:min-h-[450px] lg:min-h-[400px]">
-            <AnimatePresence mode="wait">
+          <div className="relative lg:w-1/2 flex justify-center items-center w-full min-h-[350px] sm:min-h-[450px] lg:h-[450px]">
+            <AnimatePresence mode="popLayout">
               <motion.div
                 key={active}
-                initial={isMounted && !firstLoad ? { opacity: 0, y: -80 } : false}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -80 }}
-                transition={{ duration: 0.8 }}
+                initial={isMounted && !firstLoad ? { opacity: 0, x: 500 } : false}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -500 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
                 className="relative z-10 w-full flex justify-center"
               >
                 <Image
@@ -151,11 +151,13 @@ export default function Hero() {
           type="button"
           aria-label="Next slide"
           onClick={next}
-          className="absolute right-3 top-1/2 lg:top-[240px] hidden -translate-y-1/2 text-white transition hover:scale-110 lg:inline-flex z-20"
+          className="absolute right-5 top-1/2 -translate-y-1/2 text-white/70 transition-all hover:text-white hover:scale-110 hidden lg:flex z-20"
         >
-          <ChevronRightIcon className="h-8 w-8" />
+          <ChevronRightIcon className="h-10 w-10" />
         </button>
       </div>
+
+
 
       <div className="flex items-center justify-center gap-3 pb-8">
         {slides.map((_, idx) => (

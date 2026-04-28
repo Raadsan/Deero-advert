@@ -12,7 +12,7 @@ import { useCart } from "@/context/CartContext";
 import { loginUser, signupUser } from "@/api-client/authApi";
 
 import { createTransaction } from "@/api-client/transactionApi";
-import { isAdminOrManager, isAuthenticated } from "@/utils/auth";
+import { isAdminOrManager, isAuthenticated, setAuth } from "@/utils/auth";
 import { useEffect } from "react";
 
 export default function CheckoutForm() {
@@ -106,9 +106,8 @@ export default function CheckoutForm() {
             }
 
 
-            // Save auth to sessionStorage (mimic auth utility behavior)
-            sessionStorage.setItem("user", JSON.stringify(userData));
-            sessionStorage.setItem("token", userToken);
+            // Save auth to auth utility (mimic auth utility behavior)
+            setAuth(userToken, userData);
 
             // Process each item in cart
             for (const item of cartItems) {
@@ -133,7 +132,7 @@ export default function CheckoutForm() {
 
             // Success!
             clearCart();
-            router.push("/dashboard?success=true");
+            router.push("/?success=true&type=domain");
 
         } catch (err: any) {
             console.error("Checkout error:", err);

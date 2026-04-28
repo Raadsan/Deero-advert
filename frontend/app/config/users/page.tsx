@@ -137,12 +137,12 @@ export default function UsersPage() {
 
   const handleEdit = (user: any) => {
     setFormData({
-      id: user._id,
-      fullname: user.fullname,
-      email: user.email,
+      id: user._id || user.id,
+      fullname: user.fullname || "",
+      email: user.email || "",
       password: "", // optional: leave empty for no change
-      phone: user.phone,
-      role: user.role?._id || user.role, // Use ID for radio matching
+      phone: user.phone || "",
+      role: user.role?._id || user.role || "", // Use ID for radio matching
     });
     setIsEditing(true);
     setIsModalOpen(true);

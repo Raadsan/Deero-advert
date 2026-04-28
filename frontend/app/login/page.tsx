@@ -3,15 +3,15 @@ export const dynamic = 'force-static';
 
 import { useState, useEffect } from "react";
 import { Eye, EyeOff, Mail, Lock, User, Phone, ArrowLeft } from "lucide-react";
-import { loginUser, signupUser, forgotPassword } from "../../api-client/authApi";
+import { loginUser, signupUser, forgotPassword, verifyResetCode, resetPassword } from "../../api-client/authApi";
 import { useRouter, useSearchParams } from "next/navigation";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-import { isAuthenticated, isAdminOrManager } from "@/utils/auth";
+import { isAuthenticated, isAdminOrManager, setAuth } from "@/utils/auth";
 
 import Link from "next/link";
 
-type ViewType = "login" | "forgot";
+type ViewType = "login" | "forgot" | "verify" | "reset";
 
 import { Suspense } from "react";
 
@@ -23,7 +23,7 @@ function LoginContent() {
   const [success, setSuccess] = useState("");
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirectUrl = searchParams.get("redirect") || "/dashboard";
+  const redirectUrl = searchParams.get("redirect") || "/";
 
   // Redirect if already logged in
   useEffect(() => {
@@ -43,6 +43,13 @@ function LoginContent() {
     email: "",
   });
 
+  // Verify & Reset form
+  const [resetData, setResetData] = useState({
+    code: "",
+    password: "",
+    confirmPassword: "",
+  });
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -52,8 +59,7 @@ function LoginContent() {
     try {
       const res = await loginUser(loginData);
       if (res.data.token) {
-        sessionStorage.setItem("token", res.data.token);
-        sessionStorage.setItem("user", JSON.stringify(res.data.user));
+        setAuth(res.data.token, res.data.user);
         setSuccess("Login successful! Redirecting...");
         setTimeout(() => {
           // Redirect to dashboard or requested page
@@ -75,9 +81,53 @@ function LoginContent() {
 
     try {
       await forgotPassword(forgotData.email);
-      setSuccess("Password reset link sent to your email!");
+      setSuccess("Reset code sent to your email!");
+      setTimeout(() => setView("verify"), 1500);
     } catch (err: any) {
-      setError(err.response?.data?.message || "Failed to send reset link. Please try again.");
+      setError(err.response?.data?.message || "Failed to send reset code. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleVerifyCode = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    setSuccess("");
+
+    try {
+      await verifyResetCode(forgotData.email, resetData.code);
+      setSuccess("Code verified! Now set your new password.");
+      setTimeout(() => setView("reset"), 1500);
+    } catch (err: any) {
+      setError(err.response?.data?.message || "Invalid or expired code. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResetPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (resetData.password !== resetData.confirmPassword) {
+      setError("Passwords do not match!");
+      return;
+    }
+    
+    setLoading(true);
+    setError("");
+    setSuccess("");
+
+    try {
+      await resetPassword({
+        email: forgotData.email,
+        code: resetData.code,
+        password: resetData.password
+      });
+      setSuccess("Password reset successful! You can now login.");
+      setTimeout(() => setView("login"), 2000);
+    } catch (err: any) {
+      setError(err.response?.data?.message || "Reset failed. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -206,10 +256,95 @@ function LoginContent() {
                 </button>
 
                 <div className="text-center">
-                  <button onClick={() => setView("login")} className="flex items-center justify-center gap-2 text-sm font-bold text-[#651313] hover:underline mx-auto">
+                  <button type="button" onClick={() => setView("login")} className="flex items-center justify-center gap-2 text-sm font-bold text-[#651313] hover:underline mx-auto">
                     <ArrowLeft className="h-4 w-4" /> Back to Login
                   </button>
                 </div>
+              </form>
+            </div>
+          )}
+
+          {view === "verify" && (
+            <div className="space-y-6">
+              <div>
+                <h1 className="text-3xl font-bold text-[#651313] mb-2">Verify Code</h1>
+                <p className="text-gray-500">Enter the 6-digit code sent to <strong>{forgotData.email}</strong></p>
+              </div>
+              <form onSubmit={handleVerifyCode} className="space-y-4">
+                <div className="relative group">
+                  <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                    <Lock className="h-5 w-5" />
+                  </div>
+                  <input
+                    type="text"
+                    required
+                    maxLength={6}
+                    value={resetData.code}
+                    onChange={(e) => setResetData({ ...resetData, code: e.target.value.replace(/\D/g, '') })}
+                    className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-transparent rounded-xl focus:bg-white focus:border-[#EB4724] focus:ring-0 transition-all outline-none text-center text-2xl font-bold tracking-[10px]"
+                    placeholder="000000"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full bg-[#651313] text-white py-4 rounded-xl font-bold text-lg hover:bg-[#4d0e0e] transition-colors shadow-lg flex items-center justify-center gap-2 group disabled:opacity-70"
+                >
+                  {loading ? "VERIFYING..." : "VERIFY CODE"}
+                </button>
+
+                <div className="text-center">
+                  <button type="button" onClick={() => setView("forgot")} className="flex items-center justify-center gap-2 text-sm font-bold text-[#651313] hover:underline mx-auto">
+                    <ArrowLeft className="h-4 w-4" /> Resend Code
+                  </button>
+                </div>
+              </form>
+            </div>
+          )}
+
+          {view === "reset" && (
+            <div className="space-y-6">
+              <div>
+                <h1 className="text-3xl font-bold text-[#651313] mb-2">New Password</h1>
+                <p className="text-gray-500">Create a strong password for your account.</p>
+              </div>
+              <form onSubmit={handleResetPassword} className="space-y-4">
+                <div className="relative group">
+                  <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                    <Lock className="h-5 w-5" />
+                  </div>
+                  <input
+                    type="password"
+                    required
+                    value={resetData.password}
+                    onChange={(e) => setResetData({ ...resetData, password: e.target.value })}
+                    className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-transparent rounded-xl focus:bg-white focus:border-[#EB4724] focus:ring-0 transition-all outline-none"
+                    placeholder="New Password"
+                  />
+                </div>
+
+                <div className="relative group">
+                  <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                    <Lock className="h-5 w-5" />
+                  </div>
+                  <input
+                    type="password"
+                    required
+                    value={resetData.confirmPassword}
+                    onChange={(e) => setResetData({ ...resetData, confirmPassword: e.target.value })}
+                    className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-transparent rounded-xl focus:bg-white focus:border-[#EB4724] focus:ring-0 transition-all outline-none"
+                    placeholder="Confirm New Password"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full bg-[#651313] text-white py-4 rounded-xl font-bold text-lg hover:bg-[#4d0e0e] transition-colors shadow-lg flex items-center justify-center gap-2 group disabled:opacity-70"
+                >
+                  {loading ? "RESETTING..." : "RESET PASSWORD"}
+                </button>
               </form>
             </div>
           )}

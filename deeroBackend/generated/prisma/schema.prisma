@@ -9,29 +9,40 @@ datasource db {
 }
 
 model User {
-  id             Int            @id @default(autoincrement())
-  fullname       String
-  email          String         @unique
-  password       String
-  phone          String?
-  companyName    String?
-  streetAddress  String?
-  streetAddress2 String?
-  city           String?
-  state          String?
-  country        String         @default("Somalia")
-  roleId         Int
-  role           Role           @relation(fields: [roleId], references: [id])
-  bonus          Int            @default(0)
-  registerSource String         @default("website")
-  bonusStatus    String         @default("BonusNotAvailable") // Added Status
-  bonusHistory   BonusHistory[]
-  announcements  Announcement[]
-  transactions   Transaction[]
-  deviceTokens   DeviceToken[]
-  discounts      Discount[]
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
+  id               Int            @id @default(autoincrement())
+  fullname         String
+  email            String         @unique
+  password         String
+  image            String?
+  phone            String?
+  companyName      String?
+  streetAddress    String?
+  streetAddress2   String?
+  city             String?
+  state            String?
+  country          String         @default("Somalia")
+  roleId           Int
+  role             Role           @relation(fields: [roleId], references: [id])
+  bonus            Int            @default(0)
+  registerSource   String         @default("website")
+  bonusStatus      String         @default("BonusNotAvailable") // Added Status
+  bonusHistory     BonusHistory[]
+  announcements    Announcement[]
+  transactions     Transaction[]
+  deviceTokens     DeviceToken[]
+  discounts        Discount[]
+  discount         Int?           @default(0)
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  resetCode        String?
+  resetCodeExpires DateTime?
+}
+
+model GlobalSetting {
+  id             Int      @id @default(autoincrement())
+  globalDiscount Int?     @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
 
 model Discount {

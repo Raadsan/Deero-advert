@@ -6,7 +6,7 @@ import ServiceCard from "./ServiceCard";
 import { getAllServices, Service } from "../../api-client/serviceApi";
 import { CheckIcon, ChevronDownIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { getImageUrl } from "@/utils/url";
-import { getUserId, isAuthenticated, isUser, isAdminOrManager } from "@/utils/auth";
+import { getUserId, getUser, isAuthenticated, isUser, isAdminOrManager, refreshUser } from "@/utils/auth";
 import { createTransaction } from "@/api-client/transactionApi";
 import DigitalConsultingSection from "./DigitalConsultingSection";
 
@@ -78,10 +78,11 @@ export default function ServicesContent({
     useEffect(() => {
         const fetchServices = async () => {
             try {
-                // Add a tiny delay to ensure everything is settled on refresh
-                await new Promise(resolve => setTimeout(resolve, 100));
-
-                const res: any = await getAllServices();
+                // Refresh user data and fetch services in parallel for better performance
+                const [_, res]: [any, any] = await Promise.all([
+                    refreshUser(),
+                    getAllServices()
+                ]);
 
                 // Extremely robust parsing for different response formats
                 let servicesData = [];
@@ -146,6 +147,54 @@ export default function ServicesContent({
         fetchServices();
     }, []);
 
+    const getDiscountedPrice = (pkg: any, service: Service) => {
+        const user = getUser();
+        const basePrice = pkg.price;
+
+        if (!user || !user.discounts) {
+            return { finalPrice: basePrice, discount: 0, hasDiscount: false };
+        }
+
+        const serviceId = service._id || service.id;
+        const packageId = pkg._id || pkg.id;
+
+        const applicableDiscounts = user.discounts.filter((d: any) => {
+            const isTargetMatch = d.targetType === "service" &&
+                (String(d.targetId) === String(serviceId) || String(d.targetId) === String(packageId) || d.targetId === "all");
+
+            const now = new Date();
+            const isDateValid = (!d.startDate || new Date(d.startDate) <= now) &&
+                (!d.endDate || new Date(d.endDate) >= now);
+
+            return isTargetMatch && isDateValid && d.status === "active";
+        });
+
+        if (applicableDiscounts.length === 0) return { finalPrice: basePrice, discount: 0, hasDiscount: false };
+
+        let bestPrice = basePrice;
+        let appliedDiscount = 0;
+
+        applicableDiscounts.forEach((d: any) => {
+            let currentDiscount = 0;
+            if (d.discountType === "percentage") {
+                currentDiscount = basePrice * (d.discountValue / 100);
+            } else if (d.discountType === "fixed") {
+                currentDiscount = d.discountValue;
+            }
+            const currentPrice = basePrice - currentDiscount;
+            if (currentPrice < bestPrice) {
+                bestPrice = currentPrice;
+                appliedDiscount = currentDiscount;
+            }
+        });
+
+        return {
+            finalPrice: bestPrice > 0 ? bestPrice : 0,
+            discount: appliedDiscount,
+            hasDiscount: appliedDiscount > 0
+        };
+    };
+
     // Handle scroll after navigation from hash or slug - wait for loading to finish
     useEffect(() => {
         if (!loading) {
@@ -207,7 +256,9 @@ export default function ServicesContent({
     };
 
     const processPurchase = async () => {
-        if (!selectedPlan || !selectedService || !accountNo) return;
+        const service = selectedService;
+        const plan = selectedPlan;
+        if (!plan || !service || !accountNo) return;
 
         setIsPurchasing(true);
         setPurchaseStatus(null);
@@ -216,18 +267,27 @@ export default function ServicesContent({
             const userId = getUserId();
             if (!userId) throw new Error("User not found");
 
+            const { finalPrice, discount } = getDiscountedPrice(plan, service);
+            const originalAmount = plan.price;
+
             await createTransaction({
-                serviceId: selectedService._id,
-                packageId: selectedPlan._id,
+                serviceId: service._id || service.id,
+                packageId: plan._id || plan.id,
                 userId: userId,
                 type: "service_payment",
-                amount: selectedPlan.price,
+                amount: finalPrice,
+                originalAmount: originalAmount,
+                discountApplied: discount,
                 paymentMethod: "waafi",
                 accountNo: accountNo,
-                description: `Payment for ${selectedService.serviceTitle} - ${selectedPlan.packageTitle}`
+                description: `Payment for ${service.serviceTitle} - ${plan.packageTitle}`
             });
 
             setPurchaseStatus({ success: true, message: "Transaction initiated successfully! Check your phone for verification." });
+            setTimeout(() => {
+                setPurchaseModalOpen(false);
+                router.push("/?success=true&type=service");
+            }, 2000);
             // Close after delay or let user close? Let's just show success in modal.
         } catch (err: any) {
             console.error("Purchase failed", err);
@@ -336,9 +396,21 @@ export default function ServicesContent({
 
                                                             <h4 className="text-2xl font-bold text-[#4d0e0e] mb-4 pr-8 leading-tight">{pkg.packageTitle}</h4>
 
-                                                            <div className="flex items-baseline mb-8">
-                                                                <span className="text-5xl font-bold text-[#EB4724]">${pkg.price}</span>
-                                                            </div>
+                                                             {getDiscountedPrice(pkg, service).hasDiscount && (
+                                                                <div className="flex items-center gap-2 mb-1">
+                                                                    <span className="text-sm font-bold text-gray-400 line-through">
+                                                                        ${pkg.price.toFixed(2)}
+                                                                    </span>
+                                                                    <span className="bg-red-100 text-red-700 text-[10px] font-bold px-2 py-0.5 rounded-full">
+                                                                        -{((getDiscountedPrice(pkg, service).discount / pkg.price) * 100).toFixed(0)}% OFF
+                                                                    </span>
+                                                                </div>
+                                                             )}
+
+                                                             <div className="flex items-baseline mb-2">
+                                                                 <span className="text-5xl font-bold text-[#EB4724]">${getDiscountedPrice(pkg, service).finalPrice.toFixed(2)}</span>
+                                                             </div>
+
 
                                                             <div className="flex-1">
                                                                 <ul className="space-y-4 mb-6">
@@ -401,7 +473,7 @@ export default function ServicesContent({
 
                 {/* Purchase Modal */}
                 <AnimatePresence>
-                    {purchaseModalOpen && selectedPlan && (
+                    {purchaseModalOpen && selectedPlan && selectedService && (
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
@@ -427,10 +499,19 @@ export default function ServicesContent({
                                 <h3 className="text-2xl font-bold text-[#651313] mb-2">Confirm Purchase</h3>
                                 <p className="text-gray-600 mb-6">You are selecting the <span className="font-bold text-[#EB4724]">{selectedPlan.packageTitle}</span> plan for <span className="font-semibold">{selectedService?.serviceTitle}</span>.</p>
 
-                                <div className="bg-gray-50 p-4 rounded-xl mb-6">
+                                 <div className="bg-gray-50 p-4 rounded-xl mb-6">
                                     <div className="flex justify-between items-center mb-2">
                                         <span className="text-gray-500 text-sm font-medium uppercase tracking-wide">Price</span>
-                                        <span className="text-xl font-bold text-[#651313]">${selectedPlan.price}</span>
+                                        <div className="text-right">
+                                            {getDiscountedPrice(selectedPlan, selectedService).hasDiscount && (
+                                                <div className="text-xs text-gray-400 line-through">
+                                                    ${selectedPlan.price.toFixed(2)}
+                                                </div>
+                                            )}
+                                            <span className="text-xl font-bold text-[#651313]">
+                                                ${getDiscountedPrice(selectedPlan, selectedService).finalPrice.toFixed(2)}
+                                            </span>
+                                        </div>
                                     </div>
                                     <div className="flex justify-between items-center">
                                         <span className="text-gray-500 text-sm font-medium uppercase tracking-wide">Method</span>

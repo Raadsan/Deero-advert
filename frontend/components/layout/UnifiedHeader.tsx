@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Bell, Search, Menu, LogOut, User } from "lucide-react";
 import { logout } from "../../api-client/authApi";
+import { getUser } from "@/utils/auth";
 
 export default function UnifiedHeader({ onMenuClick }: { onMenuClick: () => void }) {
     const router = useRouter();
@@ -12,21 +13,15 @@ export default function UnifiedHeader({ onMenuClick }: { onMenuClick: () => void
     const [portalTitle, setPortalTitle] = useState("Portal");
 
     useEffect(() => {
-        const userData = sessionStorage.getItem("user");
+        const userData = getUser();
         if (userData) {
-            try {
-                const parsedUser = JSON.parse(userData);
-                setUser(parsedUser);
+            setUser(userData);
+            const role = userData.role;
+            const roleName = (typeof role === 'object' && role?.name) ? role.name.toLowerCase() : 'user';
 
-                const role = parsedUser.role;
-                const roleName = (typeof role === 'object' && role?.name) ? role.name.toLowerCase() : 'user';
-
-                // Unified title for all portals
-                const formattedRole = roleName.charAt(0).toUpperCase() + roleName.slice(1);
-                setPortalTitle(`${formattedRole} Dashboard`);
-            } catch (e) {
-                console.error("Error parsing user data", e);
-            }
+            // Unified title for all portals
+            const formattedRole = roleName.charAt(0).toUpperCase() + roleName.slice(1);
+            setPortalTitle(`${formattedRole} Dashboard`);
         }
     }, []);
 

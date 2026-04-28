@@ -125,6 +125,7 @@ exports.Prisma.UserScalarFieldEnum = {
   fullname: 'fullname',
   email: 'email',
   password: 'password',
+  image: 'image',
   phone: 'phone',
   companyName: 'companyName',
   streetAddress: 'streetAddress',
@@ -136,6 +137,16 @@ exports.Prisma.UserScalarFieldEnum = {
   bonus: 'bonus',
   registerSource: 'registerSource',
   bonusStatus: 'bonusStatus',
+  discount: 'discount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  resetCode: 'resetCode',
+  resetCodeExpires: 'resetCodeExpires'
+};
+
+exports.Prisma.GlobalSettingScalarFieldEnum = {
+  id: 'id',
+  globalDiscount: 'globalDiscount',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -439,6 +450,7 @@ exports.Prisma.UserOrderByRelevanceFieldEnum = {
   fullname: 'fullname',
   email: 'email',
   password: 'password',
+  image: 'image',
   phone: 'phone',
   companyName: 'companyName',
   streetAddress: 'streetAddress',
@@ -447,7 +459,8 @@ exports.Prisma.UserOrderByRelevanceFieldEnum = {
   state: 'state',
   country: 'country',
   registerSource: 'registerSource',
-  bonusStatus: 'bonusStatus'
+  bonusStatus: 'bonusStatus',
+  resetCode: 'resetCode'
 };
 
 exports.Prisma.DiscountOrderByRelevanceFieldEnum = {
@@ -618,6 +631,7 @@ exports.Prisma.DeviceTokenOrderByRelevanceFieldEnum = {
 
 exports.Prisma.ModelName = {
   User: 'User',
+  GlobalSetting: 'GlobalSetting',
   Discount: 'Discount',
   BonusHistory: 'BonusHistory',
   Role: 'Role',

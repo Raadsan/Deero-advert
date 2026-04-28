@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { CheckIcon } from "@heroicons/react/24/outline";
 import { Service } from "@/api-client/serviceApi";
+import { getUser, isAdminOrManager } from "@/utils/auth";
 
 interface DigitalConsultingSectionProps {
     service: Service;
@@ -11,6 +12,56 @@ interface DigitalConsultingSectionProps {
 
 export default function DigitalConsultingSection({ service, onPurchase }: DigitalConsultingSectionProps) {
     const pkg = service.packages?.[0]; // Show the first package for this featured design
+
+    const getDiscountedPrice = (p: any, s: Service) => {
+        const user = getUser();
+        const basePrice = p?.price || 0;
+
+        if (!user || !user.discounts) {
+            return { finalPrice: basePrice, discount: 0, hasDiscount: false };
+        }
+
+        const serviceId = s._id || (s as any).id;
+        const packageId = p._id || p.id;
+
+        const applicableDiscounts = user.discounts.filter((d: any) => {
+            const isTargetMatch = d.targetType === "service" &&
+                (String(d.targetId) === String(serviceId) || String(d.targetId) === String(packageId) || d.targetId === "all");
+
+            const now = new Date();
+            const isDateValid = (!d.startDate || new Date(d.startDate) <= now) &&
+                (!d.endDate || new Date(d.endDate) >= now);
+
+            return isTargetMatch && isDateValid && d.status === "active";
+        });
+
+        if (applicableDiscounts.length === 0) return { finalPrice: basePrice, discount: 0, hasDiscount: false };
+
+        let bestPrice = basePrice;
+        let appliedDiscount = 0;
+
+        applicableDiscounts.forEach((d: any) => {
+            let currentDiscount = 0;
+            if (d.discountType === "percentage") {
+                currentDiscount = basePrice * (d.discountValue / 100);
+            } else if (d.discountType === "fixed") {
+                currentDiscount = d.discountValue;
+            }
+            const currentPrice = basePrice - currentDiscount;
+            if (currentPrice < bestPrice) {
+                bestPrice = currentPrice;
+                appliedDiscount = currentDiscount;
+            }
+        });
+
+        return {
+            finalPrice: bestPrice > 0 ? bestPrice : 0,
+            discount: appliedDiscount,
+            hasDiscount: appliedDiscount > 0
+        };
+    };
+
+    const { finalPrice, discount, hasDiscount } = getDiscountedPrice(pkg, service);
 
     // In case there's no diagnostic package, but ideally there should be
     if (!pkg) return null;
@@ -33,9 +84,24 @@ export default function DigitalConsultingSection({ service, onPurchase }: Digita
 
                     {/* Right Side: Content */}
                     <div className="flex-1 text-[#4d0e0e] text-left">
-                        <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-8 text-[#4d0e0e] whitespace-nowrap">
-                            {pkg.packageTitle} <span className="text-[#EB4724]">${pkg.price}</span>
-                        </h3>
+                        <div className="mb-4">
+                            <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#4d0e0e] flex flex-wrap items-center gap-x-3 gap-y-2">
+                                <span>{pkg.packageTitle}</span>
+                                <div className="flex items-center gap-2">
+                                    {hasDiscount && (
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-sm font-bold text-gray-400 line-through">
+                                                ${pkg.price.toFixed(2)}
+                                            </span>
+                                            <span className="bg-[#EB4724]/10 text-[#EB4724] text-[10px] font-bold px-2 py-0.5 rounded-full">
+                                                -{((discount / pkg.price) * 100).toFixed(0)}% OFF
+                                            </span>
+                                        </div>
+                                    )}
+                                    <span className="text-[#EB4724] text-3xl sm:text-4xl font-black">${finalPrice.toFixed(2)}</span>
+                                </div>
+                            </h3>
+                        </div>
 
                         <ul className="space-y-4 mb-12">
                             {pkg.features.map((feature, index) => (

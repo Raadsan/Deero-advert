@@ -1,5 +1,6 @@
 export interface Service {
   _id: string;
+  id?: string | number;
   serviceTitle: string;
   serviceDescription: string;
   serviceIcon: string;
@@ -8,6 +9,7 @@ export interface Service {
     price: number;
     features: string[];
     _id?: string;
+    id?: string | number;
   }[];
   createdAt?: string;
   updatedAt?: string;

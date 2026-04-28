@@ -2,23 +2,25 @@ import api from "./axios";
 
 // ➕ CREATE TRANSACTION
 export const createTransaction = (data: {
-  domainId?: string;
+  domainId?: string | number;
   domain?: {
     name: string;
     user: string;
     price: number;
     [key: string]: any;
   };
-  serviceId?: string;
-  packageId?: string;
-  hostingPackageId?: string;
-  userId: string;
+  serviceId?: string | number;
+  packageId?: string | number;
+  hostingPackageId?: string | number;
+  userId: string | number;
   type: "register" | "payment" | "service_payment" | "hosting_payment";
   amount: number;
   currency?: string;
   description?: string;
   paymentMethod?: string;
   accountNo?: string; // For Waafi payments
+  originalAmount?: number;
+  discountApplied?: number;
 }) => {
   return api.post("/transactions", data);
 };

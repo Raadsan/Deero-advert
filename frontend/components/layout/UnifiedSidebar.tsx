@@ -25,7 +25,8 @@ import {
     Globe,
     CreditCard,
     User,
-    Video
+    Video,
+    Ticket
 } from "lucide-react";
 import Image from "next/image";
 import { logout } from "@/api-client/authApi";
@@ -82,6 +83,8 @@ const iconMap: Record<string, LucideIcon> = {
     video: Video,
     videos: Video,
     management: LayoutDashboard,
+    discounts: Ticket,
+    ticket: Ticket,
 };
 
 export default function UnifiedSidebar({ isOpen, onClose }: { isOpen?: boolean; onClose?: () => void }) {
@@ -134,6 +137,7 @@ export default function UnifiedSidebar({ isOpen, onClose }: { isOpen?: boolean; 
                                     sm.title !== "Domain Managment" && sm.title !== "Domain Management"
                                 )
                             }));
+
                             setMenus(filteredMenus);
                         } else {
                             setMenus([]);

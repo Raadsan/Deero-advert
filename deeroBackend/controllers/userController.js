@@ -258,34 +258,85 @@ export const forgotPassword = async (req, res) => {
     const user = await prisma.user.findUnique({
       where: { email: email.toLowerCase() }
     });
-    if (!user) return res.status(200).json({ message: "If email exists, reset link sent" });
+    
+    if (!user) {
+      // For security, don't reveal if user exists
+      return res.status(200).json({ message: "If email exists, reset code sent" });
+    }
 
-    const resetToken = jwt.sign({ userId: user.id }, process.env.JWT_SECRET || "secret", { expiresIn: "1h" });
+    // Generate 6-digit code
+    const resetCode = Math.floor(100000 + Math.random() * 900000).toString();
+    const expires = new Date();
+    expires.setMinutes(expires.getMinutes() + 10); // 10 minutes
 
-    const resetUrl = `${process.env.FRONTEND_URL || "http://localhost:3000"}/reset-password/${resetToken}`;
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        resetCode: resetCode,
+        resetCodeExpires: expires
+      }
+    });
 
-    const message = `
-      <h1>You have requested a password reset</h1>
-      <p>Please go to this link to reset your password:</p>
-      <a href=${resetUrl} clicktracking=off>${resetUrl}</a>
+    const htmlMessage = `
+      <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e1e1e1; border-radius: 12px; padding: 0; overflow: hidden; background-color: #ffffff;">
+        <div style="background-color: #ffffff; padding: 30px 20px; text-align: center;">
+          <h2 style="margin: 0; color: #1a1a1a; font-size: 24px; letter-spacing: 0.5px;">Password Reset</h2>
+        </div>
+        <div style="height: 2px; background: linear-gradient(to right, #ffffff, #651313, #ffffff); margin: 0 40px;"></div>
+        <div style="padding: 40px 40px 30px;">
+          <p style="text-align: center; color: #4a4a4a; font-size: 16px; line-height: 1.5; margin-bottom: 30px;">You requested a password reset. Use the code below to reset your password:</p>
+          
+          <div style="background-color: #f0f7f7; padding: 30px; border-radius: 16px; text-align: center; margin: 0 0 30px 0; border: 1px solid #e8f2f2;">
+            <span style="font-size: 48px; font-weight: 800; color: #1e3a3a; letter-spacing: 15px; font-family: monospace; display: block; margin-left: 15px;">${resetCode}</span>
+          </div>
+          
+          <div style="text-align: center; margin-bottom: 25px;">
+            <p style="color: #666; font-size: 14px; margin: 0;">This code expires in <strong style="color: #1e3a3a;">10 minutes</strong>.</p>
+          </div>
+          
+          <p style="text-align: center; color: #999; font-size: 14px; margin-bottom: 0;">If you did not request this, please ignore this email.</p>
+        </div>
+        <div style="background-color: #f9f9f9; padding: 25px; text-align: center; border-top: 1px solid #eee;">
+          <p style="color: #bbb; font-size: 12px; margin: 0;">Sent from Deero Advert Management System.</p>
+        </div>
+      </div>
     `;
 
     try {
       await sendEmail({
         email: user.email,
-        subject: "Password Reset Request",
-        message: `Please go to this link to reset your password: ${resetUrl}`,
-        html: message,
+        subject: "Password Reset Code",
+        message: `Your password reset code is: ${resetCode}`,
+        html: htmlMessage,
       });
 
-      res.status(200).json({ message: "Password reset link has been sent" });
+      res.status(200).json({ message: "Password reset code has been sent" });
     } catch (err) {
       console.error("Email send error:", err);
-      return res.status(500).json({
-        message: "Email could not be sent",
-        error: err.message
-      });
+      return res.status(500).json({ message: "Email could not be sent" });
     }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+/**
+ * 🔐 VERIFY RESET CODE
+ */
+export const verifyResetCode = async (req, res) => {
+  try {
+    const { email, code } = req.body;
+    if (!email || !code) return res.status(400).json({ message: "Email and code are required" });
+
+    const user = await prisma.user.findUnique({
+      where: { email: email.toLowerCase() }
+    });
+
+    if (!user || user.resetCode !== code || new Date() > user.resetCodeExpires) {
+      return res.status(400).json({ message: "Invalid or expired code" });
+    }
+
+    res.status(200).json({ message: "Code verified successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -296,31 +347,29 @@ export const forgotPassword = async (req, res) => {
  */
 export const resetPassword = async (req, res) => {
   try {
-    const { token } = req.params;
-    const { password } = req.body;
+    const { email, code, password } = req.body;
 
-    if (!password) {
-      return res.status(400).json({ message: "Password is required" });
-    }
-
-    let decoded;
-    try {
-      decoded = jwt.verify(token, process.env.JWT_SECRET || "secret");
-    } catch (err) {
-      return res.status(400).json({ message: "Invalid or expired token" });
+    if (!email || !code || !password) {
+      return res.status(400).json({ message: "Email, code, and new password are required" });
     }
 
     const user = await prisma.user.findUnique({
-      where: { id: parseInt(decoded.userId) }
+      where: { email: email.toLowerCase() }
     });
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
+
+    if (!user || user.resetCode !== code || new Date() > user.resetCodeExpires) {
+      return res.status(400).json({ message: "Invalid or expired code" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
+    
     await prisma.user.update({
       where: { id: user.id },
-      data: { password: hashedPassword }
+      data: { 
+        password: hashedPassword,
+        resetCode: null,
+        resetCodeExpires: null
+      }
     });
 
     res.status(200).json({ message: "Password reset successful" });
@@ -350,7 +399,26 @@ export const getUsers = async (req, res) => {
   }
 };
 
-// GET USER BY ID
+// GET CURRENT USER PROFILE (Lightweight version for refreshUser)
+export const getMe = async (req, res) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: parseInt(req.user.id) },
+      include: { 
+        role: true,
+        discounts: {
+          where: { status: "active" }
+        }
+      }
+    });
+    if (!user) return res.status(404).json({ message: "User not found" });
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// GET USER BY ID (Full details including transactions)
 export const getUserById = async (req, res) => {
   try {
     const user = await prisma.user.findUnique({
@@ -382,11 +450,15 @@ export const updateUser = async (req, res) => {
     const data = { ...req.body };
     if (data.password) data.password = await bcrypt.hash(data.password, 10);
 
-    // Remove relation fields if they are in body but not as proper IDs
     if (data.role) {
       data.roleId = parseInt(data.role);
       delete data.role;
     }
+
+    // Prevent updating primary key or metadata fields
+    delete data.id;
+    delete data.createdAt;
+    delete data.updatedAt;
 
     const user = await prisma.user.update({
       where: { id: parseInt(req.params.id) },

@@ -7,7 +7,7 @@ import { useCart } from "@/context/CartContext";
 import { useRouter, usePathname } from "next/navigation";
 import { getAllPackages, HostingPackage } from "@/api-client/hostingPackageApi";
 import { createTransaction } from "@/api-client/transactionApi";
-import { getUserId, isAuthenticated, isAdminOrManager } from "@/utils/auth";
+import { getUserId, getUser, isAuthenticated, isAdminOrManager, refreshUser } from "@/utils/auth";
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -44,7 +44,11 @@ export default function HostingPackages() {
     useEffect(() => {
         const fetchPackages = async () => {
             try {
-                const res: any = await getAllPackages();
+                // Refresh user data and fetch packages in parallel for better performance
+                const [_, res]: [any, any] = await Promise.all([
+                    refreshUser(),
+                    getAllPackages()
+                ]);
                 const data = res.data?.data || res.data || [];
                 setPackages(Array.isArray(data) ? data : []);
             } catch (err) {
@@ -57,6 +61,53 @@ export default function HostingPackages() {
 
         fetchPackages();
     }, []);
+
+    const getDiscountedPrice = (plan: HostingPackage) => {
+        const user = getUser();
+        const basePrice = isYearly ? plan.price * 12 : plan.price;
+
+        if (!user || !user.discounts) {
+            return { finalPrice: basePrice, discount: 0, hasDiscount: false };
+        }
+
+        const planId = plan.id || plan._id;
+
+        const applicableDiscounts = user.discounts.filter((d: any) => {
+            const isTargetMatch = d.targetType === "hosting" &&
+                (String(d.targetId) === String(planId) || d.targetId === "all");
+
+            const now = new Date();
+            const isDateValid = (!d.startDate || new Date(d.startDate) <= now) &&
+                (!d.endDate || new Date(d.endDate) >= now);
+
+            return isTargetMatch && isDateValid && d.status === "active";
+        });
+
+        if (applicableDiscounts.length === 0) return { finalPrice: basePrice, discount: 0, hasDiscount: false };
+
+        let bestPrice = basePrice;
+        let appliedDiscount = 0;
+
+        applicableDiscounts.forEach((d: any) => {
+            let currentDiscount = 0;
+            if (d.discountType === "percentage") {
+                currentDiscount = basePrice * (d.discountValue / 100);
+            } else if (d.discountType === "fixed") {
+                currentDiscount = d.discountValue;
+            }
+            const currentPrice = basePrice - currentDiscount;
+            if (currentPrice < bestPrice) {
+                bestPrice = currentPrice;
+                appliedDiscount = currentDiscount;
+            }
+        });
+
+        return {
+            finalPrice: bestPrice > 0 ? bestPrice : 0,
+            discount: appliedDiscount,
+            hasDiscount: appliedDiscount > 0
+        };
+    };
 
     const handleChoosePlan = (plan: HostingPackage) => {
         // Authenticate
@@ -77,7 +128,8 @@ export default function HostingPackages() {
     };
 
     const processPurchase = async () => {
-        if (!selectedPlan || !accountNo) return;
+        const plan = selectedPlan;
+        if (!plan || !accountNo) return;
 
         setIsPurchasing(true);
         setPurchaseStatus(null);
@@ -86,25 +138,27 @@ export default function HostingPackages() {
             const userId = getUserId();
             if (!userId) throw new Error("User not found");
 
-            let finalPrice = selectedPlan.price;
-            let description = `Payment for Hosting - ${selectedPlan.name} (Monthly)`;
-
-            if (isYearly) {
-                finalPrice = selectedPlan.price * 12;
-                description = `Payment for Hosting - ${selectedPlan.name} (Yearly)`;
-            }
+            const { finalPrice, discount } = getDiscountedPrice(plan);
+            const originalAmount = isYearly ? plan.price * 12 : plan.price;
+            let description = `Payment for Hosting - ${plan.name} (${isYearly ? 'Yearly' : 'Monthly'})`;
 
             await createTransaction({
-                hostingPackageId: selectedPlan._id,
+                hostingPackageId: plan.id || plan._id,
                 userId: userId,
                 type: "hosting_payment",
                 amount: finalPrice,
+                originalAmount: originalAmount,
+                discountApplied: discount,
                 paymentMethod: "waafi",
                 accountNo: accountNo,
                 description: description
             });
 
             setPurchaseStatus({ success: true, message: "Transaction initiated successfully! Check your phone for verification." });
+            setTimeout(() => {
+                setPurchaseModalOpen(false);
+                router.push("/?success=true&type=hosting");
+            }, 2000);
         } catch (err: any) {
             console.error("Purchase failed", err);
             setPurchaseStatus({ success: false, message: err.response?.data?.message || "Transaction failed. Please try again." });
@@ -161,6 +215,8 @@ export default function HostingPackages() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
                     {packages.map((plan, index) => {
                         const { buttonColor, bgColor, isMain } = getStyleProps(index);
+                        const { finalPrice, discount, hasDiscount } = getDiscountedPrice(plan);
+                        const originalPrice = isYearly ? plan.price * 12 : plan.price;
 
                         return (
                             <motion.div
@@ -184,13 +240,25 @@ export default function HostingPackages() {
                                 )}
 
                                 <div className="mb-2 text-[#651313]/60 text-xs font-semibold">From only</div>
-                                <div className="flex items-baseline mb-6">
-                                    <span className="text-4xl font-bold text-[#651313]">
-                                        ${isYearly ? (plan.price * 12).toFixed(2) : plan.price}
-                                    </span>
-                                    <span className="text-[#651313]/60 text-xs ml-1 font-semibold">
-                                        /{isYearly ? 'year' : 'month'}
-                                    </span>
+                                <div className="flex flex-col mb-6">
+                                    {hasDiscount && (
+                                        <div className="flex items-center gap-2 mb-1">
+                                            <span className="text-sm font-bold text-gray-400 line-through">
+                                                ${originalPrice.toFixed(2)}
+                                            </span>
+                                            <span className="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-0.5 rounded-full">
+                                                -{((discount / originalPrice) * 100).toFixed(0)}% OFF
+                                            </span>
+                                        </div>
+                                    )}
+                                    <div className="flex items-baseline">
+                                        <span className="text-4xl font-bold text-[#651313]">
+                                            ${finalPrice.toFixed(2)}
+                                        </span>
+                                        <span className="text-[#651313]/60 text-xs ml-1 font-semibold">
+                                            /{isYearly ? 'year' : 'month'}
+                                        </span>
+                                    </div>
                                 </div>
 
                                 <ul className="space-y-3 mb-6 flex-1">
@@ -242,12 +310,19 @@ export default function HostingPackages() {
                             <h3 className="text-2xl font-bold text-[#651313] mb-2">Confirm Purchase</h3>
                             <p className="text-gray-600 mb-6">You are selecting the <span className="font-bold text-[#EB4724]">{selectedPlan.name}</span> plan.</p>
 
-                            <div className="bg-gray-50 p-4 rounded-xl mb-6">
+                             <div className="bg-gray-50 p-4 rounded-xl mb-6">
                                 <div className="flex justify-between items-center mb-2">
                                     <span className="text-gray-500 text-sm font-medium uppercase tracking-wide">Price</span>
-                                    <span className="text-xl font-bold text-[#651313]">
-                                        ${isYearly ? (selectedPlan.price * 12).toFixed(2) : selectedPlan.price}
-                                    </span>
+                                    <div className="text-right">
+                                        {getDiscountedPrice(selectedPlan).hasDiscount && (
+                                            <div className="text-xs text-gray-400 line-through">
+                                                ${(isYearly ? selectedPlan.price * 12 : selectedPlan.price).toFixed(2)}
+                                            </div>
+                                        )}
+                                        <span className="text-xl font-bold text-[#651313]">
+                                            ${getDiscountedPrice(selectedPlan).finalPrice.toFixed(2)}
+                                        </span>
+                                    </div>
                                 </div>
                                 <div className="flex justify-between items-center">
                                     <span className="text-gray-500 text-sm font-medium uppercase tracking-wide">Method</span>

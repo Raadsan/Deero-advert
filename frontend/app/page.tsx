@@ -1,7 +1,7 @@
 export const dynamic = 'force-static';
 import Header from "@/components/layout/Header";
 import Hero from "@/components/home/hero";
-import DomainSearch from "@/components/home/DomainSearch";
+import MobileDownload from "@/components/home/MobileDownload";
 import ServicesSection from "@/components/home/ServicesSection";
 import PortfolioSection from "@/components/home/PortfolioSection";
 import HostingPackages from "@/components/home/HostingPackages";
@@ -12,19 +12,25 @@ import TestimonialsSection from "@/components/home/TestimonialsSection";
 import NewsletterSection from "@/components/home/NewsletterSection";
 import Footer from "@/components/layout/Footer";
 
+import SuccessNotification from "@/components/shared/SuccessNotification";
+import { Suspense } from "react";
+
 export default function Home() {
   return (
     <div className="min-h-screen bg-white text-[#1a1a1a]">
+      <Suspense fallback={null}>
+        <SuccessNotification />
+      </Suspense>
       <Header />
       <main className="pt-[130px] md:pt-[120px]">
         <Hero />
-        <DomainSearch />
+        <MobileDownload />
         <ServicesSection />
         <PortfolioSection limit={1} />
         <HostingPackages />
         <AchievementsSection />
         <RecentBlogs />
-        <TeamSection />
+        {/* <TeamSection /> */}
         <TestimonialsSection />
         <NewsletterSection />
         <Footer />

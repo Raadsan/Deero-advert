@@ -7,7 +7,7 @@ import { signupUser } from "../../api-client/authApi";
 import { useRouter, useSearchParams } from "next/navigation";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-import { isAuthenticated } from "@/utils/auth";
+import { isAuthenticated, setAuth } from "@/utils/auth";
 import Link from "next/link";
 
 import { Suspense } from "react";
@@ -19,7 +19,7 @@ function SignupContent() {
     const [success, setSuccess] = useState("");
     const router = useRouter();
     const searchParams = useSearchParams();
-    const redirectUrl = searchParams.get("redirect") || "/dashboard";
+    const redirectUrl = searchParams.get("redirect") || "/";
 
     // Redirect if already logged in
     useEffect(() => {
@@ -61,8 +61,7 @@ function SignupContent() {
                 phone: signupData.phone,
                 password: signupData.password,
             });
-            sessionStorage.setItem("token", res.data.token);
-            sessionStorage.setItem("user", JSON.stringify(res.data.user));
+            setAuth(res.data.token, res.data.user);
             setSuccess("Account created successfully! Redirecting...");
             setTimeout(() => {
                 router.push(redirectUrl);

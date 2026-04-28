@@ -9,7 +9,8 @@ import { useCart } from "@/context/CartContext";
 import { isAuthenticated, getUser, clearAuth, isAdmin, isManager, isAdminOrManager } from "@/utils/auth";
 import { logout as apiLogout } from "../../api-client/authApi";
 import { getActiveAnnouncements, Announcement } from "../../api-client/announcementApi";
-import { Megaphone, X } from "lucide-react";
+import { Megaphone, X, ChevronDown } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -17,6 +18,7 @@ const navLinks = [
   { label: "Hosting", href: "/hosting" },
   { label: "Services", href: "/services" },
   { label: "Portfolio", href: "/portfolio" },
+  // { label: "Our Team", href: "/team" },
   { label: "Contact", href: "/contact" },
 ];
 
@@ -165,7 +167,7 @@ export default function Header() {
 
       {/* Main header */}
       <div className="border-b border-white/20 bg-white/95 backdrop-blur-sm shadow-sm sm:px-6">
-        <div className="mx-auto max-w-7xl px-4 md:px-6 h-[70px] md:h-[95px] flex items-center justify-between">
+        <div className="mx-auto max-w-6xl xl:max-w-7xl px-4 sm:px-6 h-[70px] md:h-[95px] flex items-center justify-between">
 
           {/* Logo - Left */}
           <div className="flex-shrink-0">
@@ -182,7 +184,7 @@ export default function Header() {
           </div>
 
           {/* Navigation - Center */}
-          <nav className="hidden md:flex gap-8 font-semibold text-[#651313] pr-22">
+          <nav className="hidden md:flex gap-8 font-semibold text-[#651313]">
             {navLinks.map((link) => {
               const [linkPathPart, linkHashPart] = link.href.split("#");
               const linkPath = linkPathPart || "/";
@@ -206,7 +208,7 @@ export default function Header() {
           </nav>
 
           {/* Client Area - Right */}
-          <div className="hidden md:flex items-center gap-6 pr-25">
+          <div className="hidden md:flex items-center gap-6">
             {/* Shopping Cart - Only show when logged in */}
             {isLoggedIn && !isStaff && (
               <Link href="/cart" className="relative p-2 text-[#651313] hover:bg-gray-100 rounded-full transition">
@@ -220,16 +222,70 @@ export default function Header() {
             )}
 
             {isLoggedIn ? (
-              <Link
-                href={"/dashboard"}
-                className="rounded-full bg-[#EB4724] px-6 py-2.5 font-semibold text-white transition hover:opacity-90"
-              >
-                Dashboard
-              </Link>
+              isAdminOrManager() ? (
+                <Link
+                  href="/dashboard"
+                  className="rounded-full bg-[#EB4724] px-6 py-2.5 font-semibold text-white transition hover:opacity-90 shadow-md"
+                >
+                  Dashboard
+                </Link>
+              ) : (
+                <div className="relative">
+                  <button
+                    onClick={() => setShowProfileDropdown(!showProfileDropdown)}
+                    className="h-10 w-10 overflow-hidden rounded-full bg-gray-200 hover:ring-2 hover:ring-[#EB4724] transition-all shadow-md"
+                  >
+                    {user?.fullname ? (
+                      <div className="flex h-full w-full items-center justify-center bg-[#651313] text-sm font-bold text-white uppercase">
+                        {user.fullname.charAt(0)}
+                        {user.fullname.split(" ")[1]?.charAt(0) || ""}
+                      </div>
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center bg-[#651313] text-white">
+                        <User className="h-5 w-5" />
+                      </div>
+                    )}
+                  </button>
+
+                  <AnimatePresence>
+                    {showProfileDropdown && (
+                      <>
+                        {/* Backdrop to close dropdown */}
+                        <div 
+                          className="fixed inset-0 z-40" 
+                          onClick={() => setShowProfileDropdown(false)}
+                        ></div>
+                        
+                        <motion.div
+                          initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                          className="absolute right-0 mt-2 w-56 rounded-xl border border-gray-200 bg-white shadow-xl z-50 overflow-hidden"
+                        >
+                          <div className="p-4 border-b border-gray-100 bg-gray-50/50">
+                            <p className="text-sm font-bold text-gray-900">{user?.fullname || "User"}</p>
+                            <p className="text-xs text-gray-500 truncate">{user?.email || ""}</p>
+                          </div>
+                          
+                          <div className="p-1">
+                            <button
+                              onClick={handleLogout}
+                              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-red-600 hover:bg-red-50 transition-colors font-semibold text-sm"
+                            >
+                              <LogOut className="h-4 w-4" />
+                              Logout
+                            </button>
+                          </div>
+                        </motion.div>
+                      </>
+                    )}
+                  </AnimatePresence>
+                </div>
+              )
             ) : (
               <Link
                 href="/login"
-                className="rounded-full bg-[#EB4724] px-6 py-2.5 font-semibold text-white transition hover:opacity-90"
+                className="rounded-full bg-[#EB4724] px-6 py-2.5 font-semibold text-white transition hover:opacity-90 shadow-md"
               >
                 Client Area
               </Link>
@@ -302,6 +358,15 @@ export default function Header() {
                     </div>
 
                   </div>
+                  {isAdminOrManager() && (
+                    <Link
+                      href="/dashboard"
+                      className="w-full rounded-full bg-[#EB4724] py-2 text-center text-white font-semibold transition"
+                      onClick={() => setOpen(false)}
+                    >
+                      Dashboard
+                    </Link>
+                  )}
                   <button
                     onClick={handleLogout}
                     className="w-full rounded-full border border-red-100 py-2 text-center text-red-600 bg-red-50 font-semibold transition"
