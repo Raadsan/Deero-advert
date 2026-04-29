@@ -31,9 +31,6 @@ export const UPLOAD_URL = BASE_URL.replace("/api", "/uploads");
 
 const api = axios.create({
     baseURL: BASE_URL,
-    headers: {
-        "Content-Type": "application/json",
-    },
 });
 
 // Request interceptor to add auth token

@@ -15,6 +15,7 @@ import {
 } from "@/api-client/majorClientApi";
 import { getImageUrl } from "@/utils/url";
 import { compressImage } from "@/utils/compressImage";
+import { toast } from "react-hot-toast";
 
 
 export default function MajorClientsPage() {
@@ -37,7 +38,7 @@ export default function MajorClientsPage() {
         try {
             const res = await getMajorClients();
             const clientsData = Array.isArray(res.clients) ? res.clients : res.data || [];
-            const clients = [...clientsData].reverse();
+            const clients = [...clientsData];
             setData(
                 clients.map((c: any) => ({
                     id: c.id,
@@ -67,15 +68,15 @@ export default function MajorClientsPage() {
 
     // Handle file input change (multiple files)
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files) {
-            const selectedFiles = Array.from(e.target.files);
-            const compressedFiles = await Promise.all(selectedFiles.map(file => compressImage(file)));
-            const newPreviews = compressedFiles.map((file) => URL.createObjectURL(file));
+        if (e.target.files && e.target.files[0]) {
+            const file = e.target.files[0];
+            const compressedFile = await compressImage(file);
+            const newPreview = URL.createObjectURL(compressedFile);
 
             setFormData((prev) => ({
                 ...prev,
-                images: [...prev.images, ...compressedFiles],
-                imagePreviews: [...prev.imagePreviews, ...newPreviews],
+                images: [compressedFile],
+                imagePreviews: [newPreview],
             }));
 
             e.target.value = ""; // Clear input to allow re-selecting same files if needed
@@ -95,7 +96,7 @@ export default function MajorClientsPage() {
         e.preventDefault();
 
         if (formData.images.length === 0 && formData.imagePreviews.length === 0) {
-            alert("At least one image is required");
+            toast.error("At least one image is required");
             return;
         }
 
@@ -118,8 +119,10 @@ export default function MajorClientsPage() {
         try {
             if (editingId) {
                 await updateMajorClient(editingId, formDataToSend);
+                toast.success("Client updated successfully");
             } else {
                 await createMajorClient(formDataToSend);
+                toast.success("Client added successfully");
             }
             setIsModalOpen(false);
             setEditingId(null);
@@ -131,7 +134,7 @@ export default function MajorClientsPage() {
             fetchClients(); // reload table
         } catch (err: any) {
             console.error("Failed to save client", err);
-            alert(err.response?.data?.message || "Failed to save client");
+            toast.error(err.response?.data?.message || "Failed to save client");
         }
     };
 
@@ -157,9 +160,11 @@ export default function MajorClientsPage() {
         if (!deletingId) return;
         try {
             await deleteMajorClient(deletingId);
+            toast.success("Major client deleted successfully");
             fetchClients();
         } catch (err) {
             console.error("Failed to delete client", err);
+            toast.error("Failed to delete client");
         } finally {
             setIsDeleteModalOpen(false);
             setDeletingId(null);
