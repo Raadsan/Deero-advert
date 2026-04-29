@@ -4,7 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "../context/CartContext";
 import Chatbot from "../components/layout/Chatbot";
-// import Protection from "../components/layout/Protection";
+import Protection from "../components/layout/Protection";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,7 +35,7 @@ export default function RootLayout({
         suppressHydrationWarning
         className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden`}
       >
-        {/* <Protection /> */}
+        <Protection />
         <CartProvider>
           {children}
         </CartProvider>

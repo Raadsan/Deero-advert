@@ -9,11 +9,6 @@ const Protection = () => {
       return;
     }
 
-    // Disable right-click
-    const handleContextMenu = (e: MouseEvent) => {
-      e.preventDefault();
-    };
-
     // Disable keyboard shortcuts for inspection
     const handleKeyDown = (e: KeyboardEvent) => {
       // Disable F12
@@ -48,7 +43,6 @@ const Protection = () => {
     };
 
     // Add event listeners
-    document.addEventListener('contextmenu', handleContextMenu);
     document.addEventListener('keydown', handleKeyDown);
 
     // Periodic check to clear console and detect DevTools
@@ -68,7 +62,6 @@ const Protection = () => {
     }, 2000);
 
     return () => {
-      document.removeEventListener('contextmenu', handleContextMenu);
       document.removeEventListener('keydown', handleKeyDown);
       clearInterval(interval);
     };
