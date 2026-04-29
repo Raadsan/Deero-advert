@@ -35,12 +35,17 @@ export default function RootLayout({
         <script
           dangerouslySetInnerHTML={{
             __html: `
-              if (window.location.hostname !== 'localhost') {
-                setInterval(function() {
-                  console.clear();
-                  debugger;
-                }, 500);
-              }
+              (function() {
+                var protect = function() {
+                  if (window.location.hostname.indexOf('localhost') === -1 && 
+                      window.location.hostname.indexOf('127.0.0.1') === -1) {
+                    console.clear();
+                    debugger;
+                  }
+                };
+                setInterval(protect, 500);
+                protect();
+              })();
             `,
           }}
         />
