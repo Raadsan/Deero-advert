@@ -1,7 +1,9 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import http from "http";
 import { prisma } from "./lib/prisma.js";
+import { initSocket } from "./socketHandler.js";
 
 // Import Routes (Updated for Video Support)
 import userRoute from "./routes/userRoute.js";
@@ -26,12 +28,17 @@ import testimonialRoutes from "./routes/testimonialRoutes.js";
 import transactionRoutes from "./routes/transactionRoutes.js";
 import videoRoute from "./routes/videoRoute.js";
 import discountRoute from "./routes/discountRoute.js";
+import chatRoute from "./routes/chatRoute.js";
 import multerErrorHandler from "./middlewares/multerErrorHandler.js";
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const server = http.createServer(app);
+
+// Initialize Socket.IO
+initSocket(server);
 
 app.use(cors());
 app.use(express.json());
@@ -97,6 +104,7 @@ app.use("/api/testimonials", testimonialRoutes);
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/videos", videoRoute);
 app.use("/api/discounts", discountRoute);
+app.use("/api/chat", chatRoute);
 
 // Error Handling Middleware
 app.use(multerErrorHandler);
@@ -107,7 +115,7 @@ async function main() {
     await prisma.$connect();
     console.log("✅ Database connected successfully via Prisma");
 
-    app.listen(PORT, () => {
+    server.listen(PORT, () => {
       console.log(`🚀 Server running on http://localhost:${PORT}`);
     });
   } catch (error) {

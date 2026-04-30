@@ -431,6 +431,27 @@ exports.Prisma.DeviceTokenScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.ConversationScalarFieldEnum = {
+  id: 'id',
+  participant1Id: 'participant1Id',
+  participant2Id: 'participant2Id',
+  lastMessage: 'lastMessage',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.MessageScalarFieldEnum = {
+  id: 'id',
+  conversationId: 'conversationId',
+  senderId: 'senderId',
+  text: 'text',
+  isRead: 'isRead',
+  messageType: 'messageType',
+  mediaUrl: 'mediaUrl',
+  duration: 'duration',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -628,6 +649,16 @@ exports.Prisma.DeviceTokenOrderByRelevanceFieldEnum = {
   token: 'token'
 };
 
+exports.Prisma.ConversationOrderByRelevanceFieldEnum = {
+  lastMessage: 'lastMessage'
+};
+
+exports.Prisma.MessageOrderByRelevanceFieldEnum = {
+  text: 'text',
+  messageType: 'messageType',
+  mediaUrl: 'mediaUrl'
+};
+
 
 exports.Prisma.ModelName = {
   User: 'User',
@@ -661,7 +692,9 @@ exports.Prisma.ModelName = {
   ServicePackage: 'ServicePackage',
   ServicePackageFeature: 'ServicePackageFeature',
   Subscriber: 'Subscriber',
-  DeviceToken: 'DeviceToken'
+  DeviceToken: 'DeviceToken',
+  Conversation: 'Conversation',
+  Message: 'Message'
 };
 
 /**
