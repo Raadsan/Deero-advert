@@ -11,12 +11,12 @@ const contactDetails = [
     },
     {
         title: "Email Us",
-        details: ["sales@advert.deero.so", "marketing@advert.deero.so", "info@advert.deero.so"],
+        details: ["info@advert.deero.so"],
         icon: EnvelopeIcon,
     },
     {
         title: "Address",
-        details: ["HQ Digfeer, Hodan Mogadishu-Somalia", "Shaqaalaha Mogadishu-Somalia"],
+        details: ["Xarunta Dhexe: Digfeer, dhabarka dambe ee Hayat Mall, Degmada Hodan.", "Xarunta 2aad: Agagaarka isgoyska Shaqaalaha, Degmada Waaberi."],
         icon: MapPinIcon,
     },
 ];
@@ -64,6 +64,8 @@ export default function ContactHero() {
                                 className="object-contain"
                                 priority
                             />
+
+
                         </div>
                     </div>
                 </div>
