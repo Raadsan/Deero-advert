@@ -36,6 +36,11 @@ model User {
   updatedAt       DateTime       @updatedAt
   resetCode       String?
   resetCodeExpires DateTime?
+  
+  // Chat Relations
+  conversationsAsParticipant1 Conversation[] @relation("ConversationParticipant1")
+  conversationsAsParticipant2 Conversation[] @relation("ConversationParticipant2")
+  messagesSent                Message[]      @relation("MessageSender")
 }
 
 model GlobalSetting {
@@ -353,3 +358,33 @@ model DeviceToken {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model Conversation {
+  id             Int       @id @default(autoincrement())
+  participant1Id Int
+  participant1   User      @relation("ConversationParticipant1", fields: [participant1Id], references: [id])
+  participant2Id Int
+  participant2   User      @relation("ConversationParticipant2", fields: [participant2Id], references: [id])
+  lastMessage    String?   @db.LongText
+  messages       Message[]
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@unique([participant1Id, participant2Id])
+}
+
+model Message {
+  id             Int          @id @default(autoincrement())
+  conversationId Int
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  senderId       Int
+  sender         User         @relation("MessageSender", fields: [senderId], references: [id])
+  text           String       @db.LongText
+  isRead         Boolean      @default(false)
+  messageType    String       @default("text")
+  mediaUrl       String?      @db.LongText
+  duration       Int?         // Duration in seconds
+  createdAt      DateTime     @default(now())
+}
+
+
