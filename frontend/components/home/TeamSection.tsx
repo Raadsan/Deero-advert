@@ -25,28 +25,13 @@ export default function TeamSection({ view = "slider" }: { view?: "slider" | "gr
                     teamsData = response.data;
                 }
 
-                // If no teams found, use mock data for design preview
-                if (teamsData.length === 0) {
-                    const allSocials = [
-                        { platform: 'facebook', url: '#' },
-                        { platform: 'linkedin', url: '#' },
-                        { platform: 'instagram', url: '#' },
-                        { platform: 'tiktok', url: '#' }
-                    ];
-                    teamsData = [
-                        { _id: '1', name: 'Ahmed Ali', position: 'CEO & Founder', description: 'Visionary leader with over 10 years of experience in digital transformation and strategic business growth for global brands.', image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=400', socials: allSocials },
-                        { _id: '2', name: 'Sahra Hassan', position: 'Creative Director', description: 'Award-winning designer expert in brand identity, visual storytelling, and creating immersive user experiences for clients.', image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400', socials: allSocials },
-                        { _id: '3', name: 'Mohamed Omar', position: 'Technical Lead', description: 'Full-stack developer specializing in building fast, scalable, and responsive web applications using modern technologies.', image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=400', socials: allSocials },
-                        { _id: '4', name: 'Anisa Ahmed', position: 'UI/UX Designer', description: 'Passionate about creating user-centered designs that wow users and solve complex problems through simple, elegant solutions.', image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=400', socials: allSocials },
-                        { _id: '5', name: 'Anisa Ahmed', position: 'UI/UX Designer', description: 'Passionate about creating user-centered designs that wow users and solve complex problems through simple, elegant solutions.', image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=400', socials: allSocials },
-                        { _id: '6', name: 'Anisa Ahmed', position: 'UI/UX Designer', description: 'Passionate about creating user-centered designs that wow users and solve complex problems through simple, elegant solutions.', image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=400', socials: allSocials },
-                        { _id: '7', name: 'Anisa Ahmed', position: 'UI/UX Designer', description: 'Passionate about creating user-centered designs that wow users and solve complex problems through simple, elegant solutions.', image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=400', socials: allSocials },
-                    ];
-                }
+
 
                 const formattedTeams = teamsData.map((member: any) => ({
                     ...member,
-                    image: member.image.startsWith('http') ? member.image : (getImageUrl(member.image) || "/home-images/placeholder.png"),
+                    image: (member.image.startsWith('http') || (member.image.startsWith('/') && !member.image.startsWith('/uploads'))) 
+                        ? member.image 
+                        : (getImageUrl(member.image) || "/home-images/placeholder.png"),
                     name: member.name || member.fullname,
                     title: member.position || member.title,
                     description: member.description || "",
