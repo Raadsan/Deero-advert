@@ -7,7 +7,7 @@ import { signupUser } from "../../api-client/authApi";
 import { useRouter, useSearchParams } from "next/navigation";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-import { isAuthenticated, setAuth } from "@/utils/auth";
+import { isAuthenticated, setAuth, getUser, isUser } from "@/utils/auth";
 import Link from "next/link";
 
 import { Suspense } from "react";
@@ -24,7 +24,11 @@ function SignupContent() {
     // Redirect if already logged in
     useEffect(() => {
         if (isAuthenticated()) {
-            router.push(redirectUrl);
+            if (isUser()) {
+                router.push(redirectUrl);
+            } else {
+                router.push("/dashboard");
+            }
         }
     }, [router, redirectUrl]);
 
@@ -63,8 +67,13 @@ function SignupContent() {
             });
             setAuth(res.data.token, res.data.user);
             setSuccess("Account created successfully! Redirecting...");
+
             setTimeout(() => {
-                router.push(redirectUrl);
+                if (isUser()) {
+                    router.push(redirectUrl);
+                } else {
+                    router.push("/dashboard");
+                }
             }, 1000);
         } catch (err: any) {
             setError(err.response?.data?.message || "Signup failed. Please try again.");

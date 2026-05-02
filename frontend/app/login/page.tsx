@@ -7,7 +7,7 @@ import { loginUser, signupUser, forgotPassword, verifyResetCode, resetPassword }
 import { useRouter, useSearchParams } from "next/navigation";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-import { isAuthenticated, isAdminOrManager, setAuth } from "@/utils/auth";
+import { isAuthenticated, isAdminOrManager, setAuth, getUser, isUser } from "@/utils/auth";
 
 import Link from "next/link";
 
@@ -28,7 +28,11 @@ function LoginContent() {
   // Redirect if already logged in
   useEffect(() => {
     if (isAuthenticated()) {
-      router.push(redirectUrl);
+      if (isUser()) {
+        router.push(redirectUrl);
+      } else {
+        router.push("/dashboard");
+      }
     }
   }, [router, redirectUrl]);
 
@@ -63,7 +67,11 @@ function LoginContent() {
         setSuccess("Login successful! Redirecting...");
         setTimeout(() => {
           // Redirect to dashboard or requested page
-          router.push(redirectUrl);
+          if (isUser()) {
+            router.push(redirectUrl);
+          } else {
+            router.push("/dashboard");
+          }
         }, 1000);
       }
     } catch (err: any) {
