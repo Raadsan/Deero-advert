@@ -371,28 +371,31 @@ export default function ServicesContent({
                                                 {service.serviceTitle} Packages
                                             </h3>
                                             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 justify-center items-stretch">
-                                                {service.packages.map((pkg: any, idx: number) => {
-                                                    const packageId = `${service._id}-${idx}`;
-                                                    const isExpanded = expandedPackages[packageId];
-                                                    const initialFeaturesCount = 5;
-                                                    const hasMoreFeatures = pkg.features?.length > initialFeaturesCount;
-                                                    const displayedFeatures = isExpanded ? pkg.features : (pkg.features?.slice(0, initialFeaturesCount) || []);
+                                                {[...service.packages]
+                                                    .sort((a: any, b: any) => a.price - b.price)
+                                                    .map((pkg: any, idx: number, sortedArray) => {
+                                                        const packageId = `${service._id}-${idx}`;
+                                                        const isExpanded = expandedPackages[packageId];
+                                                        const initialFeaturesCount = 5;
+                                                        const hasMoreFeatures = pkg.features?.length > initialFeaturesCount;
+                                                        const displayedFeatures = isExpanded ? pkg.features : (pkg.features?.slice(0, initialFeaturesCount) || []);
+                                                        const middleIndex = Math.floor(sortedArray.length / 2);
 
-                                                    return (
-                                                        <motion.div
-                                                            key={idx}
-                                                            variants={itemVariants}
-                                                            whileHover={{ scale: 1.02 }}
-                                                            className="bg-[#fcd7c3] p-8 rounded-2xl shadow-sm border-none flex flex-col transition-all duration-300 relative overflow-hidden group min-h-[480px] text-left"
-                                                        >
-                                                            {/* Most Popular Ribbon logic */}
-                                                            {idx === 1 && (
-                                                                <div className="absolute top-6 -right-8 w-40 h-8">
-                                                                    <div className="bg-[#651313] w-full h-full rotate-45 flex items-center justify-center shadow-md">
-                                                                        <span className="text-white text-[10px] font-bold uppercase tracking-widest translate-y-[1px]">Most Popular</span>
+                                                        return (
+                                                            <motion.div
+                                                                key={idx}
+                                                                variants={itemVariants}
+                                                                whileHover={{ scale: 1.02 }}
+                                                                className="bg-[#fcd7c3] p-8 rounded-2xl shadow-sm border-none flex flex-col transition-all duration-300 relative overflow-hidden group min-h-[480px] text-left"
+                                                            >
+                                                                {/* Most Popular Ribbon logic - Always on the middle item */}
+                                                                {idx === middleIndex && (
+                                                                    <div className="absolute top-6 -right-8 w-40 h-8">
+                                                                        <div className="bg-[#651313] w-full h-full rotate-45 flex items-center justify-center shadow-md">
+                                                                            <span className="text-white text-[10px] font-bold uppercase tracking-widest translate-y-[1px]">Most Popular</span>
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                            )}
+                                                                )}
 
                                                             <h4 className="text-2xl font-bold text-[#4d0e0e] mb-4 pr-8 leading-tight">{pkg.packageTitle}</h4>
 
