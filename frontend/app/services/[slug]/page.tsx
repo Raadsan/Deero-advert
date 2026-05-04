@@ -14,7 +14,7 @@ export default function ServiceSubPage({ params }: { params: Promise<{ slug: str
     return (
         <div className="flex flex-col min-h-screen">
             <Header />
-            <main className="flex-grow pt-[170px]">
+            <main className="flex-grow pt-[106px] md:pt-[131px]">
                 <ServicesHero />
                 <ServicesContent
                     showTitle={false}

@@ -26,13 +26,13 @@ export default function AboutContent() {
                             <h2 className="text-4xl md:text-5xl font-bold text-[#1a1a1a] mb-8">
                                 About Us
                             </h2>
-                            <p className="text-gray-600 leading-relaxed text-lg mb-6">
+                            <p className="text-gray-600 leading-relaxed text-lg mb-6 text-justify">
                                 Deero Advertising Agency is one of the innovative digital service providers in Somalia,
                                 founded in 2019 to offer a wide range of digital creative services. deero Advert is the first
                                 advertising company that provides a wide variety of one-stop digital creative services
                                 (1-stop agency: marketing, creative, web, and video) in Somalia.
                             </p>
-                            <p className="text-gray-600 leading-relaxed text-lg">
+                            <p className="text-gray-600 leading-relaxed text-lg text-justify">
                                 Deero always aims to exceed expectations and deliver results that are based on our clients
                                 marketing objectives while overall enhancing their brands. Deero helps businesses keep
                                 up with the digital transformation and capitalize on new markets and opportunities.

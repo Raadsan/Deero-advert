@@ -22,7 +22,7 @@ export default function Home() {
         <SuccessNotification />
       </Suspense>
       <Header />
-      <main className="pt-[130px] md:pt-[120px]">
+      <main className="pt-[106px] md:pt-[131px]">
         <Hero />
         <MobileDownload />
         <ServicesSection />

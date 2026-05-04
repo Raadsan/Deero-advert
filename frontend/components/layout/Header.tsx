@@ -15,8 +15,8 @@ import { motion, AnimatePresence } from "framer-motion";
 const navLinks = [
   { label: "Home", href: "/" },
   { label: "About Us", href: "/about" },
-  { label: "Hosting", href: "/hosting" },
   { label: "Services", href: "/services" },
+  { label: "Hosting", href: "/hosting" },
   { label: "Portfolio", href: "/portfolio" },
   // { label: "Our Team", href: "/team" },
   { label: "Contact", href: "/contact" },
@@ -35,8 +35,10 @@ export default function Header() {
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [activeAnnouncement, setActiveAnnouncement] = useState<Announcement | null>(null);
   const [showBanner, setShowBanner] = useState(true);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     setIsLoggedIn(isAuthenticated());
     const userData = getUser();
     if (userData) {
@@ -190,9 +192,9 @@ export default function Header() {
               const linkPath = linkPathPart || "/";
               const linkHash = linkHashPart ? `#${linkHashPart}` : "";
 
-              const isActive = linkHash
+              const isActive = mounted && (linkHash
                 ? pathname === linkPath && hash === linkHash
-                : pathname === linkPath;
+                : pathname === linkPath);
 
               return (
                 <Link
@@ -329,6 +331,7 @@ export default function Header() {
             <div className="flex flex-col gap-3 font-semibold text-[#651313]">
               {navLinks.map((link) => {
                 const isActive =
+                  mounted &&
                   link.href.startsWith("/") &&
                   (pathname === link.href || pathname.startsWith(link.href));
 
