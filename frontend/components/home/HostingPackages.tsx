@@ -213,7 +213,9 @@ export default function HostingPackages() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
-                    {packages.map((plan, index) => {
+                    {[...packages]
+                        .sort((a, b) => a.price - b.price)
+                        .map((plan, index) => {
                         const { buttonColor, bgColor, isMain } = getStyleProps(index);
                         const { finalPrice, discount, hasDiscount } = getDiscountedPrice(plan);
                         const originalPrice = isYearly ? plan.price * 12 : plan.price;
