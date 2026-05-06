@@ -97,6 +97,7 @@ export default function PortfolioDetailPage() {
             <Header />
 
             <main className="pt-[106px] md:pt-[131px] pb-24 px-4 sm:px-10">
+                <div className="h-8 md:h-12" />
                 <div className="mx-auto max-w-7xl">
 
                     {/* Hero Section - Pure Image Display */}
