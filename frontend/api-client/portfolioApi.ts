@@ -38,3 +38,6 @@ export const deleteGalleryImage = (id: string, imagePath: string) => {
     return api.post(`/portfolios/${id}/delete-gallery-image`, { imagePath });
 };
 
+export const reorderGallery = (id: string, orders: { id: number; sortOrder: number }[]) => {
+    return api.post(`/portfolios/${id}/reorder-gallery`, { orders });
+};

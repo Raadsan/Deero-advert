@@ -22093,10 +22093,12 @@ export namespace Prisma {
 
   export type PortfolioAvgAggregateOutputType = {
     id: number | null
+    sortOrder: number | null
   }
 
   export type PortfolioSumAggregateOutputType = {
     id: number | null
+    sortOrder: number | null
   }
 
   export type PortfolioMinAggregateOutputType = {
@@ -22106,6 +22108,7 @@ export namespace Prisma {
     description: string | null
     year: string | null
     industry: string | null
+    sortOrder: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -22117,6 +22120,7 @@ export namespace Prisma {
     description: string | null
     year: string | null
     industry: string | null
+    sortOrder: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -22129,6 +22133,7 @@ export namespace Prisma {
     year: number
     industry: number
     projectDirection: number
+    sortOrder: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -22137,10 +22142,12 @@ export namespace Prisma {
 
   export type PortfolioAvgAggregateInputType = {
     id?: true
+    sortOrder?: true
   }
 
   export type PortfolioSumAggregateInputType = {
     id?: true
+    sortOrder?: true
   }
 
   export type PortfolioMinAggregateInputType = {
@@ -22150,6 +22157,7 @@ export namespace Prisma {
     description?: true
     year?: true
     industry?: true
+    sortOrder?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -22161,6 +22169,7 @@ export namespace Prisma {
     description?: true
     year?: true
     industry?: true
+    sortOrder?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -22173,6 +22182,7 @@ export namespace Prisma {
     year?: true
     industry?: true
     projectDirection?: true
+    sortOrder?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -22272,6 +22282,7 @@ export namespace Prisma {
     year: string | null
     industry: string | null
     projectDirection: JsonValue | null
+    sortOrder: number | null
     createdAt: Date
     updatedAt: Date
     _count: PortfolioCountAggregateOutputType | null
@@ -22303,6 +22314,7 @@ export namespace Prisma {
     year?: boolean
     industry?: boolean
     projectDirection?: boolean
+    sortOrder?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     gallery?: boolean | Portfolio$galleryArgs<ExtArgs>
@@ -22319,11 +22331,12 @@ export namespace Prisma {
     year?: boolean
     industry?: boolean
     projectDirection?: boolean
+    sortOrder?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type PortfolioOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "mainImage" | "description" | "year" | "industry" | "projectDirection" | "createdAt" | "updatedAt", ExtArgs["result"]["portfolio"]>
+  export type PortfolioOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "mainImage" | "description" | "year" | "industry" | "projectDirection" | "sortOrder" | "createdAt" | "updatedAt", ExtArgs["result"]["portfolio"]>
   export type PortfolioInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     gallery?: boolean | Portfolio$galleryArgs<ExtArgs>
     _count?: boolean | PortfolioCountOutputTypeDefaultArgs<ExtArgs>
@@ -22342,6 +22355,7 @@ export namespace Prisma {
       year: string | null
       industry: string | null
       projectDirection: Prisma.JsonValue | null
+      sortOrder: number | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["portfolio"]>
@@ -22721,6 +22735,7 @@ export namespace Prisma {
     readonly year: FieldRef<"Portfolio", 'String'>
     readonly industry: FieldRef<"Portfolio", 'String'>
     readonly projectDirection: FieldRef<"Portfolio", 'Json'>
+    readonly sortOrder: FieldRef<"Portfolio", 'Int'>
     readonly createdAt: FieldRef<"Portfolio", 'DateTime'>
     readonly updatedAt: FieldRef<"Portfolio", 'DateTime'>
   }
@@ -23128,29 +23143,34 @@ export namespace Prisma {
   export type PortfolioGalleryAvgAggregateOutputType = {
     id: number | null
     portfolioId: number | null
+    sortOrder: number | null
   }
 
   export type PortfolioGallerySumAggregateOutputType = {
     id: number | null
     portfolioId: number | null
+    sortOrder: number | null
   }
 
   export type PortfolioGalleryMinAggregateOutputType = {
     id: number | null
     portfolioId: number | null
     imagePath: string | null
+    sortOrder: number | null
   }
 
   export type PortfolioGalleryMaxAggregateOutputType = {
     id: number | null
     portfolioId: number | null
     imagePath: string | null
+    sortOrder: number | null
   }
 
   export type PortfolioGalleryCountAggregateOutputType = {
     id: number
     portfolioId: number
     imagePath: number
+    sortOrder: number
     _all: number
   }
 
@@ -23158,29 +23178,34 @@ export namespace Prisma {
   export type PortfolioGalleryAvgAggregateInputType = {
     id?: true
     portfolioId?: true
+    sortOrder?: true
   }
 
   export type PortfolioGallerySumAggregateInputType = {
     id?: true
     portfolioId?: true
+    sortOrder?: true
   }
 
   export type PortfolioGalleryMinAggregateInputType = {
     id?: true
     portfolioId?: true
     imagePath?: true
+    sortOrder?: true
   }
 
   export type PortfolioGalleryMaxAggregateInputType = {
     id?: true
     portfolioId?: true
     imagePath?: true
+    sortOrder?: true
   }
 
   export type PortfolioGalleryCountAggregateInputType = {
     id?: true
     portfolioId?: true
     imagePath?: true
+    sortOrder?: true
     _all?: true
   }
 
@@ -23274,6 +23299,7 @@ export namespace Prisma {
     id: number
     portfolioId: number
     imagePath: string
+    sortOrder: number
     _count: PortfolioGalleryCountAggregateOutputType | null
     _avg: PortfolioGalleryAvgAggregateOutputType | null
     _sum: PortfolioGallerySumAggregateOutputType | null
@@ -23299,6 +23325,7 @@ export namespace Prisma {
     id?: boolean
     portfolioId?: boolean
     imagePath?: boolean
+    sortOrder?: boolean
     portfolio?: boolean | PortfolioDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["portfolioGallery"]>
 
@@ -23308,9 +23335,10 @@ export namespace Prisma {
     id?: boolean
     portfolioId?: boolean
     imagePath?: boolean
+    sortOrder?: boolean
   }
 
-  export type PortfolioGalleryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "portfolioId" | "imagePath", ExtArgs["result"]["portfolioGallery"]>
+  export type PortfolioGalleryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "portfolioId" | "imagePath" | "sortOrder", ExtArgs["result"]["portfolioGallery"]>
   export type PortfolioGalleryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     portfolio?: boolean | PortfolioDefaultArgs<ExtArgs>
   }
@@ -23324,6 +23352,7 @@ export namespace Prisma {
       id: number
       portfolioId: number
       imagePath: string
+      sortOrder: number
     }, ExtArgs["result"]["portfolioGallery"]>
     composites: {}
   }
@@ -23697,6 +23726,7 @@ export namespace Prisma {
     readonly id: FieldRef<"PortfolioGallery", 'Int'>
     readonly portfolioId: FieldRef<"PortfolioGallery", 'Int'>
     readonly imagePath: FieldRef<"PortfolioGallery", 'String'>
+    readonly sortOrder: FieldRef<"PortfolioGallery", 'Int'>
   }
     
 
@@ -38253,6 +38283,7 @@ export namespace Prisma {
     year: 'year',
     industry: 'industry',
     projectDirection: 'projectDirection',
+    sortOrder: 'sortOrder',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -38263,7 +38294,8 @@ export namespace Prisma {
   export const PortfolioGalleryScalarFieldEnum: {
     id: 'id',
     portfolioId: 'portfolioId',
-    imagePath: 'imagePath'
+    imagePath: 'imagePath',
+    sortOrder: 'sortOrder'
   };
 
   export type PortfolioGalleryScalarFieldEnum = (typeof PortfolioGalleryScalarFieldEnum)[keyof typeof PortfolioGalleryScalarFieldEnum]
@@ -40075,6 +40107,7 @@ export namespace Prisma {
     year?: StringNullableFilter<"Portfolio"> | string | null
     industry?: StringNullableFilter<"Portfolio"> | string | null
     projectDirection?: JsonNullableFilter<"Portfolio">
+    sortOrder?: IntNullableFilter<"Portfolio"> | number | null
     createdAt?: DateTimeFilter<"Portfolio"> | Date | string
     updatedAt?: DateTimeFilter<"Portfolio"> | Date | string
     gallery?: PortfolioGalleryListRelationFilter
@@ -40088,6 +40121,7 @@ export namespace Prisma {
     year?: SortOrderInput | SortOrder
     industry?: SortOrderInput | SortOrder
     projectDirection?: SortOrderInput | SortOrder
+    sortOrder?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     gallery?: PortfolioGalleryOrderByRelationAggregateInput
@@ -40105,6 +40139,7 @@ export namespace Prisma {
     year?: StringNullableFilter<"Portfolio"> | string | null
     industry?: StringNullableFilter<"Portfolio"> | string | null
     projectDirection?: JsonNullableFilter<"Portfolio">
+    sortOrder?: IntNullableFilter<"Portfolio"> | number | null
     createdAt?: DateTimeFilter<"Portfolio"> | Date | string
     updatedAt?: DateTimeFilter<"Portfolio"> | Date | string
     gallery?: PortfolioGalleryListRelationFilter
@@ -40118,6 +40153,7 @@ export namespace Prisma {
     year?: SortOrderInput | SortOrder
     industry?: SortOrderInput | SortOrder
     projectDirection?: SortOrderInput | SortOrder
+    sortOrder?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: PortfolioCountOrderByAggregateInput
@@ -40138,6 +40174,7 @@ export namespace Prisma {
     year?: StringNullableWithAggregatesFilter<"Portfolio"> | string | null
     industry?: StringNullableWithAggregatesFilter<"Portfolio"> | string | null
     projectDirection?: JsonNullableWithAggregatesFilter<"Portfolio">
+    sortOrder?: IntNullableWithAggregatesFilter<"Portfolio"> | number | null
     createdAt?: DateTimeWithAggregatesFilter<"Portfolio"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Portfolio"> | Date | string
   }
@@ -40149,6 +40186,7 @@ export namespace Prisma {
     id?: IntFilter<"PortfolioGallery"> | number
     portfolioId?: IntFilter<"PortfolioGallery"> | number
     imagePath?: StringFilter<"PortfolioGallery"> | string
+    sortOrder?: IntFilter<"PortfolioGallery"> | number
     portfolio?: XOR<PortfolioScalarRelationFilter, PortfolioWhereInput>
   }
 
@@ -40156,6 +40194,7 @@ export namespace Prisma {
     id?: SortOrder
     portfolioId?: SortOrder
     imagePath?: SortOrder
+    sortOrder?: SortOrder
     portfolio?: PortfolioOrderByWithRelationInput
     _relevance?: PortfolioGalleryOrderByRelevanceInput
   }
@@ -40167,6 +40206,7 @@ export namespace Prisma {
     NOT?: PortfolioGalleryWhereInput | PortfolioGalleryWhereInput[]
     portfolioId?: IntFilter<"PortfolioGallery"> | number
     imagePath?: StringFilter<"PortfolioGallery"> | string
+    sortOrder?: IntFilter<"PortfolioGallery"> | number
     portfolio?: XOR<PortfolioScalarRelationFilter, PortfolioWhereInput>
   }, "id">
 
@@ -40174,6 +40214,7 @@ export namespace Prisma {
     id?: SortOrder
     portfolioId?: SortOrder
     imagePath?: SortOrder
+    sortOrder?: SortOrder
     _count?: PortfolioGalleryCountOrderByAggregateInput
     _avg?: PortfolioGalleryAvgOrderByAggregateInput
     _max?: PortfolioGalleryMaxOrderByAggregateInput
@@ -40188,6 +40229,7 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"PortfolioGallery"> | number
     portfolioId?: IntWithAggregatesFilter<"PortfolioGallery"> | number
     imagePath?: StringWithAggregatesFilter<"PortfolioGallery"> | string
+    sortOrder?: IntWithAggregatesFilter<"PortfolioGallery"> | number
   }
 
   export type TeamWhereInput = {
@@ -42396,6 +42438,7 @@ export namespace Prisma {
     year?: string | null
     industry?: string | null
     projectDirection?: NullableJsonNullValueInput | InputJsonValue
+    sortOrder?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     gallery?: PortfolioGalleryCreateNestedManyWithoutPortfolioInput
@@ -42409,6 +42452,7 @@ export namespace Prisma {
     year?: string | null
     industry?: string | null
     projectDirection?: NullableJsonNullValueInput | InputJsonValue
+    sortOrder?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     gallery?: PortfolioGalleryUncheckedCreateNestedManyWithoutPortfolioInput
@@ -42421,6 +42465,7 @@ export namespace Prisma {
     year?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     projectDirection?: NullableJsonNullValueInput | InputJsonValue
+    sortOrder?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     gallery?: PortfolioGalleryUpdateManyWithoutPortfolioNestedInput
@@ -42434,6 +42479,7 @@ export namespace Prisma {
     year?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     projectDirection?: NullableJsonNullValueInput | InputJsonValue
+    sortOrder?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     gallery?: PortfolioGalleryUncheckedUpdateManyWithoutPortfolioNestedInput
@@ -42447,6 +42493,7 @@ export namespace Prisma {
     year?: string | null
     industry?: string | null
     projectDirection?: NullableJsonNullValueInput | InputJsonValue
+    sortOrder?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -42458,6 +42505,7 @@ export namespace Prisma {
     year?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     projectDirection?: NullableJsonNullValueInput | InputJsonValue
+    sortOrder?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -42470,12 +42518,14 @@ export namespace Prisma {
     year?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     projectDirection?: NullableJsonNullValueInput | InputJsonValue
+    sortOrder?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PortfolioGalleryCreateInput = {
     imagePath: string
+    sortOrder?: number
     portfolio: PortfolioCreateNestedOneWithoutGalleryInput
   }
 
@@ -42483,10 +42533,12 @@ export namespace Prisma {
     id?: number
     portfolioId: number
     imagePath: string
+    sortOrder?: number
   }
 
   export type PortfolioGalleryUpdateInput = {
     imagePath?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
     portfolio?: PortfolioUpdateOneRequiredWithoutGalleryNestedInput
   }
 
@@ -42494,22 +42546,26 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     portfolioId?: IntFieldUpdateOperationsInput | number
     imagePath?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
   }
 
   export type PortfolioGalleryCreateManyInput = {
     id?: number
     portfolioId: number
     imagePath: string
+    sortOrder?: number
   }
 
   export type PortfolioGalleryUpdateManyMutationInput = {
     imagePath?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
   }
 
   export type PortfolioGalleryUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     portfolioId?: IntFieldUpdateOperationsInput | number
     imagePath?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
   }
 
   export type TeamCreateInput = {
@@ -44643,12 +44699,14 @@ export namespace Prisma {
     year?: SortOrder
     industry?: SortOrder
     projectDirection?: SortOrder
+    sortOrder?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
   export type PortfolioAvgOrderByAggregateInput = {
     id?: SortOrder
+    sortOrder?: SortOrder
   }
 
   export type PortfolioMaxOrderByAggregateInput = {
@@ -44658,6 +44716,7 @@ export namespace Prisma {
     description?: SortOrder
     year?: SortOrder
     industry?: SortOrder
+    sortOrder?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -44669,12 +44728,14 @@ export namespace Prisma {
     description?: SortOrder
     year?: SortOrder
     industry?: SortOrder
+    sortOrder?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
   export type PortfolioSumOrderByAggregateInput = {
     id?: SortOrder
+    sortOrder?: SortOrder
   }
 
   export type PortfolioScalarRelationFilter = {
@@ -44692,28 +44753,33 @@ export namespace Prisma {
     id?: SortOrder
     portfolioId?: SortOrder
     imagePath?: SortOrder
+    sortOrder?: SortOrder
   }
 
   export type PortfolioGalleryAvgOrderByAggregateInput = {
     id?: SortOrder
     portfolioId?: SortOrder
+    sortOrder?: SortOrder
   }
 
   export type PortfolioGalleryMaxOrderByAggregateInput = {
     id?: SortOrder
     portfolioId?: SortOrder
     imagePath?: SortOrder
+    sortOrder?: SortOrder
   }
 
   export type PortfolioGalleryMinOrderByAggregateInput = {
     id?: SortOrder
     portfolioId?: SortOrder
     imagePath?: SortOrder
+    sortOrder?: SortOrder
   }
 
   export type PortfolioGallerySumOrderByAggregateInput = {
     id?: SortOrder
     portfolioId?: SortOrder
+    sortOrder?: SortOrder
   }
 
   export type TeamSocialListRelationFilter = {
@@ -48585,11 +48651,13 @@ export namespace Prisma {
 
   export type PortfolioGalleryCreateWithoutPortfolioInput = {
     imagePath: string
+    sortOrder?: number
   }
 
   export type PortfolioGalleryUncheckedCreateWithoutPortfolioInput = {
     id?: number
     imagePath: string
+    sortOrder?: number
   }
 
   export type PortfolioGalleryCreateOrConnectWithoutPortfolioInput = {
@@ -48625,6 +48693,7 @@ export namespace Prisma {
     id?: IntFilter<"PortfolioGallery"> | number
     portfolioId?: IntFilter<"PortfolioGallery"> | number
     imagePath?: StringFilter<"PortfolioGallery"> | string
+    sortOrder?: IntFilter<"PortfolioGallery"> | number
   }
 
   export type PortfolioCreateWithoutGalleryInput = {
@@ -48634,6 +48703,7 @@ export namespace Prisma {
     year?: string | null
     industry?: string | null
     projectDirection?: NullableJsonNullValueInput | InputJsonValue
+    sortOrder?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -48646,6 +48716,7 @@ export namespace Prisma {
     year?: string | null
     industry?: string | null
     projectDirection?: NullableJsonNullValueInput | InputJsonValue
+    sortOrder?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -48673,6 +48744,7 @@ export namespace Prisma {
     year?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     projectDirection?: NullableJsonNullValueInput | InputJsonValue
+    sortOrder?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -48685,6 +48757,7 @@ export namespace Prisma {
     year?: NullableStringFieldUpdateOperationsInput | string | null
     industry?: NullableStringFieldUpdateOperationsInput | string | null
     projectDirection?: NullableJsonNullValueInput | InputJsonValue
+    sortOrder?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -50638,20 +50711,24 @@ export namespace Prisma {
   export type PortfolioGalleryCreateManyPortfolioInput = {
     id?: number
     imagePath: string
+    sortOrder?: number
   }
 
   export type PortfolioGalleryUpdateWithoutPortfolioInput = {
     imagePath?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
   }
 
   export type PortfolioGalleryUncheckedUpdateWithoutPortfolioInput = {
     id?: IntFieldUpdateOperationsInput | number
     imagePath?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
   }
 
   export type PortfolioGalleryUncheckedUpdateManyWithoutPortfolioInput = {
     id?: IntFieldUpdateOperationsInput | number
     imagePath?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
   }
 
   export type TeamSocialCreateManyTeamInput = {

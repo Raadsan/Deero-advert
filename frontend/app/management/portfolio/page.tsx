@@ -13,6 +13,7 @@ import {
     updatePortfolio,
     deletePortfolio,
     deleteGalleryImage,
+    reorderGallery,
 } from "@/api-client/portfolioApi";
 import { getImageUrl } from "@/utils/url";
 import { compressImage } from "@/utils/compressImage";
@@ -35,6 +36,7 @@ export default function PortfolioManagementPage() {
         projectDirection: "",
         mainImage: null as File | null,
         mainImagePreview: "",
+        sortOrder: "",
         galleryImages: [] as File[],
         galleryPreviews: [] as string[],
         existingGallery: [] as string[],
@@ -52,11 +54,12 @@ export default function PortfolioManagementPage() {
                     : [];
 
             setData(
-                [...items].reverse().map((p: any) => ({
-                    _id: p._id,
+                items.map((p: any) => ({
+                    _id: p.id || p._id,
                     title: p.title || "",
                     description: p.description || "",
                     industry: p.industry || "",
+                    sortOrder: p.sortOrder || 0,
                     projectDirection: Array.isArray(p.projectDirection) ? p.projectDirection.join(", ") : (p.projectDirection || ""),
                     year: p.year || "",
                     mainImage: getImageUrl(p.mainImage),
@@ -133,6 +136,33 @@ export default function PortfolioManagementPage() {
         }
     };
 
+    const moveGalleryImage = async (direction: 'left' | 'right', index: number) => {
+        if (!editingId) return;
+        const newGallery = [...formData.existingGallery];
+        if (direction === 'left' && index > 0) {
+            [newGallery[index], newGallery[index - 1]] = [newGallery[index - 1], newGallery[index]];
+        } else if (direction === 'right' && index < newGallery.length - 1) {
+            [newGallery[index], newGallery[index + 1]] = [newGallery[index + 1], newGallery[index]];
+        } else {
+            return;
+        }
+
+        // Prepare orders for backend
+        const orders = newGallery.map((img: any, idx) => ({
+            id: img.id,
+            sortOrder: idx
+        }));
+
+        try {
+            await reorderGallery(editingId, orders);
+            setFormData(prev => ({ ...prev, existingGallery: newGallery }));
+            // Optionally refresh everything, but updating local state is smoother
+        } catch (err) {
+            console.error("Failed to reorder gallery", err);
+            alert("Failed to reorder gallery");
+        }
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -141,6 +171,7 @@ export default function PortfolioManagementPage() {
         formDataToSend.append("description", formData.description);
         formDataToSend.append("year", formData.year);
         formDataToSend.append("industry", formData.industry);
+        formDataToSend.append("sortOrder", formData.sortOrder);
         formDataToSend.append("projectDirection", formData.projectDirection);
 
         if (formData.mainImage) {
@@ -202,6 +233,7 @@ export default function PortfolioManagementPage() {
             description: portfolio.description || "",
             year: portfolio.year || "",
             industry: portfolio.industry || "",
+            sortOrder: portfolio.sortOrder?.toString() || "0",
             projectDirection: portfolio.projectDirection || "",
             mainImage: null,
             mainImagePreview: portfolio.mainImage,
@@ -219,6 +251,7 @@ export default function PortfolioManagementPage() {
             description: "",
             year: "",
             industry: "",
+            sortOrder: "",
             projectDirection: "",
             mainImage: null,
             mainImagePreview: "",
@@ -269,6 +302,7 @@ export default function PortfolioManagementPage() {
             ),
         },
         { label: "Industry", key: "industry" },
+        { label: "Order", key: "sortOrder" },
         {
             label: "Project Direction",
             key: "projectDirection",
@@ -454,6 +488,21 @@ export default function PortfolioManagementPage() {
                                 placeholder="e.g. Healthcare"
                             />
                         </div>
+
+                        {/* Sort Order */}
+                        <div className="space-y-0.5">
+                            <label className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">
+                                Sort Order
+                            </label>
+                            <input
+                                type="number"
+                                name="sortOrder"
+                                value={formData.sortOrder}
+                                onChange={handleInputChange}
+                                className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#EB4724] focus:border-[#EB4724]"
+                                placeholder="e.g. 1"
+                            />
+                        </div>
                     </div>
 
                     {/* Project Direction */}
@@ -495,10 +544,29 @@ export default function PortfolioManagementPage() {
                                                 <button
                                                     type="button"
                                                     onClick={() => removeExistingGalleryImage(editingId!, imgPath)}
-                                                    className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
+                                                    className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity z-10"
                                                 >
                                                     <X className="h-3 w-3" />
                                                 </button>
+                                                {/* Reorder Buttons */}
+                                                <div className="absolute inset-x-0 bottom-0 flex justify-between p-1 opacity-0 group-hover:opacity-100 transition-opacity bg-black/20">
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => moveGalleryImage('left', idx)}
+                                                        disabled={idx === 0}
+                                                        className="bg-white/80 hover:bg-white text-gray-800 rounded p-0.5 disabled:opacity-30"
+                                                    >
+                                                        <span className="text-[10px]">←</span>
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => moveGalleryImage('right', idx)}
+                                                        disabled={idx === formData.existingGallery.length - 1}
+                                                        className="bg-white/80 hover:bg-white text-gray-800 rounded p-0.5 disabled:opacity-30"
+                                                    >
+                                                        <span className="text-[10px]">→</span>
+                                                    </button>
+                                                </div>
                                             </div>
                                         );
                                     })}

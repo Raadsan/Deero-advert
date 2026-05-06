@@ -16,7 +16,7 @@ const contactDetails = [
     },
     {
         title: "Address",
-        details: ["Xarunta Dhexe: Digfeer, dhabarka dambe ee Hayat Mall, Degmada Hodan.", "Xarunta 2aad: Agagaarka isgoyska Shaqaalaha, Degmada Waaberi."],
+        details: ["Head Office: Digfeer Rd, behind Hayat Mall, Hodan District | Branch 1: Shaqaalaha Rd, near Tayo Hotel, Waaberi District, Mogadishu, Somalia"],
         icon: MapPinIcon,
     },
 ];

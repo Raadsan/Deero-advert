@@ -5,7 +5,8 @@ import {
   getPortfolioById,
   updatePortfolio,
   deletePortfolio,
-  deleteGalleryImage
+  deleteGalleryImage,
+  reorderGalleryImages
 } from "../controllers/portfolioController.js";
 import upload from "../utils/multer.js";
 import { protect } from "../middlewares/authMiddleware.js";
@@ -23,5 +24,6 @@ router.post("/", protect, uploadFields, createPortfolio);
 router.patch("/:id", protect, uploadFields, updatePortfolio);
 router.delete("/:id", protect, deletePortfolio);
 router.post("/:id/delete-gallery-image", protect, deleteGalleryImage);
+router.post("/:id/reorder-gallery", protect, reorderGalleryImages);
 
 export default router;

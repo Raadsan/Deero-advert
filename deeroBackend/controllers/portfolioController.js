@@ -3,7 +3,7 @@ import { prisma } from "../lib/prisma.js";
 // ➕ Create Portfolio
 export const createPortfolio = async (req, res) => {
   try {
-    let { title, description, industry, Industry, year, Year, projectDirection } = req.body;
+    let { title, description, industry, Industry, year, Year, projectDirection, sortOrder } = req.body;
     const finalIndustry = industry || Industry;
     const finalYear = year || Year;
 
@@ -27,7 +27,10 @@ export const createPortfolio = async (req, res) => {
     const mainImagePath = mainImageFile.path.replace(/\\/g, "/");
     
     const galleryFiles = req.files?.gallery || req.files?.['gallery'] || [];
-    const galleryImages = galleryFiles.map((file) => ({ imagePath: file.path.replace(/\\/g, "/") }));
+    const galleryImages = galleryFiles.map((file, idx) => ({ 
+      imagePath: file.path.replace(/\\/g, "/"),
+      sortOrder: idx
+    }));
 
     const portfolio = await prisma.portfolio.create({
       data: {
@@ -37,11 +40,16 @@ export const createPortfolio = async (req, res) => {
         year: finalYear,
         projectDirection: projectDirection || [],
         mainImage: mainImagePath,
+        sortOrder: sortOrder ? parseInt(sortOrder) : 0,
         gallery: {
           create: galleryImages,
         },
       },
-      include: { gallery: true }
+      include: { 
+        gallery: {
+          orderBy: { sortOrder: 'asc' }
+        }
+      }
     });
 
     res.status(201).json({ success: true, portfolio });
@@ -54,8 +62,15 @@ export const createPortfolio = async (req, res) => {
 export const getAllPortfolios = async (req, res) => {
   try {
     const portfolios = await prisma.portfolio.findMany({
-      orderBy: { createdAt: 'desc' },
-      include: { gallery: true }
+      orderBy: [
+        { sortOrder: "asc" },
+        { id: "asc" }
+      ],
+      include: { 
+        gallery: {
+          orderBy: { sortOrder: 'asc' }
+        }
+      }
     });
     res.json({ success: true, count: portfolios.length, portfolios });
   } catch (error) {
@@ -67,7 +82,11 @@ export const getPortfolioById = async (req, res) => {
   try {
     const portfolio = await prisma.portfolio.findUnique({
       where: { id: parseInt(req.params.id) },
-      include: { gallery: true }
+      include: { 
+        gallery: {
+          orderBy: { sortOrder: 'asc' }
+        }
+      }
     });
     if (!portfolio) {
       return res.status(404).json({ success: false, message: "Portfolio not found" });
@@ -81,7 +100,7 @@ export const getPortfolioById = async (req, res) => {
 // 📝 Update Portfolio
 export const updatePortfolio = async (req, res) => {
   try {
-    let { title, description, industry, Industry, year, Year, projectDirection } = req.body;
+    let { title, description, industry, Industry, year, Year, projectDirection, sortOrder } = req.body;
     const finalIndustry = industry || Industry;
     const finalYear = year || Year;
 
@@ -94,6 +113,7 @@ export const updatePortfolio = async (req, res) => {
     if (description) data.description = description;
     if (finalIndustry) data.industry = finalIndustry;
     if (finalYear) data.year = finalYear;
+    if (sortOrder !== undefined) data.sortOrder = parseInt(sortOrder);
     
     if (projectDirection) {
       if (typeof projectDirection === 'string') {
@@ -115,15 +135,29 @@ export const updatePortfolio = async (req, res) => {
     // Handle gallery additions
     const galleryFiles = req.files?.gallery || req.files?.['gallery'] || [];
     if (galleryFiles.length > 0) {
+        // Find max sortOrder to append
+        const lastImage = await prisma.portfolioGallery.findFirst({
+            where: { portfolioId: portfolioId },
+            orderBy: { sortOrder: 'desc' }
+        });
+        const startOrder = lastImage ? lastImage.sortOrder + 1 : 0;
+
         data.gallery = {
-            create: galleryFiles.map(file => ({ imagePath: file.path.replace(/\\/g, "/") }))
+            create: galleryFiles.map((file, idx) => ({ 
+                imagePath: file.path.replace(/\\/g, "/"),
+                sortOrder: startOrder + idx
+            }))
         };
     }
 
     const updatedPortfolio = await prisma.portfolio.update({
       where: { id: portfolioId },
       data: data,
-      include: { gallery: true }
+      include: { 
+        gallery: {
+          orderBy: { sortOrder: 'asc' }
+        }
+      }
     });
 
     res.json({ success: true, portfolio: updatedPortfolio });
@@ -163,7 +197,46 @@ export const deleteGalleryImage = async (req, res) => {
 
     const updatedPortfolio = await prisma.portfolio.findUnique({
       where: { id: parseInt(id) },
-      include: { gallery: true }
+      include: { 
+        gallery: {
+          orderBy: { sortOrder: 'asc' }
+        }
+      }
+    });
+
+    res.json({ success: true, portfolio: updatedPortfolio });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// 🔄 Reorder Gallery Images
+export const reorderGalleryImages = async (req, res) => {
+  try {
+    const { id } = req.params; // portfolioId
+    const { orders } = req.body; // Array of { id, sortOrder }
+
+    if (!orders || !Array.isArray(orders)) {
+      return res.status(400).json({ message: "Orders array is required" });
+    }
+
+    // Update each gallery image's sortOrder
+    await Promise.all(
+      orders.map((item) =>
+        prisma.portfolioGallery.update({
+          where: { id: parseInt(item.id) },
+          data: { sortOrder: parseInt(item.sortOrder) },
+        })
+      )
+    );
+
+    const updatedPortfolio = await prisma.portfolio.findUnique({
+      where: { id: parseInt(id) },
+      include: {
+        gallery: {
+          orderBy: { sortOrder: "asc" },
+        },
+      },
     });
 
     res.json({ success: true, portfolio: updatedPortfolio });

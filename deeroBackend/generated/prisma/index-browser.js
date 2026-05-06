@@ -311,6 +311,7 @@ exports.Prisma.PortfolioScalarFieldEnum = {
   year: 'year',
   industry: 'industry',
   projectDirection: 'projectDirection',
+  sortOrder: 'sortOrder',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -318,7 +319,8 @@ exports.Prisma.PortfolioScalarFieldEnum = {
 exports.Prisma.PortfolioGalleryScalarFieldEnum = {
   id: 'id',
   portfolioId: 'portfolioId',
-  imagePath: 'imagePath'
+  imagePath: 'imagePath',
+  sortOrder: 'sortOrder'
 };
 
 exports.Prisma.TeamScalarFieldEnum = {

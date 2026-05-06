@@ -58,7 +58,7 @@ export default function PortfolioSection({ showHeader = true, limit, paddingClas
                     };
                 });
 
-                setPortfolios(processedItems.reverse());
+                setPortfolios(processedItems);
             } catch (err: any) {
                 console.error("Error fetching portfolios:", err);
                 setError("no portfolio found");
