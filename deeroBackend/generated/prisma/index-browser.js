@@ -454,6 +454,14 @@ exports.Prisma.MessageScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.CompanyContactScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  value: 'value',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -661,6 +669,11 @@ exports.Prisma.MessageOrderByRelevanceFieldEnum = {
   mediaUrl: 'mediaUrl'
 };
 
+exports.Prisma.CompanyContactOrderByRelevanceFieldEnum = {
+  type: 'type',
+  value: 'value'
+};
+
 
 exports.Prisma.ModelName = {
   User: 'User',
@@ -696,7 +709,8 @@ exports.Prisma.ModelName = {
   Subscriber: 'Subscriber',
   DeviceToken: 'DeviceToken',
   Conversation: 'Conversation',
-  Message: 'Message'
+  Message: 'Message',
+  CompanyContact: 'CompanyContact'
 };
 
 /**

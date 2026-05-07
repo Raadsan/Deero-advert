@@ -375,6 +375,7 @@ model Conversation {
   @@unique([participant1Id, participant2Id])
 }
 
+
 model Message {
   id             Int          @id @default(autoincrement())
   conversationId Int
@@ -388,5 +389,14 @@ model Message {
   duration       Int?         // Duration in seconds
   createdAt      DateTime     @default(now())
 }
+
+model CompanyContact {
+  id        Int      @id @default(autoincrement())
+  type      String   // "phone", "email", "address"
+  value     String   @db.LongText
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 
 

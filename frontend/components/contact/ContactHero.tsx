@@ -1,27 +1,56 @@
 "use client";
 
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { ChatBubbleLeftRightIcon, PhoneIcon, EnvelopeIcon, MapPinIcon } from "@heroicons/react/24/solid";
+import { getCompanyContacts } from "@/api-client/companyContactApi";
 
-const contactDetails = [
-    {
-        title: "Phone",
-        details: ["+252 618 553566,", "+252 61 8553633"],
-        icon: PhoneIcon,
-    },
-    {
-        title: "Email Us",
-        details: ["info@advert.deero.so"],
-        icon: EnvelopeIcon,
-    },
-    {
-        title: "Address",
-        details: ["Head Office: Digfeer Rd, behind Hayat Mall, Hodan District | Branch 1: Shaqaalaha Rd, near Tayo Hotel, Waaberi District, Mogadishu, Somalia"],
-        icon: MapPinIcon,
-    },
-];
+const iconMap: Record<string, any> = {
+    phone: PhoneIcon,
+    email: EnvelopeIcon,
+    address: MapPinIcon,
+};
+
+const titleMap: Record<string, string> = {
+    phone: "Phone",
+    email: "Email Us",
+    address: "Address",
+};
 
 export default function ContactHero() {
+    const [contacts, setContacts] = useState<{ title: string; details: string[]; icon: any; type: string }[]>([]);
+
+    useEffect(() => {
+        const fetchContacts = async () => {
+            try {
+                const res = await getCompanyContacts();
+                if (res.success && res.data && res.data.length > 0) {
+                    const dynamicData = res.data;
+
+                    // Group by type, preserving order: phone, email, address
+                    const typeOrder = ["phone", "email", "address"];
+                    const grouped = typeOrder
+                        .map((type) => {
+                            const items = dynamicData.filter((c: any) => c.type === type);
+                            if (items.length === 0) return null;
+                            return {
+                                title: titleMap[type] || type,
+                                details: items.map((c: any) => c.value),
+                                icon: iconMap[type] || PhoneIcon,
+                                type,
+                            };
+                        })
+                        .filter(Boolean) as { title: string; details: string[]; icon: any; type: string }[];
+
+                    setContacts(grouped);
+                }
+            } catch (err) {
+                console.error("Failed to fetch contact info:", err);
+            }
+        };
+        fetchContacts();
+    }, []);
+
     return (
         <section className="relative w-full bg-gradient-to-r from-[#4d0e0e] via-[#651313] to-[#EB4724] py-9 lg:py-[60px] px-4 overflow-x-clip">
             {/* Background Decoration */}
@@ -73,10 +102,10 @@ export default function ContactHero() {
                 {/* Overlapping Info Cards */}
                 <div className="relative lg:absolute left-0 right-0 lg:-bottom-24 lg:translate-y-1/2 px-4 mt-16 lg:mt-0 -mb-16 lg:mb-0 pointer-events-auto z-20">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-y-14 lg:gap-8 max-w-5xl mx-auto">
-                        {contactDetails.map((item, index) => (
+                        {contacts.map((item, index) => (
                             <div
                                 key={index}
-                                className="bg-[#EB4724] rounded-2xl p-10 pt-16 relative shadow-[0_20px_50px_rgba(0,0,0,0.3)] transition hover:-translate-y-2 duration-300"
+                                className="bg-[#EB4724] rounded-2xl p-10 pt-16 relative shadow-[0_20px_50px_rgba(0,0,0,0.3)] transition hover:-translate-y-2 duration-300 min-h-[220px]"
                             >
                                 {/* Icon Circle */}
                                 <div className="absolute top-0 left-10 -translate-y-1/2 w-16 h-16 bg-[#4d0e0e] rounded-full flex items-center justify-center shadow-lg border-4 border-[#EB4724]">
@@ -86,9 +115,14 @@ export default function ContactHero() {
                                 <h3 className="text-white text-2xl font-bold mb-4">{item.title}</h3>
 
                                 <div className="space-y-1">
-                                    {item.details.map((detail, idx) => (
+                                    {(item.type === "phone" || item.type === "email"
+                                        ? item.details.flatMap((detail) =>
+                                            detail.split(",").map(v => v.trim()).filter(v => v !== "")
+                                          )
+                                        : item.details
+                                    ).map((line, idx) => (
                                         <p key={idx} className="text-white/90 text-[13px] font-medium leading-relaxed">
-                                            {detail}
+                                            {line}
                                         </p>
                                     ))}
                                 </div>
@@ -105,4 +139,5 @@ export default function ContactHero() {
         </section>
     );
 }
+
 

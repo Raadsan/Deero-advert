@@ -1,4 +1,5 @@
-import express from "express";
+import express from "express"; 
+
 import cors from "cors";
 import dotenv from "dotenv";
 import http from "http";
@@ -29,6 +30,7 @@ import transactionRoutes from "./routes/transactionRoutes.js";
 import videoRoute from "./routes/videoRoute.js";
 import discountRoute from "./routes/discountRoute.js";
 import chatRoute from "./routes/chatRoute.js";
+import companyContactRoutes from "./routes/companyContactRoutes.js";
 import multerErrorHandler from "./middlewares/multerErrorHandler.js";
 
 dotenv.config();
@@ -105,6 +107,7 @@ app.use("/api/transactions", transactionRoutes);
 app.use("/api/videos", videoRoute);
 app.use("/api/discounts", discountRoute);
 app.use("/api/chat", chatRoute);
+app.use("/api/company-contact", companyContactRoutes);
 
 // Error Handling Middleware
 app.use(multerErrorHandler);
@@ -125,3 +128,4 @@ async function main() {
 }
 
 main();
+ 

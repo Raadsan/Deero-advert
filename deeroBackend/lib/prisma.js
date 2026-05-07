@@ -1,6 +1,8 @@
 import "dotenv/config";
 import { PrismaMariaDb } from '@prisma/adapter-mariadb';
 import { PrismaClient } from '../generated/prisma/index.js';
+// Triggering reload for new CompanyContact model
+
 
 /**
  * Helper to parse DATABASE_URL since the generated client
