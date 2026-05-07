@@ -30,6 +30,8 @@ export default function AdminServicesPage() {
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [deletingName, setDeletingName] = useState("");
   const [discountModal, setDiscountModal] = useState<{ open: boolean, id: string, name: string }>({ open: false, id: "", name: "" });
+  const [viewingService, setViewingService] = useState<any>(null);
+  const [saving, setSaving] = useState(false);
   const truncate = (s: string, n = 80) => (s?.length > n ? s.slice(0, n) + "..." : s);
   const [formData, setFormData] = useState({
     serviceTitle: "",
@@ -45,37 +47,17 @@ export default function AdminServicesPage() {
       const res = await getAllServices();
       const data: Service[] = Array.isArray(res.data?.data) ? [...res.data.data].reverse() : [];
 
-      const flattened: any[] = [];
+      // One row per service (not flattened by package)
+      const serviceRows = data.map((svc) => ({
+        _id: svc._id,
+        serviceTitle: svc.serviceTitle,
+        serviceIcon: getImageUrl(svc.serviceIcon),
+        packages: svc.packages || [],
+        packageCount: (svc.packages || []).length,
+        createdAt: svc.createdAt,
+      }));
 
-      data.forEach((svc) => {
-        if (Array.isArray(svc.packages) && svc.packages.length > 0) {
-          svc.packages.forEach((pkg: any) => {
-            flattened.push({
-              _id: pkg._id || svc._id,
-              serviceId: svc._id,
-              serviceTitle: svc.serviceTitle,
-              serviceIcon: getImageUrl(svc.serviceIcon),
-              packageTitle: pkg.packageTitle,
-              price: pkg.price,
-              features: pkg.features,
-              createdAt: svc.createdAt,
-            });
-          });
-        } else {
-          flattened.push({
-            _id: svc._id,
-            serviceId: svc._id,
-            serviceTitle: svc.serviceTitle,
-            serviceIcon: getImageUrl(svc.serviceIcon),
-            packageTitle: "-",
-            price: "-",
-            features: [],
-            createdAt: svc.createdAt,
-          });
-        }
-      });
-
-      setRows(flattened);
+      setRows(serviceRows);
     } catch (err) {
       console.error("Failed to load services", err);
       setRows([]);
@@ -165,6 +147,7 @@ export default function AdminServicesPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    setSaving(true);
     try {
       // Validate packages
       if (!formData.packages || formData.packages.length === 0) {
@@ -230,12 +213,14 @@ export default function AdminServicesPage() {
     } catch (err: any) {
       console.error("Failed to save service", err);
       alert(err.message || err.response?.data?.message || "Failed to save service");
+    } finally {
+      setSaving(false);
     }
   };
 
   // Handle delete
   const handleDelete = (row: any) => {
-    setDeletingId(row.serviceId);
+    setDeletingId(row._id);
     setDeletingName(row.serviceTitle);
     setIsDeleteModalOpen(true);
   };
@@ -258,28 +243,21 @@ export default function AdminServicesPage() {
   // Handle edit
   const handleEdit = async (row: any) => {
     try {
-      // Fetch full service data to get packages
-      const res = await getAllServices();
-      const services = Array.isArray(res.data?.data) ? res.data.data : [];
-      const service = services.find((s: any) => s._id === row.serviceId);
+      setEditingId(row._id);
+      // Convert packages to form format
+      const packages = (row.packages || []).map((pkg: any) => ({
+        packageTitle: pkg.packageTitle || "",
+        price: pkg.price || "",
+        features: Array.isArray(pkg.features) ? pkg.features : [],
+      }));
 
-      if (service) {
-        setEditingId(service._id);
-        // Convert packages to form format (ensure features is array of strings)
-        const packages = (service.packages || []).map((pkg: any) => ({
-          packageTitle: pkg.packageTitle || "",
-          price: pkg.price || "",
-          features: Array.isArray(pkg.features) ? pkg.features : [],
-        }));
-
-        setFormData({
-          serviceTitle: service.serviceTitle,
-          serviceIcon: null,
-          serviceIconPreview: getImageUrl(service.serviceIcon) || "",
-          packages: packages.length > 0 ? packages : [{ packageTitle: "", price: "", features: [""] }],
-        });
-        setIsModalOpen(true);
-      }
+      setFormData({
+        serviceTitle: row.serviceTitle,
+        serviceIcon: null,
+        serviceIconPreview: row.serviceIcon || "",
+        packages: packages.length > 0 ? packages : [{ packageTitle: "", price: "", features: [""] }],
+      });
+      setIsModalOpen(true);
     } catch (err) {
       console.error("Failed to load service for editing", err);
     }
@@ -307,31 +285,29 @@ export default function AdminServicesPage() {
           <span className="text-gray-400">-</span>
         ),
     },
-    { label: "Package", key: "packageTitle", width: "220px" },
     {
-      label: "Price",
-      key: "price",
+      label: "Packages",
+      key: "packageCount",
       width: "120px",
-      render: (r: any) => (r.price === "-" ? "-" : `$${r.price}`),
-    },
-    {
-      label: "Features",
-      key: "features",
-      render: (r: any) => {
-        const text = Array.isArray(r.features) ? r.features.join(", ") : (r.features || "");
-        return (
-          <div title={text} className="truncate max-w-[20ch] xl:max-w-xs">
-            {text}
-          </div>
-        );
-      },
+      render: (r: any) => (
+        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+          {r.packageCount} {r.packageCount === 1 ? "package" : "packages"}
+        </span>
+      ),
     },
     {
       label: "Actions",
       key: "actions",
-      width: "140px",
+      width: "180px",
       render: (r: any) => (
         <div className="flex gap-2">
+          <button
+            onClick={() => setViewingService(r)}
+            className="px-2.5 py-1.5 text-xs font-medium text-white bg-[#651313] rounded-lg hover:bg-[#500f0f] transition-colors"
+            title="View Packages"
+          >
+            View
+          </button>
           <button
             onClick={() => handleEdit(r)}
             className="p-2 rounded-lg hover:bg-blue-50 text-blue-600 transition-colors"
@@ -347,7 +323,7 @@ export default function AdminServicesPage() {
             <Trash2 className="h-4 w-4" />
           </button>
           <button
-            onClick={() => setDiscountModal({ open: true, id: r._id, name: `${r.serviceTitle} - ${r.packageTitle}` })}
+            onClick={() => setDiscountModal({ open: true, id: r._id, name: r.serviceTitle })}
             className="p-2 rounded-lg hover:bg-green-50 text-green-600 transition-colors"
             title="Apply Discount"
           >
@@ -600,9 +576,16 @@ export default function AdminServicesPage() {
             </button>
             <button
               type="submit"
-              className="px-3 py-1.5 text-xs font-medium text-white bg-[#651313] rounded-lg hover:bg-[#500f0f]"
+              disabled={saving}
+              className="px-3 py-1.5 text-xs font-medium text-white bg-[#651313] rounded-lg hover:bg-[#500f0f] disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2"
             >
-              {editingId ? "Update" : "Save"}
+              {saving && (
+                <svg className="animate-spin h-3.5 w-3.5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+              )}
+              {saving ? "Saving..." : editingId ? "Update" : "Save"}
             </button>
           </div>
         </form>
@@ -615,6 +598,49 @@ export default function AdminServicesPage() {
         targetId={discountModal.id}
         itemName={discountModal.name}
       />
+
+      {/* View Packages Modal */}
+      <Modal
+        isOpen={!!viewingService}
+        onClose={() => setViewingService(null)}
+        title={`${viewingService?.serviceTitle || ""} — Packages`}
+      >
+        <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-1">
+          {viewingService?.packages?.length > 0 ? (
+            viewingService.packages.map((pkg: any, idx: number) => (
+              <div
+                key={idx}
+                className="p-4 border border-gray-200 rounded-lg bg-gray-50 space-y-2"
+              >
+                <div className="flex items-center justify-between">
+                  <h4 className="text-sm font-semibold text-gray-800">{pkg.packageTitle}</h4>
+                  <span className="text-sm font-bold text-[#651313]">${pkg.price}</span>
+                </div>
+                {Array.isArray(pkg.features) && pkg.features.length > 0 && (
+                  <ul className="space-y-1 mt-2">
+                    {pkg.features.map((f: string, fi: number) => (
+                      <li key={fi} className="flex items-start gap-2 text-xs text-gray-600">
+                        <span className="text-green-500 mt-0.5">✓</span>
+                        {f}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            ))
+          ) : (
+            <p className="text-sm text-gray-400 text-center py-6">No packages found.</p>
+          )}
+        </div>
+        <div className="flex justify-end pt-3 border-t border-gray-100 mt-4">
+          <button
+            onClick={() => setViewingService(null)}
+            className="px-3 py-1.5 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+          >
+            Close
+          </button>
+        </div>
+      </Modal>
     </div>
   );
 }
