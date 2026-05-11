@@ -225,7 +225,7 @@ export default function HostingPackages() {
                                 key={plan._id}
                                 variants={itemVariants}
                                 whileHover={{ scale: 1.02 }}
-                                className={`${bgColor} p-6 shadow-sm flex flex-col relative overflow-hidden transition-all duration-300`}
+                                className={`${bgColor} p-6 rounded-2xl shadow-sm flex flex-col relative overflow-hidden transition-all duration-300`}
                             >
 
 
@@ -265,8 +265,10 @@ export default function HostingPackages() {
 
                                 <ul className="space-y-3 mb-6 flex-1">
                                     {plan.features && plan.features.map((feature, i) => (
-                                        <li key={`${feature}-${i}`} className="flex items-center gap-3 text-[#651313] text-sm">
-                                            <CheckIcon className="h-4 w-4 shrink-0 stroke-[3]" />
+                                        <li key={`${feature}-${i}`} className="flex items-center gap-3 text-[#651313] text-sm group">
+                                            <div className="w-5 h-5 rounded-md bg-[#EB4724]/10 flex items-center justify-center shrink-0 group-hover:bg-[#EB4724]/20 transition-colors">
+                                                <CheckIcon className="h-3.5 w-3.5 stroke-[4] text-[#EB4724]" />
+                                            </div>
                                             <span>{feature}</span>
                                         </li>
                                     ))}

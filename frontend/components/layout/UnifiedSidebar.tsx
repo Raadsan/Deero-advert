@@ -85,6 +85,8 @@ const iconMap: Record<string, LucideIcon> = {
     management: LayoutDashboard,
     discounts: Ticket,
     ticket: Ticket,
+    casestudy: Briefcase,
+    "case-study": Briefcase,
 };
 
 export default function UnifiedSidebar({ isOpen, onClose }: { isOpen?: boolean; onClose?: () => void }) {

@@ -315,7 +315,18 @@ export default function Chatbot() {
                 }}
                 className="w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all hover:scale-110 active:scale-95 bg-[#F7B5A7] z-20"
               >
-                <MessageCircle className="w-7 h-7 text-[#1a1a1a]" />
+                <svg viewBox="0 0 100 100" className="w-10 h-10 text-[#1a1a1a] fill-none stroke-[#1a1a1a] stroke-[6]" strokeLinecap="round" strokeLinejoin="round">
+                  {/* Head */}
+                  <rect x="25" y="35" width="50" height="40" rx="10" />
+                  {/* Eyes - Vertical Pills */}
+                  <rect x="39" y="48" width="5" height="14" rx="2.5" fill="#1a1a1a" stroke="none" />
+                  <rect x="56" y="48" width="5" height="14" rx="2.5" fill="#1a1a1a" stroke="none" />
+                  {/* Antenna - L shape - Centered */}
+                  <path d="M45 35 V25 H55" />
+                  {/* Side ears */}
+                  <path d="M25 55 H18" />
+                  <path d="M75 55 H82" />
+                </svg>
               </motion.button>
             </div>
           )}

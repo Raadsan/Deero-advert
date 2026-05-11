@@ -240,6 +240,23 @@ exports.Prisma.BlogScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.CaseStudyScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  category: 'category',
+  client: 'client',
+  duration: 'duration',
+  challenge: 'challenge',
+  solution: 'solution',
+  result: 'result',
+  services: 'services',
+  image: 'image',
+  author: 'author',
+  publishedDate: 'publishedDate',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.AchievementScalarFieldEnum = {
   id: 'id',
   title: 'title',
@@ -535,6 +552,29 @@ exports.Prisma.BlogOrderByRelevanceFieldEnum = {
   featuredImage: 'featuredImage'
 };
 
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
+};
+
+exports.Prisma.QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
+};
+
+exports.Prisma.CaseStudyOrderByRelevanceFieldEnum = {
+  title: 'title',
+  category: 'category',
+  client: 'client',
+  duration: 'duration',
+  challenge: 'challenge',
+  solution: 'solution',
+  result: 'result',
+  image: 'image',
+  author: 'author'
+};
+
 exports.Prisma.AchievementOrderByRelevanceFieldEnum = {
   title: 'title',
   icon: 'icon'
@@ -561,17 +601,6 @@ exports.Prisma.EventNewsOrderByRelevanceFieldEnum = {
   title: 'title',
   type: 'type',
   description: 'description'
-};
-
-exports.Prisma.JsonNullValueFilter = {
-  DbNull: Prisma.DbNull,
-  JsonNull: Prisma.JsonNull,
-  AnyNull: Prisma.AnyNull
-};
-
-exports.Prisma.QueryMode = {
-  default: 'default',
-  insensitive: 'insensitive'
 };
 
 exports.Prisma.HostingPackageOrderByRelevanceFieldEnum = {
@@ -688,6 +717,7 @@ exports.Prisma.ModelName = {
   SubMenu: 'SubMenu',
   Video: 'Video',
   Blog: 'Blog',
+  CaseStudy: 'CaseStudy',
   Achievement: 'Achievement',
   Announcement: 'Announcement',
   Career: 'Career',

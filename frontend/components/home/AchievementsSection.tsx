@@ -99,8 +99,8 @@ export default function AchievementsSection() {
 
     return (
         <section className="overflow-hidden">
-            {/* Achievements Part - Peach Background */}
-            <div className="pt-16 pb-0 px-4 sm:px-10">
+            {/* Achievements Part - White Background */}
+            <div className="bg-white pt-20 pb-20 px-4 sm:px-10">
                 <div className="mx-auto max-w-6xl">
                     <div className="text-center mb-16">
                         <motion.div
@@ -161,8 +161,8 @@ export default function AchievementsSection() {
                 </div>
             </div>
 
-            {/* Major Clients Part - White Background */}
-            <div className="bg-white pt-8 pb-16 px-4 sm:px-10">
+            {/* Major Clients Part - Lighter Gray Background */}
+            <div className="bg-[#fafafa] pt-20 pb-20 px-4 sm:px-10">
                 <div className="mx-auto max-w-6xl">
                     <div className="text-center mb-16">
                         <motion.div

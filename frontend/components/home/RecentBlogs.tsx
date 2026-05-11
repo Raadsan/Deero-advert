@@ -32,7 +32,8 @@ export default function RecentBlogs() {
             try {
                 const res = await getAllBlogs();
                 const data = res.data.success ? res.data.data : (Array.isArray(res.data) ? res.data : []);
-                setBlogs(data.reverse());
+                // Take only the first 3 blogs for the home page
+                setBlogs(data.reverse().slice(0, 3));
             } catch (err) {
                 console.error("Failed to fetch blogs", err);
             } finally {
@@ -58,118 +59,76 @@ export default function RecentBlogs() {
                     </motion.div>
                 </div>
 
-                <div className="relative w-full overflow-hidden min-h-[500px]">
-                    {loading && (
+                <div className="relative w-full min-h-[400px]">
+                    {loading ? (
                         <div className="text-center text-gray-500 py-10">Loading blogs...</div>
-                    )}
-                    {blogs.length === 0 && !loading && (
+                    ) : blogs.length === 0 ? (
                         <div className="text-center text-gray-500 py-10">No blogs found.</div>
-                    )}
+                    ) : (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            {blogs.map((blog, idx) => (
+                                <motion.div
+                                    key={blog.id || blog._id || idx}
+                                    variants={itemVariants}
+                                    className="bg-white rounded-xl overflow-hidden shadow-xl flex flex-col group transition-all duration-300 transform hover:-translate-y-2 h-full min-h-[520px]"
+                                >
+                                    <Link href={`/blogs/${blog.id || blog._id}`} className="flex flex-col h-full">
+                                        {/* Top Card Area with Image */}
+                                        <div className={`${['bg-[#EB4724]', 'bg-[#4d0e0e]', 'bg-[#9b7677]'][idx % 3]} h-48 relative overflow-hidden flex-shrink-0`}>
+                                            <Image
+                                                src={getImageUrl(blog.featuredImage || blog.featured_image) || `/home-images/blog${(idx % 3) + 1}.png`}
+                                                alt={blog.title || "Blog Cover"}
+                                                fill
+                                                unoptimized
+                                                className="object-cover brightness-110 contrast-125 transition-transform duration-500 group-hover:scale-110"
+                                                onError={(e) => {
+                                                    const target = e.target as HTMLImageElement;
+                                                    target.srcset = "";
+                                                    target.src = `/home-images/blog${(idx % 3) + 1}.png`;
+                                                }}
+                                            />
+                                        </div>
 
-                    {blogs.length > 0 && <BlogSlider blogs={blogs} />}
+                                        {/* Content Area */}
+                                        <div className="p-6 pt-8 flex-1 flex flex-col text-left">
+                                            <h3 className="text-2xl font-bold text-[#EB4724] mb-4 min-h-[56px] flex items-center justify-start leading-tight line-clamp-2 group-hover:text-[#651313] transition-colors">
+                                                {blog.title}
+                                            </h3>
+                                            <div className="text-gray-500 text-sm mb-6 flex-1 line-clamp-6 overflow-hidden leading-relaxed">
+                                                {blog.content?.replace(/<[^>]*>?/gm, '').substring(0, 260)}...
+                                            </div>
+                                            <div className="mt-auto pt-6 flex justify-between items-center text-xs font-bold uppercase tracking-widest text-gray-400 border-t border-gray-100">
+                                                <span className="hover:text-[#EB4724] transition-colors">
+                                                    {typeof blog.author === 'string' ? blog.author : (blog.author?.name || blog.authorName || "Deero Advert")}
+                                                </span>
+                                                <span>
+                                                    {new Date(blog.published_date || blog.createdAt).toLocaleDateString()}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </Link>
+                                </motion.div>
+                            ))}
+                        </div>
+                    )}
                 </div>
+
+                {/* View All Button */}
+                <motion.div 
+                    variants={itemVariants}
+                    className="mt-16 text-center"
+                >
+                    <Link 
+                        href="/blogs"
+                        className="inline-flex items-center gap-2 bg-[#651313] text-white px-8 py-4 rounded-full font-bold hover:bg-[#EB4724] transition-all shadow-lg hover:shadow-[#EB4724]/20 transform hover:-translate-y-1"
+                    >
+                        View All Blogs
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        </svg>
+                    </Link>
+                </motion.div>
             </motion.div>
         </section>
     );
 }
-
-function BlogSlider({ blogs }: { blogs: any[] }) {
-    const [index, setIndex] = useState(0);
-    const [visibleItems, setVisibleItems] = useState(3);
-
-    useEffect(() => {
-        const handleResize = () => {
-            if (window.innerWidth < 768) setVisibleItems(1);
-            else if (window.innerWidth < 1024) setVisibleItems(2);
-            else setVisibleItems(3);
-        };
-
-        handleResize();
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
-    }, []);
-
-    useEffect(() => {
-        if (blogs.length <= visibleItems) {
-            setIndex(0);
-            return;
-        }
-
-        const interval = setInterval(() => {
-            setIndex((prev) => (prev + 1) % (blogs.length - visibleItems + 1));
-        }, 3000); // 3 seconds
-        return () => clearInterval(interval);
-    }, [visibleItems, blogs.length]);
-
-    return (
-        <div className="relative w-full">
-            <div
-                className="flex transition-transform duration-700 ease-in-out"
-                style={{
-                    transform: `translateX(-${index * (100 / visibleItems)}%)`,
-                }}
-            >
-                {blogs.map((blog, idx) => (
-                    <div
-                        key={blog._id || idx}
-                        style={{ width: `${100 / visibleItems}%` }}
-                        className="flex-shrink-0 px-4 h-full"
-                    >
-                        <div className="bg-white rounded-xl overflow-hidden shadow-xl flex flex-col group transition-all duration-300 transform hover:-translate-y-2 h-full min-h-[520px]">
-                            {/* Top Card Area with Image */}
-                            <div className={`${['bg-[#EB4724]', 'bg-[#4d0e0e]', 'bg-[#9b7677]'][idx % 3]} h-48 relative overflow-hidden flex-shrink-0`}>
-                                <Image
-                                    src={getImageUrl(blog.featuredImage || blog.featured_image) || `/home-images/blog${(idx % 3) + 1}.png`}
-                                    alt={blog.title || "Blog Cover"}
-                                    fill
-                                    unoptimized
-                                    className="object-cover brightness-110 contrast-125 transition-transform duration-500 group-hover:scale-110"
-                                    onError={(e) => {
-                                        const target = e.target as HTMLImageElement;
-                                        target.srcset = "";
-                                        target.src = `/home-images/blog${(idx % 3) + 1}.png`;
-                                    }}
-                                />
-                            </div>
-
-                            {/* Content Area */}
-                            <div className="p-6 pt-8 flex-1 flex flex-col text-left">
-                                <h3 className="text-2xl font-bold text-[#EB4724] mb-4 min-h-[56px] flex items-center justify-start leading-tight line-clamp-2">
-                                    {blog.title}
-                                </h3>
-                                <div
-                                    className="text-gray-500 text-sm mb-6 flex-1 line-clamp-3 overflow-hidden"
-                                    dangerouslySetInnerHTML={{ __html: blog.content }}
-                                />
-                                <div className="mt-auto pt-6 flex justify-between items-center text-xs font-bold uppercase tracking-widest text-gray-400 border-t border-gray-100">
-                                    <span className="hover:text-[#EB4724] transition-colors">
-                                        {typeof blog.author === 'string' ? blog.author : (blog.author?.name || blog.authorName || "Deero Advert")}
-                                    </span>
-                                    <span>
-                                        {new Date(blog.published_date || blog.createdAt).toLocaleDateString()}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                ))}
-            </div>
-
-            {/* Pagination Dots */}
-            {blogs.length > visibleItems && (
-                <div className="flex justify-center gap-2 mt-12">
-                    {Array.from({ length: blogs.length - visibleItems + 1 }).map((_, i) => (
-                        <button
-                            key={i}
-                            onClick={() => setIndex(i)}
-                            className={`h-1.5 rounded-full transition-all duration-300 ${index === i ? "w-6 bg-[#EB4724]" : "w-1.5 bg-[#EB4724]/30 hover:bg-[#EB4724]/60"
-                                }`}
-                            aria-label={`Go to slide ${i + 1}`}
-                        />
-                    ))}
-                </div>
-            )}
-        </div>
-    );
-}
-

@@ -18,7 +18,16 @@ const navLinks = [
   { label: "Services", href: "/services" },
   { label: "Hosting", href: "/hosting" },
   { label: "Portfolio", href: "/portfolio" },
-  // { label: "Our Team", href: "/team" },
+  { 
+    label: "Resources", 
+    href: "#", 
+    subLinks: [
+      { label: "Blog", href: "/blogs" },
+      { label: "News & Events", href: "/news" },
+      { label: "Case Studies", href: "/casestudy" }
+    ] 
+  },
+  // { label: "Team", href: "/team" },
   { label: "Contact", href: "/contact" },
 ];
 
@@ -36,6 +45,7 @@ export default function Header() {
   const [activeAnnouncement, setActiveAnnouncement] = useState<Announcement | null>(null);
   const [showBanner, setShowBanner] = useState(true);
   const [mounted, setMounted] = useState(false);
+  const [showResourcesDropdown, setShowResourcesDropdown] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -186,8 +196,50 @@ export default function Header() {
           </div>
 
           {/* Navigation - Center */}
-          <nav className="hidden md:flex gap-8 font-semibold text-[#651313]">
+          <nav className="hidden md:flex items-center gap-6 lg:gap-8 font-semibold text-[#651313]">
             {navLinks.map((link) => {
+              if (link.subLinks) {
+                return (
+                  <div 
+                    key={link.label}
+                    className="relative group"
+                    onMouseEnter={() => setShowResourcesDropdown(true)}
+                    onMouseLeave={() => setShowResourcesDropdown(false)}
+                  >
+                    <button
+                      className="flex items-center gap-1 transition hover:text-[#EB4724] py-4"
+                    >
+                      {link.label}
+                      <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${showResourcesDropdown ? "rotate-180" : ""}`} />
+                    </button>
+
+                    <AnimatePresence>
+                      {showResourcesDropdown && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: 10 }}
+                          className="absolute left-0 mt-0 w-48 rounded-xl border border-gray-100 bg-white shadow-xl z-50 overflow-hidden"
+                        >
+                          <div className="p-1">
+                            {link.subLinks.map((sub) => (
+                              <Link
+                                key={sub.href}
+                                href={sub.href}
+                                className="block px-4 py-2.5 rounded-lg text-sm text-[#651313] hover:bg-gray-50 hover:text-[#EB4724] transition-colors"
+                                onClick={() => setShowResourcesDropdown(false)}
+                              >
+                                {sub.label}
+                              </Link>
+                            ))}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                );
+              }
+
               const [linkPathPart, linkHashPart] = link.href.split("#");
               const linkPath = linkPathPart || "/";
               const linkHash = linkHashPart ? `#${linkHashPart}` : "";
@@ -330,6 +382,28 @@ export default function Header() {
           <div className="md:hidden border-t border-white/30 bg-white px-4 pb-4 shadow-sm">
             <div className="flex flex-col gap-3 font-semibold text-[#651313]">
               {navLinks.map((link) => {
+                if (link.subLinks) {
+                  return (
+                    <div key={link.label} className="flex flex-col">
+                      <div className="px-2 py-2 text-xs uppercase font-bold text-gray-400 tracking-wider mt-2">
+                        {link.label}
+                      </div>
+                      <div className="flex flex-col gap-1 ml-2 border-l border-gray-100 pl-4">
+                        {link.subLinks.map((sub) => (
+                          <Link
+                            key={sub.href}
+                            href={sub.href}
+                            className="rounded-md px-2 py-2 text-sm transition hover:bg-[#651313]/5 hover:text-[#EB4724]"
+                            onClick={() => setOpen(false)}
+                          >
+                            {sub.label}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                }
+
                 const isActive =
                   mounted &&
                   link.href.startsWith("/") &&

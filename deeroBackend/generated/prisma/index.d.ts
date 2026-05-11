@@ -74,6 +74,11 @@ export type Video = $Result.DefaultSelection<Prisma.$VideoPayload>
  */
 export type Blog = $Result.DefaultSelection<Prisma.$BlogPayload>
 /**
+ * Model CaseStudy
+ * 
+ */
+export type CaseStudy = $Result.DefaultSelection<Prisma.$CaseStudyPayload>
+/**
  * Model Achievement
  * 
  */
@@ -429,6 +434,16 @@ export class PrismaClient<
     * ```
     */
   get blog(): Prisma.BlogDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.caseStudy`: Exposes CRUD operations for the **CaseStudy** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CaseStudies
+    * const caseStudies = await prisma.caseStudy.findMany()
+    * ```
+    */
+  get caseStudy(): Prisma.CaseStudyDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.achievement`: Exposes CRUD operations for the **Achievement** model.
@@ -1105,6 +1120,7 @@ export namespace Prisma {
     SubMenu: 'SubMenu',
     Video: 'Video',
     Blog: 'Blog',
+    CaseStudy: 'CaseStudy',
     Achievement: 'Achievement',
     Announcement: 'Announcement',
     Career: 'Career',
@@ -1143,7 +1159,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "globalSetting" | "discount" | "bonusHistory" | "role" | "rolePermission" | "permissionMenuAccess" | "permissionSubMenu" | "menu" | "subMenu" | "video" | "blog" | "achievement" | "announcement" | "career" | "domainPrice" | "eventNews" | "hostingPackage" | "portfolio" | "portfolioGallery" | "team" | "teamSocial" | "testimonial" | "transaction" | "contact" | "majorClient" | "majorClientImage" | "service" | "servicePackage" | "servicePackageFeature" | "subscriber" | "deviceToken" | "conversation" | "message" | "companyContact"
+      modelProps: "user" | "globalSetting" | "discount" | "bonusHistory" | "role" | "rolePermission" | "permissionMenuAccess" | "permissionSubMenu" | "menu" | "subMenu" | "video" | "blog" | "caseStudy" | "achievement" | "announcement" | "career" | "domainPrice" | "eventNews" | "hostingPackage" | "portfolio" | "portfolioGallery" | "team" | "teamSocial" | "testimonial" | "transaction" | "contact" | "majorClient" | "majorClientImage" | "service" | "servicePackage" | "servicePackageFeature" | "subscriber" | "deviceToken" | "conversation" | "message" | "companyContact"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1936,6 +1952,72 @@ export namespace Prisma {
           count: {
             args: Prisma.BlogCountArgs<ExtArgs>
             result: $Utils.Optional<BlogCountAggregateOutputType> | number
+          }
+        }
+      }
+      CaseStudy: {
+        payload: Prisma.$CaseStudyPayload<ExtArgs>
+        fields: Prisma.CaseStudyFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CaseStudyFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CaseStudyPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CaseStudyFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CaseStudyPayload>
+          }
+          findFirst: {
+            args: Prisma.CaseStudyFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CaseStudyPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CaseStudyFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CaseStudyPayload>
+          }
+          findMany: {
+            args: Prisma.CaseStudyFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CaseStudyPayload>[]
+          }
+          create: {
+            args: Prisma.CaseStudyCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CaseStudyPayload>
+          }
+          createMany: {
+            args: Prisma.CaseStudyCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.CaseStudyDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CaseStudyPayload>
+          }
+          update: {
+            args: Prisma.CaseStudyUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CaseStudyPayload>
+          }
+          deleteMany: {
+            args: Prisma.CaseStudyDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CaseStudyUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.CaseStudyUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CaseStudyPayload>
+          }
+          aggregate: {
+            args: Prisma.CaseStudyAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCaseStudy>
+          }
+          groupBy: {
+            args: Prisma.CaseStudyGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CaseStudyGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CaseStudyCountArgs<ExtArgs>
+            result: $Utils.Optional<CaseStudyCountAggregateOutputType> | number
           }
         }
       }
@@ -3577,6 +3659,7 @@ export namespace Prisma {
     subMenu?: SubMenuOmit
     video?: VideoOmit
     blog?: BlogOmit
+    caseStudy?: CaseStudyOmit
     achievement?: AchievementOmit
     announcement?: AnnouncementOmit
     career?: CareerOmit
@@ -16336,6 +16419,1022 @@ export namespace Prisma {
      * Omit specific fields from the Blog
      */
     omit?: BlogOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model CaseStudy
+   */
+
+  export type AggregateCaseStudy = {
+    _count: CaseStudyCountAggregateOutputType | null
+    _avg: CaseStudyAvgAggregateOutputType | null
+    _sum: CaseStudySumAggregateOutputType | null
+    _min: CaseStudyMinAggregateOutputType | null
+    _max: CaseStudyMaxAggregateOutputType | null
+  }
+
+  export type CaseStudyAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type CaseStudySumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type CaseStudyMinAggregateOutputType = {
+    id: number | null
+    title: string | null
+    category: string | null
+    client: string | null
+    duration: string | null
+    challenge: string | null
+    solution: string | null
+    result: string | null
+    image: string | null
+    author: string | null
+    publishedDate: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type CaseStudyMaxAggregateOutputType = {
+    id: number | null
+    title: string | null
+    category: string | null
+    client: string | null
+    duration: string | null
+    challenge: string | null
+    solution: string | null
+    result: string | null
+    image: string | null
+    author: string | null
+    publishedDate: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type CaseStudyCountAggregateOutputType = {
+    id: number
+    title: number
+    category: number
+    client: number
+    duration: number
+    challenge: number
+    solution: number
+    result: number
+    services: number
+    image: number
+    author: number
+    publishedDate: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type CaseStudyAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type CaseStudySumAggregateInputType = {
+    id?: true
+  }
+
+  export type CaseStudyMinAggregateInputType = {
+    id?: true
+    title?: true
+    category?: true
+    client?: true
+    duration?: true
+    challenge?: true
+    solution?: true
+    result?: true
+    image?: true
+    author?: true
+    publishedDate?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type CaseStudyMaxAggregateInputType = {
+    id?: true
+    title?: true
+    category?: true
+    client?: true
+    duration?: true
+    challenge?: true
+    solution?: true
+    result?: true
+    image?: true
+    author?: true
+    publishedDate?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type CaseStudyCountAggregateInputType = {
+    id?: true
+    title?: true
+    category?: true
+    client?: true
+    duration?: true
+    challenge?: true
+    solution?: true
+    result?: true
+    services?: true
+    image?: true
+    author?: true
+    publishedDate?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type CaseStudyAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CaseStudy to aggregate.
+     */
+    where?: CaseStudyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CaseStudies to fetch.
+     */
+    orderBy?: CaseStudyOrderByWithRelationInput | CaseStudyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CaseStudyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CaseStudies from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CaseStudies.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CaseStudies
+    **/
+    _count?: true | CaseStudyCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CaseStudyAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CaseStudySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CaseStudyMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CaseStudyMaxAggregateInputType
+  }
+
+  export type GetCaseStudyAggregateType<T extends CaseStudyAggregateArgs> = {
+        [P in keyof T & keyof AggregateCaseStudy]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCaseStudy[P]>
+      : GetScalarType<T[P], AggregateCaseStudy[P]>
+  }
+
+
+
+
+  export type CaseStudyGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CaseStudyWhereInput
+    orderBy?: CaseStudyOrderByWithAggregationInput | CaseStudyOrderByWithAggregationInput[]
+    by: CaseStudyScalarFieldEnum[] | CaseStudyScalarFieldEnum
+    having?: CaseStudyScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CaseStudyCountAggregateInputType | true
+    _avg?: CaseStudyAvgAggregateInputType
+    _sum?: CaseStudySumAggregateInputType
+    _min?: CaseStudyMinAggregateInputType
+    _max?: CaseStudyMaxAggregateInputType
+  }
+
+  export type CaseStudyGroupByOutputType = {
+    id: number
+    title: string
+    category: string
+    client: string
+    duration: string | null
+    challenge: string
+    solution: string
+    result: string
+    services: JsonValue | null
+    image: string
+    author: string | null
+    publishedDate: Date
+    createdAt: Date
+    updatedAt: Date
+    _count: CaseStudyCountAggregateOutputType | null
+    _avg: CaseStudyAvgAggregateOutputType | null
+    _sum: CaseStudySumAggregateOutputType | null
+    _min: CaseStudyMinAggregateOutputType | null
+    _max: CaseStudyMaxAggregateOutputType | null
+  }
+
+  type GetCaseStudyGroupByPayload<T extends CaseStudyGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CaseStudyGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CaseStudyGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CaseStudyGroupByOutputType[P]>
+            : GetScalarType<T[P], CaseStudyGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CaseStudySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    category?: boolean
+    client?: boolean
+    duration?: boolean
+    challenge?: boolean
+    solution?: boolean
+    result?: boolean
+    services?: boolean
+    image?: boolean
+    author?: boolean
+    publishedDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["caseStudy"]>
+
+
+
+  export type CaseStudySelectScalar = {
+    id?: boolean
+    title?: boolean
+    category?: boolean
+    client?: boolean
+    duration?: boolean
+    challenge?: boolean
+    solution?: boolean
+    result?: boolean
+    services?: boolean
+    image?: boolean
+    author?: boolean
+    publishedDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type CaseStudyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "category" | "client" | "duration" | "challenge" | "solution" | "result" | "services" | "image" | "author" | "publishedDate" | "createdAt" | "updatedAt", ExtArgs["result"]["caseStudy"]>
+
+  export type $CaseStudyPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CaseStudy"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      title: string
+      category: string
+      client: string
+      duration: string | null
+      challenge: string
+      solution: string
+      result: string
+      services: Prisma.JsonValue | null
+      image: string
+      author: string | null
+      publishedDate: Date
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["caseStudy"]>
+    composites: {}
+  }
+
+  type CaseStudyGetPayload<S extends boolean | null | undefined | CaseStudyDefaultArgs> = $Result.GetResult<Prisma.$CaseStudyPayload, S>
+
+  type CaseStudyCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CaseStudyFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CaseStudyCountAggregateInputType | true
+    }
+
+  export interface CaseStudyDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CaseStudy'], meta: { name: 'CaseStudy' } }
+    /**
+     * Find zero or one CaseStudy that matches the filter.
+     * @param {CaseStudyFindUniqueArgs} args - Arguments to find a CaseStudy
+     * @example
+     * // Get one CaseStudy
+     * const caseStudy = await prisma.caseStudy.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CaseStudyFindUniqueArgs>(args: SelectSubset<T, CaseStudyFindUniqueArgs<ExtArgs>>): Prisma__CaseStudyClient<$Result.GetResult<Prisma.$CaseStudyPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one CaseStudy that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CaseStudyFindUniqueOrThrowArgs} args - Arguments to find a CaseStudy
+     * @example
+     * // Get one CaseStudy
+     * const caseStudy = await prisma.caseStudy.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CaseStudyFindUniqueOrThrowArgs>(args: SelectSubset<T, CaseStudyFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CaseStudyClient<$Result.GetResult<Prisma.$CaseStudyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CaseStudy that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CaseStudyFindFirstArgs} args - Arguments to find a CaseStudy
+     * @example
+     * // Get one CaseStudy
+     * const caseStudy = await prisma.caseStudy.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CaseStudyFindFirstArgs>(args?: SelectSubset<T, CaseStudyFindFirstArgs<ExtArgs>>): Prisma__CaseStudyClient<$Result.GetResult<Prisma.$CaseStudyPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CaseStudy that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CaseStudyFindFirstOrThrowArgs} args - Arguments to find a CaseStudy
+     * @example
+     * // Get one CaseStudy
+     * const caseStudy = await prisma.caseStudy.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CaseStudyFindFirstOrThrowArgs>(args?: SelectSubset<T, CaseStudyFindFirstOrThrowArgs<ExtArgs>>): Prisma__CaseStudyClient<$Result.GetResult<Prisma.$CaseStudyPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more CaseStudies that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CaseStudyFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CaseStudies
+     * const caseStudies = await prisma.caseStudy.findMany()
+     * 
+     * // Get first 10 CaseStudies
+     * const caseStudies = await prisma.caseStudy.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const caseStudyWithIdOnly = await prisma.caseStudy.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CaseStudyFindManyArgs>(args?: SelectSubset<T, CaseStudyFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CaseStudyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a CaseStudy.
+     * @param {CaseStudyCreateArgs} args - Arguments to create a CaseStudy.
+     * @example
+     * // Create one CaseStudy
+     * const CaseStudy = await prisma.caseStudy.create({
+     *   data: {
+     *     // ... data to create a CaseStudy
+     *   }
+     * })
+     * 
+     */
+    create<T extends CaseStudyCreateArgs>(args: SelectSubset<T, CaseStudyCreateArgs<ExtArgs>>): Prisma__CaseStudyClient<$Result.GetResult<Prisma.$CaseStudyPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many CaseStudies.
+     * @param {CaseStudyCreateManyArgs} args - Arguments to create many CaseStudies.
+     * @example
+     * // Create many CaseStudies
+     * const caseStudy = await prisma.caseStudy.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CaseStudyCreateManyArgs>(args?: SelectSubset<T, CaseStudyCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a CaseStudy.
+     * @param {CaseStudyDeleteArgs} args - Arguments to delete one CaseStudy.
+     * @example
+     * // Delete one CaseStudy
+     * const CaseStudy = await prisma.caseStudy.delete({
+     *   where: {
+     *     // ... filter to delete one CaseStudy
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CaseStudyDeleteArgs>(args: SelectSubset<T, CaseStudyDeleteArgs<ExtArgs>>): Prisma__CaseStudyClient<$Result.GetResult<Prisma.$CaseStudyPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one CaseStudy.
+     * @param {CaseStudyUpdateArgs} args - Arguments to update one CaseStudy.
+     * @example
+     * // Update one CaseStudy
+     * const caseStudy = await prisma.caseStudy.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CaseStudyUpdateArgs>(args: SelectSubset<T, CaseStudyUpdateArgs<ExtArgs>>): Prisma__CaseStudyClient<$Result.GetResult<Prisma.$CaseStudyPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more CaseStudies.
+     * @param {CaseStudyDeleteManyArgs} args - Arguments to filter CaseStudies to delete.
+     * @example
+     * // Delete a few CaseStudies
+     * const { count } = await prisma.caseStudy.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CaseStudyDeleteManyArgs>(args?: SelectSubset<T, CaseStudyDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CaseStudies.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CaseStudyUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CaseStudies
+     * const caseStudy = await prisma.caseStudy.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CaseStudyUpdateManyArgs>(args: SelectSubset<T, CaseStudyUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one CaseStudy.
+     * @param {CaseStudyUpsertArgs} args - Arguments to update or create a CaseStudy.
+     * @example
+     * // Update or create a CaseStudy
+     * const caseStudy = await prisma.caseStudy.upsert({
+     *   create: {
+     *     // ... data to create a CaseStudy
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CaseStudy we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CaseStudyUpsertArgs>(args: SelectSubset<T, CaseStudyUpsertArgs<ExtArgs>>): Prisma__CaseStudyClient<$Result.GetResult<Prisma.$CaseStudyPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of CaseStudies.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CaseStudyCountArgs} args - Arguments to filter CaseStudies to count.
+     * @example
+     * // Count the number of CaseStudies
+     * const count = await prisma.caseStudy.count({
+     *   where: {
+     *     // ... the filter for the CaseStudies we want to count
+     *   }
+     * })
+    **/
+    count<T extends CaseStudyCountArgs>(
+      args?: Subset<T, CaseStudyCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CaseStudyCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CaseStudy.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CaseStudyAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CaseStudyAggregateArgs>(args: Subset<T, CaseStudyAggregateArgs>): Prisma.PrismaPromise<GetCaseStudyAggregateType<T>>
+
+    /**
+     * Group by CaseStudy.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CaseStudyGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CaseStudyGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CaseStudyGroupByArgs['orderBy'] }
+        : { orderBy?: CaseStudyGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CaseStudyGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCaseStudyGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CaseStudy model
+   */
+  readonly fields: CaseStudyFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CaseStudy.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CaseStudyClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CaseStudy model
+   */
+  interface CaseStudyFieldRefs {
+    readonly id: FieldRef<"CaseStudy", 'Int'>
+    readonly title: FieldRef<"CaseStudy", 'String'>
+    readonly category: FieldRef<"CaseStudy", 'String'>
+    readonly client: FieldRef<"CaseStudy", 'String'>
+    readonly duration: FieldRef<"CaseStudy", 'String'>
+    readonly challenge: FieldRef<"CaseStudy", 'String'>
+    readonly solution: FieldRef<"CaseStudy", 'String'>
+    readonly result: FieldRef<"CaseStudy", 'String'>
+    readonly services: FieldRef<"CaseStudy", 'Json'>
+    readonly image: FieldRef<"CaseStudy", 'String'>
+    readonly author: FieldRef<"CaseStudy", 'String'>
+    readonly publishedDate: FieldRef<"CaseStudy", 'DateTime'>
+    readonly createdAt: FieldRef<"CaseStudy", 'DateTime'>
+    readonly updatedAt: FieldRef<"CaseStudy", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CaseStudy findUnique
+   */
+  export type CaseStudyFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CaseStudy
+     */
+    select?: CaseStudySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CaseStudy
+     */
+    omit?: CaseStudyOmit<ExtArgs> | null
+    /**
+     * Filter, which CaseStudy to fetch.
+     */
+    where: CaseStudyWhereUniqueInput
+  }
+
+  /**
+   * CaseStudy findUniqueOrThrow
+   */
+  export type CaseStudyFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CaseStudy
+     */
+    select?: CaseStudySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CaseStudy
+     */
+    omit?: CaseStudyOmit<ExtArgs> | null
+    /**
+     * Filter, which CaseStudy to fetch.
+     */
+    where: CaseStudyWhereUniqueInput
+  }
+
+  /**
+   * CaseStudy findFirst
+   */
+  export type CaseStudyFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CaseStudy
+     */
+    select?: CaseStudySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CaseStudy
+     */
+    omit?: CaseStudyOmit<ExtArgs> | null
+    /**
+     * Filter, which CaseStudy to fetch.
+     */
+    where?: CaseStudyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CaseStudies to fetch.
+     */
+    orderBy?: CaseStudyOrderByWithRelationInput | CaseStudyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CaseStudies.
+     */
+    cursor?: CaseStudyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CaseStudies from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CaseStudies.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CaseStudies.
+     */
+    distinct?: CaseStudyScalarFieldEnum | CaseStudyScalarFieldEnum[]
+  }
+
+  /**
+   * CaseStudy findFirstOrThrow
+   */
+  export type CaseStudyFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CaseStudy
+     */
+    select?: CaseStudySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CaseStudy
+     */
+    omit?: CaseStudyOmit<ExtArgs> | null
+    /**
+     * Filter, which CaseStudy to fetch.
+     */
+    where?: CaseStudyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CaseStudies to fetch.
+     */
+    orderBy?: CaseStudyOrderByWithRelationInput | CaseStudyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CaseStudies.
+     */
+    cursor?: CaseStudyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CaseStudies from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CaseStudies.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CaseStudies.
+     */
+    distinct?: CaseStudyScalarFieldEnum | CaseStudyScalarFieldEnum[]
+  }
+
+  /**
+   * CaseStudy findMany
+   */
+  export type CaseStudyFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CaseStudy
+     */
+    select?: CaseStudySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CaseStudy
+     */
+    omit?: CaseStudyOmit<ExtArgs> | null
+    /**
+     * Filter, which CaseStudies to fetch.
+     */
+    where?: CaseStudyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CaseStudies to fetch.
+     */
+    orderBy?: CaseStudyOrderByWithRelationInput | CaseStudyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CaseStudies.
+     */
+    cursor?: CaseStudyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CaseStudies from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CaseStudies.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CaseStudies.
+     */
+    distinct?: CaseStudyScalarFieldEnum | CaseStudyScalarFieldEnum[]
+  }
+
+  /**
+   * CaseStudy create
+   */
+  export type CaseStudyCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CaseStudy
+     */
+    select?: CaseStudySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CaseStudy
+     */
+    omit?: CaseStudyOmit<ExtArgs> | null
+    /**
+     * The data needed to create a CaseStudy.
+     */
+    data: XOR<CaseStudyCreateInput, CaseStudyUncheckedCreateInput>
+  }
+
+  /**
+   * CaseStudy createMany
+   */
+  export type CaseStudyCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CaseStudies.
+     */
+    data: CaseStudyCreateManyInput | CaseStudyCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CaseStudy update
+   */
+  export type CaseStudyUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CaseStudy
+     */
+    select?: CaseStudySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CaseStudy
+     */
+    omit?: CaseStudyOmit<ExtArgs> | null
+    /**
+     * The data needed to update a CaseStudy.
+     */
+    data: XOR<CaseStudyUpdateInput, CaseStudyUncheckedUpdateInput>
+    /**
+     * Choose, which CaseStudy to update.
+     */
+    where: CaseStudyWhereUniqueInput
+  }
+
+  /**
+   * CaseStudy updateMany
+   */
+  export type CaseStudyUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CaseStudies.
+     */
+    data: XOR<CaseStudyUpdateManyMutationInput, CaseStudyUncheckedUpdateManyInput>
+    /**
+     * Filter which CaseStudies to update
+     */
+    where?: CaseStudyWhereInput
+    /**
+     * Limit how many CaseStudies to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CaseStudy upsert
+   */
+  export type CaseStudyUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CaseStudy
+     */
+    select?: CaseStudySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CaseStudy
+     */
+    omit?: CaseStudyOmit<ExtArgs> | null
+    /**
+     * The filter to search for the CaseStudy to update in case it exists.
+     */
+    where: CaseStudyWhereUniqueInput
+    /**
+     * In case the CaseStudy found by the `where` argument doesn't exist, create a new CaseStudy with this data.
+     */
+    create: XOR<CaseStudyCreateInput, CaseStudyUncheckedCreateInput>
+    /**
+     * In case the CaseStudy was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CaseStudyUpdateInput, CaseStudyUncheckedUpdateInput>
+  }
+
+  /**
+   * CaseStudy delete
+   */
+  export type CaseStudyDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CaseStudy
+     */
+    select?: CaseStudySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CaseStudy
+     */
+    omit?: CaseStudyOmit<ExtArgs> | null
+    /**
+     * Filter which CaseStudy to delete.
+     */
+    where: CaseStudyWhereUniqueInput
+  }
+
+  /**
+   * CaseStudy deleteMany
+   */
+  export type CaseStudyDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CaseStudies to delete
+     */
+    where?: CaseStudyWhereInput
+    /**
+     * Limit how many CaseStudies to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * CaseStudy without action
+   */
+  export type CaseStudyDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CaseStudy
+     */
+    select?: CaseStudySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CaseStudy
+     */
+    omit?: CaseStudyOmit<ExtArgs> | null
   }
 
 
@@ -39198,6 +40297,26 @@ export namespace Prisma {
   export type BlogScalarFieldEnum = (typeof BlogScalarFieldEnum)[keyof typeof BlogScalarFieldEnum]
 
 
+  export const CaseStudyScalarFieldEnum: {
+    id: 'id',
+    title: 'title',
+    category: 'category',
+    client: 'client',
+    duration: 'duration',
+    challenge: 'challenge',
+    solution: 'solution',
+    result: 'result',
+    services: 'services',
+    image: 'image',
+    author: 'author',
+    publishedDate: 'publishedDate',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type CaseStudyScalarFieldEnum = (typeof CaseStudyScalarFieldEnum)[keyof typeof CaseStudyScalarFieldEnum]
+
+
   export const AchievementScalarFieldEnum: {
     id: 'id',
     title: 'title',
@@ -39595,6 +40714,38 @@ export namespace Prisma {
   export type BlogOrderByRelevanceFieldEnum = (typeof BlogOrderByRelevanceFieldEnum)[keyof typeof BlogOrderByRelevanceFieldEnum]
 
 
+  export const JsonNullValueFilter: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull,
+    AnyNull: typeof AnyNull
+  };
+
+  export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
+
+
+  export const QueryMode: {
+    default: 'default',
+    insensitive: 'insensitive'
+  };
+
+  export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+  export const CaseStudyOrderByRelevanceFieldEnum: {
+    title: 'title',
+    category: 'category',
+    client: 'client',
+    duration: 'duration',
+    challenge: 'challenge',
+    solution: 'solution',
+    result: 'result',
+    image: 'image',
+    author: 'author'
+  };
+
+  export type CaseStudyOrderByRelevanceFieldEnum = (typeof CaseStudyOrderByRelevanceFieldEnum)[keyof typeof CaseStudyOrderByRelevanceFieldEnum]
+
+
   export const AchievementOrderByRelevanceFieldEnum: {
     title: 'title',
     icon: 'icon'
@@ -39636,23 +40787,6 @@ export namespace Prisma {
   };
 
   export type EventNewsOrderByRelevanceFieldEnum = (typeof EventNewsOrderByRelevanceFieldEnum)[keyof typeof EventNewsOrderByRelevanceFieldEnum]
-
-
-  export const JsonNullValueFilter: {
-    DbNull: typeof DbNull,
-    JsonNull: typeof JsonNull,
-    AnyNull: typeof AnyNull
-  };
-
-  export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
-
-
-  export const QueryMode: {
-    default: 'default',
-    insensitive: 'insensitive'
-  };
-
-  export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
 
 
   export const HostingPackageOrderByRelevanceFieldEnum: {
@@ -40706,6 +41840,106 @@ export namespace Prisma {
     publishedDate?: DateTimeNullableWithAggregatesFilter<"Blog"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Blog"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Blog"> | Date | string
+  }
+
+  export type CaseStudyWhereInput = {
+    AND?: CaseStudyWhereInput | CaseStudyWhereInput[]
+    OR?: CaseStudyWhereInput[]
+    NOT?: CaseStudyWhereInput | CaseStudyWhereInput[]
+    id?: IntFilter<"CaseStudy"> | number
+    title?: StringFilter<"CaseStudy"> | string
+    category?: StringFilter<"CaseStudy"> | string
+    client?: StringFilter<"CaseStudy"> | string
+    duration?: StringNullableFilter<"CaseStudy"> | string | null
+    challenge?: StringFilter<"CaseStudy"> | string
+    solution?: StringFilter<"CaseStudy"> | string
+    result?: StringFilter<"CaseStudy"> | string
+    services?: JsonNullableFilter<"CaseStudy">
+    image?: StringFilter<"CaseStudy"> | string
+    author?: StringNullableFilter<"CaseStudy"> | string | null
+    publishedDate?: DateTimeFilter<"CaseStudy"> | Date | string
+    createdAt?: DateTimeFilter<"CaseStudy"> | Date | string
+    updatedAt?: DateTimeFilter<"CaseStudy"> | Date | string
+  }
+
+  export type CaseStudyOrderByWithRelationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    category?: SortOrder
+    client?: SortOrder
+    duration?: SortOrderInput | SortOrder
+    challenge?: SortOrder
+    solution?: SortOrder
+    result?: SortOrder
+    services?: SortOrderInput | SortOrder
+    image?: SortOrder
+    author?: SortOrderInput | SortOrder
+    publishedDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _relevance?: CaseStudyOrderByRelevanceInput
+  }
+
+  export type CaseStudyWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: CaseStudyWhereInput | CaseStudyWhereInput[]
+    OR?: CaseStudyWhereInput[]
+    NOT?: CaseStudyWhereInput | CaseStudyWhereInput[]
+    title?: StringFilter<"CaseStudy"> | string
+    category?: StringFilter<"CaseStudy"> | string
+    client?: StringFilter<"CaseStudy"> | string
+    duration?: StringNullableFilter<"CaseStudy"> | string | null
+    challenge?: StringFilter<"CaseStudy"> | string
+    solution?: StringFilter<"CaseStudy"> | string
+    result?: StringFilter<"CaseStudy"> | string
+    services?: JsonNullableFilter<"CaseStudy">
+    image?: StringFilter<"CaseStudy"> | string
+    author?: StringNullableFilter<"CaseStudy"> | string | null
+    publishedDate?: DateTimeFilter<"CaseStudy"> | Date | string
+    createdAt?: DateTimeFilter<"CaseStudy"> | Date | string
+    updatedAt?: DateTimeFilter<"CaseStudy"> | Date | string
+  }, "id">
+
+  export type CaseStudyOrderByWithAggregationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    category?: SortOrder
+    client?: SortOrder
+    duration?: SortOrderInput | SortOrder
+    challenge?: SortOrder
+    solution?: SortOrder
+    result?: SortOrder
+    services?: SortOrderInput | SortOrder
+    image?: SortOrder
+    author?: SortOrderInput | SortOrder
+    publishedDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: CaseStudyCountOrderByAggregateInput
+    _avg?: CaseStudyAvgOrderByAggregateInput
+    _max?: CaseStudyMaxOrderByAggregateInput
+    _min?: CaseStudyMinOrderByAggregateInput
+    _sum?: CaseStudySumOrderByAggregateInput
+  }
+
+  export type CaseStudyScalarWhereWithAggregatesInput = {
+    AND?: CaseStudyScalarWhereWithAggregatesInput | CaseStudyScalarWhereWithAggregatesInput[]
+    OR?: CaseStudyScalarWhereWithAggregatesInput[]
+    NOT?: CaseStudyScalarWhereWithAggregatesInput | CaseStudyScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"CaseStudy"> | number
+    title?: StringWithAggregatesFilter<"CaseStudy"> | string
+    category?: StringWithAggregatesFilter<"CaseStudy"> | string
+    client?: StringWithAggregatesFilter<"CaseStudy"> | string
+    duration?: StringNullableWithAggregatesFilter<"CaseStudy"> | string | null
+    challenge?: StringWithAggregatesFilter<"CaseStudy"> | string
+    solution?: StringWithAggregatesFilter<"CaseStudy"> | string
+    result?: StringWithAggregatesFilter<"CaseStudy"> | string
+    services?: JsonNullableWithAggregatesFilter<"CaseStudy">
+    image?: StringWithAggregatesFilter<"CaseStudy"> | string
+    author?: StringNullableWithAggregatesFilter<"CaseStudy"> | string | null
+    publishedDate?: DateTimeWithAggregatesFilter<"CaseStudy"> | Date | string
+    createdAt?: DateTimeWithAggregatesFilter<"CaseStudy"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"CaseStudy"> | Date | string
   }
 
   export type AchievementWhereInput = {
@@ -43079,6 +44313,122 @@ export namespace Prisma {
     author?: StringFieldUpdateOperationsInput | string
     featuredImage?: StringFieldUpdateOperationsInput | string
     publishedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CaseStudyCreateInput = {
+    title: string
+    category: string
+    client: string
+    duration?: string | null
+    challenge: string
+    solution: string
+    result: string
+    services?: NullableJsonNullValueInput | InputJsonValue
+    image: string
+    author?: string | null
+    publishedDate?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CaseStudyUncheckedCreateInput = {
+    id?: number
+    title: string
+    category: string
+    client: string
+    duration?: string | null
+    challenge: string
+    solution: string
+    result: string
+    services?: NullableJsonNullValueInput | InputJsonValue
+    image: string
+    author?: string | null
+    publishedDate?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CaseStudyUpdateInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    client?: StringFieldUpdateOperationsInput | string
+    duration?: NullableStringFieldUpdateOperationsInput | string | null
+    challenge?: StringFieldUpdateOperationsInput | string
+    solution?: StringFieldUpdateOperationsInput | string
+    result?: StringFieldUpdateOperationsInput | string
+    services?: NullableJsonNullValueInput | InputJsonValue
+    image?: StringFieldUpdateOperationsInput | string
+    author?: NullableStringFieldUpdateOperationsInput | string | null
+    publishedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CaseStudyUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    client?: StringFieldUpdateOperationsInput | string
+    duration?: NullableStringFieldUpdateOperationsInput | string | null
+    challenge?: StringFieldUpdateOperationsInput | string
+    solution?: StringFieldUpdateOperationsInput | string
+    result?: StringFieldUpdateOperationsInput | string
+    services?: NullableJsonNullValueInput | InputJsonValue
+    image?: StringFieldUpdateOperationsInput | string
+    author?: NullableStringFieldUpdateOperationsInput | string | null
+    publishedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CaseStudyCreateManyInput = {
+    id?: number
+    title: string
+    category: string
+    client: string
+    duration?: string | null
+    challenge: string
+    solution: string
+    result: string
+    services?: NullableJsonNullValueInput | InputJsonValue
+    image: string
+    author?: string | null
+    publishedDate?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CaseStudyUpdateManyMutationInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    client?: StringFieldUpdateOperationsInput | string
+    duration?: NullableStringFieldUpdateOperationsInput | string | null
+    challenge?: StringFieldUpdateOperationsInput | string
+    solution?: StringFieldUpdateOperationsInput | string
+    result?: StringFieldUpdateOperationsInput | string
+    services?: NullableJsonNullValueInput | InputJsonValue
+    image?: StringFieldUpdateOperationsInput | string
+    author?: NullableStringFieldUpdateOperationsInput | string | null
+    publishedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CaseStudyUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    client?: StringFieldUpdateOperationsInput | string
+    duration?: NullableStringFieldUpdateOperationsInput | string | null
+    challenge?: StringFieldUpdateOperationsInput | string
+    solution?: StringFieldUpdateOperationsInput | string
+    result?: StringFieldUpdateOperationsInput | string
+    services?: NullableJsonNullValueInput | InputJsonValue
+    image?: StringFieldUpdateOperationsInput | string
+    author?: NullableStringFieldUpdateOperationsInput | string | null
+    publishedDate?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -45477,6 +46827,118 @@ export namespace Prisma {
   export type BlogSumOrderByAggregateInput = {
     id?: SortOrder
   }
+  export type JsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue
+    lte?: InputJsonValue
+    gt?: InputJsonValue
+    gte?: InputJsonValue
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type CaseStudyOrderByRelevanceInput = {
+    fields: CaseStudyOrderByRelevanceFieldEnum | CaseStudyOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type CaseStudyCountOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    category?: SortOrder
+    client?: SortOrder
+    duration?: SortOrder
+    challenge?: SortOrder
+    solution?: SortOrder
+    result?: SortOrder
+    services?: SortOrder
+    image?: SortOrder
+    author?: SortOrder
+    publishedDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CaseStudyAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type CaseStudyMaxOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    category?: SortOrder
+    client?: SortOrder
+    duration?: SortOrder
+    challenge?: SortOrder
+    solution?: SortOrder
+    result?: SortOrder
+    image?: SortOrder
+    author?: SortOrder
+    publishedDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CaseStudyMinOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    category?: SortOrder
+    client?: SortOrder
+    duration?: SortOrder
+    challenge?: SortOrder
+    solution?: SortOrder
+    result?: SortOrder
+    image?: SortOrder
+    author?: SortOrder
+    publishedDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CaseStudySumOrderByAggregateInput = {
+    id?: SortOrder
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue
+    lte?: InputJsonValue
+    gt?: InputJsonValue
+    gte?: InputJsonValue
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
+  }
 
   export type AchievementOrderByRelevanceInput = {
     fields: AchievementOrderByRelevanceFieldEnum | AchievementOrderByRelevanceFieldEnum[]
@@ -45712,29 +47174,6 @@ export namespace Prisma {
   export type EventNewsSumOrderByAggregateInput = {
     id?: SortOrder
   }
-  export type JsonNullableFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonNullableFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonNullableFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue
-    lte?: InputJsonValue
-    gt?: InputJsonValue
-    gte?: InputJsonValue
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
 
   export type HostingPackageOrderByRelevanceInput = {
     fields: HostingPackageOrderByRelevanceFieldEnum | HostingPackageOrderByRelevanceFieldEnum[]
@@ -45778,32 +47217,6 @@ export namespace Prisma {
   export type HostingPackageSumOrderByAggregateInput = {
     id?: SortOrder
     price?: SortOrder
-  }
-  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue
-    lte?: InputJsonValue
-    gt?: InputJsonValue
-    gte?: InputJsonValue
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedJsonNullableFilter<$PrismaModel>
-    _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
   export type PortfolioGalleryListRelationFilter = {
