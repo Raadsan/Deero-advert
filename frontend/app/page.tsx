@@ -26,7 +26,7 @@ export default function Home() {
         <Hero />
         <MobileDownload />
         <ServicesSection />
-        <PortfolioSection limit={1} />
+        <PortfolioSection limit={2} />
         <HostingPackages />
         <AchievementsSection />
         <RecentBlogs />
