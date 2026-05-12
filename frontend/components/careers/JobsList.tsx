@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Briefcase, MapPin, Calendar } from "lucide-react";
 import { getActiveCareers, Career } from "../../api-client/careerApi";
+import ApplyModal from "./ApplyModal";
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -23,6 +24,8 @@ const itemVariants = {
 export default function JobsList() {
     const [jobs, setJobs] = useState<Career[]>([]);
     const [loading, setLoading] = useState(true);
+    const [selectedJob, setSelectedJob] = useState<Career | null>(null);
+    const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -128,12 +131,15 @@ export default function JobsList() {
                                                     Posted: {formatDate(job.postedDate)} • Expires: {formatDate(job.expireDate)}
                                                 </span>
                                             </div>
-                                            <a
-                                                href="mailto:info@advert.deero.so"
+                                            <button
+                                                onClick={() => {
+                                                    setSelectedJob(job);
+                                                    setIsApplyModalOpen(true);
+                                                }}
                                                 className="inline-flex items-center gap-2 px-6 py-2.5 bg-[#EB4724] text-white font-bold text-sm rounded-full hover:bg-[#651313] transition-all duration-300 shadow-md hover:shadow-lg"
                                             >
                                                 Apply Now
-                                            </a>
+                                            </button>
                                         </div>
                                     </div>
                                 </motion.article>
@@ -142,6 +148,12 @@ export default function JobsList() {
                     </AnimatePresence>
                 )}
             </div>
+            
+            <ApplyModal 
+                isOpen={isApplyModalOpen} 
+                onClose={() => setIsApplyModalOpen(false)} 
+                job={selectedJob} 
+            />
         </section>
     );
 }

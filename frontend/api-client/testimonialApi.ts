@@ -7,6 +7,7 @@ export interface Testimonial {
     clientImage: string;
     message: string;
     rating: number;
+    sortOrder?: number;
     createdAt?: string;
     updatedAt?: string;
 }

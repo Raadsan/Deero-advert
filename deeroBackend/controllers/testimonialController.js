@@ -3,7 +3,7 @@ import { prisma } from "../lib/prisma.js";
 // Add Testimonial
 export const addTestimonial = async (req, res) => {
   try {
-    const { clientName, clientTitle, message, rating } = req.body;
+    const { clientName, clientTitle, message, rating, sortOrder } = req.body;
 
     const testimonial = await prisma.testimonial.create({
       data: {
@@ -11,6 +11,7 @@ export const addTestimonial = async (req, res) => {
         clientTitle,
         message,
         rating: rating ? parseInt(rating) : 5,
+        sortOrder: sortOrder ? parseInt(sortOrder) : 0,
         clientImage: req.file ? req.file.path.replace(/\\/g, "/") : ""
       },
     });
@@ -24,7 +25,7 @@ export const addTestimonial = async (req, res) => {
 // Get All Testimonials
 export const getTestimonials = async (req, res) => {
   try {
-    const data = await prisma.testimonial.findMany({ orderBy: { createdAt: 'desc' } });
+    const data = await prisma.testimonial.findMany({ orderBy: { sortOrder: 'asc' } });
     res.status(200).json(data);
   } catch (error) {
     res.status(500).json({ message: "Failed to fetch testimonials", error: error.message });
@@ -35,13 +36,14 @@ export const getTestimonials = async (req, res) => {
 export const updateTestimonial = async (req, res) => {
   try {
     const { id } = req.params;
-    const { clientName, clientTitle, message, rating } = req.body;
+    const { clientName, clientTitle, message, rating, sortOrder } = req.body;
 
     const data = {};
     if (clientName !== undefined) data.clientName = clientName;
     if (clientTitle !== undefined) data.clientTitle = clientTitle;
     if (message !== undefined) data.message = message;
     if (rating !== undefined) data.rating = parseInt(rating);
+    if (sortOrder !== undefined) data.sortOrder = parseInt(sortOrder);
     if (req.file) data.clientImage = req.file.path.replace(/\\/g, "/");
 
     if (Object.keys(data).length === 0) {

@@ -66,7 +66,7 @@ export default function TestimonialsSection() {
             try {
                 const data = await getTestimonials();
                 if (data && data.length > 0) {
-                    setDynamicTestimonials([...data].reverse());
+                    setDynamicTestimonials(data);
                 }
             } catch (err) {
                 console.error("Failed to fetch testimonials", err);

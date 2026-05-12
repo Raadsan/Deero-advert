@@ -290,6 +290,21 @@ exports.Prisma.CareerScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.JobApplicationScalarFieldEnum = {
+  id: 'id',
+  fullName: 'fullName',
+  position: 'position',
+  phone: 'phone',
+  email: 'email',
+  cvUrl: 'cvUrl',
+  portfolioUrl: 'portfolioUrl',
+  certificateUrl: 'certificateUrl',
+  status: 'status',
+  careerId: 'careerId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.DomainPriceScalarFieldEnum = {
   id: 'id',
   tld: 'tld',
@@ -364,6 +379,7 @@ exports.Prisma.TestimonialScalarFieldEnum = {
   clientImage: 'clientImage',
   message: 'message',
   rating: 'rating',
+  sortOrder: 'sortOrder',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -593,6 +609,17 @@ exports.Prisma.CareerOrderByRelevanceFieldEnum = {
   description: 'description'
 };
 
+exports.Prisma.JobApplicationOrderByRelevanceFieldEnum = {
+  fullName: 'fullName',
+  position: 'position',
+  phone: 'phone',
+  email: 'email',
+  cvUrl: 'cvUrl',
+  portfolioUrl: 'portfolioUrl',
+  certificateUrl: 'certificateUrl',
+  status: 'status'
+};
+
 exports.Prisma.DomainPriceOrderByRelevanceFieldEnum = {
   tld: 'tld'
 };
@@ -721,6 +748,7 @@ exports.Prisma.ModelName = {
   Achievement: 'Achievement',
   Announcement: 'Announcement',
   Career: 'Career',
+  JobApplication: 'JobApplication',
   DomainPrice: 'DomainPrice',
   EventNews: 'EventNews',
   HostingPackage: 'HostingPackage',

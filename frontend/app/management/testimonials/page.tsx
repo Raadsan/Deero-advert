@@ -33,6 +33,7 @@ export default function TestimonialsPage() {
     clientImagePreview: "",
     message: "",
     rating: 5,
+    sortOrder: 0,
   });
 
   // ✅ Fetch testimonials from backend
@@ -50,6 +51,7 @@ export default function TestimonialsPage() {
           clientImage: getImageUrl(t.clientImage),
           message: t.message,
           rating: t.rating || 5,
+          sortOrder: t.sortOrder || 0,
         }))
       );
     } catch (err) {
@@ -94,6 +96,7 @@ export default function TestimonialsPage() {
     formDataToSend.append("clientTitle", formData.clientTitle);
     formDataToSend.append("message", formData.message);
     formDataToSend.append("rating", formData.rating.toString());
+    formDataToSend.append("sortOrder", formData.sortOrder.toString());
 
     // Add client image file if present
     if (formData.clientImage) {
@@ -121,6 +124,7 @@ export default function TestimonialsPage() {
         clientImagePreview: "",
         message: "",
         rating: 5,
+        sortOrder: 0,
       });
       fetchTestimonials(); // reload table
     } catch (err: any) {
@@ -161,6 +165,7 @@ export default function TestimonialsPage() {
       clientImagePreview: imageUrl,
       message: testimonial.message,
       rating: testimonial.rating || 5,
+      sortOrder: testimonial.sortOrder || 0,
     });
     setIsModalOpen(true);
   };
@@ -184,6 +189,7 @@ export default function TestimonialsPage() {
     },
     { label: "Client Name", key: "clientName" },
     { label: "Client Title", key: "clientTitle" },
+    { label: "Order", key: "sortOrder", width: "80px", render: (row: any) => <span className="font-mono font-bold text-[#EB4724] bg-[#EB4724]/5 px-2 py-1 rounded border border-[#EB4724]/10">{row.sortOrder}</span> },
     {
       label: "Message",
       key: "message",
@@ -261,6 +267,7 @@ export default function TestimonialsPage() {
             clientImagePreview: "",
             message: "",
             rating: 5,
+            sortOrder: 0,
           });
         }}
         title={editingId ? "Edit Testimonial" : "Add New Testimonial"}
@@ -359,23 +366,38 @@ export default function TestimonialsPage() {
             />
           </div>
 
-          <div className="space-y-0.5">
-            <label className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">
-              Rating <span className="text-red-500">*</span>
-            </label>
-            <select
-              name="rating"
-              required
-              value={formData.rating}
-              onChange={(e) => setFormData(prev => ({ ...prev, rating: parseInt(e.target.value) }))}
-              className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#EB4724] focus:border-[#EB4724]"
-            >
-              {[1, 2, 3, 4, 5].map((num) => (
-                <option key={num} value={num}>
-                  {num} Star{num > 1 ? "s" : ""}
-                </option>
-              ))}
-            </select>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-0.5">
+              <label className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">
+                Rating <span className="text-red-500">*</span>
+              </label>
+              <select
+                name="rating"
+                required
+                value={formData.rating}
+                onChange={(e) => setFormData(prev => ({ ...prev, rating: parseInt(e.target.value) }))}
+                className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#EB4724] focus:border-[#EB4724]"
+              >
+                {[1, 2, 3, 4, 5].map((num) => (
+                  <option key={num} value={num}>
+                    {num} Star{num > 1 ? "s" : ""}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="space-y-0.5">
+              <label className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">
+                Sort Order <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="number"
+                name="sortOrder"
+                required
+                value={formData.sortOrder}
+                onChange={handleInputChange}
+                className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#EB4724] focus:border-[#EB4724]"
+              />
+            </div>
           </div>
 
           <div className="flex justify-end gap-2 pt-3 border-t border-gray-100 mt-4">
@@ -391,6 +413,7 @@ export default function TestimonialsPage() {
                   clientImagePreview: "",
                   message: "",
                   rating: 5,
+                  sortOrder: 0,
                 });
               }}
               className="px-3 py-1.5 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
