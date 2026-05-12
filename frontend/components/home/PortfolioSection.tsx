@@ -49,16 +49,7 @@ export default function PortfolioSection({ showHeader = true, limit, paddingClas
                 }
 
 
-                // Process image URLs
-                const processedItems = items.map((item: any) => {
-                    const processed = getImageUrl(item.mainImage);
-                    return {
-                        ...item,
-                        mainImage: processed,
-                    };
-                });
-
-                setPortfolios(processedItems);
+                setPortfolios(items);
             } catch (err: any) {
                 console.error("Error fetching portfolios:", err);
                 setError("no portfolio found");
@@ -211,7 +202,7 @@ export default function PortfolioSection({ showHeader = true, limit, paddingClas
 
                                         </div>
                                         <Image
-                                            src={item.mainImage || "/logo deero-02 .svg"}
+                                            src={getImageUrl(item.mainImage) || "/logo deero-02 .svg"}
                                             alt={item.title}
                                             width={800}
                                             height={600}
