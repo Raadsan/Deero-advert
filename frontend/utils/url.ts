@@ -28,19 +28,22 @@ export const getImageUrl = (path: any) => {
     if (!path || typeof path !== "string" || path === "") return null;
     if (path.startsWith("http")) return path;
 
-    // Normalize backslashes to forward slashes for Windows paths
+    // Normalize backslashes to forward slashes
     let cleanPath = path.replace(/\\/g, "/");
 
-    // Ensure path doesn't start with / if we're adding it
-    cleanPath = cleanPath.startsWith("/") ? cleanPath.substring(1) : cleanPath;
-
-    // Auto-prepend uploads/ if likely missing (simple heuristic)
-    if (!cleanPath.startsWith("uploads/") && !cleanPath.startsWith("images/")) {
-        cleanPath = `uploads/${cleanPath}`;
+    // Remove "uploads/" from the start if it exists, because we'll add it via UPLOAD_URL
+    if (cleanPath.startsWith("uploads/")) {
+        cleanPath = cleanPath.replace("uploads/", "");
+    }
+    
+    // Ensure no leading slash
+    if (cleanPath.startsWith("/")) {
+        cleanPath = cleanPath.substring(1);
     }
 
-    // Also handle 'uploads/' prefix if needed, but usually the backend returns it
-    return `${API_BASE_URL}/${cleanPath}`.replace(/([^:]\/)\/+/g, "$1");
+    // Use the domain and add /uploads/ manually to be 100% sure
+    const baseUrl = getBaseURL(); // This returns https://deeroadvert.so
+    return `${baseUrl}/uploads/${cleanPath}`;
 };
 
 export const slugify = (text: string) => {
