@@ -24,9 +24,9 @@ export const submitApplication = async (req, res) => {
                 position,
                 phone,
                 email,
-                cvUrl: cvFile.path || cvFile.url,
-                portfolioUrl: portfolioFile ? (portfolioFile.path || portfolioFile.url) : null,
-                certificateUrl: certificateFile ? (certificateFile.path || certificateFile.url) : null,
+                cvUrl: (cvFile.path || cvFile.url).replace(/\\/g, "/"),
+                portfolioUrl: portfolioFile ? (portfolioFile.path || portfolioFile.url).replace(/\\/g, "/") : null,
+                certificateUrl: certificateFile ? (certificateFile.path || certificateFile.url).replace(/\\/g, "/") : null,
                 careerId: careerId ? parseInt(careerId) : null,
             },
         });

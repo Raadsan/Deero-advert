@@ -7,6 +7,7 @@ import DeleteConfirmModal from "@/components/layout/DeleteConfirmModal";
 import { Trash2, CheckCircle, XCircle, Clock, FileText, ExternalLink, User, Mail, Phone, Briefcase, Eye } from "lucide-react";
 import { getAllApplications, updateApplicationStatus, deleteApplication } from "@/api-client/applicationApi";
 import Modal from "@/components/layout/Modal";
+import { getImageUrl } from "@/utils/url";
 
 export default function JobRequestsPage() {
   const [loading, setLoading] = useState(true);
@@ -116,17 +117,17 @@ export default function JobRequestsPage() {
       render: (r: any) => (
         <div className="flex flex-wrap gap-2">
           {r.cvUrl && (
-            <a href={r.cvUrl} target="_blank" rel="noopener noreferrer" className="p-1.5 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors flex items-center gap-1 text-[10px] font-bold shadow-sm border border-blue-100" title="View CV">
+            <a href={getImageUrl(r.cvUrl) || "#"} target="_blank" rel="noopener noreferrer" className="p-1.5 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors flex items-center gap-1 text-[10px] font-bold shadow-sm border border-blue-100" title="View CV">
               <FileText className="w-3 h-3" /> CV
             </a>
           )}
           {r.portfolioUrl && (
-            <a href={r.portfolioUrl} target="_blank" rel="noopener noreferrer" className="p-1.5 bg-purple-50 text-purple-600 rounded-lg hover:bg-purple-100 transition-colors flex items-center gap-1 text-[10px] font-bold shadow-sm border border-purple-100" title="View Portfolio">
+            <a href={getImageUrl(r.portfolioUrl) || "#"} target="_blank" rel="noopener noreferrer" className="p-1.5 bg-purple-50 text-purple-600 rounded-lg hover:bg-purple-100 transition-colors flex items-center gap-1 text-[10px] font-bold shadow-sm border border-purple-100" title="View Portfolio">
               <ExternalLink className="w-3 h-3" /> Port.
             </a>
           )}
           {r.certificateUrl && (
-            <a href={r.certificateUrl} target="_blank" rel="noopener noreferrer" className="p-1.5 bg-orange-50 text-orange-600 rounded-lg hover:bg-orange-100 transition-colors flex items-center gap-1 text-[10px] font-bold shadow-sm border border-orange-100" title="View Certificate">
+            <a href={getImageUrl(r.certificateUrl) || "#"} target="_blank" rel="noopener noreferrer" className="p-1.5 bg-orange-50 text-orange-600 rounded-lg hover:bg-orange-100 transition-colors flex items-center gap-1 text-[10px] font-bold shadow-sm border border-orange-100" title="View Certificate">
               <CheckCircle className="w-3 h-3" /> Cert.
             </a>
           )}
@@ -215,7 +216,7 @@ export default function JobRequestsPage() {
               <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Attached Documents</p>
               <div className="grid grid-cols-1 gap-2">
                 {selectedApp.cvUrl && (
-                  <a href={selectedApp.cvUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-xl hover:border-blue-500 hover:shadow-sm transition-all group">
+                  <a href={getImageUrl(selectedApp.cvUrl) || "#"} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-xl hover:border-blue-500 hover:shadow-sm transition-all group">
                     <div className="flex items-center gap-3">
                       <FileText className="w-5 h-5 text-blue-500" />
                       <span className="text-sm font-medium text-gray-700">Curriculum Vitae (CV)</span>
@@ -224,7 +225,7 @@ export default function JobRequestsPage() {
                   </a>
                 )}
                 {selectedApp.portfolioUrl && (
-                  <a href={selectedApp.portfolioUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-xl hover:border-purple-500 hover:shadow-sm transition-all group">
+                  <a href={getImageUrl(selectedApp.portfolioUrl) || "#"} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-xl hover:border-purple-500 hover:shadow-sm transition-all group">
                     <div className="flex items-center gap-3">
                       <ExternalLink className="w-5 h-5 text-purple-500" />
                       <span className="text-sm font-medium text-gray-700">Portfolio</span>
@@ -233,7 +234,7 @@ export default function JobRequestsPage() {
                   </a>
                 )}
                 {selectedApp.certificateUrl && (
-                  <a href={selectedApp.certificateUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-xl hover:border-orange-500 hover:shadow-sm transition-all group">
+                  <a href={getImageUrl(selectedApp.certificateUrl) || "#"} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-xl hover:border-orange-500 hover:shadow-sm transition-all group">
                     <div className="flex items-center gap-3">
                       <CheckCircle className="w-5 h-5 text-orange-500" />
                       <span className="text-sm font-medium text-gray-700">Education Certificate</span>
