@@ -208,6 +208,7 @@ export default function PortfolioSection({ showHeader = true, limit, paddingClas
                                             height={600}
                                             style={{ width: '100%', height: 'auto' }}
                                             className="object-contain"
+                                            unoptimized
                                             onError={(e) => {
                                                 const target = e.target as HTMLImageElement;
                                                 target.src = "/logo deero-02 .svg";
