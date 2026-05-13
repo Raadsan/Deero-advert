@@ -2,7 +2,7 @@ import { prisma } from "../lib/prisma.js";
 
 export const submitApplication = async (req, res) => {
     try {
-        const { fullName, position, phone, email, careerId } = req.body;
+        const { fullName, position, phone, email, careerId, portfolioUrl } = req.body;
 
         if (!fullName || !phone || !email) {
             return res.status(400).json({ message: "Required fields are missing", success: false });
@@ -27,12 +27,13 @@ export const submitApplication = async (req, res) => {
         // Handle files from req.files
         const files = req.files || [];
         const cvFile = files.find(f => f.fieldname === 'cv');
-        const portfolioFile = files.find(f => f.fieldname === 'portfolio');
         const certificateFile = files.find(f => f.fieldname === 'certificate');
+        const portfolioFile = files.find(f => f.fieldname === 'portfolio');
 
-        if (!cvFile || !portfolioFile || !certificateFile) {
+        // Portfolio is required as either a link (req.body) or a file (req.files)
+        if (!cvFile || !certificateFile || (!portfolioFile && !portfolioUrl)) {
             return res.status(400).json({ 
-                message: "All documents (CV, Portfolio, and Education Certificate) are required", 
+                message: "All documents (CV, Portfolio link/file, and Education Certificate) are required", 
                 success: false 
             });
         }
@@ -44,8 +45,8 @@ export const submitApplication = async (req, res) => {
                 phone,
                 email,
                 cvUrl: (cvFile.path || cvFile.url).replace(/\\/g, "/"),
-                portfolioUrl: portfolioFile ? (portfolioFile.path || portfolioFile.url).replace(/\\/g, "/") : null,
-                certificateUrl: certificateFile ? (certificateFile.path || certificateFile.url).replace(/\\/g, "/") : null,
+                portfolioUrl: portfolioUrl || (portfolioFile ? (portfolioFile.path || portfolioFile.url).replace(/\\/g, "/") : null),
+                certificateUrl: (certificateFile.path || certificateFile.url).replace(/\\/g, "/"),
                 careerId: careerId ? parseInt(careerId) : null,
             },
         });

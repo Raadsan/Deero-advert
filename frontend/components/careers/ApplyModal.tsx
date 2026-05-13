@@ -22,15 +22,14 @@ export default function ApplyModal({ isOpen, onClose, job }: ApplyModalProps) {
         email: "",
         phone: "",
         position: job?.title || "",
+        portfolioUrl: "",
     });
 
     const [files, setFiles] = useState<{
         cv: File | null;
-        portfolio: File | null;
         certificate: File | null;
     }>({
         cv: null,
-        portfolio: null,
         certificate: null,
     });
 
@@ -50,7 +49,7 @@ export default function ApplyModal({ isOpen, onClose, job }: ApplyModalProps) {
         if (!form.phone.trim()) { setError("Phone Number is required"); return; }
         // Position is automatically handled from the job context
         if (!files.cv) { setError("Please upload your CV"); return; }
-        if (!files.portfolio) { setError("Please upload your Portfolio"); return; }
+        if (!form.portfolioUrl.trim()) { setError("Portfolio link is required"); return; }
         if (!files.certificate) { setError("Please upload your Education Certificate"); return; }
 
         setLoading(true);
@@ -62,10 +61,10 @@ export default function ApplyModal({ isOpen, onClose, job }: ApplyModalProps) {
             formData.append("email", form.email);
             formData.append("phone", form.phone);
             formData.append("position", form.position || job?.title || "");
+            formData.append("portfolioUrl", form.portfolioUrl);
             if (job?._id) formData.append("careerId", job._id);
-
+ 
             formData.append("cv", files.cv);
-            if (files.portfolio) formData.append("portfolio", files.portfolio);
             if (files.certificate) formData.append("certificate", files.certificate);
 
             const res = await submitApplication(formData as any);
@@ -74,8 +73,8 @@ export default function ApplyModal({ isOpen, onClose, job }: ApplyModalProps) {
                 setTimeout(() => {
                     onClose();
                     setSubmitted(false);
-                    setForm({ fullName: "", email: "", phone: "", position: "" });
-                    setFiles({ cv: null, portfolio: null, certificate: null });
+                    setForm({ fullName: "", email: "", phone: "", position: "", portfolioUrl: "" });
+                    setFiles({ cv: null, certificate: null });
                 }, 3000);
             }
         } catch (err: any) {
@@ -215,23 +214,20 @@ export default function ApplyModal({ isOpen, onClose, job }: ApplyModalProps) {
                                 </div>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    {/* Portfolio Upload */}
-                                    <label className="block p-4 rounded-2xl border-2 border-dashed border-gray-200 hover:border-[#EB4724] hover:bg-[#EB4724]/5 transition-all cursor-pointer group">
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 bg-gray-100 group-hover:bg-[#EB4724]/10 rounded-xl flex items-center justify-center text-gray-400 group-hover:text-[#EB4724] transition-colors">
-                                                {files.portfolio ? <CheckCircle2 className="h-5 w-5 text-green-500" /> : <Folder className="h-5 w-5" />}
-                                            </div>
-                                            <div className="flex-1">
-                                                <p className="text-sm font-bold text-gray-800">Portfolio <span className="text-red-500">*</span></p>
-                                                <p className="text-[10px] text-gray-500 truncate max-w-[150px]">{files.portfolio ? files.portfolio.name : "Required (Max size: 2GB)"}</p>
-                                            </div>
-                                        </div>
+                                    {/* Portfolio Link Input */}
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2">
+                                            <Folder className="h-3 w-3" /> Portfolio Link  <span className="text-red-500">*</span>
+                                        </label>
                                         <input
-                                            type="file"
-                                            className="hidden"
-                                            onChange={(e) => handleFileChange(e, "portfolio")}
+                                            required
+                                            type="url"
+                                            placeholder="input your portfolio link"
+                                            value={form.portfolioUrl}
+                                            onChange={(e) => setForm({ ...form, portfolioUrl: e.target.value })}
+                                            className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#EB4724] focus:ring-2 focus:ring-[#EB4724]/10 outline-none transition-all text-gray-800"
                                         />
-                                    </label>
+                                    </div>
 
                                     {/* Certificate Upload */}
                                     <label className="block p-4 rounded-2xl border-2 border-dashed border-gray-200 hover:border-[#EB4724] hover:bg-[#EB4724]/5 transition-all cursor-pointer group">
