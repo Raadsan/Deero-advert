@@ -43,10 +43,15 @@ export default function ApplyModal({ isOpen, onClose, job }: ApplyModalProps) {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!files.cv) {
-            setError("CV is required");
-            return;
-        }
+        
+        // Comprehensive Validation
+        if (!form.fullName.trim()) { setError("Full Name is required"); return; }
+        if (!form.email.trim()) { setError("Email Address is required"); return; }
+        if (!form.phone.trim()) { setError("Phone Number is required"); return; }
+        // Position is automatically handled from the job context
+        if (!files.cv) { setError("Please upload your CV"); return; }
+        if (!files.portfolio) { setError("Please upload your Portfolio"); return; }
+        if (!files.certificate) { setError("Please upload your Education Certificate"); return; }
 
         setLoading(true);
         setError(null);
@@ -130,7 +135,7 @@ export default function ApplyModal({ isOpen, onClose, job }: ApplyModalProps) {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                                 <div className="space-y-2">
                                     <label className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2">
-                                        <User className="h-3 w-3" /> Full Name
+                                        <User className="h-3 w-3" /> Full Name <span className="text-red-500">*</span>
                                     </label>
                                     <input
                                         required
@@ -144,7 +149,7 @@ export default function ApplyModal({ isOpen, onClose, job }: ApplyModalProps) {
 
                                 <div className="space-y-2">
                                     <label className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2">
-                                        <Mail className="h-3 w-3" /> Email Address
+                                        <Mail className="h-3 w-3" /> Email Address <span className="text-red-500">*</span>
                                     </label>
                                     <input
                                         required
@@ -158,7 +163,7 @@ export default function ApplyModal({ isOpen, onClose, job }: ApplyModalProps) {
 
                                 <div className="space-y-2">
                                     <label className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2">
-                                        <Phone className="h-3 w-3" /> Phone Number
+                                        <Phone className="h-3 w-3" /> Phone Number <span className="text-red-500">*</span>
                                     </label>
                                     <input
                                         required
@@ -175,13 +180,10 @@ export default function ApplyModal({ isOpen, onClose, job }: ApplyModalProps) {
                                         <Briefcase className="h-3 w-3" /> Position
                                     </label>
                                     <input
-                                        required
                                         type="text"
-                                        readOnly={!!job}
-                                        placeholder="Position applying for"
-                                        value={form.position || job?.title || ""}
-                                        onChange={(e) => setForm({ ...form, position: e.target.value })}
-                                        className={`w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#EB4724] focus:ring-2 focus:ring-[#EB4724]/10 outline-none transition-all text-gray-800 ${job ? 'bg-gray-50 cursor-not-allowed' : ''}`}
+                                        readOnly
+                                        value={job?.title || "General Position"}
+                                        className="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 text-gray-500 outline-none cursor-not-allowed transition-all"
                                     />
                                 </div>
                             </div>
@@ -189,7 +191,7 @@ export default function ApplyModal({ isOpen, onClose, job }: ApplyModalProps) {
                             {/* File Uploads */}
                             <div className="space-y-4 pt-4 border-t border-gray-100">
                                 <h4 className="text-sm font-bold text-gray-800">Required Documents</h4>
-                                
+
                                 {/* CV Upload */}
                                 <div className="relative">
                                     <label className="block p-4 rounded-2xl border-2 border-dashed border-gray-200 hover:border-[#EB4724] hover:bg-[#EB4724]/5 transition-all cursor-pointer group">
@@ -199,7 +201,7 @@ export default function ApplyModal({ isOpen, onClose, job }: ApplyModalProps) {
                                             </div>
                                             <div className="flex-1">
                                                 <p className="font-bold text-gray-800">Upload CV <span className="text-red-500">*</span></p>
-                                                <p className="text-xs text-gray-500">{files.cv ? files.cv.name : "PDF, DOCX (Max 5MB)"}</p>
+                                               
                                             </div>
                                             <Upload className="h-5 w-5 text-gray-400 group-hover:text-[#EB4724]" />
                                         </div>
@@ -220,8 +222,8 @@ export default function ApplyModal({ isOpen, onClose, job }: ApplyModalProps) {
                                                 {files.portfolio ? <CheckCircle2 className="h-5 w-5 text-green-500" /> : <Folder className="h-5 w-5" />}
                                             </div>
                                             <div className="flex-1">
-                                                <p className="text-sm font-bold text-gray-800">Portfolio</p>
-                                                <p className="text-[10px] text-gray-500 truncate max-w-[150px]">{files.portfolio ? files.portfolio.name : "Optional"}</p>
+                                                <p className="text-sm font-bold text-gray-800">Portfolio <span className="text-red-500">*</span></p>
+                                                <p className="text-[10px] text-gray-500 truncate max-w-[150px]">{files.portfolio ? files.portfolio.name : "Required (Max size: 2GB)"}</p>
                                             </div>
                                         </div>
                                         <input
@@ -238,8 +240,8 @@ export default function ApplyModal({ isOpen, onClose, job }: ApplyModalProps) {
                                                 {files.certificate ? <CheckCircle2 className="h-5 w-5 text-green-500" /> : <GraduationCap className="h-5 w-5" />}
                                             </div>
                                             <div className="flex-1">
-                                                <p className="text-sm font-bold text-gray-800">Education Cert.</p>
-                                                <p className="text-[10px] text-gray-500 truncate max-w-[150px]">{files.certificate ? files.certificate.name : "Optional"}</p>
+                                                <p className="text-sm font-bold text-gray-800">Education Cert. <span className="text-red-500">*</span></p>
+                                                <p className="text-[10px] text-gray-500 truncate max-w-[150px]">{files.certificate ? files.certificate.name : "Required"}</p>
                                             </div>
                                         </div>
                                         <input

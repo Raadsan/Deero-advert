@@ -4,8 +4,24 @@ export const submitApplication = async (req, res) => {
     try {
         const { fullName, position, phone, email, careerId } = req.body;
 
-        if (!fullName || !position || !phone || !email) {
+        if (!fullName || !phone || !email) {
             return res.status(400).json({ message: "Required fields are missing", success: false });
+        }
+
+        // Always prioritize the job title from the database if careerId is provided
+        let finalPosition = position;
+        if (careerId) {
+            const career = await prisma.career.findUnique({ 
+                where: { id: parseInt(careerId) } 
+            });
+            if (career) {
+                finalPosition = career.title;
+            }
+        }
+
+        // If no careerId was provided and no position was sent, reject
+        if (!finalPosition) {
+            return res.status(400).json({ message: "Position is required", success: false });
         }
 
         // Handle files from req.files
@@ -14,14 +30,17 @@ export const submitApplication = async (req, res) => {
         const portfolioFile = files.find(f => f.fieldname === 'portfolio');
         const certificateFile = files.find(f => f.fieldname === 'certificate');
 
-        if (!cvFile) {
-            return res.status(400).json({ message: "CV is required", success: false });
+        if (!cvFile || !portfolioFile || !certificateFile) {
+            return res.status(400).json({ 
+                message: "All documents (CV, Portfolio, and Education Certificate) are required", 
+                success: false 
+            });
         }
 
         const application = await prisma.jobApplication.create({
             data: {
                 fullName,
-                position,
+                position: finalPosition,
                 phone,
                 email,
                 cvUrl: (cvFile.path || cvFile.url).replace(/\\/g, "/"),
