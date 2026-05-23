@@ -14,7 +14,15 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const navLinks = [
   { label: "Home", href: "/" },
-  { label: "About Us", href: "/about" },
+  // { label: "About Us", href: "/about" },
+   { 
+    label: "About Deero", 
+    href: "/about", 
+    subLinks: [
+      { label: "Welcome", href: "/welcome" },
+      { label: "About Us", href: "/about" },
+    ] 
+  },
   { label: "Services", href: "/services" },
   { label: "Hosting", href: "/hosting" },
   { label: "Portfolio", href: "/portfolio" },
@@ -45,7 +53,7 @@ export default function Header() {
   const [activeAnnouncement, setActiveAnnouncement] = useState<Announcement | null>(null);
   const [showBanner, setShowBanner] = useState(true);
   const [mounted, setMounted] = useState(false);
-  const [showResourcesDropdown, setShowResourcesDropdown] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -203,18 +211,18 @@ export default function Header() {
                   <div 
                     key={link.label}
                     className="relative group"
-                    onMouseEnter={() => setShowResourcesDropdown(true)}
-                    onMouseLeave={() => setShowResourcesDropdown(false)}
+                    onMouseEnter={() => setOpenDropdown(link.label)}
+                    onMouseLeave={() => setOpenDropdown(null)}
                   >
                     <button
                       className="flex items-center gap-1 transition hover:text-[#EB4724] py-4"
                     >
                       {link.label}
-                      <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${showResourcesDropdown ? "rotate-180" : ""}`} />
+                      <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${openDropdown === link.label ? "rotate-180" : ""}`} />
                     </button>
 
                     <AnimatePresence>
-                      {showResourcesDropdown && (
+                      {openDropdown === link.label && (
                         <motion.div
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
@@ -227,7 +235,7 @@ export default function Header() {
                                 key={sub.href}
                                 href={sub.href}
                                 className="block px-4 py-2.5 rounded-lg text-sm text-[#651313] hover:bg-gray-50 hover:text-[#EB4724] transition-colors"
-                                onClick={() => setShowResourcesDropdown(false)}
+                                onClick={() => setOpenDropdown(null)}
                               >
                                 {sub.label}
                               </Link>

@@ -495,6 +495,22 @@ exports.Prisma.CompanyContactScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.WelcomeMessageScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  subtitle: 'subtitle',
+  content: 'content',
+  presidentName: 'presidentName',
+  presidentTitle: 'presidentTitle',
+  image: 'image',
+  facebook: 'facebook',
+  linkedin: 'linkedin',
+  instagram: 'instagram',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -730,6 +746,18 @@ exports.Prisma.CompanyContactOrderByRelevanceFieldEnum = {
   value: 'value'
 };
 
+exports.Prisma.WelcomeMessageOrderByRelevanceFieldEnum = {
+  title: 'title',
+  subtitle: 'subtitle',
+  content: 'content',
+  presidentName: 'presidentName',
+  presidentTitle: 'presidentTitle',
+  image: 'image',
+  facebook: 'facebook',
+  linkedin: 'linkedin',
+  instagram: 'instagram'
+};
+
 
 exports.Prisma.ModelName = {
   User: 'User',
@@ -768,7 +796,8 @@ exports.Prisma.ModelName = {
   DeviceToken: 'DeviceToken',
   Conversation: 'Conversation',
   Message: 'Message',
-  CompanyContact: 'CompanyContact'
+  CompanyContact: 'CompanyContact',
+  WelcomeMessage: 'WelcomeMessage'
 };
 
 /**

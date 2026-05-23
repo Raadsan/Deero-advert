@@ -33,6 +33,7 @@ import chatRoute from "./routes/chatRoute.js";
 import companyContactRoutes from "./routes/companyContactRoutes.js";
 import caseStudyRoute from "./routes/caseStudyRoute.js";
 import applicationRoutes from "./routes/applicationRoutes.js";
+import welcomeRoutes from "./routes/welcomeRoutes.js";
 import multerErrorHandler from "./middlewares/multerErrorHandler.js";
 
 dotenv.config();
@@ -113,6 +114,7 @@ app.use("/api/company-contact", companyContactRoutes);
 app.use("/api/casestudies", caseStudyRoute);
 app.use("/api/casestudy", caseStudyRoute);
 app.use("/api/applications", applicationRoutes);
+app.use("/api/welcome", welcomeRoutes);
 
 // Error Handling Middleware
 app.use(multerErrorHandler);

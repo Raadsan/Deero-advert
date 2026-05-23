@@ -198,6 +198,11 @@ export type Message = $Result.DefaultSelection<Prisma.$MessagePayload>
  * 
  */
 export type CompanyContact = $Result.DefaultSelection<Prisma.$CompanyContactPayload>
+/**
+ * Model WelcomeMessage
+ * 
+ */
+export type WelcomeMessage = $Result.DefaultSelection<Prisma.$WelcomeMessagePayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -689,6 +694,16 @@ export class PrismaClient<
     * ```
     */
   get companyContact(): Prisma.CompanyContactDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.welcomeMessage`: Exposes CRUD operations for the **WelcomeMessage** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more WelcomeMessages
+    * const welcomeMessages = await prisma.welcomeMessage.findMany()
+    * ```
+    */
+  get welcomeMessage(): Prisma.WelcomeMessageDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1159,7 +1174,8 @@ export namespace Prisma {
     DeviceToken: 'DeviceToken',
     Conversation: 'Conversation',
     Message: 'Message',
-    CompanyContact: 'CompanyContact'
+    CompanyContact: 'CompanyContact',
+    WelcomeMessage: 'WelcomeMessage'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1175,7 +1191,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "globalSetting" | "discount" | "bonusHistory" | "role" | "rolePermission" | "permissionMenuAccess" | "permissionSubMenu" | "menu" | "subMenu" | "video" | "blog" | "caseStudy" | "achievement" | "announcement" | "career" | "jobApplication" | "domainPrice" | "eventNews" | "hostingPackage" | "portfolio" | "portfolioGallery" | "team" | "teamSocial" | "testimonial" | "transaction" | "contact" | "majorClient" | "majorClientImage" | "service" | "servicePackage" | "servicePackageFeature" | "subscriber" | "deviceToken" | "conversation" | "message" | "companyContact"
+      modelProps: "user" | "globalSetting" | "discount" | "bonusHistory" | "role" | "rolePermission" | "permissionMenuAccess" | "permissionSubMenu" | "menu" | "subMenu" | "video" | "blog" | "caseStudy" | "achievement" | "announcement" | "career" | "jobApplication" | "domainPrice" | "eventNews" | "hostingPackage" | "portfolio" | "portfolioGallery" | "team" | "teamSocial" | "testimonial" | "transaction" | "contact" | "majorClient" | "majorClientImage" | "service" | "servicePackage" | "servicePackageFeature" | "subscriber" | "deviceToken" | "conversation" | "message" | "companyContact" | "welcomeMessage"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3621,6 +3637,72 @@ export namespace Prisma {
           }
         }
       }
+      WelcomeMessage: {
+        payload: Prisma.$WelcomeMessagePayload<ExtArgs>
+        fields: Prisma.WelcomeMessageFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.WelcomeMessageFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WelcomeMessagePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.WelcomeMessageFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WelcomeMessagePayload>
+          }
+          findFirst: {
+            args: Prisma.WelcomeMessageFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WelcomeMessagePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.WelcomeMessageFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WelcomeMessagePayload>
+          }
+          findMany: {
+            args: Prisma.WelcomeMessageFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WelcomeMessagePayload>[]
+          }
+          create: {
+            args: Prisma.WelcomeMessageCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WelcomeMessagePayload>
+          }
+          createMany: {
+            args: Prisma.WelcomeMessageCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.WelcomeMessageDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WelcomeMessagePayload>
+          }
+          update: {
+            args: Prisma.WelcomeMessageUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WelcomeMessagePayload>
+          }
+          deleteMany: {
+            args: Prisma.WelcomeMessageDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.WelcomeMessageUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.WelcomeMessageUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WelcomeMessagePayload>
+          }
+          aggregate: {
+            args: Prisma.WelcomeMessageAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateWelcomeMessage>
+          }
+          groupBy: {
+            args: Prisma.WelcomeMessageGroupByArgs<ExtArgs>
+            result: $Utils.Optional<WelcomeMessageGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.WelcomeMessageCountArgs<ExtArgs>
+            result: $Utils.Optional<WelcomeMessageCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -3766,6 +3848,7 @@ export namespace Prisma {
     conversation?: ConversationOmit
     message?: MessageOmit
     companyContact?: CompanyContactOmit
+    welcomeMessage?: WelcomeMessageOmit
   }
 
   /* Types for Logging */
@@ -41398,6 +41481,1015 @@ export namespace Prisma {
 
 
   /**
+   * Model WelcomeMessage
+   */
+
+  export type AggregateWelcomeMessage = {
+    _count: WelcomeMessageCountAggregateOutputType | null
+    _avg: WelcomeMessageAvgAggregateOutputType | null
+    _sum: WelcomeMessageSumAggregateOutputType | null
+    _min: WelcomeMessageMinAggregateOutputType | null
+    _max: WelcomeMessageMaxAggregateOutputType | null
+  }
+
+  export type WelcomeMessageAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type WelcomeMessageSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type WelcomeMessageMinAggregateOutputType = {
+    id: number | null
+    title: string | null
+    subtitle: string | null
+    content: string | null
+    presidentName: string | null
+    presidentTitle: string | null
+    image: string | null
+    facebook: string | null
+    linkedin: string | null
+    instagram: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type WelcomeMessageMaxAggregateOutputType = {
+    id: number | null
+    title: string | null
+    subtitle: string | null
+    content: string | null
+    presidentName: string | null
+    presidentTitle: string | null
+    image: string | null
+    facebook: string | null
+    linkedin: string | null
+    instagram: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type WelcomeMessageCountAggregateOutputType = {
+    id: number
+    title: number
+    subtitle: number
+    content: number
+    presidentName: number
+    presidentTitle: number
+    image: number
+    facebook: number
+    linkedin: number
+    instagram: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type WelcomeMessageAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type WelcomeMessageSumAggregateInputType = {
+    id?: true
+  }
+
+  export type WelcomeMessageMinAggregateInputType = {
+    id?: true
+    title?: true
+    subtitle?: true
+    content?: true
+    presidentName?: true
+    presidentTitle?: true
+    image?: true
+    facebook?: true
+    linkedin?: true
+    instagram?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type WelcomeMessageMaxAggregateInputType = {
+    id?: true
+    title?: true
+    subtitle?: true
+    content?: true
+    presidentName?: true
+    presidentTitle?: true
+    image?: true
+    facebook?: true
+    linkedin?: true
+    instagram?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type WelcomeMessageCountAggregateInputType = {
+    id?: true
+    title?: true
+    subtitle?: true
+    content?: true
+    presidentName?: true
+    presidentTitle?: true
+    image?: true
+    facebook?: true
+    linkedin?: true
+    instagram?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type WelcomeMessageAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WelcomeMessage to aggregate.
+     */
+    where?: WelcomeMessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WelcomeMessages to fetch.
+     */
+    orderBy?: WelcomeMessageOrderByWithRelationInput | WelcomeMessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: WelcomeMessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WelcomeMessages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WelcomeMessages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned WelcomeMessages
+    **/
+    _count?: true | WelcomeMessageCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: WelcomeMessageAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: WelcomeMessageSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: WelcomeMessageMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: WelcomeMessageMaxAggregateInputType
+  }
+
+  export type GetWelcomeMessageAggregateType<T extends WelcomeMessageAggregateArgs> = {
+        [P in keyof T & keyof AggregateWelcomeMessage]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateWelcomeMessage[P]>
+      : GetScalarType<T[P], AggregateWelcomeMessage[P]>
+  }
+
+
+
+
+  export type WelcomeMessageGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WelcomeMessageWhereInput
+    orderBy?: WelcomeMessageOrderByWithAggregationInput | WelcomeMessageOrderByWithAggregationInput[]
+    by: WelcomeMessageScalarFieldEnum[] | WelcomeMessageScalarFieldEnum
+    having?: WelcomeMessageScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: WelcomeMessageCountAggregateInputType | true
+    _avg?: WelcomeMessageAvgAggregateInputType
+    _sum?: WelcomeMessageSumAggregateInputType
+    _min?: WelcomeMessageMinAggregateInputType
+    _max?: WelcomeMessageMaxAggregateInputType
+  }
+
+  export type WelcomeMessageGroupByOutputType = {
+    id: number
+    title: string
+    subtitle: string
+    content: string
+    presidentName: string
+    presidentTitle: string
+    image: string | null
+    facebook: string | null
+    linkedin: string | null
+    instagram: string | null
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: WelcomeMessageCountAggregateOutputType | null
+    _avg: WelcomeMessageAvgAggregateOutputType | null
+    _sum: WelcomeMessageSumAggregateOutputType | null
+    _min: WelcomeMessageMinAggregateOutputType | null
+    _max: WelcomeMessageMaxAggregateOutputType | null
+  }
+
+  type GetWelcomeMessageGroupByPayload<T extends WelcomeMessageGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<WelcomeMessageGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof WelcomeMessageGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], WelcomeMessageGroupByOutputType[P]>
+            : GetScalarType<T[P], WelcomeMessageGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type WelcomeMessageSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    subtitle?: boolean
+    content?: boolean
+    presidentName?: boolean
+    presidentTitle?: boolean
+    image?: boolean
+    facebook?: boolean
+    linkedin?: boolean
+    instagram?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["welcomeMessage"]>
+
+
+
+  export type WelcomeMessageSelectScalar = {
+    id?: boolean
+    title?: boolean
+    subtitle?: boolean
+    content?: boolean
+    presidentName?: boolean
+    presidentTitle?: boolean
+    image?: boolean
+    facebook?: boolean
+    linkedin?: boolean
+    instagram?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type WelcomeMessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "subtitle" | "content" | "presidentName" | "presidentTitle" | "image" | "facebook" | "linkedin" | "instagram" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["welcomeMessage"]>
+
+  export type $WelcomeMessagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "WelcomeMessage"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      title: string
+      subtitle: string
+      content: string
+      presidentName: string
+      presidentTitle: string
+      image: string | null
+      facebook: string | null
+      linkedin: string | null
+      instagram: string | null
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["welcomeMessage"]>
+    composites: {}
+  }
+
+  type WelcomeMessageGetPayload<S extends boolean | null | undefined | WelcomeMessageDefaultArgs> = $Result.GetResult<Prisma.$WelcomeMessagePayload, S>
+
+  type WelcomeMessageCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<WelcomeMessageFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: WelcomeMessageCountAggregateInputType | true
+    }
+
+  export interface WelcomeMessageDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['WelcomeMessage'], meta: { name: 'WelcomeMessage' } }
+    /**
+     * Find zero or one WelcomeMessage that matches the filter.
+     * @param {WelcomeMessageFindUniqueArgs} args - Arguments to find a WelcomeMessage
+     * @example
+     * // Get one WelcomeMessage
+     * const welcomeMessage = await prisma.welcomeMessage.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends WelcomeMessageFindUniqueArgs>(args: SelectSubset<T, WelcomeMessageFindUniqueArgs<ExtArgs>>): Prisma__WelcomeMessageClient<$Result.GetResult<Prisma.$WelcomeMessagePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one WelcomeMessage that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {WelcomeMessageFindUniqueOrThrowArgs} args - Arguments to find a WelcomeMessage
+     * @example
+     * // Get one WelcomeMessage
+     * const welcomeMessage = await prisma.welcomeMessage.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends WelcomeMessageFindUniqueOrThrowArgs>(args: SelectSubset<T, WelcomeMessageFindUniqueOrThrowArgs<ExtArgs>>): Prisma__WelcomeMessageClient<$Result.GetResult<Prisma.$WelcomeMessagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WelcomeMessage that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WelcomeMessageFindFirstArgs} args - Arguments to find a WelcomeMessage
+     * @example
+     * // Get one WelcomeMessage
+     * const welcomeMessage = await prisma.welcomeMessage.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends WelcomeMessageFindFirstArgs>(args?: SelectSubset<T, WelcomeMessageFindFirstArgs<ExtArgs>>): Prisma__WelcomeMessageClient<$Result.GetResult<Prisma.$WelcomeMessagePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WelcomeMessage that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WelcomeMessageFindFirstOrThrowArgs} args - Arguments to find a WelcomeMessage
+     * @example
+     * // Get one WelcomeMessage
+     * const welcomeMessage = await prisma.welcomeMessage.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends WelcomeMessageFindFirstOrThrowArgs>(args?: SelectSubset<T, WelcomeMessageFindFirstOrThrowArgs<ExtArgs>>): Prisma__WelcomeMessageClient<$Result.GetResult<Prisma.$WelcomeMessagePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more WelcomeMessages that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WelcomeMessageFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all WelcomeMessages
+     * const welcomeMessages = await prisma.welcomeMessage.findMany()
+     * 
+     * // Get first 10 WelcomeMessages
+     * const welcomeMessages = await prisma.welcomeMessage.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const welcomeMessageWithIdOnly = await prisma.welcomeMessage.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends WelcomeMessageFindManyArgs>(args?: SelectSubset<T, WelcomeMessageFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WelcomeMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a WelcomeMessage.
+     * @param {WelcomeMessageCreateArgs} args - Arguments to create a WelcomeMessage.
+     * @example
+     * // Create one WelcomeMessage
+     * const WelcomeMessage = await prisma.welcomeMessage.create({
+     *   data: {
+     *     // ... data to create a WelcomeMessage
+     *   }
+     * })
+     * 
+     */
+    create<T extends WelcomeMessageCreateArgs>(args: SelectSubset<T, WelcomeMessageCreateArgs<ExtArgs>>): Prisma__WelcomeMessageClient<$Result.GetResult<Prisma.$WelcomeMessagePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many WelcomeMessages.
+     * @param {WelcomeMessageCreateManyArgs} args - Arguments to create many WelcomeMessages.
+     * @example
+     * // Create many WelcomeMessages
+     * const welcomeMessage = await prisma.welcomeMessage.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends WelcomeMessageCreateManyArgs>(args?: SelectSubset<T, WelcomeMessageCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a WelcomeMessage.
+     * @param {WelcomeMessageDeleteArgs} args - Arguments to delete one WelcomeMessage.
+     * @example
+     * // Delete one WelcomeMessage
+     * const WelcomeMessage = await prisma.welcomeMessage.delete({
+     *   where: {
+     *     // ... filter to delete one WelcomeMessage
+     *   }
+     * })
+     * 
+     */
+    delete<T extends WelcomeMessageDeleteArgs>(args: SelectSubset<T, WelcomeMessageDeleteArgs<ExtArgs>>): Prisma__WelcomeMessageClient<$Result.GetResult<Prisma.$WelcomeMessagePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one WelcomeMessage.
+     * @param {WelcomeMessageUpdateArgs} args - Arguments to update one WelcomeMessage.
+     * @example
+     * // Update one WelcomeMessage
+     * const welcomeMessage = await prisma.welcomeMessage.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends WelcomeMessageUpdateArgs>(args: SelectSubset<T, WelcomeMessageUpdateArgs<ExtArgs>>): Prisma__WelcomeMessageClient<$Result.GetResult<Prisma.$WelcomeMessagePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more WelcomeMessages.
+     * @param {WelcomeMessageDeleteManyArgs} args - Arguments to filter WelcomeMessages to delete.
+     * @example
+     * // Delete a few WelcomeMessages
+     * const { count } = await prisma.welcomeMessage.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends WelcomeMessageDeleteManyArgs>(args?: SelectSubset<T, WelcomeMessageDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WelcomeMessages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WelcomeMessageUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many WelcomeMessages
+     * const welcomeMessage = await prisma.welcomeMessage.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends WelcomeMessageUpdateManyArgs>(args: SelectSubset<T, WelcomeMessageUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one WelcomeMessage.
+     * @param {WelcomeMessageUpsertArgs} args - Arguments to update or create a WelcomeMessage.
+     * @example
+     * // Update or create a WelcomeMessage
+     * const welcomeMessage = await prisma.welcomeMessage.upsert({
+     *   create: {
+     *     // ... data to create a WelcomeMessage
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the WelcomeMessage we want to update
+     *   }
+     * })
+     */
+    upsert<T extends WelcomeMessageUpsertArgs>(args: SelectSubset<T, WelcomeMessageUpsertArgs<ExtArgs>>): Prisma__WelcomeMessageClient<$Result.GetResult<Prisma.$WelcomeMessagePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of WelcomeMessages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WelcomeMessageCountArgs} args - Arguments to filter WelcomeMessages to count.
+     * @example
+     * // Count the number of WelcomeMessages
+     * const count = await prisma.welcomeMessage.count({
+     *   where: {
+     *     // ... the filter for the WelcomeMessages we want to count
+     *   }
+     * })
+    **/
+    count<T extends WelcomeMessageCountArgs>(
+      args?: Subset<T, WelcomeMessageCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], WelcomeMessageCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a WelcomeMessage.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WelcomeMessageAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends WelcomeMessageAggregateArgs>(args: Subset<T, WelcomeMessageAggregateArgs>): Prisma.PrismaPromise<GetWelcomeMessageAggregateType<T>>
+
+    /**
+     * Group by WelcomeMessage.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WelcomeMessageGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends WelcomeMessageGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: WelcomeMessageGroupByArgs['orderBy'] }
+        : { orderBy?: WelcomeMessageGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, WelcomeMessageGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetWelcomeMessageGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the WelcomeMessage model
+   */
+  readonly fields: WelcomeMessageFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for WelcomeMessage.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__WelcomeMessageClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the WelcomeMessage model
+   */
+  interface WelcomeMessageFieldRefs {
+    readonly id: FieldRef<"WelcomeMessage", 'Int'>
+    readonly title: FieldRef<"WelcomeMessage", 'String'>
+    readonly subtitle: FieldRef<"WelcomeMessage", 'String'>
+    readonly content: FieldRef<"WelcomeMessage", 'String'>
+    readonly presidentName: FieldRef<"WelcomeMessage", 'String'>
+    readonly presidentTitle: FieldRef<"WelcomeMessage", 'String'>
+    readonly image: FieldRef<"WelcomeMessage", 'String'>
+    readonly facebook: FieldRef<"WelcomeMessage", 'String'>
+    readonly linkedin: FieldRef<"WelcomeMessage", 'String'>
+    readonly instagram: FieldRef<"WelcomeMessage", 'String'>
+    readonly isActive: FieldRef<"WelcomeMessage", 'Boolean'>
+    readonly createdAt: FieldRef<"WelcomeMessage", 'DateTime'>
+    readonly updatedAt: FieldRef<"WelcomeMessage", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * WelcomeMessage findUnique
+   */
+  export type WelcomeMessageFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WelcomeMessage
+     */
+    select?: WelcomeMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WelcomeMessage
+     */
+    omit?: WelcomeMessageOmit<ExtArgs> | null
+    /**
+     * Filter, which WelcomeMessage to fetch.
+     */
+    where: WelcomeMessageWhereUniqueInput
+  }
+
+  /**
+   * WelcomeMessage findUniqueOrThrow
+   */
+  export type WelcomeMessageFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WelcomeMessage
+     */
+    select?: WelcomeMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WelcomeMessage
+     */
+    omit?: WelcomeMessageOmit<ExtArgs> | null
+    /**
+     * Filter, which WelcomeMessage to fetch.
+     */
+    where: WelcomeMessageWhereUniqueInput
+  }
+
+  /**
+   * WelcomeMessage findFirst
+   */
+  export type WelcomeMessageFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WelcomeMessage
+     */
+    select?: WelcomeMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WelcomeMessage
+     */
+    omit?: WelcomeMessageOmit<ExtArgs> | null
+    /**
+     * Filter, which WelcomeMessage to fetch.
+     */
+    where?: WelcomeMessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WelcomeMessages to fetch.
+     */
+    orderBy?: WelcomeMessageOrderByWithRelationInput | WelcomeMessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WelcomeMessages.
+     */
+    cursor?: WelcomeMessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WelcomeMessages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WelcomeMessages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WelcomeMessages.
+     */
+    distinct?: WelcomeMessageScalarFieldEnum | WelcomeMessageScalarFieldEnum[]
+  }
+
+  /**
+   * WelcomeMessage findFirstOrThrow
+   */
+  export type WelcomeMessageFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WelcomeMessage
+     */
+    select?: WelcomeMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WelcomeMessage
+     */
+    omit?: WelcomeMessageOmit<ExtArgs> | null
+    /**
+     * Filter, which WelcomeMessage to fetch.
+     */
+    where?: WelcomeMessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WelcomeMessages to fetch.
+     */
+    orderBy?: WelcomeMessageOrderByWithRelationInput | WelcomeMessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WelcomeMessages.
+     */
+    cursor?: WelcomeMessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WelcomeMessages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WelcomeMessages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WelcomeMessages.
+     */
+    distinct?: WelcomeMessageScalarFieldEnum | WelcomeMessageScalarFieldEnum[]
+  }
+
+  /**
+   * WelcomeMessage findMany
+   */
+  export type WelcomeMessageFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WelcomeMessage
+     */
+    select?: WelcomeMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WelcomeMessage
+     */
+    omit?: WelcomeMessageOmit<ExtArgs> | null
+    /**
+     * Filter, which WelcomeMessages to fetch.
+     */
+    where?: WelcomeMessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WelcomeMessages to fetch.
+     */
+    orderBy?: WelcomeMessageOrderByWithRelationInput | WelcomeMessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing WelcomeMessages.
+     */
+    cursor?: WelcomeMessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WelcomeMessages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WelcomeMessages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WelcomeMessages.
+     */
+    distinct?: WelcomeMessageScalarFieldEnum | WelcomeMessageScalarFieldEnum[]
+  }
+
+  /**
+   * WelcomeMessage create
+   */
+  export type WelcomeMessageCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WelcomeMessage
+     */
+    select?: WelcomeMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WelcomeMessage
+     */
+    omit?: WelcomeMessageOmit<ExtArgs> | null
+    /**
+     * The data needed to create a WelcomeMessage.
+     */
+    data: XOR<WelcomeMessageCreateInput, WelcomeMessageUncheckedCreateInput>
+  }
+
+  /**
+   * WelcomeMessage createMany
+   */
+  export type WelcomeMessageCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many WelcomeMessages.
+     */
+    data: WelcomeMessageCreateManyInput | WelcomeMessageCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * WelcomeMessage update
+   */
+  export type WelcomeMessageUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WelcomeMessage
+     */
+    select?: WelcomeMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WelcomeMessage
+     */
+    omit?: WelcomeMessageOmit<ExtArgs> | null
+    /**
+     * The data needed to update a WelcomeMessage.
+     */
+    data: XOR<WelcomeMessageUpdateInput, WelcomeMessageUncheckedUpdateInput>
+    /**
+     * Choose, which WelcomeMessage to update.
+     */
+    where: WelcomeMessageWhereUniqueInput
+  }
+
+  /**
+   * WelcomeMessage updateMany
+   */
+  export type WelcomeMessageUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update WelcomeMessages.
+     */
+    data: XOR<WelcomeMessageUpdateManyMutationInput, WelcomeMessageUncheckedUpdateManyInput>
+    /**
+     * Filter which WelcomeMessages to update
+     */
+    where?: WelcomeMessageWhereInput
+    /**
+     * Limit how many WelcomeMessages to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * WelcomeMessage upsert
+   */
+  export type WelcomeMessageUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WelcomeMessage
+     */
+    select?: WelcomeMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WelcomeMessage
+     */
+    omit?: WelcomeMessageOmit<ExtArgs> | null
+    /**
+     * The filter to search for the WelcomeMessage to update in case it exists.
+     */
+    where: WelcomeMessageWhereUniqueInput
+    /**
+     * In case the WelcomeMessage found by the `where` argument doesn't exist, create a new WelcomeMessage with this data.
+     */
+    create: XOR<WelcomeMessageCreateInput, WelcomeMessageUncheckedCreateInput>
+    /**
+     * In case the WelcomeMessage was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<WelcomeMessageUpdateInput, WelcomeMessageUncheckedUpdateInput>
+  }
+
+  /**
+   * WelcomeMessage delete
+   */
+  export type WelcomeMessageDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WelcomeMessage
+     */
+    select?: WelcomeMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WelcomeMessage
+     */
+    omit?: WelcomeMessageOmit<ExtArgs> | null
+    /**
+     * Filter which WelcomeMessage to delete.
+     */
+    where: WelcomeMessageWhereUniqueInput
+  }
+
+  /**
+   * WelcomeMessage deleteMany
+   */
+  export type WelcomeMessageDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WelcomeMessages to delete
+     */
+    where?: WelcomeMessageWhereInput
+    /**
+     * Limit how many WelcomeMessages to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * WelcomeMessage without action
+   */
+  export type WelcomeMessageDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WelcomeMessage
+     */
+    select?: WelcomeMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WelcomeMessage
+     */
+    omit?: WelcomeMessageOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -41897,6 +42989,25 @@ export namespace Prisma {
   export type CompanyContactScalarFieldEnum = (typeof CompanyContactScalarFieldEnum)[keyof typeof CompanyContactScalarFieldEnum]
 
 
+  export const WelcomeMessageScalarFieldEnum: {
+    id: 'id',
+    title: 'title',
+    subtitle: 'subtitle',
+    content: 'content',
+    presidentName: 'presidentName',
+    presidentTitle: 'presidentTitle',
+    image: 'image',
+    facebook: 'facebook',
+    linkedin: 'linkedin',
+    instagram: 'instagram',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type WelcomeMessageScalarFieldEnum = (typeof WelcomeMessageScalarFieldEnum)[keyof typeof WelcomeMessageScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -42244,6 +43355,21 @@ export namespace Prisma {
   };
 
   export type CompanyContactOrderByRelevanceFieldEnum = (typeof CompanyContactOrderByRelevanceFieldEnum)[keyof typeof CompanyContactOrderByRelevanceFieldEnum]
+
+
+  export const WelcomeMessageOrderByRelevanceFieldEnum: {
+    title: 'title',
+    subtitle: 'subtitle',
+    content: 'content',
+    presidentName: 'presidentName',
+    presidentTitle: 'presidentTitle',
+    image: 'image',
+    facebook: 'facebook',
+    linkedin: 'linkedin',
+    instagram: 'instagram'
+  };
+
+  export type WelcomeMessageOrderByRelevanceFieldEnum = (typeof WelcomeMessageOrderByRelevanceFieldEnum)[keyof typeof WelcomeMessageOrderByRelevanceFieldEnum]
 
 
   /**
@@ -44868,6 +45994,101 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"CompanyContact"> | Date | string
   }
 
+  export type WelcomeMessageWhereInput = {
+    AND?: WelcomeMessageWhereInput | WelcomeMessageWhereInput[]
+    OR?: WelcomeMessageWhereInput[]
+    NOT?: WelcomeMessageWhereInput | WelcomeMessageWhereInput[]
+    id?: IntFilter<"WelcomeMessage"> | number
+    title?: StringFilter<"WelcomeMessage"> | string
+    subtitle?: StringFilter<"WelcomeMessage"> | string
+    content?: StringFilter<"WelcomeMessage"> | string
+    presidentName?: StringFilter<"WelcomeMessage"> | string
+    presidentTitle?: StringFilter<"WelcomeMessage"> | string
+    image?: StringNullableFilter<"WelcomeMessage"> | string | null
+    facebook?: StringNullableFilter<"WelcomeMessage"> | string | null
+    linkedin?: StringNullableFilter<"WelcomeMessage"> | string | null
+    instagram?: StringNullableFilter<"WelcomeMessage"> | string | null
+    isActive?: BoolFilter<"WelcomeMessage"> | boolean
+    createdAt?: DateTimeFilter<"WelcomeMessage"> | Date | string
+    updatedAt?: DateTimeFilter<"WelcomeMessage"> | Date | string
+  }
+
+  export type WelcomeMessageOrderByWithRelationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    subtitle?: SortOrder
+    content?: SortOrder
+    presidentName?: SortOrder
+    presidentTitle?: SortOrder
+    image?: SortOrderInput | SortOrder
+    facebook?: SortOrderInput | SortOrder
+    linkedin?: SortOrderInput | SortOrder
+    instagram?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _relevance?: WelcomeMessageOrderByRelevanceInput
+  }
+
+  export type WelcomeMessageWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: WelcomeMessageWhereInput | WelcomeMessageWhereInput[]
+    OR?: WelcomeMessageWhereInput[]
+    NOT?: WelcomeMessageWhereInput | WelcomeMessageWhereInput[]
+    title?: StringFilter<"WelcomeMessage"> | string
+    subtitle?: StringFilter<"WelcomeMessage"> | string
+    content?: StringFilter<"WelcomeMessage"> | string
+    presidentName?: StringFilter<"WelcomeMessage"> | string
+    presidentTitle?: StringFilter<"WelcomeMessage"> | string
+    image?: StringNullableFilter<"WelcomeMessage"> | string | null
+    facebook?: StringNullableFilter<"WelcomeMessage"> | string | null
+    linkedin?: StringNullableFilter<"WelcomeMessage"> | string | null
+    instagram?: StringNullableFilter<"WelcomeMessage"> | string | null
+    isActive?: BoolFilter<"WelcomeMessage"> | boolean
+    createdAt?: DateTimeFilter<"WelcomeMessage"> | Date | string
+    updatedAt?: DateTimeFilter<"WelcomeMessage"> | Date | string
+  }, "id">
+
+  export type WelcomeMessageOrderByWithAggregationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    subtitle?: SortOrder
+    content?: SortOrder
+    presidentName?: SortOrder
+    presidentTitle?: SortOrder
+    image?: SortOrderInput | SortOrder
+    facebook?: SortOrderInput | SortOrder
+    linkedin?: SortOrderInput | SortOrder
+    instagram?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: WelcomeMessageCountOrderByAggregateInput
+    _avg?: WelcomeMessageAvgOrderByAggregateInput
+    _max?: WelcomeMessageMaxOrderByAggregateInput
+    _min?: WelcomeMessageMinOrderByAggregateInput
+    _sum?: WelcomeMessageSumOrderByAggregateInput
+  }
+
+  export type WelcomeMessageScalarWhereWithAggregatesInput = {
+    AND?: WelcomeMessageScalarWhereWithAggregatesInput | WelcomeMessageScalarWhereWithAggregatesInput[]
+    OR?: WelcomeMessageScalarWhereWithAggregatesInput[]
+    NOT?: WelcomeMessageScalarWhereWithAggregatesInput | WelcomeMessageScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"WelcomeMessage"> | number
+    title?: StringWithAggregatesFilter<"WelcomeMessage"> | string
+    subtitle?: StringWithAggregatesFilter<"WelcomeMessage"> | string
+    content?: StringWithAggregatesFilter<"WelcomeMessage"> | string
+    presidentName?: StringWithAggregatesFilter<"WelcomeMessage"> | string
+    presidentTitle?: StringWithAggregatesFilter<"WelcomeMessage"> | string
+    image?: StringNullableWithAggregatesFilter<"WelcomeMessage"> | string | null
+    facebook?: StringNullableWithAggregatesFilter<"WelcomeMessage"> | string | null
+    linkedin?: StringNullableWithAggregatesFilter<"WelcomeMessage"> | string | null
+    instagram?: StringNullableWithAggregatesFilter<"WelcomeMessage"> | string | null
+    isActive?: BoolWithAggregatesFilter<"WelcomeMessage"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"WelcomeMessage"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"WelcomeMessage"> | Date | string
+  }
+
   export type UserCreateInput = {
     fullname: string
     email: string
@@ -47452,6 +48673,115 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type WelcomeMessageCreateInput = {
+    title?: string
+    subtitle?: string
+    content: string
+    presidentName?: string
+    presidentTitle?: string
+    image?: string | null
+    facebook?: string | null
+    linkedin?: string | null
+    instagram?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WelcomeMessageUncheckedCreateInput = {
+    id?: number
+    title?: string
+    subtitle?: string
+    content: string
+    presidentName?: string
+    presidentTitle?: string
+    image?: string | null
+    facebook?: string | null
+    linkedin?: string | null
+    instagram?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WelcomeMessageUpdateInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    subtitle?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    presidentName?: StringFieldUpdateOperationsInput | string
+    presidentTitle?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    facebook?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedin?: NullableStringFieldUpdateOperationsInput | string | null
+    instagram?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WelcomeMessageUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    subtitle?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    presidentName?: StringFieldUpdateOperationsInput | string
+    presidentTitle?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    facebook?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedin?: NullableStringFieldUpdateOperationsInput | string | null
+    instagram?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WelcomeMessageCreateManyInput = {
+    id?: number
+    title?: string
+    subtitle?: string
+    content: string
+    presidentName?: string
+    presidentTitle?: string
+    image?: string | null
+    facebook?: string | null
+    linkedin?: string | null
+    instagram?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WelcomeMessageUpdateManyMutationInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    subtitle?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    presidentName?: StringFieldUpdateOperationsInput | string
+    presidentTitle?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    facebook?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedin?: NullableStringFieldUpdateOperationsInput | string | null
+    instagram?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WelcomeMessageUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    subtitle?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    presidentName?: StringFieldUpdateOperationsInput | string
+    presidentTitle?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    facebook?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedin?: NullableStringFieldUpdateOperationsInput | string | null
+    instagram?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[]
@@ -49690,6 +51020,68 @@ export namespace Prisma {
   }
 
   export type CompanyContactSumOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type WelcomeMessageOrderByRelevanceInput = {
+    fields: WelcomeMessageOrderByRelevanceFieldEnum | WelcomeMessageOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type WelcomeMessageCountOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    subtitle?: SortOrder
+    content?: SortOrder
+    presidentName?: SortOrder
+    presidentTitle?: SortOrder
+    image?: SortOrder
+    facebook?: SortOrder
+    linkedin?: SortOrder
+    instagram?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WelcomeMessageAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type WelcomeMessageMaxOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    subtitle?: SortOrder
+    content?: SortOrder
+    presidentName?: SortOrder
+    presidentTitle?: SortOrder
+    image?: SortOrder
+    facebook?: SortOrder
+    linkedin?: SortOrder
+    instagram?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WelcomeMessageMinOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    subtitle?: SortOrder
+    content?: SortOrder
+    presidentName?: SortOrder
+    presidentTitle?: SortOrder
+    image?: SortOrder
+    facebook?: SortOrder
+    linkedin?: SortOrder
+    instagram?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WelcomeMessageSumOrderByAggregateInput = {
     id?: SortOrder
   }
 

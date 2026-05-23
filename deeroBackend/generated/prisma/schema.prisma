@@ -432,3 +432,19 @@ model CompanyContact {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model WelcomeMessage {
+  id             Int      @id @default(autoincrement())
+  title          String   @default("WELCOME TO THE HOME OF CREATIVE EXCELLENCE.")
+  subtitle       String   @default("Deero Advert President")
+  content        String   @db.LongText
+  presidentName  String   @default("Eng. Ayuub Mohamud")
+  presidentTitle String   @default("President")
+  image          String?
+  facebook       String?
+  linkedin       String?
+  instagram      String?
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
