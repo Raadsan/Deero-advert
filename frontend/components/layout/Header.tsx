@@ -14,15 +14,15 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const navLinks = [
   { label: "Home", href: "/" },
-  // { label: "About Us", href: "/about" },
-   { 
-    label: "About Deero", 
-    href: "/about", 
-    subLinks: [
-      { label: "Welcome", href: "/welcome" },
-      { label: "About Us", href: "/about" },
-    ] 
-  },
+  { label: "About Us", href: "/about" },
+  //  { 
+  //   label: "About Deero", 
+  //   href: "/about", 
+  //   subLinks: [
+  //     { label: "Welcome", href: "/welcome" },
+  //     { label: "About Us", href: "/about" },
+  //   ] 
+  // },
   { label: "Services", href: "/services" },
   { label: "Hosting", href: "/hosting" },
   { label: "Portfolio", href: "/portfolio" },
