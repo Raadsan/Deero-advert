@@ -1,15 +1,39 @@
 "use client";
 export const dynamic = "force-dynamic";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { getBlogById } from "@/api-client/blogsApi";
 import { getImageUrl } from "@/utils/url";
 import Image from "next/image";
-import { User, Calendar, ChevronLeft } from "lucide-react";
+import { Calendar, ChevronLeft } from "lucide-react";
 import Link from "next/link";
+import ReactMarkdown from "react-markdown";
+
+// Helper function to process text and style hashtags
+const processChildren = (children: any): any => {
+    if (typeof children === "string") {
+        const parts = children.split(/(#[a-zA-Z0-9_À-ÿ]+)/g);
+        return parts.map((part, index) => {
+            if (part.startsWith("#")) {
+                return (
+                    <span key={index} className="text-[#007bff] hover:underline cursor-pointer font-medium mr-1">
+                        {part}
+                    </span>
+                );
+            }
+            return part;
+        });
+    }
+    if (Array.isArray(children)) {
+        return children.map((child, index) => (
+            <React.Fragment key={index}>{processChildren(child)}</React.Fragment>
+        ));
+    }
+    return children;
+};
 
 export default function BlogDetailsPage() {
     const { id } = useParams();
@@ -79,7 +103,7 @@ export default function BlogDetailsPage() {
                             alt={blog.title}
                             fill
                             priority
-                            unoptimized
+                             unoptimized
                             className="object-cover"
                         />
                     </div>
@@ -111,30 +135,55 @@ export default function BlogDetailsPage() {
 
                     {/* Content */}
                     <div 
-                        className="max-w-none text-gray-700 leading-relaxed space-y-6 
-                            [&_h2]:text-2xl [&_h2]:md:text-3xl [&_h2]:font-bold [&_h2]:text-[#651313] [&_h2]:mt-10 [&_h2]:mb-4
-                            [&_h3]:text-xl [&_h3]:md:text-2xl [&_h3]:font-bold [&_h3]:text-gray-900 [&_h3]:mt-8 [&_h3]:mb-3
-                            [&_p]:mb-4 [&_p]:text-base [&_p]:md:text-lg
-                            [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:space-y-2 [&_ul]:mb-6
-                            [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:space-y-2 [&_ol]:mb-6
-                            [&_li]:text-gray-700
-                            [&_strong]:font-bold [&_strong]:text-gray-900
-                            [&_a]:text-[#EB4724] [&_a]:underline [&_a]:underline-offset-4"
-                        dangerouslySetInnerHTML={{ 
-                            __html: blog.content?.includes("<") 
-                                ? blog.content 
-                                : blog.content
-                                    .split("\n")
-                                    .map((line: string) => {
-                                        if (line.startsWith("## ")) {
-                                            return `<h2>${line.replace("## ", "")}</h2>`;
-                                        }
-                                        if (line.trim() === "") return "";
-                                        return `<p>${line}</p>`;
-                                    })
-                                    .join("")
-                        }}
-                    />
+                        className="max-w-none text-gray-700 leading-relaxed space-y-6"
+                    >
+                        <ReactMarkdown
+                            components={{
+                                h2: ({ children }) => (
+                                    <h2 className="mt-10 mb-4 text-2xl font-bold text-[#651313] md:text-3xl">
+                                        {children}
+                                    </h2>
+                                ),
+                                h3: ({ children }) => (
+                                    <h3 className="mt-8 mb-3 text-xl font-bold text-gray-900 md:text-2xl">
+                                        {children}
+                                    </h3>
+                                ),
+                                p: ({ children }) => (
+                                    <p className="mb-4 text-justify text-base md:text-lg">
+                                        {processChildren(children)}
+                                    </p>
+                                ),
+                                ul: ({ children }) => (
+                                    <ul className="mb-6 list-disc space-y-2 pl-6">
+                                        {children}
+                                    </ul>
+                                ),
+                                ol: ({ children }) => (
+                                    <ol className="mb-6 list-decimal space-y-2 pl-6">
+                                        {children}
+                                    </ol>
+                                ),
+                                li: ({ children }) => (
+                                    <li className="text-gray-700">
+                                        {children}
+                                    </li>
+                                ),
+                                strong: ({ children }) => (
+                                    <strong className="font-bold text-gray-900">
+                                        {children}
+                                    </strong>
+                                ),
+                                a: ({ href, children }) => (
+                                    <a className="text-[#EB4724] underline underline-offset-4" href={href}>
+                                        {children}
+                                    </a>
+                                ),
+                            }}
+                        >
+                            {blog.content || ""}
+                        </ReactMarkdown>
+                    </div>
                 </article>
             </main>
             <Footer />
