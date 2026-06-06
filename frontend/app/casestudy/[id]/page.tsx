@@ -182,7 +182,7 @@ export default function CaseStudyDetailsPage() {
                                 </div>
                                 <h2 className="text-3xl md:text-4xl font-black text-[#651313]">The Challenge</h2>
                             </div>
-                            <div className="text-gray-800 text-lg leading-relaxed space-y-6">
+                            <div className="text-gray-800 text-lg leading-relaxed space-y-6 text-justify">
                                 <p>
                                     {caseStudy.challenge}
                                 </p>
@@ -205,7 +205,7 @@ export default function CaseStudyDetailsPage() {
                                 </div>
                                 <h2 className="text-3xl md:text-4xl font-black text-[#651313]">Our Solution</h2>
                             </div>
-                            <div className="text-gray-800 text-lg leading-relaxed space-y-6">
+                            <div className="text-gray-800 text-lg leading-relaxed space-y-6 text-justify">
                                 <p>
                                     {caseStudy.solution}
                                 </p>
@@ -228,7 +228,7 @@ export default function CaseStudyDetailsPage() {
                                 </div>
                                 <h2 className="text-3xl md:text-4xl font-black text-[#651313]">The Result</h2>
                             </div>
-                            <div className="text-gray-800 text-lg leading-relaxed space-y-6">
+                            <div className="text-gray-800 text-lg leading-relaxed space-y-6 text-justify">
                                 <p>
                                     {caseStudy.result}
                                 </p>
