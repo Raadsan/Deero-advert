@@ -8,16 +8,31 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
+        protocol: "https",
+        hostname: "radsanuploads.s3.eu-north-1.amazonaws.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "radsanuploads.s3.amazonaws.com",
+        pathname: "/**",
+      },
+      {
         protocol: "http",
         hostname: "localhost",
-        port: "5000",
+        port: "8000",
         pathname: "/uploads/**",
       },
       {
         protocol: "http",
         hostname: "127.0.0.1",
-        port: "5000",
+        port: "8000",
         pathname: "/uploads/**",
+      },
+      {
+        protocol: "https",
+        hostname: "deeroadvert.so",
+        pathname: "/**",
       },
       {
         protocol: "https",

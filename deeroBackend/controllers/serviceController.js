@@ -39,7 +39,7 @@ export const CreateService = async (req, res) => {
         }
 
         if (!serviceIcon) {
-            return res.status(400).json({ message: "serviceIcon is required. Check Cloudinary settings.", success: false });
+            return res.status(400).json({ message: "serviceIcon is required.", success: false });
         }
 
         let packagesData = packages;

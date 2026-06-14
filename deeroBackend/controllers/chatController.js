@@ -126,7 +126,7 @@ export const uploadVoiceMessage = async (req, res) => {
       return res.status(400).json({ message: "No audio file uploaded" });
     }
 
-    // req.file.path contains the Cloudinary URL
+    // req.file.path contains the S3 URL
     res.status(201).json({ url: req.file.path });
   } catch (error) {
     res.status(500).json({ message: error.message });

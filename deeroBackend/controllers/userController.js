@@ -470,7 +470,7 @@ export const updateUser = async (req, res) => {
     delete data.createdAt;
     delete data.updatedAt;
     if (req.file) {
-      data.image = req.file.path; // Cloudinary returns the URL in path
+      data.image = req.file.path;
     }
 
     const user = await prisma.user.update({

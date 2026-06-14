@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express";
 
 import cors from "cors";
@@ -48,8 +49,6 @@ initSocket(server);
 app.use(cors());
 app.use(express.json({ limit: '2gb' }));
 app.use(express.urlencoded({ limit: '2gb', extended: true }));
-app.use("/uploads", express.static("uploads"));
-
 // Alias middleware for frontend compatibility (_id -> id)
 app.use((req, res, next) => {
   const originalJson = res.json;
