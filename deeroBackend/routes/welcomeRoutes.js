@@ -8,6 +8,7 @@ import {
   deleteWelcomeMessage,
 } from "../controllers/welcomeController.js";
 import upload from "../utils/multer.js";
+import { authorizeMenuAccess, protect } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
@@ -23,12 +24,12 @@ router.get("/active", getActiveWelcomeMessage);
 router.get("/:id", getWelcomeMessageById);
 
 // CREATE
-router.post("/", uploader, createWelcomeMessage);
+router.post("/", protect, authorizeMenuAccess("welcome", "welcome message"), uploader, createWelcomeMessage);
 
 // UPDATE
-router.put("/:id", uploader, updateWelcomeMessage);
+router.put("/:id", protect, authorizeMenuAccess("welcome", "welcome message"), uploader, updateWelcomeMessage);
 
 // DELETE
-router.delete("/:id", deleteWelcomeMessage);
+router.delete("/:id", protect, authorizeMenuAccess("welcome", "welcome message"), deleteWelcomeMessage);
 
 export default router;

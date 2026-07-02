@@ -14,7 +14,7 @@ import {
   googleLogin,
   getMe,
 } from "../controllers/userController.js";
-import { protect } from "../middlewares/authMiddleware.js";
+import { allowSelfOrMenuAccess, authorizeMenuAccess, protect } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
@@ -22,14 +22,14 @@ const router = express.Router();
 router.get("/me", protect, getMe);
 
 // Bonus History route
-router.get("/:id/bonus-history", protect, getBonusHistory);
+router.get("/:id/bonus-history", protect, allowSelfOrMenuAccess("users"), getBonusHistory);
 
 // Protected user CRUD routes
-router.get("/", getUsers);
-router.get("/:id", protect, getUserById);
+router.get("/", protect, authorizeMenuAccess("users"), getUsers);
+router.get("/:id", protect, allowSelfOrMenuAccess("users"), getUserById);
 router.post("/", signup);
-router.patch("/:id", protect, upload.single("image"), updateUser);
-router.delete("/:id", protect, deleteUser);
+router.patch("/:id", protect, allowSelfOrMenuAccess("users"), upload.single("image"), updateUser);
+router.delete("/:id", protect, authorizeMenuAccess("users"), deleteUser);
 
 // Public authentication routes
 router.post("/signup", signup);

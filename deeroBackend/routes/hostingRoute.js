@@ -6,15 +6,15 @@ import {
     updatePackage,
     deletePackage
 } from "../controllers/hostingPackageController.js";
-import { protect } from "../middlewares/authMiddleware.js";
+import { authorizeMenuAccess, protect } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
 router.get("/", getAllPackages);
 router.get("/:id", getPackageById);
 
-router.post("/", protect, createPackage);
-router.patch("/:id", protect, updatePackage);
-router.delete("/:id", protect, deletePackage);
+router.post("/", protect, authorizeMenuAccess("hosting"), createPackage);
+router.patch("/:id", protect, authorizeMenuAccess("hosting"), updatePackage);
+router.delete("/:id", protect, authorizeMenuAccess("hosting"), deletePackage);
 
 export default router;

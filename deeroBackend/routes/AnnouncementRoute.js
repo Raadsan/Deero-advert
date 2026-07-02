@@ -8,7 +8,7 @@ import {
     deleteAnnouncement,
     saveDeviceToken
 } from "../controllers/AnnouncementController.js";
-import { protect } from "../middlewares/authMiddleware.js";
+import { authorizeMenuAccess, protect } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
@@ -17,9 +17,9 @@ router.post("/save-token", saveDeviceToken);
 
 // Public: app & guests can list announcements (no JWT). Mutations stay protected.
 router.get("/", getAnnouncements);
-router.get("/:id", protect, getAnnouncementById);
-router.post("/", protect, createAnnouncement);
-router.patch("/:id", protect, updateAnnouncement);
-router.delete("/:id", protect, deleteAnnouncement);
+router.get("/:id", protect, authorizeMenuAccess("announcements", "announcement"), getAnnouncementById);
+router.post("/", protect, authorizeMenuAccess("announcements", "announcement"), createAnnouncement);
+router.patch("/:id", protect, authorizeMenuAccess("announcements", "announcement"), updateAnnouncement);
+router.delete("/:id", protect, authorizeMenuAccess("announcements", "announcement"), deleteAnnouncement);
 
 export default router;

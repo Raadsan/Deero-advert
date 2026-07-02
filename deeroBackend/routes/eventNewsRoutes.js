@@ -6,15 +6,15 @@ import {
     updateEventNews,
     deleteEventNews,
 } from "../controllers/EventNewsController.js";
-import { protect } from "../middlewares/authMiddleware.js";
+import { authorizeMenuAccess, protect } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
 router.get("/", getAllEventsNews);
 router.get("/:id", getEventNewsById);
 
-router.post("/", protect, createEventNews);
-router.patch("/:id", protect, updateEventNews);
-router.delete("/:id", protect, deleteEventNews);
+router.post("/", protect, authorizeMenuAccess("events news", "event news", "news"), createEventNews);
+router.patch("/:id", protect, authorizeMenuAccess("events news", "event news", "news"), updateEventNews);
+router.delete("/:id", protect, authorizeMenuAccess("events news", "event news", "news"), deleteEventNews);
 
 export default router;

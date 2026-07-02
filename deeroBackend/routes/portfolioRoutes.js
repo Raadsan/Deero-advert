@@ -9,7 +9,7 @@ import {
   reorderGalleryImages
 } from "../controllers/portfolioController.js";
 import upload from "../utils/multer.js";
-import { protect } from "../middlewares/authMiddleware.js";
+import { authorizeMenuAccess, protect } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
@@ -20,10 +20,10 @@ const uploadFields = upload.fields([
 
 router.get("/", getAllPortfolios);
 router.get("/:id", getPortfolioById);
-router.post("/", protect, uploadFields, createPortfolio);
-router.patch("/:id", protect, uploadFields, updatePortfolio);
-router.delete("/:id", protect, deletePortfolio);
-router.post("/:id/delete-gallery-image", protect, deleteGalleryImage);
-router.post("/:id/reorder-gallery", protect, reorderGalleryImages);
+router.post("/", protect, authorizeMenuAccess("portfolio", "portfolios"), uploadFields, createPortfolio);
+router.patch("/:id", protect, authorizeMenuAccess("portfolio", "portfolios"), uploadFields, updatePortfolio);
+router.delete("/:id", protect, authorizeMenuAccess("portfolio", "portfolios"), deletePortfolio);
+router.post("/:id/delete-gallery-image", protect, authorizeMenuAccess("portfolio", "portfolios"), deleteGalleryImage);
+router.post("/:id/reorder-gallery", protect, authorizeMenuAccess("portfolio", "portfolios"), reorderGalleryImages);
 
 export default router;
