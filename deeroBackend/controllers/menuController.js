@@ -184,25 +184,47 @@ export const getUserMenus = async (req, res) => {
     const roleId = parseInt(req.params.roleId);
     if (!roleId) return res.status(400).json({ success: false, message: "Role ID is required" });
 
-    const rolePermissions = await prisma.rolePermission.findMany({
+    const rolePermission = await prisma.rolePermission.findUnique({
       where: { roleId },
       include: {
-         menusAccess: {
-            include: {
-               menu: {
-                  include: { subMenus: true }
-               }
-            }
-         }
-      }
+        menusAccess: {
+          include: {
+            menu: {
+              include: { subMenus: true },
+            },
+            subMenus: true,
+          },
+        },
+      },
     });
 
-    if (!rolePermissions.length) return res.json({ success: true, menus: [] });
+    if (!rolePermission) return res.json({ success: true, menus: [] });
 
-    // In Prisma schema, rolePermission -> menusAccess[] -> menu
-    const userMenus = rolePermissions.flatMap(rp => 
-        rp.menusAccess.map(ma => ma.menu)
-    ).filter(Boolean);
+    const userMenus = rolePermission.menusAccess
+      .map((menuAccess) => {
+        const menu = menuAccess.menu;
+        if (!menu) return null;
+
+        if (menu.isCollapsible) {
+          const allowedSubMenuIds = new Set(
+            menuAccess.subMenus.map((subMenu) => subMenu.subMenuId)
+          );
+
+          const filteredSubMenus = menu.subMenus.filter((subMenu) =>
+            allowedSubMenuIds.has(subMenu.id)
+          );
+
+          if (filteredSubMenus.length === 0) return null;
+
+          return {
+            ...menu,
+            subMenus: filteredSubMenus,
+          };
+        }
+
+        return menu;
+      })
+      .filter(Boolean);
 
     res.json({ success: true, menus: userMenus });
   } catch (err) {

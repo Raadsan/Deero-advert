@@ -13,7 +13,7 @@ export default function DashboardLayout({
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
     return (
-        <ProtectedRoute requiredRole="any">
+        <ProtectedRoute requiredRole="staff">
             <div className="min-h-screen bg-gray-50 font-sans">
                 <UnifiedSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 

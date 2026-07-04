@@ -1,5 +1,6 @@
 import api from "./axios";
 import { clearAuth } from "@/utils/auth";
+import { clearMenuAccessCache } from "@/utils/menuAccess";
 
 // Login
 export const loginUser = (data: { email: string; password: string }) => {
@@ -29,9 +30,8 @@ export const forgotPassword = (email: string) => {
 
 // Logout
 export const logout = () => {
-  // Clear token and user from auth utility
+  clearMenuAccessCache();
   clearAuth();
-  // Return a resolved promise for consistency
   return Promise.resolve();
 };
 

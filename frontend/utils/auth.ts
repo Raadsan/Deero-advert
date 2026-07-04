@@ -58,35 +58,86 @@ export const isAuthenticated = (): boolean => {
     return !!getToken() && !!getUser();
 };
 
-export const isAdmin = (): boolean => {
+export const getRoleName = (): string => {
     const user = getUser();
-    return user?.role === "admin" || user?.role?.name === "admin";
+    if (typeof user?.role === "object") {
+        return (user?.role?.name || "user").toLowerCase().trim();
+    }
+    return (user?.role || "user").toString().toLowerCase().trim();
 };
 
-export const isManager = (): boolean => {
-    const user = getUser();
-    return user?.role === "manager" || user?.role?.name === "manager";
-};
+export const isAdmin = (): boolean => getRoleName() === "admin";
+
+export const isManager = (): boolean => getRoleName() === "manager";
 
 export const isAdminOrManager = (): boolean => {
-    return isAdmin() || isManager();
+    const role = getRoleName();
+    return role === "admin" || role === "manager";
 };
 
+export const isStaff = (): boolean => isAuthenticated() && getRoleName() !== "user";
+
 export const isUser = (): boolean => {
-    const user = getUser();
-    return (
-        user?.role === "user" ||
-        user?.role?.name === "user" ||
-        (!user?.role && isAuthenticated())
-    );
+    if (!isAuthenticated()) return false;
+    return getRoleName() === "user";
 };
 
 export const getUserRole = (): string | null => {
-    const user = getUser();
-    if (typeof user?.role === "object") {
-        return user?.role?.name || null;
+    const role = getRoleName();
+    return role || null;
+};
+
+const STAFF_ROUTE_ALIASES: Record<string, string> = {
+    "/services": "/management/services",
+    "/teams": "/management/teams",
+    "/blogs": "/management/blogs",
+    "/portfolio": "/management/portfolio",
+    "/portfolios": "/management/portfolio",
+    "/achievements": "/management/achievements",
+    "/testimonials": "/management/testimonials",
+    "/career": "/management/career",
+    "/careers": "/management/career",
+    "/announcements": "/management/announcements",
+    "/events-news": "/management/events-news",
+    "/video": "/management/video",
+    "/videos": "/management/video",
+    "/majorclient": "/management/majorclient",
+    "/major-clients": "/management/majorclient",
+    "/hosting": "/management/hosting-package",
+    "/hosting-package": "/management/hosting-package",
+    "/domain-price": "/management/domain-price",
+    "/case-study": "/management/case-study",
+    "/casestudy": "/management/case-study",
+    "/welcome": "/management/welcome-message",
+    "/company-contact": "/management/company-contact",
+    "/users": "/config/users",
+    "/roles": "/config/roles",
+    "/menus": "/config/menus",
+    "/permissions": "/config/permissions",
+};
+
+export const normalizeStaffMenuUrl = (url?: string) => {
+    if (!url) return "#";
+
+    let clean = url.replace(/\\/g, "/").trim();
+    if (!clean.startsWith("/")) clean = `/${clean}`;
+    clean = clean.replace(/\/+$/, "") || "/";
+
+    if (clean === "/") return "/dashboard";
+
+    if (
+        clean.startsWith("/management") ||
+        clean.startsWith("/config") ||
+        clean.startsWith("/requests") ||
+        clean.startsWith("/request") ||
+        clean.startsWith("/discounts") ||
+        clean.startsWith("/dashboard") ||
+        clean.startsWith("/payments")
+    ) {
+        return clean;
     }
-    return user?.role || null;
+
+    return STAFF_ROUTE_ALIASES[clean] || clean;
 };
 
 export const getUserId = (): string | null => {

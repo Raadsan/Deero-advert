@@ -7,7 +7,8 @@ import { loginUser, signupUser, forgotPassword, verifyResetCode, resetPassword }
 import { useRouter, useSearchParams } from "next/navigation";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-import { isAuthenticated, isAdminOrManager, setAuth, getUser, isUser } from "@/utils/auth";
+import { isAuthenticated, isStaff, setAuth, isUser } from "@/utils/auth";
+import { clearMenuAccessCache } from "@/utils/menuAccess";
 
 import Link from "next/link";
 
@@ -30,8 +31,10 @@ function LoginContent() {
     if (isAuthenticated()) {
       if (isUser()) {
         router.push(redirectUrl);
-      } else {
+      } else if (isStaff()) {
         router.push("/dashboard");
+      } else {
+        router.push(redirectUrl);
       }
     }
   }, [router, redirectUrl]);
@@ -63,14 +66,17 @@ function LoginContent() {
     try {
       const res = await loginUser(loginData);
       if (res.data.token) {
+        clearMenuAccessCache();
         setAuth(res.data.token, res.data.user);
         setSuccess("Login successful! Redirecting...");
         setTimeout(() => {
           // Redirect to dashboard or requested page
           if (isUser()) {
             router.push(redirectUrl);
-          } else {
+          } else if (isStaff()) {
             router.push("/dashboard");
+          } else {
+            router.push(redirectUrl);
           }
         }, 1000);
       }

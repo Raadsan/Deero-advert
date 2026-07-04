@@ -13,7 +13,7 @@ export default function ConfigurationLayout({
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
     return (
-        <ProtectedRoute requiredRole="admin">
+        <ProtectedRoute requiredRole="staff">
             <div className="min-h-screen bg-gray-50 font-sans">
                 <UnifiedSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 

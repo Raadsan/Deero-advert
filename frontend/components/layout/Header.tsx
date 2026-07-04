@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { Bell, User, LogOut, ShoppingCart } from "lucide-react";
 import { useCart } from "@/context/CartContext";
-import { isAuthenticated, getUser, clearAuth, isAdmin, isManager, isAdminOrManager } from "@/utils/auth";
+import { isAuthenticated, getUser, clearAuth, isStaff as hasStaffRole, isAdmin } from "@/utils/auth";
 import { logout as apiLogout } from "../../api-client/authApi";
 import { getActiveAnnouncements, Announcement } from "../../api-client/announcementApi";
 import { Megaphone, X, ChevronDown } from "lucide-react";
@@ -62,7 +62,7 @@ export default function Header() {
     if (userData) {
       setUser(userData);
       setIsAdminUser(isAdmin());
-      setIsStaff(isAdminOrManager());
+      setIsStaff(hasStaffRole());
     } else {
       setUser(null);
       setIsAdminUser(false);
@@ -96,7 +96,7 @@ export default function Header() {
     if (userData) {
       setUser(userData);
       setIsAdminUser(isAdmin());
-      setIsStaff(isAdminOrManager());
+      setIsStaff(hasStaffRole());
     } else {
       setUser(null);
       setIsAdminUser(false);
@@ -284,7 +284,7 @@ export default function Header() {
             )}
 
             {isLoggedIn ? (
-              isAdminOrManager() ? (
+              hasStaffRole() ? (
                 <Link
                   href="/dashboard"
                   className="rounded-full bg-[#EB4724] px-6 py-2.5 font-semibold text-white transition hover:opacity-90 shadow-md"
@@ -443,7 +443,7 @@ export default function Header() {
                     </div>
 
                   </div>
-                  {isAdminOrManager() && (
+                  {hasStaffRole() && (
                     <Link
                       href="/dashboard"
                       className="w-full rounded-full bg-[#EB4724] py-2 text-center text-white font-semibold transition"

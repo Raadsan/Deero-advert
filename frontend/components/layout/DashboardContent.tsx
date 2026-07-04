@@ -12,7 +12,8 @@ import { getAllTransactions, getTransactionsByUser, getRevenueAnalytics } from "
 
 import DataTable from "@/components/layout/DataTable";
 import { Transaction } from "@/types/transaction";
-import { isAdminOrManager, getUserId, isUser, getUserRole } from "@/utils/auth";
+import { isStaff, getUserId, isUser, getUserRole, isAdmin } from "@/utils/auth";
+import { isStaffPathAllowed, loadAllowedStaffPaths } from "@/utils/menuAccess";
 
 export default function DashboardContent() {
     const [stats, setStats] = useState<any[]>([]);
@@ -27,10 +28,11 @@ export default function DashboardContent() {
     // Revenue Analytics State
     const [revenueData, setRevenueData] = useState<any[]>([]);
     const [revenueLoading, setRevenueLoading] = useState(false);
+    const [canViewUsers, setCanViewUsers] = useState(false);
 
-    const isPrivileged = isAdminOrManager();
+    const isPrivileged = isStaff();
     const userId = getUserId();
-    const userRole = getUserRole(); // Get role
+    const userRole = getUserRole();
 
     useEffect(() => {
         const fetchDashboardData = async () => {
@@ -40,28 +42,88 @@ export default function DashboardContent() {
 
                 if (isPrivileged) {
                     setRevenueLoading(true);
-                    // ADMIN/MANAGER STATS - Global
-                    const [servicesRes, usersRes, achievementsRes, transactionsRes, revenueRes] = await Promise.all([
-                        getAllServices(),
-                        getAllUsers(),
-                        getAllAchievements(),
-                        getAllTransactions(),
-                        getRevenueAnalytics(),
-                    ]);
+                    setCanViewUsers(false);
 
-                    const servicesResAny = servicesRes as any;
-                    const achievementsResAny = achievementsRes as any;
-                    const transactionsData = transactionsRes.data?.transactions || [];
+                    let servicesCount = 0;
+                    let usersCount = 0;
+                    let achievementsCount = 0;
+                    let transactionsData: Transaction[] = [];
+                    let revenueLoaded = false;
 
-                    // Set revenue data
-                    if (revenueRes.data && revenueRes.data.success) {
-                        setRevenueData(revenueRes.data.data);
+                    try {
+                        const servicesRes = await getAllServices() as any;
+                        servicesCount = servicesRes.data?.count || servicesRes.data?.data?.length || 0;
+                    } catch (error) {
+                        console.warn("Dashboard: services unavailable", error);
                     }
 
+                    const allowedPaths = isAdmin() ? [] : await loadAllowedStaffPaths();
+                    const canFetchUsers =
+                        isAdmin() ||
+                        isStaffPathAllowed("/config/users", allowedPaths) ||
+                        isStaffPathAllowed("/users", allowedPaths);
 
-                    const servicesCount = servicesResAny.data?.count || servicesResAny.data?.data?.length || 0;
-                    const usersCount = Array.isArray(usersRes.data) ? usersRes.data.length : 0;
-                    const achievementsCount = achievementsResAny.data?.count || achievementsResAny.data?.data?.length || 0;
+                    if (canFetchUsers) {
+                        try {
+                            const usersRes = await getAllUsers();
+                            usersCount = Array.isArray(usersRes.data) ? usersRes.data.length : 0;
+                            setCanViewUsers(true);
+
+                            const users = Array.isArray(usersRes.data) ? usersRes.data : [];
+                            const regularUsers = users.filter((user: any) => {
+                                const roleName = typeof user.role === "object" ? user.role?.name : user.role;
+                                return roleName === "user";
+                            });
+                            const sortedUsers = [...regularUsers]
+                                .sort((a, b) => {
+                                    const dateA = new Date(a.createdAt || a._id).getTime();
+                                    const dateB = new Date(b.createdAt || b._id).getTime();
+                                    return dateB - dateA;
+                                })
+                                .slice(0, 10);
+                            setTopUsers(sortedUsers);
+                        } catch (error) {
+                            console.warn("Dashboard: users unavailable", error);
+                            setCanViewUsers(false);
+                            setTopUsers([]);
+                        }
+                    } else {
+                        setCanViewUsers(false);
+                        setTopUsers([]);
+                    }
+
+                    try {
+                        const achievementsRes = await getAllAchievements() as any;
+                        achievementsCount = achievementsRes.data?.count || achievementsRes.data?.data?.length || 0;
+                    } catch (error) {
+                        console.warn("Dashboard: achievements unavailable", error);
+                    }
+
+                    const canFetchTransactions =
+                        isAdmin() ||
+                        isStaffPathAllowed("/payments", allowedPaths) ||
+                        isStaffPathAllowed("/transactions", allowedPaths);
+
+                    if (canFetchTransactions) {
+                        try {
+                            const transactionsRes = await getAllTransactions();
+                            transactionsData = transactionsRes.data?.transactions || [];
+                        } catch (error) {
+                            console.warn("Dashboard: transactions unavailable", error);
+                        }
+
+                        try {
+                            const revenueRes = await getRevenueAnalytics();
+                            if (revenueRes.data?.success) {
+                                setRevenueData(revenueRes.data.data);
+                                revenueLoaded = true;
+                            }
+                        } catch (error) {
+                            console.warn("Dashboard: revenue analytics unavailable", error);
+                        }
+                    } else {
+                        setRevenueData([]);
+                    }
 
                     const totalRevenue = transactionsData
                         .filter((t: any) => t.status === "completed")
@@ -69,10 +131,10 @@ export default function DashboardContent() {
 
                     const formatNumber = (num: number) => num.toLocaleString();
 
-                    // Sort transactions by date (newest first)
                     transactionsData.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
                     setTransactions(transactionsData);
+
                     setStats([
                         {
                             title: "Total Services",
@@ -103,6 +165,9 @@ export default function DashboardContent() {
                             color: "bg-purple-100 text-purple-700",
                         },
                     ]);
+                    if (!revenueLoaded) {
+                        setRevenueData([]);
+                    }
                 } else if (userId) {
                     setRevenueLoading(true);
                     // REGULAR USER STATS - Personal
@@ -170,6 +235,7 @@ export default function DashboardContent() {
                 setLoading(false);
                 setTransactionsLoading(false);
                 setRevenueLoading(false);
+                setUsersLoading(false);
             }
         };
 
@@ -179,33 +245,7 @@ export default function DashboardContent() {
     useEffect(() => {
         if (!isPrivileged) {
             setUsersLoading(false);
-            return;
         }
-
-        const fetchTopUsers = async () => {
-            try {
-                setUsersLoading(true);
-                const res = await getAllUsers();
-                const users = Array.isArray(res.data) ? res.data : [];
-                const regularUsers = users.filter((user: any) => {
-                    const roleName = typeof user.role === 'object' ? user.role?.name : user.role;
-                    return roleName === "user";
-                });
-                const sortedUsers = [...regularUsers]
-                    .sort((a, b) => {
-                        const dateA = new Date(a.createdAt || a._id).getTime();
-                        const dateB = new Date(b.createdAt || b._id).getTime();
-                        return dateB - dateA;
-                    })
-                    .slice(0, 10);
-                setTopUsers(sortedUsers);
-            } catch (error) {
-                console.error("Error fetching top users:", error);
-            } finally {
-                setUsersLoading(false);
-            }
-        };
-        fetchTopUsers();
     }, [isPrivileged]);
 
     useEffect(() => {
@@ -527,7 +567,7 @@ export default function DashboardContent() {
                 </div>
             )}
 
-            {isPrivileged && (
+            {isPrivileged && canViewUsers && (
                 <DataTable
                     title="Top 10 Regular Users"
                     columns={[

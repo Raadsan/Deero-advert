@@ -32,7 +32,7 @@ import Image from "next/image";
 import { logout } from "@/api-client/authApi";
 import { useEffect, useState } from "react";
 import { getUserMenus } from "@/api-client/menuApi";
-import { getUser, isAdminOrManager } from "@/utils/auth";
+import { getUser, normalizeStaffMenuUrl } from "@/utils/auth";
 import { Menu } from "@/types/menu";
 import { Users as UsersIcon } from "lucide-react"; // Rename to avoid confusion with the mapping
 
@@ -115,7 +115,11 @@ export default function UnifiedSidebar({ isOpen, onClose }: { isOpen?: boolean; 
                     return;
                 }
 
-                const roleId = user.role?._id || user.role;
+                const roleId =
+                    user.roleId ||
+                    user.role?.id ||
+                    user.role?._id ||
+                    user.role;
 
                 if (!roleId) {
                     if (isMounted) {
@@ -194,10 +198,7 @@ export default function UnifiedSidebar({ isOpen, onClose }: { isOpen?: boolean; 
         return iconMap[normalizedName] || iconMap[iconName.toLowerCase()] || Folder;
     };
 
-    const ensureAbsoluteUrl = (url?: string) => {
-        if (!url) return "#";
-        return url.startsWith("/") ? url : `/${url}`;
-    };
+    const ensureAbsoluteUrl = (url?: string) => normalizeStaffMenuUrl(url);
 
     const isMenuActive = (menu: Menu): boolean => {
         const absoluteUrl = ensureAbsoluteUrl(menu.url);

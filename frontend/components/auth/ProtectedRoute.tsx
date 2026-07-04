@@ -2,57 +2,71 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { getToken, getUser, isAdminOrManager } from "@/utils/auth";
+import { getToken, getUser, isStaff, isUser } from "@/utils/auth";
+import { canAccessStaffPath } from "@/utils/menuAccess";
 
 interface ProtectedRouteProps {
     children: React.ReactNode;
-    requiredRole?: "admin" | "user" | "any";
+    requiredRole?: "staff" | "user" | "any";
+    enforceMenuAccess?: boolean;
 }
 
-export default function ProtectedRoute({ children, requiredRole = "any" }: ProtectedRouteProps) {
+export default function ProtectedRoute({
+    children,
+    requiredRole = "any",
+    enforceMenuAccess = true,
+}: ProtectedRouteProps) {
     const router = useRouter();
     const pathname = usePathname();
     const [isAuthorized, setIsAuthorized] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const checkAuth = () => {
+        let isMounted = true;
+
+        const checkAuth = async () => {
             const token = getToken();
             const user = getUser();
 
-            // If no token, redirect to login
             if (!token || !user) {
                 router.push("/login");
                 return;
             }
 
-            // Check role-based access
-            if (requiredRole === "admin") {
-                // Allow both admin and manager roles for admin routes
-                if (!isAdminOrManager()) {
-                    // Regular user trying to access admin routes, redirect to home
+            if (requiredRole === "staff") {
+                if (!isStaff()) {
                     router.push("/");
                     return;
                 }
-            } else if (requiredRole === "user") {
-                // This is for user-only routes (if any)
-                const userRole = user?.role?.name || user?.role;
-                const roleNameLower = userRole?.toString().toLowerCase();
 
-                if (roleNameLower === "admin" || roleNameLower === "manager") {
-                    // Admin/Manager trying to access user routes, redirect to dashboard
+                if (enforceMenuAccess) {
+                    const allowed = await canAccessStaffPath(pathname || "/dashboard");
+                    if (!allowed) {
+                        router.push("/dashboard");
+                        return;
+                    }
+                }
+            } else if (requiredRole === "user") {
+                if (!isUser()) {
                     router.push("/dashboard");
                     return;
                 }
             }
 
-            // Authorized
-            setIsAuthorized(true);
-            setIsLoading(false);
+            if (isMounted) {
+                setIsAuthorized(true);
+                setIsLoading(false);
+            }
         };
 
+        setIsLoading(true);
+        setIsAuthorized(false);
         checkAuth();
-    }, [router, pathname, requiredRole]);
+
+        return () => {
+            isMounted = false;
+        };
+    }, [router, pathname, requiredRole, enforceMenuAccess]);
 
     if (isLoading) {
         return (
@@ -71,4 +85,3 @@ export default function ProtectedRoute({ children, requiredRole = "any" }: Prote
 
     return <>{children}</>;
 }
-
