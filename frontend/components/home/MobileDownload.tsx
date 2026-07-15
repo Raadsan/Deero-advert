@@ -40,7 +40,9 @@ export default function MobileDownload() {
 
                             {/* Google Play Badge */}
                             <Link
-                                href="#"
+                                href="https://play.google.com/store/apps/details?id=com.raadsan.deeroadvert"
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 className="flex items-center gap-2 sm:gap-3 bg-[#651313] px-3 py-2 sm:px-5 sm:py-2.5 rounded-xl transition-transform hover:scale-105 active:scale-95 shadow-lg flex-1 sm:flex-none justify-center"
                             >
                                 <svg viewBox="0 0 24 24" fill="white" className="w-5 h-5">
