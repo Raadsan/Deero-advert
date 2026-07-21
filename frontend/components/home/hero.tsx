@@ -5,60 +5,49 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { motion, AnimatePresence } from "framer-motion";
+import { getActiveHeroHomes } from "@/api-client/heroHomeApi";
 
 type Slide = {
+  id: number;
   title: string;
   description: string;
   image: string;
 };
 
-const slides: Slide[] = [
-  {
-    title: "Graphic Design",
-    description:
-      "We offer range of graphic design services encompasses logo design, UI design, event branding, and brand identity. With our expertise, we create captivating and memorable brands that resonate with the public, leaving a lasting impression.",
-    image: "/home-images/graphic-design.png",
-  },
-  {
-    title: "Digital Marketing",
-    description:
-      "We offer complete digital marketing services, including social media marketing strategy, social media analytics, branding, content writing and social media management. The strategy team understands business cases and how to align digital marketing activities to ensure they deliver on your objectives.",
-    image: "/home-images/digital-marketing.png",
-  },
-  {
-    title: "Web Solutions",
-    description:
-      "We offer complete web services, including web design, domain registration, domain transfer, SSL certificates, and web hosting. We create responsive websites that look wonderful on any device, including smartphones, tablets, and desktop computers.",
-    image: "/home-images/web-solution.png",
-  },
-  {
-    title: "Event Branding",
-    description:
-      "Full suite of event branding and consulting, from digital strategy and social media to on-site branding and highlight videos.",
-    image: "/home-images/event-branding.png",
-  },
-  {
-    title: "Digital Consulting",
-    description:
-      "We offer a full suite of digital consulting services, including digital marketing, branding consulting, event consulting, assisting with content creation, digital media, and communication consulting.",
-    image: "/home-images/digital-consulting.png",
-  },
-];
-
 export default function Hero() {
+  const [slides, setSlides] = useState<Slide[]>([]);
   const [active, setActive] = useState(0);
-  const total = useMemo(() => slides.length, []);
   const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
   const [firstLoad, setFirstLoad] = useState(true);
+
+  useEffect(() => {
+    const fetchSlides = async () => {
+      try {
+        const res = await getActiveHeroHomes();
+        if (res.success && res.data.length > 0) {
+          setSlides(res.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch hero homes", error);
+      }
+    };
+    fetchSlides();
+  }, []);
+
+  const total = useMemo(() => slides.length, [slides]);
+
   useEffect(() => {
     setIsMounted(true);
+    if (total === 0) return;
     const id = setInterval(() => {
       setFirstLoad(false);
       setActive((prev) => (prev + 1) % total);
     }, 5500);
     return () => clearInterval(id);
   }, [total]);
+
+  if (slides.length === 0) return <div className="min-h-[500px] bg-[linear-gradient(to_right,#651313_0%,#651313_60%,#EB4724_100%)]"></div>;
 
   const slide = slides[active];
 
@@ -86,14 +75,16 @@ export default function Hero() {
   return (
     <section className="relative overflow-hidden bg-[linear-gradient(to_right,#651313_0%,#651313_60%,#EB4724_100%)] text-white">
       <div className="mx-auto flex max-w-6xl flex-col gap-12 px-4 py-14 sm:px-10 lg:flex-row lg:items-center lg:py-10 2xl:py-20 min-h-[500px] lg:min-h-[400px] 2xl:min-h-[600px]">
-        <button
-          type="button"
-          aria-label="Previous slide"
-          onClick={prev}
-          className="absolute left-5 top-1/2 -translate-y-1/2 text-white/70 transition-all hover:text-white hover:scale-110 hidden lg:flex z-20"
-        >
-          <ChevronLeftIcon className="h-10 w-10" />
-        </button>
+        {total > 1 && (
+          <button
+            type="button"
+            aria-label="Previous slide"
+            onClick={prev}
+            className="absolute left-5 top-1/2 -translate-y-1/2 text-white/70 transition-all hover:text-white hover:scale-110 hidden lg:flex z-20"
+          >
+            <ChevronLeftIcon className="h-10 w-10" />
+          </button>
+        )}
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between w-full gap-10 ">
           <div className="space-y-6 lg:w-1/2 w-full flex flex-col justify-center min-h-[350px] sm:min-h-[400px] lg:h-[450px]">
             <AnimatePresence mode="popLayout">
@@ -134,7 +125,7 @@ export default function Hero() {
                 className="relative z-10 w-full flex justify-center"
               >
                 <Image
-                  src={slide.image}
+                  src={slide.image.startsWith("http") || slide.image.startsWith("/") ? slide.image : `http://localhost:5000/${slide.image}`}
                   alt={slide.title}
                   width={620}
                   height={400}
@@ -146,31 +137,32 @@ export default function Hero() {
           </div>
         </div>
 
-
-        <button
-          type="button"
-          aria-label="Next slide"
-          onClick={next}
-          className="absolute right-5 top-1/2 -translate-y-1/2 text-white/70 transition-all hover:text-white hover:scale-110 hidden lg:flex z-20"
-        >
-          <ChevronRightIcon className="h-10 w-10" />
-        </button>
-      </div>
-
-
-
-      <div className="flex items-center justify-center gap-3 pb-8">
-        {slides.map((_, idx) => (
+        {total > 1 && (
           <button
-            key={idx}
             type="button"
-            aria-label={`Go to slide ${idx + 1}`}
-            onClick={() => goTo(idx)}
-            className={`h-2 rounded-full transition-all duration-300 ${active === idx ? "w-6 bg-white" : "w-2 bg-white/60 hover:bg-white"
-              }`}
-          />
-        ))}
+            aria-label="Next slide"
+            onClick={next}
+            className="absolute right-5 top-1/2 -translate-y-1/2 text-white/70 transition-all hover:text-white hover:scale-110 hidden lg:flex z-20"
+          >
+            <ChevronRightIcon className="h-10 w-10" />
+          </button>
+        )}
       </div>
+
+      {total > 1 && (
+        <div className="flex items-center justify-center gap-3 pb-8">
+          {slides.map((_, idx) => (
+            <button
+              key={idx}
+              type="button"
+              aria-label={`Go to slide ${idx + 1}`}
+              onClick={() => goTo(idx)}
+              className={`h-2 rounded-full transition-all duration-300 ${active === idx ? "w-6 bg-white" : "w-2 bg-white/60 hover:bg-white"
+                }`}
+            />
+          ))}
+        </div>
+      )}
     </section>
   );
 }

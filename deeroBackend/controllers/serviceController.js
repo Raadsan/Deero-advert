@@ -23,7 +23,7 @@ const successResponse = (res, message, data, status = 200) => {
 // CREATE Service
 export const CreateService = async (req, res) => {
     try {
-        const { serviceTitle, packages } = req.body;
+        const { serviceTitle, packages, sortOrder } = req.body;
         if (!serviceTitle) return res.status(400).json({ message: "serviceTitle is required", success: false });
 
         let serviceIcon = null;
@@ -51,6 +51,7 @@ export const CreateService = async (req, res) => {
             data: {
                 serviceTitle,
                 serviceIcon,
+                sortOrder: Number.isFinite(Number(sortOrder)) ? Number(sortOrder) : 0,
                 packages: {
                     create: (packagesData || []).map(pkg => ({
                         packageTitle: pkg.packageTitle,
@@ -75,7 +76,7 @@ export const getALlServices = async (req, res) => {
     try {
         const services = await prisma.service.findMany({
             include: { packages: { include: { features: true } } },
-            orderBy: { createdAt: "desc" },
+            orderBy: [{ sortOrder: "asc" }, { id: "asc" }],
         });
         return successResponse(res, "Services fetched", services);
     } catch (err) {
@@ -104,10 +105,11 @@ export const updateServiceById = async (req, res) => {
     try {
         const { id } = req.params;
         const serviceId = parseInt(id);
-        const { serviceTitle, packages } = req.body;
+        const { serviceTitle, packages, sortOrder } = req.body;
 
         const existingService = await prisma.service.findUnique({ where: { id: serviceId } });
         if (!existingService) return res.status(404).json({ success: false, message: "Service not found" });
+        const parsedSortOrder = Number.isFinite(Number(sortOrder)) ? Number(sortOrder) : existingService.sortOrder;
 
         let serviceIcon = existingService.serviceIcon;
         if (req.files) {
@@ -138,6 +140,7 @@ export const updateServiceById = async (req, res) => {
                     data: {
                         serviceTitle: serviceTitle || existingService.serviceTitle,
                         serviceIcon,
+                        sortOrder: parsedSortOrder,
                         packages: {
                             create: packagesData.map(p => ({
                                 packageTitle: p.packageTitle,
@@ -149,7 +152,7 @@ export const updateServiceById = async (req, res) => {
                 });
             }
         } else {
-            await prisma.service.update({ where: { id: serviceId }, data: { serviceTitle, serviceIcon } });
+            await prisma.service.update({ where: { id: serviceId }, data: { serviceTitle, serviceIcon, sortOrder: parsedSortOrder } });
         }
 
         const updated = await prisma.service.findUnique({

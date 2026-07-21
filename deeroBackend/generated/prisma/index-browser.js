@@ -433,6 +433,7 @@ exports.Prisma.ServiceScalarFieldEnum = {
   id: 'id',
   serviceTitle: 'serviceTitle',
   serviceIcon: 'serviceIcon',
+  sortOrder: 'sortOrder',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -506,6 +507,68 @@ exports.Prisma.WelcomeMessageScalarFieldEnum = {
   facebook: 'facebook',
   linkedin: 'linkedin',
   instagram: 'instagram',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.HeroHomeScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  image: 'image',
+  isActive: 'isActive',
+  sortOrder: 'sortOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.HeroAboutScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  watermarkImage: 'watermarkImage',
+  description: 'description',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.VisionMissionScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  content: 'content',
+  icon: 'icon',
+  sortOrder: 'sortOrder',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CoreValueScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  icon: 'icon',
+  sortOrder: 'sortOrder',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ApproachScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  icon: 'icon',
+  sortOrder: 'sortOrder',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AwardScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  image: 'image',
+  sortOrder: 'sortOrder',
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -758,6 +821,39 @@ exports.Prisma.WelcomeMessageOrderByRelevanceFieldEnum = {
   instagram: 'instagram'
 };
 
+exports.Prisma.HeroHomeOrderByRelevanceFieldEnum = {
+  title: 'title',
+  description: 'description',
+  image: 'image'
+};
+
+exports.Prisma.HeroAboutOrderByRelevanceFieldEnum = {
+  title: 'title',
+  watermarkImage: 'watermarkImage',
+  description: 'description'
+};
+
+exports.Prisma.VisionMissionOrderByRelevanceFieldEnum = {
+  type: 'type',
+  content: 'content',
+  icon: 'icon'
+};
+
+exports.Prisma.CoreValueOrderByRelevanceFieldEnum = {
+  title: 'title',
+  icon: 'icon'
+};
+
+exports.Prisma.ApproachOrderByRelevanceFieldEnum = {
+  title: 'title',
+  icon: 'icon'
+};
+
+exports.Prisma.AwardOrderByRelevanceFieldEnum = {
+  title: 'title',
+  image: 'image'
+};
+
 
 exports.Prisma.ModelName = {
   User: 'User',
@@ -797,7 +893,13 @@ exports.Prisma.ModelName = {
   Conversation: 'Conversation',
   Message: 'Message',
   CompanyContact: 'CompanyContact',
-  WelcomeMessage: 'WelcomeMessage'
+  WelcomeMessage: 'WelcomeMessage',
+  HeroHome: 'HeroHome',
+  HeroAbout: 'HeroAbout',
+  VisionMission: 'VisionMission',
+  CoreValue: 'CoreValue',
+  Approach: 'Approach',
+  Award: 'Award'
 };
 
 /**

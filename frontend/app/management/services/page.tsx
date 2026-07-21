@@ -35,6 +35,7 @@ export default function AdminServicesPage() {
   const truncate = (s: string, n = 80) => (s?.length > n ? s.slice(0, n) + "..." : s);
   const [formData, setFormData] = useState({
     serviceTitle: "",
+    sortOrder: 0,
     serviceIcon: null as File | null,
     serviceIconPreview: "",
     packages: [] as Package[],
@@ -45,12 +46,13 @@ export default function AdminServicesPage() {
     setLoading(true);
     try {
       const res = await getAllServices();
-      const data: Service[] = Array.isArray(res.data?.data) ? [...res.data.data].reverse() : [];
+      const data: Service[] = Array.isArray(res.data?.data) ? res.data.data : [];
 
       // One row per service (not flattened by package)
       const serviceRows = data.map((svc) => ({
         _id: svc._id,
         serviceTitle: svc.serviceTitle,
+        sortOrder: svc.sortOrder ?? 0,
         serviceIcon: getImageUrl(svc.serviceIcon),
         packages: svc.packages || [],
         packageCount: (svc.packages || []).length,
@@ -181,6 +183,7 @@ export default function AdminServicesPage() {
       // Create FormData
       const formDataToSend = new FormData();
       formDataToSend.append("serviceTitle", formData.serviceTitle);
+      formDataToSend.append("sortOrder", String(formData.sortOrder));
       formDataToSend.append("packages", JSON.stringify(packagesData));
 
       // Add file if it's a new file (not editing or file changed)
@@ -203,6 +206,7 @@ export default function AdminServicesPage() {
       setEditingId(null);
       setFormData({
         serviceTitle: "",
+        sortOrder: 0,
         serviceIcon: null,
         serviceIconPreview: "",
         packages: [],
@@ -253,6 +257,7 @@ export default function AdminServicesPage() {
 
       setFormData({
         serviceTitle: row.serviceTitle,
+        sortOrder: row.sortOrder ?? 0,
         serviceIcon: null,
         serviceIconPreview: row.serviceIcon || "",
         packages: packages.length > 0 ? packages : [{ packageTitle: "", price: "", features: [""] }],
@@ -264,6 +269,7 @@ export default function AdminServicesPage() {
   };
 
   const columns = [
+    { label: "Order", key: "sortOrder", width: "80px" },
     { label: "Service Title", key: "serviceTitle", width: "220px" },
     {
       label: "Icon",
@@ -348,6 +354,7 @@ export default function AdminServicesPage() {
           setEditingId(null);
           setFormData({
             serviceTitle: "",
+            sortOrder: rows.length,
             serviceIcon: null,
             serviceIconPreview: "",
             packages: [{ packageTitle: "", price: "", features: [""] }],
@@ -371,6 +378,7 @@ export default function AdminServicesPage() {
           setEditingId(null);
           setFormData({
             serviceTitle: "",
+            sortOrder: 0,
             serviceIcon: null,
             serviceIconPreview: "",
             packages: [],
@@ -393,6 +401,23 @@ export default function AdminServicesPage() {
               className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#EB4724] focus:border-[#EB4724]"
               placeholder="e.g., Web Development"
             />
+          </div>
+
+          <div className="space-y-0.5">
+            <label className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">
+              Display Order
+            </label>
+            <input
+              type="number"
+              name="sortOrder"
+              min="0"
+              required
+              value={formData.sortOrder}
+              onChange={handleInputChange}
+              className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#EB4724] focus:border-[#EB4724]"
+              placeholder="0"
+            />
+            <p className="text-[10px] text-gray-400">Lower numbers appear first on the website.</p>
           </div>
 
           {/* Service Icon Upload */}
@@ -565,6 +590,7 @@ export default function AdminServicesPage() {
                 setEditingId(null);
                 setFormData({
                   serviceTitle: "",
+                  sortOrder: 0,
                   serviceIcon: null,
                   serviceIconPreview: "",
                   packages: [],

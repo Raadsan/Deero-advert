@@ -4,6 +4,7 @@ export interface Service {
   serviceTitle: string;
   serviceDescription: string;
   serviceIcon: string;
+  sortOrder?: number;
   packages?: {
     packageTitle: string;
     price: number;

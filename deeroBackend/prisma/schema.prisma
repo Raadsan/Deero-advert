@@ -357,6 +357,7 @@ model Service {
   id           Int              @id @default(autoincrement())
   serviceTitle String
   serviceIcon  String
+  sortOrder    Int              @default(0)
   packages     ServicePackage[]
   transactions Transaction[]
   createdAt    DateTime         @default(now())
@@ -447,4 +448,66 @@ model WelcomeMessage {
   isActive       Boolean  @default(true)
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+}
+
+model HeroHome {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String   @db.LongText
+  image       String
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model HeroAbout {
+  id             Int      @id @default(autoincrement())
+  title          String
+  watermarkImage String?
+  description    String?  @db.LongText
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model VisionMission {
+  id        Int      @id @default(autoincrement())
+  type      String   // "vision" or "mission"
+  content   String   @db.LongText
+  icon      String?
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model CoreValue {
+  id        Int      @id @default(autoincrement())
+  title     String
+  icon      String?
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Approach {
+  id        Int      @id @default(autoincrement())
+  title     String
+  icon      String?
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Award {
+  id        Int      @id @default(autoincrement())
+  title     String
+  image     String?
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

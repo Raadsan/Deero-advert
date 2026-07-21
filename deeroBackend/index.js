@@ -35,6 +35,12 @@ import companyContactRoutes from "./routes/companyContactRoutes.js";
 import caseStudyRoute from "./routes/caseStudyRoute.js";
 import applicationRoutes from "./routes/applicationRoutes.js";
 import welcomeRoutes from "./routes/welcomeRoutes.js";
+import heroHomeRoutes from "./routes/heroHomeRoutes.js";
+import heroAboutRoutes from "./routes/heroAboutRoutes.js";
+import visionMissionRoutes from "./routes/visionMissionRoutes.js";
+import coreValueRoutes from "./routes/coreValueRoutes.js";
+import approachRoutes from "./routes/approachRoutes.js";
+import awardRoutes from "./routes/awardRoutes.js";
 import multerErrorHandler from "./middlewares/multerErrorHandler.js";
 
 dotenv.config();
@@ -114,6 +120,12 @@ app.use("/api/casestudies", caseStudyRoute);
 app.use("/api/casestudy", caseStudyRoute);
 app.use("/api/applications", applicationRoutes);
 app.use("/api/welcome", welcomeRoutes);
+app.use("/api/hero-home", heroHomeRoutes);
+app.use("/api/hero-about", heroAboutRoutes);
+app.use("/api/vision-mission", visionMissionRoutes);
+app.use("/api/core-values", coreValueRoutes);
+app.use("/api/approaches", approachRoutes);
+app.use("/api/awards", awardRoutes);
 
 // Error Handling Middleware
 app.use(multerErrorHandler);

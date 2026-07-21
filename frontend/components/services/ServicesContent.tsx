@@ -126,13 +126,11 @@ export default function ServicesContent({
 
                 let results = Array.from(groupedMap.values());
 
-                // Sort to put "Graphic Design" first
+                // Keep the website in the order configured by management.
                 results.sort((a, b) => {
-                    const titleA = (a.serviceTitle || "").toLowerCase();
-                    const titleB = (b.serviceTitle || "").toLowerCase();
-                    if (titleA === "graphic design") return -1;
-                    if (titleB === "graphic design") return 1;
-                    return 0;
+                    const orderDifference = (a.sortOrder ?? 0) - (b.sortOrder ?? 0);
+                    if (orderDifference !== 0) return orderDifference;
+                    return Number(a.id ?? a._id ?? 0) - Number(b.id ?? b._id ?? 0);
                 });
 
                 setGroupedServices(results);

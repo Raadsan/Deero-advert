@@ -203,6 +203,36 @@ export type CompanyContact = $Result.DefaultSelection<Prisma.$CompanyContactPayl
  * 
  */
 export type WelcomeMessage = $Result.DefaultSelection<Prisma.$WelcomeMessagePayload>
+/**
+ * Model HeroHome
+ * 
+ */
+export type HeroHome = $Result.DefaultSelection<Prisma.$HeroHomePayload>
+/**
+ * Model HeroAbout
+ * 
+ */
+export type HeroAbout = $Result.DefaultSelection<Prisma.$HeroAboutPayload>
+/**
+ * Model VisionMission
+ * 
+ */
+export type VisionMission = $Result.DefaultSelection<Prisma.$VisionMissionPayload>
+/**
+ * Model CoreValue
+ * 
+ */
+export type CoreValue = $Result.DefaultSelection<Prisma.$CoreValuePayload>
+/**
+ * Model Approach
+ * 
+ */
+export type Approach = $Result.DefaultSelection<Prisma.$ApproachPayload>
+/**
+ * Model Award
+ * 
+ */
+export type Award = $Result.DefaultSelection<Prisma.$AwardPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -704,6 +734,66 @@ export class PrismaClient<
     * ```
     */
   get welcomeMessage(): Prisma.WelcomeMessageDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.heroHome`: Exposes CRUD operations for the **HeroHome** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more HeroHomes
+    * const heroHomes = await prisma.heroHome.findMany()
+    * ```
+    */
+  get heroHome(): Prisma.HeroHomeDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.heroAbout`: Exposes CRUD operations for the **HeroAbout** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more HeroAbouts
+    * const heroAbouts = await prisma.heroAbout.findMany()
+    * ```
+    */
+  get heroAbout(): Prisma.HeroAboutDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.visionMission`: Exposes CRUD operations for the **VisionMission** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more VisionMissions
+    * const visionMissions = await prisma.visionMission.findMany()
+    * ```
+    */
+  get visionMission(): Prisma.VisionMissionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.coreValue`: Exposes CRUD operations for the **CoreValue** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CoreValues
+    * const coreValues = await prisma.coreValue.findMany()
+    * ```
+    */
+  get coreValue(): Prisma.CoreValueDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.approach`: Exposes CRUD operations for the **Approach** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Approaches
+    * const approaches = await prisma.approach.findMany()
+    * ```
+    */
+  get approach(): Prisma.ApproachDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.award`: Exposes CRUD operations for the **Award** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Awards
+    * const awards = await prisma.award.findMany()
+    * ```
+    */
+  get award(): Prisma.AwardDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1175,7 +1265,13 @@ export namespace Prisma {
     Conversation: 'Conversation',
     Message: 'Message',
     CompanyContact: 'CompanyContact',
-    WelcomeMessage: 'WelcomeMessage'
+    WelcomeMessage: 'WelcomeMessage',
+    HeroHome: 'HeroHome',
+    HeroAbout: 'HeroAbout',
+    VisionMission: 'VisionMission',
+    CoreValue: 'CoreValue',
+    Approach: 'Approach',
+    Award: 'Award'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1191,7 +1287,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "globalSetting" | "discount" | "bonusHistory" | "role" | "rolePermission" | "permissionMenuAccess" | "permissionSubMenu" | "menu" | "subMenu" | "video" | "blog" | "caseStudy" | "achievement" | "announcement" | "career" | "jobApplication" | "domainPrice" | "eventNews" | "hostingPackage" | "portfolio" | "portfolioGallery" | "team" | "teamSocial" | "testimonial" | "transaction" | "contact" | "majorClient" | "majorClientImage" | "service" | "servicePackage" | "servicePackageFeature" | "subscriber" | "deviceToken" | "conversation" | "message" | "companyContact" | "welcomeMessage"
+      modelProps: "user" | "globalSetting" | "discount" | "bonusHistory" | "role" | "rolePermission" | "permissionMenuAccess" | "permissionSubMenu" | "menu" | "subMenu" | "video" | "blog" | "caseStudy" | "achievement" | "announcement" | "career" | "jobApplication" | "domainPrice" | "eventNews" | "hostingPackage" | "portfolio" | "portfolioGallery" | "team" | "teamSocial" | "testimonial" | "transaction" | "contact" | "majorClient" | "majorClientImage" | "service" | "servicePackage" | "servicePackageFeature" | "subscriber" | "deviceToken" | "conversation" | "message" | "companyContact" | "welcomeMessage" | "heroHome" | "heroAbout" | "visionMission" | "coreValue" | "approach" | "award"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3703,6 +3799,402 @@ export namespace Prisma {
           }
         }
       }
+      HeroHome: {
+        payload: Prisma.$HeroHomePayload<ExtArgs>
+        fields: Prisma.HeroHomeFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.HeroHomeFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HeroHomePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.HeroHomeFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HeroHomePayload>
+          }
+          findFirst: {
+            args: Prisma.HeroHomeFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HeroHomePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.HeroHomeFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HeroHomePayload>
+          }
+          findMany: {
+            args: Prisma.HeroHomeFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HeroHomePayload>[]
+          }
+          create: {
+            args: Prisma.HeroHomeCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HeroHomePayload>
+          }
+          createMany: {
+            args: Prisma.HeroHomeCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.HeroHomeDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HeroHomePayload>
+          }
+          update: {
+            args: Prisma.HeroHomeUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HeroHomePayload>
+          }
+          deleteMany: {
+            args: Prisma.HeroHomeDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.HeroHomeUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.HeroHomeUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HeroHomePayload>
+          }
+          aggregate: {
+            args: Prisma.HeroHomeAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateHeroHome>
+          }
+          groupBy: {
+            args: Prisma.HeroHomeGroupByArgs<ExtArgs>
+            result: $Utils.Optional<HeroHomeGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.HeroHomeCountArgs<ExtArgs>
+            result: $Utils.Optional<HeroHomeCountAggregateOutputType> | number
+          }
+        }
+      }
+      HeroAbout: {
+        payload: Prisma.$HeroAboutPayload<ExtArgs>
+        fields: Prisma.HeroAboutFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.HeroAboutFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HeroAboutPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.HeroAboutFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HeroAboutPayload>
+          }
+          findFirst: {
+            args: Prisma.HeroAboutFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HeroAboutPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.HeroAboutFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HeroAboutPayload>
+          }
+          findMany: {
+            args: Prisma.HeroAboutFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HeroAboutPayload>[]
+          }
+          create: {
+            args: Prisma.HeroAboutCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HeroAboutPayload>
+          }
+          createMany: {
+            args: Prisma.HeroAboutCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.HeroAboutDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HeroAboutPayload>
+          }
+          update: {
+            args: Prisma.HeroAboutUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HeroAboutPayload>
+          }
+          deleteMany: {
+            args: Prisma.HeroAboutDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.HeroAboutUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.HeroAboutUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HeroAboutPayload>
+          }
+          aggregate: {
+            args: Prisma.HeroAboutAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateHeroAbout>
+          }
+          groupBy: {
+            args: Prisma.HeroAboutGroupByArgs<ExtArgs>
+            result: $Utils.Optional<HeroAboutGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.HeroAboutCountArgs<ExtArgs>
+            result: $Utils.Optional<HeroAboutCountAggregateOutputType> | number
+          }
+        }
+      }
+      VisionMission: {
+        payload: Prisma.$VisionMissionPayload<ExtArgs>
+        fields: Prisma.VisionMissionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.VisionMissionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VisionMissionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.VisionMissionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VisionMissionPayload>
+          }
+          findFirst: {
+            args: Prisma.VisionMissionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VisionMissionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.VisionMissionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VisionMissionPayload>
+          }
+          findMany: {
+            args: Prisma.VisionMissionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VisionMissionPayload>[]
+          }
+          create: {
+            args: Prisma.VisionMissionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VisionMissionPayload>
+          }
+          createMany: {
+            args: Prisma.VisionMissionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.VisionMissionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VisionMissionPayload>
+          }
+          update: {
+            args: Prisma.VisionMissionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VisionMissionPayload>
+          }
+          deleteMany: {
+            args: Prisma.VisionMissionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.VisionMissionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.VisionMissionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VisionMissionPayload>
+          }
+          aggregate: {
+            args: Prisma.VisionMissionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateVisionMission>
+          }
+          groupBy: {
+            args: Prisma.VisionMissionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<VisionMissionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.VisionMissionCountArgs<ExtArgs>
+            result: $Utils.Optional<VisionMissionCountAggregateOutputType> | number
+          }
+        }
+      }
+      CoreValue: {
+        payload: Prisma.$CoreValuePayload<ExtArgs>
+        fields: Prisma.CoreValueFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CoreValueFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CoreValuePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CoreValueFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CoreValuePayload>
+          }
+          findFirst: {
+            args: Prisma.CoreValueFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CoreValuePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CoreValueFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CoreValuePayload>
+          }
+          findMany: {
+            args: Prisma.CoreValueFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CoreValuePayload>[]
+          }
+          create: {
+            args: Prisma.CoreValueCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CoreValuePayload>
+          }
+          createMany: {
+            args: Prisma.CoreValueCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.CoreValueDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CoreValuePayload>
+          }
+          update: {
+            args: Prisma.CoreValueUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CoreValuePayload>
+          }
+          deleteMany: {
+            args: Prisma.CoreValueDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CoreValueUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.CoreValueUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CoreValuePayload>
+          }
+          aggregate: {
+            args: Prisma.CoreValueAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCoreValue>
+          }
+          groupBy: {
+            args: Prisma.CoreValueGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CoreValueGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CoreValueCountArgs<ExtArgs>
+            result: $Utils.Optional<CoreValueCountAggregateOutputType> | number
+          }
+        }
+      }
+      Approach: {
+        payload: Prisma.$ApproachPayload<ExtArgs>
+        fields: Prisma.ApproachFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ApproachFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ApproachPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ApproachFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ApproachPayload>
+          }
+          findFirst: {
+            args: Prisma.ApproachFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ApproachPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ApproachFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ApproachPayload>
+          }
+          findMany: {
+            args: Prisma.ApproachFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ApproachPayload>[]
+          }
+          create: {
+            args: Prisma.ApproachCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ApproachPayload>
+          }
+          createMany: {
+            args: Prisma.ApproachCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.ApproachDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ApproachPayload>
+          }
+          update: {
+            args: Prisma.ApproachUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ApproachPayload>
+          }
+          deleteMany: {
+            args: Prisma.ApproachDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ApproachUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.ApproachUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ApproachPayload>
+          }
+          aggregate: {
+            args: Prisma.ApproachAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateApproach>
+          }
+          groupBy: {
+            args: Prisma.ApproachGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ApproachGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ApproachCountArgs<ExtArgs>
+            result: $Utils.Optional<ApproachCountAggregateOutputType> | number
+          }
+        }
+      }
+      Award: {
+        payload: Prisma.$AwardPayload<ExtArgs>
+        fields: Prisma.AwardFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AwardFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AwardPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AwardFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AwardPayload>
+          }
+          findFirst: {
+            args: Prisma.AwardFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AwardPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AwardFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AwardPayload>
+          }
+          findMany: {
+            args: Prisma.AwardFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AwardPayload>[]
+          }
+          create: {
+            args: Prisma.AwardCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AwardPayload>
+          }
+          createMany: {
+            args: Prisma.AwardCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.AwardDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AwardPayload>
+          }
+          update: {
+            args: Prisma.AwardUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AwardPayload>
+          }
+          deleteMany: {
+            args: Prisma.AwardDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AwardUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.AwardUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AwardPayload>
+          }
+          aggregate: {
+            args: Prisma.AwardAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAward>
+          }
+          groupBy: {
+            args: Prisma.AwardGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AwardGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AwardCountArgs<ExtArgs>
+            result: $Utils.Optional<AwardCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -3849,6 +4341,12 @@ export namespace Prisma {
     message?: MessageOmit
     companyContact?: CompanyContactOmit
     welcomeMessage?: WelcomeMessageOmit
+    heroHome?: HeroHomeOmit
+    heroAbout?: HeroAboutOmit
+    visionMission?: VisionMissionOmit
+    coreValue?: CoreValueOmit
+    approach?: ApproachOmit
+    award?: AwardOmit
   }
 
   /* Types for Logging */
@@ -33645,16 +34143,19 @@ export namespace Prisma {
 
   export type ServiceAvgAggregateOutputType = {
     id: number | null
+    sortOrder: number | null
   }
 
   export type ServiceSumAggregateOutputType = {
     id: number | null
+    sortOrder: number | null
   }
 
   export type ServiceMinAggregateOutputType = {
     id: number | null
     serviceTitle: string | null
     serviceIcon: string | null
+    sortOrder: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -33663,6 +34164,7 @@ export namespace Prisma {
     id: number | null
     serviceTitle: string | null
     serviceIcon: string | null
+    sortOrder: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -33671,6 +34173,7 @@ export namespace Prisma {
     id: number
     serviceTitle: number
     serviceIcon: number
+    sortOrder: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -33679,16 +34182,19 @@ export namespace Prisma {
 
   export type ServiceAvgAggregateInputType = {
     id?: true
+    sortOrder?: true
   }
 
   export type ServiceSumAggregateInputType = {
     id?: true
+    sortOrder?: true
   }
 
   export type ServiceMinAggregateInputType = {
     id?: true
     serviceTitle?: true
     serviceIcon?: true
+    sortOrder?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -33697,6 +34203,7 @@ export namespace Prisma {
     id?: true
     serviceTitle?: true
     serviceIcon?: true
+    sortOrder?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -33705,6 +34212,7 @@ export namespace Prisma {
     id?: true
     serviceTitle?: true
     serviceIcon?: true
+    sortOrder?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -33800,6 +34308,7 @@ export namespace Prisma {
     id: number
     serviceTitle: string
     serviceIcon: string
+    sortOrder: number
     createdAt: Date
     updatedAt: Date
     _count: ServiceCountAggregateOutputType | null
@@ -33827,6 +34336,7 @@ export namespace Prisma {
     id?: boolean
     serviceTitle?: boolean
     serviceIcon?: boolean
+    sortOrder?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     packages?: boolean | Service$packagesArgs<ExtArgs>
@@ -33840,11 +34350,12 @@ export namespace Prisma {
     id?: boolean
     serviceTitle?: boolean
     serviceIcon?: boolean
+    sortOrder?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ServiceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "serviceTitle" | "serviceIcon" | "createdAt" | "updatedAt", ExtArgs["result"]["service"]>
+  export type ServiceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "serviceTitle" | "serviceIcon" | "sortOrder" | "createdAt" | "updatedAt", ExtArgs["result"]["service"]>
   export type ServiceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     packages?: boolean | Service$packagesArgs<ExtArgs>
     transactions?: boolean | Service$transactionsArgs<ExtArgs>
@@ -33861,6 +34372,7 @@ export namespace Prisma {
       id: number
       serviceTitle: string
       serviceIcon: string
+      sortOrder: number
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["service"]>
@@ -34237,6 +34749,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Service", 'Int'>
     readonly serviceTitle: FieldRef<"Service", 'String'>
     readonly serviceIcon: FieldRef<"Service", 'String'>
+    readonly sortOrder: FieldRef<"Service", 'Int'>
     readonly createdAt: FieldRef<"Service", 'DateTime'>
     readonly updatedAt: FieldRef<"Service", 'DateTime'>
   }
@@ -42490,6 +43003,5706 @@ export namespace Prisma {
 
 
   /**
+   * Model HeroHome
+   */
+
+  export type AggregateHeroHome = {
+    _count: HeroHomeCountAggregateOutputType | null
+    _avg: HeroHomeAvgAggregateOutputType | null
+    _sum: HeroHomeSumAggregateOutputType | null
+    _min: HeroHomeMinAggregateOutputType | null
+    _max: HeroHomeMaxAggregateOutputType | null
+  }
+
+  export type HeroHomeAvgAggregateOutputType = {
+    id: number | null
+    sortOrder: number | null
+  }
+
+  export type HeroHomeSumAggregateOutputType = {
+    id: number | null
+    sortOrder: number | null
+  }
+
+  export type HeroHomeMinAggregateOutputType = {
+    id: number | null
+    title: string | null
+    description: string | null
+    image: string | null
+    isActive: boolean | null
+    sortOrder: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type HeroHomeMaxAggregateOutputType = {
+    id: number | null
+    title: string | null
+    description: string | null
+    image: string | null
+    isActive: boolean | null
+    sortOrder: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type HeroHomeCountAggregateOutputType = {
+    id: number
+    title: number
+    description: number
+    image: number
+    isActive: number
+    sortOrder: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type HeroHomeAvgAggregateInputType = {
+    id?: true
+    sortOrder?: true
+  }
+
+  export type HeroHomeSumAggregateInputType = {
+    id?: true
+    sortOrder?: true
+  }
+
+  export type HeroHomeMinAggregateInputType = {
+    id?: true
+    title?: true
+    description?: true
+    image?: true
+    isActive?: true
+    sortOrder?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type HeroHomeMaxAggregateInputType = {
+    id?: true
+    title?: true
+    description?: true
+    image?: true
+    isActive?: true
+    sortOrder?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type HeroHomeCountAggregateInputType = {
+    id?: true
+    title?: true
+    description?: true
+    image?: true
+    isActive?: true
+    sortOrder?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type HeroHomeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which HeroHome to aggregate.
+     */
+    where?: HeroHomeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HeroHomes to fetch.
+     */
+    orderBy?: HeroHomeOrderByWithRelationInput | HeroHomeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: HeroHomeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HeroHomes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HeroHomes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned HeroHomes
+    **/
+    _count?: true | HeroHomeCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: HeroHomeAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: HeroHomeSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: HeroHomeMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: HeroHomeMaxAggregateInputType
+  }
+
+  export type GetHeroHomeAggregateType<T extends HeroHomeAggregateArgs> = {
+        [P in keyof T & keyof AggregateHeroHome]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateHeroHome[P]>
+      : GetScalarType<T[P], AggregateHeroHome[P]>
+  }
+
+
+
+
+  export type HeroHomeGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: HeroHomeWhereInput
+    orderBy?: HeroHomeOrderByWithAggregationInput | HeroHomeOrderByWithAggregationInput[]
+    by: HeroHomeScalarFieldEnum[] | HeroHomeScalarFieldEnum
+    having?: HeroHomeScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: HeroHomeCountAggregateInputType | true
+    _avg?: HeroHomeAvgAggregateInputType
+    _sum?: HeroHomeSumAggregateInputType
+    _min?: HeroHomeMinAggregateInputType
+    _max?: HeroHomeMaxAggregateInputType
+  }
+
+  export type HeroHomeGroupByOutputType = {
+    id: number
+    title: string
+    description: string
+    image: string
+    isActive: boolean
+    sortOrder: number
+    createdAt: Date
+    updatedAt: Date
+    _count: HeroHomeCountAggregateOutputType | null
+    _avg: HeroHomeAvgAggregateOutputType | null
+    _sum: HeroHomeSumAggregateOutputType | null
+    _min: HeroHomeMinAggregateOutputType | null
+    _max: HeroHomeMaxAggregateOutputType | null
+  }
+
+  type GetHeroHomeGroupByPayload<T extends HeroHomeGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<HeroHomeGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof HeroHomeGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], HeroHomeGroupByOutputType[P]>
+            : GetScalarType<T[P], HeroHomeGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type HeroHomeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    description?: boolean
+    image?: boolean
+    isActive?: boolean
+    sortOrder?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["heroHome"]>
+
+
+
+  export type HeroHomeSelectScalar = {
+    id?: boolean
+    title?: boolean
+    description?: boolean
+    image?: boolean
+    isActive?: boolean
+    sortOrder?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type HeroHomeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "image" | "isActive" | "sortOrder" | "createdAt" | "updatedAt", ExtArgs["result"]["heroHome"]>
+
+  export type $HeroHomePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "HeroHome"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      title: string
+      description: string
+      image: string
+      isActive: boolean
+      sortOrder: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["heroHome"]>
+    composites: {}
+  }
+
+  type HeroHomeGetPayload<S extends boolean | null | undefined | HeroHomeDefaultArgs> = $Result.GetResult<Prisma.$HeroHomePayload, S>
+
+  type HeroHomeCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<HeroHomeFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: HeroHomeCountAggregateInputType | true
+    }
+
+  export interface HeroHomeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['HeroHome'], meta: { name: 'HeroHome' } }
+    /**
+     * Find zero or one HeroHome that matches the filter.
+     * @param {HeroHomeFindUniqueArgs} args - Arguments to find a HeroHome
+     * @example
+     * // Get one HeroHome
+     * const heroHome = await prisma.heroHome.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends HeroHomeFindUniqueArgs>(args: SelectSubset<T, HeroHomeFindUniqueArgs<ExtArgs>>): Prisma__HeroHomeClient<$Result.GetResult<Prisma.$HeroHomePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one HeroHome that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {HeroHomeFindUniqueOrThrowArgs} args - Arguments to find a HeroHome
+     * @example
+     * // Get one HeroHome
+     * const heroHome = await prisma.heroHome.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends HeroHomeFindUniqueOrThrowArgs>(args: SelectSubset<T, HeroHomeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__HeroHomeClient<$Result.GetResult<Prisma.$HeroHomePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first HeroHome that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HeroHomeFindFirstArgs} args - Arguments to find a HeroHome
+     * @example
+     * // Get one HeroHome
+     * const heroHome = await prisma.heroHome.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends HeroHomeFindFirstArgs>(args?: SelectSubset<T, HeroHomeFindFirstArgs<ExtArgs>>): Prisma__HeroHomeClient<$Result.GetResult<Prisma.$HeroHomePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first HeroHome that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HeroHomeFindFirstOrThrowArgs} args - Arguments to find a HeroHome
+     * @example
+     * // Get one HeroHome
+     * const heroHome = await prisma.heroHome.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends HeroHomeFindFirstOrThrowArgs>(args?: SelectSubset<T, HeroHomeFindFirstOrThrowArgs<ExtArgs>>): Prisma__HeroHomeClient<$Result.GetResult<Prisma.$HeroHomePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more HeroHomes that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HeroHomeFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all HeroHomes
+     * const heroHomes = await prisma.heroHome.findMany()
+     * 
+     * // Get first 10 HeroHomes
+     * const heroHomes = await prisma.heroHome.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const heroHomeWithIdOnly = await prisma.heroHome.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends HeroHomeFindManyArgs>(args?: SelectSubset<T, HeroHomeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HeroHomePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a HeroHome.
+     * @param {HeroHomeCreateArgs} args - Arguments to create a HeroHome.
+     * @example
+     * // Create one HeroHome
+     * const HeroHome = await prisma.heroHome.create({
+     *   data: {
+     *     // ... data to create a HeroHome
+     *   }
+     * })
+     * 
+     */
+    create<T extends HeroHomeCreateArgs>(args: SelectSubset<T, HeroHomeCreateArgs<ExtArgs>>): Prisma__HeroHomeClient<$Result.GetResult<Prisma.$HeroHomePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many HeroHomes.
+     * @param {HeroHomeCreateManyArgs} args - Arguments to create many HeroHomes.
+     * @example
+     * // Create many HeroHomes
+     * const heroHome = await prisma.heroHome.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends HeroHomeCreateManyArgs>(args?: SelectSubset<T, HeroHomeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a HeroHome.
+     * @param {HeroHomeDeleteArgs} args - Arguments to delete one HeroHome.
+     * @example
+     * // Delete one HeroHome
+     * const HeroHome = await prisma.heroHome.delete({
+     *   where: {
+     *     // ... filter to delete one HeroHome
+     *   }
+     * })
+     * 
+     */
+    delete<T extends HeroHomeDeleteArgs>(args: SelectSubset<T, HeroHomeDeleteArgs<ExtArgs>>): Prisma__HeroHomeClient<$Result.GetResult<Prisma.$HeroHomePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one HeroHome.
+     * @param {HeroHomeUpdateArgs} args - Arguments to update one HeroHome.
+     * @example
+     * // Update one HeroHome
+     * const heroHome = await prisma.heroHome.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends HeroHomeUpdateArgs>(args: SelectSubset<T, HeroHomeUpdateArgs<ExtArgs>>): Prisma__HeroHomeClient<$Result.GetResult<Prisma.$HeroHomePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more HeroHomes.
+     * @param {HeroHomeDeleteManyArgs} args - Arguments to filter HeroHomes to delete.
+     * @example
+     * // Delete a few HeroHomes
+     * const { count } = await prisma.heroHome.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends HeroHomeDeleteManyArgs>(args?: SelectSubset<T, HeroHomeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more HeroHomes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HeroHomeUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many HeroHomes
+     * const heroHome = await prisma.heroHome.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends HeroHomeUpdateManyArgs>(args: SelectSubset<T, HeroHomeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one HeroHome.
+     * @param {HeroHomeUpsertArgs} args - Arguments to update or create a HeroHome.
+     * @example
+     * // Update or create a HeroHome
+     * const heroHome = await prisma.heroHome.upsert({
+     *   create: {
+     *     // ... data to create a HeroHome
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the HeroHome we want to update
+     *   }
+     * })
+     */
+    upsert<T extends HeroHomeUpsertArgs>(args: SelectSubset<T, HeroHomeUpsertArgs<ExtArgs>>): Prisma__HeroHomeClient<$Result.GetResult<Prisma.$HeroHomePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of HeroHomes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HeroHomeCountArgs} args - Arguments to filter HeroHomes to count.
+     * @example
+     * // Count the number of HeroHomes
+     * const count = await prisma.heroHome.count({
+     *   where: {
+     *     // ... the filter for the HeroHomes we want to count
+     *   }
+     * })
+    **/
+    count<T extends HeroHomeCountArgs>(
+      args?: Subset<T, HeroHomeCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], HeroHomeCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a HeroHome.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HeroHomeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends HeroHomeAggregateArgs>(args: Subset<T, HeroHomeAggregateArgs>): Prisma.PrismaPromise<GetHeroHomeAggregateType<T>>
+
+    /**
+     * Group by HeroHome.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HeroHomeGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends HeroHomeGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: HeroHomeGroupByArgs['orderBy'] }
+        : { orderBy?: HeroHomeGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, HeroHomeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetHeroHomeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the HeroHome model
+   */
+  readonly fields: HeroHomeFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for HeroHome.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__HeroHomeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the HeroHome model
+   */
+  interface HeroHomeFieldRefs {
+    readonly id: FieldRef<"HeroHome", 'Int'>
+    readonly title: FieldRef<"HeroHome", 'String'>
+    readonly description: FieldRef<"HeroHome", 'String'>
+    readonly image: FieldRef<"HeroHome", 'String'>
+    readonly isActive: FieldRef<"HeroHome", 'Boolean'>
+    readonly sortOrder: FieldRef<"HeroHome", 'Int'>
+    readonly createdAt: FieldRef<"HeroHome", 'DateTime'>
+    readonly updatedAt: FieldRef<"HeroHome", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * HeroHome findUnique
+   */
+  export type HeroHomeFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HeroHome
+     */
+    select?: HeroHomeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HeroHome
+     */
+    omit?: HeroHomeOmit<ExtArgs> | null
+    /**
+     * Filter, which HeroHome to fetch.
+     */
+    where: HeroHomeWhereUniqueInput
+  }
+
+  /**
+   * HeroHome findUniqueOrThrow
+   */
+  export type HeroHomeFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HeroHome
+     */
+    select?: HeroHomeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HeroHome
+     */
+    omit?: HeroHomeOmit<ExtArgs> | null
+    /**
+     * Filter, which HeroHome to fetch.
+     */
+    where: HeroHomeWhereUniqueInput
+  }
+
+  /**
+   * HeroHome findFirst
+   */
+  export type HeroHomeFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HeroHome
+     */
+    select?: HeroHomeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HeroHome
+     */
+    omit?: HeroHomeOmit<ExtArgs> | null
+    /**
+     * Filter, which HeroHome to fetch.
+     */
+    where?: HeroHomeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HeroHomes to fetch.
+     */
+    orderBy?: HeroHomeOrderByWithRelationInput | HeroHomeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for HeroHomes.
+     */
+    cursor?: HeroHomeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HeroHomes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HeroHomes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of HeroHomes.
+     */
+    distinct?: HeroHomeScalarFieldEnum | HeroHomeScalarFieldEnum[]
+  }
+
+  /**
+   * HeroHome findFirstOrThrow
+   */
+  export type HeroHomeFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HeroHome
+     */
+    select?: HeroHomeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HeroHome
+     */
+    omit?: HeroHomeOmit<ExtArgs> | null
+    /**
+     * Filter, which HeroHome to fetch.
+     */
+    where?: HeroHomeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HeroHomes to fetch.
+     */
+    orderBy?: HeroHomeOrderByWithRelationInput | HeroHomeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for HeroHomes.
+     */
+    cursor?: HeroHomeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HeroHomes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HeroHomes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of HeroHomes.
+     */
+    distinct?: HeroHomeScalarFieldEnum | HeroHomeScalarFieldEnum[]
+  }
+
+  /**
+   * HeroHome findMany
+   */
+  export type HeroHomeFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HeroHome
+     */
+    select?: HeroHomeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HeroHome
+     */
+    omit?: HeroHomeOmit<ExtArgs> | null
+    /**
+     * Filter, which HeroHomes to fetch.
+     */
+    where?: HeroHomeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HeroHomes to fetch.
+     */
+    orderBy?: HeroHomeOrderByWithRelationInput | HeroHomeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing HeroHomes.
+     */
+    cursor?: HeroHomeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HeroHomes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HeroHomes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of HeroHomes.
+     */
+    distinct?: HeroHomeScalarFieldEnum | HeroHomeScalarFieldEnum[]
+  }
+
+  /**
+   * HeroHome create
+   */
+  export type HeroHomeCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HeroHome
+     */
+    select?: HeroHomeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HeroHome
+     */
+    omit?: HeroHomeOmit<ExtArgs> | null
+    /**
+     * The data needed to create a HeroHome.
+     */
+    data: XOR<HeroHomeCreateInput, HeroHomeUncheckedCreateInput>
+  }
+
+  /**
+   * HeroHome createMany
+   */
+  export type HeroHomeCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many HeroHomes.
+     */
+    data: HeroHomeCreateManyInput | HeroHomeCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * HeroHome update
+   */
+  export type HeroHomeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HeroHome
+     */
+    select?: HeroHomeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HeroHome
+     */
+    omit?: HeroHomeOmit<ExtArgs> | null
+    /**
+     * The data needed to update a HeroHome.
+     */
+    data: XOR<HeroHomeUpdateInput, HeroHomeUncheckedUpdateInput>
+    /**
+     * Choose, which HeroHome to update.
+     */
+    where: HeroHomeWhereUniqueInput
+  }
+
+  /**
+   * HeroHome updateMany
+   */
+  export type HeroHomeUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update HeroHomes.
+     */
+    data: XOR<HeroHomeUpdateManyMutationInput, HeroHomeUncheckedUpdateManyInput>
+    /**
+     * Filter which HeroHomes to update
+     */
+    where?: HeroHomeWhereInput
+    /**
+     * Limit how many HeroHomes to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * HeroHome upsert
+   */
+  export type HeroHomeUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HeroHome
+     */
+    select?: HeroHomeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HeroHome
+     */
+    omit?: HeroHomeOmit<ExtArgs> | null
+    /**
+     * The filter to search for the HeroHome to update in case it exists.
+     */
+    where: HeroHomeWhereUniqueInput
+    /**
+     * In case the HeroHome found by the `where` argument doesn't exist, create a new HeroHome with this data.
+     */
+    create: XOR<HeroHomeCreateInput, HeroHomeUncheckedCreateInput>
+    /**
+     * In case the HeroHome was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<HeroHomeUpdateInput, HeroHomeUncheckedUpdateInput>
+  }
+
+  /**
+   * HeroHome delete
+   */
+  export type HeroHomeDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HeroHome
+     */
+    select?: HeroHomeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HeroHome
+     */
+    omit?: HeroHomeOmit<ExtArgs> | null
+    /**
+     * Filter which HeroHome to delete.
+     */
+    where: HeroHomeWhereUniqueInput
+  }
+
+  /**
+   * HeroHome deleteMany
+   */
+  export type HeroHomeDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which HeroHomes to delete
+     */
+    where?: HeroHomeWhereInput
+    /**
+     * Limit how many HeroHomes to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * HeroHome without action
+   */
+  export type HeroHomeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HeroHome
+     */
+    select?: HeroHomeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HeroHome
+     */
+    omit?: HeroHomeOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model HeroAbout
+   */
+
+  export type AggregateHeroAbout = {
+    _count: HeroAboutCountAggregateOutputType | null
+    _avg: HeroAboutAvgAggregateOutputType | null
+    _sum: HeroAboutSumAggregateOutputType | null
+    _min: HeroAboutMinAggregateOutputType | null
+    _max: HeroAboutMaxAggregateOutputType | null
+  }
+
+  export type HeroAboutAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type HeroAboutSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type HeroAboutMinAggregateOutputType = {
+    id: number | null
+    title: string | null
+    watermarkImage: string | null
+    description: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type HeroAboutMaxAggregateOutputType = {
+    id: number | null
+    title: string | null
+    watermarkImage: string | null
+    description: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type HeroAboutCountAggregateOutputType = {
+    id: number
+    title: number
+    watermarkImage: number
+    description: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type HeroAboutAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type HeroAboutSumAggregateInputType = {
+    id?: true
+  }
+
+  export type HeroAboutMinAggregateInputType = {
+    id?: true
+    title?: true
+    watermarkImage?: true
+    description?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type HeroAboutMaxAggregateInputType = {
+    id?: true
+    title?: true
+    watermarkImage?: true
+    description?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type HeroAboutCountAggregateInputType = {
+    id?: true
+    title?: true
+    watermarkImage?: true
+    description?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type HeroAboutAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which HeroAbout to aggregate.
+     */
+    where?: HeroAboutWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HeroAbouts to fetch.
+     */
+    orderBy?: HeroAboutOrderByWithRelationInput | HeroAboutOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: HeroAboutWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HeroAbouts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HeroAbouts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned HeroAbouts
+    **/
+    _count?: true | HeroAboutCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: HeroAboutAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: HeroAboutSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: HeroAboutMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: HeroAboutMaxAggregateInputType
+  }
+
+  export type GetHeroAboutAggregateType<T extends HeroAboutAggregateArgs> = {
+        [P in keyof T & keyof AggregateHeroAbout]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateHeroAbout[P]>
+      : GetScalarType<T[P], AggregateHeroAbout[P]>
+  }
+
+
+
+
+  export type HeroAboutGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: HeroAboutWhereInput
+    orderBy?: HeroAboutOrderByWithAggregationInput | HeroAboutOrderByWithAggregationInput[]
+    by: HeroAboutScalarFieldEnum[] | HeroAboutScalarFieldEnum
+    having?: HeroAboutScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: HeroAboutCountAggregateInputType | true
+    _avg?: HeroAboutAvgAggregateInputType
+    _sum?: HeroAboutSumAggregateInputType
+    _min?: HeroAboutMinAggregateInputType
+    _max?: HeroAboutMaxAggregateInputType
+  }
+
+  export type HeroAboutGroupByOutputType = {
+    id: number
+    title: string
+    watermarkImage: string | null
+    description: string | null
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: HeroAboutCountAggregateOutputType | null
+    _avg: HeroAboutAvgAggregateOutputType | null
+    _sum: HeroAboutSumAggregateOutputType | null
+    _min: HeroAboutMinAggregateOutputType | null
+    _max: HeroAboutMaxAggregateOutputType | null
+  }
+
+  type GetHeroAboutGroupByPayload<T extends HeroAboutGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<HeroAboutGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof HeroAboutGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], HeroAboutGroupByOutputType[P]>
+            : GetScalarType<T[P], HeroAboutGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type HeroAboutSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    watermarkImage?: boolean
+    description?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["heroAbout"]>
+
+
+
+  export type HeroAboutSelectScalar = {
+    id?: boolean
+    title?: boolean
+    watermarkImage?: boolean
+    description?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type HeroAboutOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "watermarkImage" | "description" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["heroAbout"]>
+
+  export type $HeroAboutPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "HeroAbout"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      title: string
+      watermarkImage: string | null
+      description: string | null
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["heroAbout"]>
+    composites: {}
+  }
+
+  type HeroAboutGetPayload<S extends boolean | null | undefined | HeroAboutDefaultArgs> = $Result.GetResult<Prisma.$HeroAboutPayload, S>
+
+  type HeroAboutCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<HeroAboutFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: HeroAboutCountAggregateInputType | true
+    }
+
+  export interface HeroAboutDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['HeroAbout'], meta: { name: 'HeroAbout' } }
+    /**
+     * Find zero or one HeroAbout that matches the filter.
+     * @param {HeroAboutFindUniqueArgs} args - Arguments to find a HeroAbout
+     * @example
+     * // Get one HeroAbout
+     * const heroAbout = await prisma.heroAbout.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends HeroAboutFindUniqueArgs>(args: SelectSubset<T, HeroAboutFindUniqueArgs<ExtArgs>>): Prisma__HeroAboutClient<$Result.GetResult<Prisma.$HeroAboutPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one HeroAbout that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {HeroAboutFindUniqueOrThrowArgs} args - Arguments to find a HeroAbout
+     * @example
+     * // Get one HeroAbout
+     * const heroAbout = await prisma.heroAbout.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends HeroAboutFindUniqueOrThrowArgs>(args: SelectSubset<T, HeroAboutFindUniqueOrThrowArgs<ExtArgs>>): Prisma__HeroAboutClient<$Result.GetResult<Prisma.$HeroAboutPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first HeroAbout that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HeroAboutFindFirstArgs} args - Arguments to find a HeroAbout
+     * @example
+     * // Get one HeroAbout
+     * const heroAbout = await prisma.heroAbout.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends HeroAboutFindFirstArgs>(args?: SelectSubset<T, HeroAboutFindFirstArgs<ExtArgs>>): Prisma__HeroAboutClient<$Result.GetResult<Prisma.$HeroAboutPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first HeroAbout that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HeroAboutFindFirstOrThrowArgs} args - Arguments to find a HeroAbout
+     * @example
+     * // Get one HeroAbout
+     * const heroAbout = await prisma.heroAbout.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends HeroAboutFindFirstOrThrowArgs>(args?: SelectSubset<T, HeroAboutFindFirstOrThrowArgs<ExtArgs>>): Prisma__HeroAboutClient<$Result.GetResult<Prisma.$HeroAboutPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more HeroAbouts that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HeroAboutFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all HeroAbouts
+     * const heroAbouts = await prisma.heroAbout.findMany()
+     * 
+     * // Get first 10 HeroAbouts
+     * const heroAbouts = await prisma.heroAbout.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const heroAboutWithIdOnly = await prisma.heroAbout.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends HeroAboutFindManyArgs>(args?: SelectSubset<T, HeroAboutFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HeroAboutPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a HeroAbout.
+     * @param {HeroAboutCreateArgs} args - Arguments to create a HeroAbout.
+     * @example
+     * // Create one HeroAbout
+     * const HeroAbout = await prisma.heroAbout.create({
+     *   data: {
+     *     // ... data to create a HeroAbout
+     *   }
+     * })
+     * 
+     */
+    create<T extends HeroAboutCreateArgs>(args: SelectSubset<T, HeroAboutCreateArgs<ExtArgs>>): Prisma__HeroAboutClient<$Result.GetResult<Prisma.$HeroAboutPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many HeroAbouts.
+     * @param {HeroAboutCreateManyArgs} args - Arguments to create many HeroAbouts.
+     * @example
+     * // Create many HeroAbouts
+     * const heroAbout = await prisma.heroAbout.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends HeroAboutCreateManyArgs>(args?: SelectSubset<T, HeroAboutCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a HeroAbout.
+     * @param {HeroAboutDeleteArgs} args - Arguments to delete one HeroAbout.
+     * @example
+     * // Delete one HeroAbout
+     * const HeroAbout = await prisma.heroAbout.delete({
+     *   where: {
+     *     // ... filter to delete one HeroAbout
+     *   }
+     * })
+     * 
+     */
+    delete<T extends HeroAboutDeleteArgs>(args: SelectSubset<T, HeroAboutDeleteArgs<ExtArgs>>): Prisma__HeroAboutClient<$Result.GetResult<Prisma.$HeroAboutPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one HeroAbout.
+     * @param {HeroAboutUpdateArgs} args - Arguments to update one HeroAbout.
+     * @example
+     * // Update one HeroAbout
+     * const heroAbout = await prisma.heroAbout.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends HeroAboutUpdateArgs>(args: SelectSubset<T, HeroAboutUpdateArgs<ExtArgs>>): Prisma__HeroAboutClient<$Result.GetResult<Prisma.$HeroAboutPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more HeroAbouts.
+     * @param {HeroAboutDeleteManyArgs} args - Arguments to filter HeroAbouts to delete.
+     * @example
+     * // Delete a few HeroAbouts
+     * const { count } = await prisma.heroAbout.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends HeroAboutDeleteManyArgs>(args?: SelectSubset<T, HeroAboutDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more HeroAbouts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HeroAboutUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many HeroAbouts
+     * const heroAbout = await prisma.heroAbout.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends HeroAboutUpdateManyArgs>(args: SelectSubset<T, HeroAboutUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one HeroAbout.
+     * @param {HeroAboutUpsertArgs} args - Arguments to update or create a HeroAbout.
+     * @example
+     * // Update or create a HeroAbout
+     * const heroAbout = await prisma.heroAbout.upsert({
+     *   create: {
+     *     // ... data to create a HeroAbout
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the HeroAbout we want to update
+     *   }
+     * })
+     */
+    upsert<T extends HeroAboutUpsertArgs>(args: SelectSubset<T, HeroAboutUpsertArgs<ExtArgs>>): Prisma__HeroAboutClient<$Result.GetResult<Prisma.$HeroAboutPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of HeroAbouts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HeroAboutCountArgs} args - Arguments to filter HeroAbouts to count.
+     * @example
+     * // Count the number of HeroAbouts
+     * const count = await prisma.heroAbout.count({
+     *   where: {
+     *     // ... the filter for the HeroAbouts we want to count
+     *   }
+     * })
+    **/
+    count<T extends HeroAboutCountArgs>(
+      args?: Subset<T, HeroAboutCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], HeroAboutCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a HeroAbout.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HeroAboutAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends HeroAboutAggregateArgs>(args: Subset<T, HeroAboutAggregateArgs>): Prisma.PrismaPromise<GetHeroAboutAggregateType<T>>
+
+    /**
+     * Group by HeroAbout.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HeroAboutGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends HeroAboutGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: HeroAboutGroupByArgs['orderBy'] }
+        : { orderBy?: HeroAboutGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, HeroAboutGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetHeroAboutGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the HeroAbout model
+   */
+  readonly fields: HeroAboutFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for HeroAbout.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__HeroAboutClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the HeroAbout model
+   */
+  interface HeroAboutFieldRefs {
+    readonly id: FieldRef<"HeroAbout", 'Int'>
+    readonly title: FieldRef<"HeroAbout", 'String'>
+    readonly watermarkImage: FieldRef<"HeroAbout", 'String'>
+    readonly description: FieldRef<"HeroAbout", 'String'>
+    readonly isActive: FieldRef<"HeroAbout", 'Boolean'>
+    readonly createdAt: FieldRef<"HeroAbout", 'DateTime'>
+    readonly updatedAt: FieldRef<"HeroAbout", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * HeroAbout findUnique
+   */
+  export type HeroAboutFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HeroAbout
+     */
+    select?: HeroAboutSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HeroAbout
+     */
+    omit?: HeroAboutOmit<ExtArgs> | null
+    /**
+     * Filter, which HeroAbout to fetch.
+     */
+    where: HeroAboutWhereUniqueInput
+  }
+
+  /**
+   * HeroAbout findUniqueOrThrow
+   */
+  export type HeroAboutFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HeroAbout
+     */
+    select?: HeroAboutSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HeroAbout
+     */
+    omit?: HeroAboutOmit<ExtArgs> | null
+    /**
+     * Filter, which HeroAbout to fetch.
+     */
+    where: HeroAboutWhereUniqueInput
+  }
+
+  /**
+   * HeroAbout findFirst
+   */
+  export type HeroAboutFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HeroAbout
+     */
+    select?: HeroAboutSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HeroAbout
+     */
+    omit?: HeroAboutOmit<ExtArgs> | null
+    /**
+     * Filter, which HeroAbout to fetch.
+     */
+    where?: HeroAboutWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HeroAbouts to fetch.
+     */
+    orderBy?: HeroAboutOrderByWithRelationInput | HeroAboutOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for HeroAbouts.
+     */
+    cursor?: HeroAboutWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HeroAbouts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HeroAbouts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of HeroAbouts.
+     */
+    distinct?: HeroAboutScalarFieldEnum | HeroAboutScalarFieldEnum[]
+  }
+
+  /**
+   * HeroAbout findFirstOrThrow
+   */
+  export type HeroAboutFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HeroAbout
+     */
+    select?: HeroAboutSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HeroAbout
+     */
+    omit?: HeroAboutOmit<ExtArgs> | null
+    /**
+     * Filter, which HeroAbout to fetch.
+     */
+    where?: HeroAboutWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HeroAbouts to fetch.
+     */
+    orderBy?: HeroAboutOrderByWithRelationInput | HeroAboutOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for HeroAbouts.
+     */
+    cursor?: HeroAboutWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HeroAbouts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HeroAbouts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of HeroAbouts.
+     */
+    distinct?: HeroAboutScalarFieldEnum | HeroAboutScalarFieldEnum[]
+  }
+
+  /**
+   * HeroAbout findMany
+   */
+  export type HeroAboutFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HeroAbout
+     */
+    select?: HeroAboutSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HeroAbout
+     */
+    omit?: HeroAboutOmit<ExtArgs> | null
+    /**
+     * Filter, which HeroAbouts to fetch.
+     */
+    where?: HeroAboutWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HeroAbouts to fetch.
+     */
+    orderBy?: HeroAboutOrderByWithRelationInput | HeroAboutOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing HeroAbouts.
+     */
+    cursor?: HeroAboutWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HeroAbouts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HeroAbouts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of HeroAbouts.
+     */
+    distinct?: HeroAboutScalarFieldEnum | HeroAboutScalarFieldEnum[]
+  }
+
+  /**
+   * HeroAbout create
+   */
+  export type HeroAboutCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HeroAbout
+     */
+    select?: HeroAboutSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HeroAbout
+     */
+    omit?: HeroAboutOmit<ExtArgs> | null
+    /**
+     * The data needed to create a HeroAbout.
+     */
+    data: XOR<HeroAboutCreateInput, HeroAboutUncheckedCreateInput>
+  }
+
+  /**
+   * HeroAbout createMany
+   */
+  export type HeroAboutCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many HeroAbouts.
+     */
+    data: HeroAboutCreateManyInput | HeroAboutCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * HeroAbout update
+   */
+  export type HeroAboutUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HeroAbout
+     */
+    select?: HeroAboutSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HeroAbout
+     */
+    omit?: HeroAboutOmit<ExtArgs> | null
+    /**
+     * The data needed to update a HeroAbout.
+     */
+    data: XOR<HeroAboutUpdateInput, HeroAboutUncheckedUpdateInput>
+    /**
+     * Choose, which HeroAbout to update.
+     */
+    where: HeroAboutWhereUniqueInput
+  }
+
+  /**
+   * HeroAbout updateMany
+   */
+  export type HeroAboutUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update HeroAbouts.
+     */
+    data: XOR<HeroAboutUpdateManyMutationInput, HeroAboutUncheckedUpdateManyInput>
+    /**
+     * Filter which HeroAbouts to update
+     */
+    where?: HeroAboutWhereInput
+    /**
+     * Limit how many HeroAbouts to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * HeroAbout upsert
+   */
+  export type HeroAboutUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HeroAbout
+     */
+    select?: HeroAboutSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HeroAbout
+     */
+    omit?: HeroAboutOmit<ExtArgs> | null
+    /**
+     * The filter to search for the HeroAbout to update in case it exists.
+     */
+    where: HeroAboutWhereUniqueInput
+    /**
+     * In case the HeroAbout found by the `where` argument doesn't exist, create a new HeroAbout with this data.
+     */
+    create: XOR<HeroAboutCreateInput, HeroAboutUncheckedCreateInput>
+    /**
+     * In case the HeroAbout was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<HeroAboutUpdateInput, HeroAboutUncheckedUpdateInput>
+  }
+
+  /**
+   * HeroAbout delete
+   */
+  export type HeroAboutDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HeroAbout
+     */
+    select?: HeroAboutSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HeroAbout
+     */
+    omit?: HeroAboutOmit<ExtArgs> | null
+    /**
+     * Filter which HeroAbout to delete.
+     */
+    where: HeroAboutWhereUniqueInput
+  }
+
+  /**
+   * HeroAbout deleteMany
+   */
+  export type HeroAboutDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which HeroAbouts to delete
+     */
+    where?: HeroAboutWhereInput
+    /**
+     * Limit how many HeroAbouts to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * HeroAbout without action
+   */
+  export type HeroAboutDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HeroAbout
+     */
+    select?: HeroAboutSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HeroAbout
+     */
+    omit?: HeroAboutOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model VisionMission
+   */
+
+  export type AggregateVisionMission = {
+    _count: VisionMissionCountAggregateOutputType | null
+    _avg: VisionMissionAvgAggregateOutputType | null
+    _sum: VisionMissionSumAggregateOutputType | null
+    _min: VisionMissionMinAggregateOutputType | null
+    _max: VisionMissionMaxAggregateOutputType | null
+  }
+
+  export type VisionMissionAvgAggregateOutputType = {
+    id: number | null
+    sortOrder: number | null
+  }
+
+  export type VisionMissionSumAggregateOutputType = {
+    id: number | null
+    sortOrder: number | null
+  }
+
+  export type VisionMissionMinAggregateOutputType = {
+    id: number | null
+    type: string | null
+    content: string | null
+    icon: string | null
+    sortOrder: number | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type VisionMissionMaxAggregateOutputType = {
+    id: number | null
+    type: string | null
+    content: string | null
+    icon: string | null
+    sortOrder: number | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type VisionMissionCountAggregateOutputType = {
+    id: number
+    type: number
+    content: number
+    icon: number
+    sortOrder: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type VisionMissionAvgAggregateInputType = {
+    id?: true
+    sortOrder?: true
+  }
+
+  export type VisionMissionSumAggregateInputType = {
+    id?: true
+    sortOrder?: true
+  }
+
+  export type VisionMissionMinAggregateInputType = {
+    id?: true
+    type?: true
+    content?: true
+    icon?: true
+    sortOrder?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type VisionMissionMaxAggregateInputType = {
+    id?: true
+    type?: true
+    content?: true
+    icon?: true
+    sortOrder?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type VisionMissionCountAggregateInputType = {
+    id?: true
+    type?: true
+    content?: true
+    icon?: true
+    sortOrder?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type VisionMissionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which VisionMission to aggregate.
+     */
+    where?: VisionMissionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of VisionMissions to fetch.
+     */
+    orderBy?: VisionMissionOrderByWithRelationInput | VisionMissionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: VisionMissionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` VisionMissions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` VisionMissions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned VisionMissions
+    **/
+    _count?: true | VisionMissionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: VisionMissionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: VisionMissionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: VisionMissionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: VisionMissionMaxAggregateInputType
+  }
+
+  export type GetVisionMissionAggregateType<T extends VisionMissionAggregateArgs> = {
+        [P in keyof T & keyof AggregateVisionMission]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateVisionMission[P]>
+      : GetScalarType<T[P], AggregateVisionMission[P]>
+  }
+
+
+
+
+  export type VisionMissionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: VisionMissionWhereInput
+    orderBy?: VisionMissionOrderByWithAggregationInput | VisionMissionOrderByWithAggregationInput[]
+    by: VisionMissionScalarFieldEnum[] | VisionMissionScalarFieldEnum
+    having?: VisionMissionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: VisionMissionCountAggregateInputType | true
+    _avg?: VisionMissionAvgAggregateInputType
+    _sum?: VisionMissionSumAggregateInputType
+    _min?: VisionMissionMinAggregateInputType
+    _max?: VisionMissionMaxAggregateInputType
+  }
+
+  export type VisionMissionGroupByOutputType = {
+    id: number
+    type: string
+    content: string
+    icon: string | null
+    sortOrder: number
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: VisionMissionCountAggregateOutputType | null
+    _avg: VisionMissionAvgAggregateOutputType | null
+    _sum: VisionMissionSumAggregateOutputType | null
+    _min: VisionMissionMinAggregateOutputType | null
+    _max: VisionMissionMaxAggregateOutputType | null
+  }
+
+  type GetVisionMissionGroupByPayload<T extends VisionMissionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<VisionMissionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof VisionMissionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], VisionMissionGroupByOutputType[P]>
+            : GetScalarType<T[P], VisionMissionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type VisionMissionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    type?: boolean
+    content?: boolean
+    icon?: boolean
+    sortOrder?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["visionMission"]>
+
+
+
+  export type VisionMissionSelectScalar = {
+    id?: boolean
+    type?: boolean
+    content?: boolean
+    icon?: boolean
+    sortOrder?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type VisionMissionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "type" | "content" | "icon" | "sortOrder" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["visionMission"]>
+
+  export type $VisionMissionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "VisionMission"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      type: string
+      content: string
+      icon: string | null
+      sortOrder: number
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["visionMission"]>
+    composites: {}
+  }
+
+  type VisionMissionGetPayload<S extends boolean | null | undefined | VisionMissionDefaultArgs> = $Result.GetResult<Prisma.$VisionMissionPayload, S>
+
+  type VisionMissionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<VisionMissionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: VisionMissionCountAggregateInputType | true
+    }
+
+  export interface VisionMissionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['VisionMission'], meta: { name: 'VisionMission' } }
+    /**
+     * Find zero or one VisionMission that matches the filter.
+     * @param {VisionMissionFindUniqueArgs} args - Arguments to find a VisionMission
+     * @example
+     * // Get one VisionMission
+     * const visionMission = await prisma.visionMission.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends VisionMissionFindUniqueArgs>(args: SelectSubset<T, VisionMissionFindUniqueArgs<ExtArgs>>): Prisma__VisionMissionClient<$Result.GetResult<Prisma.$VisionMissionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one VisionMission that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {VisionMissionFindUniqueOrThrowArgs} args - Arguments to find a VisionMission
+     * @example
+     * // Get one VisionMission
+     * const visionMission = await prisma.visionMission.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends VisionMissionFindUniqueOrThrowArgs>(args: SelectSubset<T, VisionMissionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__VisionMissionClient<$Result.GetResult<Prisma.$VisionMissionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first VisionMission that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VisionMissionFindFirstArgs} args - Arguments to find a VisionMission
+     * @example
+     * // Get one VisionMission
+     * const visionMission = await prisma.visionMission.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends VisionMissionFindFirstArgs>(args?: SelectSubset<T, VisionMissionFindFirstArgs<ExtArgs>>): Prisma__VisionMissionClient<$Result.GetResult<Prisma.$VisionMissionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first VisionMission that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VisionMissionFindFirstOrThrowArgs} args - Arguments to find a VisionMission
+     * @example
+     * // Get one VisionMission
+     * const visionMission = await prisma.visionMission.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends VisionMissionFindFirstOrThrowArgs>(args?: SelectSubset<T, VisionMissionFindFirstOrThrowArgs<ExtArgs>>): Prisma__VisionMissionClient<$Result.GetResult<Prisma.$VisionMissionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more VisionMissions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VisionMissionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all VisionMissions
+     * const visionMissions = await prisma.visionMission.findMany()
+     * 
+     * // Get first 10 VisionMissions
+     * const visionMissions = await prisma.visionMission.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const visionMissionWithIdOnly = await prisma.visionMission.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends VisionMissionFindManyArgs>(args?: SelectSubset<T, VisionMissionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VisionMissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a VisionMission.
+     * @param {VisionMissionCreateArgs} args - Arguments to create a VisionMission.
+     * @example
+     * // Create one VisionMission
+     * const VisionMission = await prisma.visionMission.create({
+     *   data: {
+     *     // ... data to create a VisionMission
+     *   }
+     * })
+     * 
+     */
+    create<T extends VisionMissionCreateArgs>(args: SelectSubset<T, VisionMissionCreateArgs<ExtArgs>>): Prisma__VisionMissionClient<$Result.GetResult<Prisma.$VisionMissionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many VisionMissions.
+     * @param {VisionMissionCreateManyArgs} args - Arguments to create many VisionMissions.
+     * @example
+     * // Create many VisionMissions
+     * const visionMission = await prisma.visionMission.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends VisionMissionCreateManyArgs>(args?: SelectSubset<T, VisionMissionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a VisionMission.
+     * @param {VisionMissionDeleteArgs} args - Arguments to delete one VisionMission.
+     * @example
+     * // Delete one VisionMission
+     * const VisionMission = await prisma.visionMission.delete({
+     *   where: {
+     *     // ... filter to delete one VisionMission
+     *   }
+     * })
+     * 
+     */
+    delete<T extends VisionMissionDeleteArgs>(args: SelectSubset<T, VisionMissionDeleteArgs<ExtArgs>>): Prisma__VisionMissionClient<$Result.GetResult<Prisma.$VisionMissionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one VisionMission.
+     * @param {VisionMissionUpdateArgs} args - Arguments to update one VisionMission.
+     * @example
+     * // Update one VisionMission
+     * const visionMission = await prisma.visionMission.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends VisionMissionUpdateArgs>(args: SelectSubset<T, VisionMissionUpdateArgs<ExtArgs>>): Prisma__VisionMissionClient<$Result.GetResult<Prisma.$VisionMissionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more VisionMissions.
+     * @param {VisionMissionDeleteManyArgs} args - Arguments to filter VisionMissions to delete.
+     * @example
+     * // Delete a few VisionMissions
+     * const { count } = await prisma.visionMission.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends VisionMissionDeleteManyArgs>(args?: SelectSubset<T, VisionMissionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more VisionMissions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VisionMissionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many VisionMissions
+     * const visionMission = await prisma.visionMission.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends VisionMissionUpdateManyArgs>(args: SelectSubset<T, VisionMissionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one VisionMission.
+     * @param {VisionMissionUpsertArgs} args - Arguments to update or create a VisionMission.
+     * @example
+     * // Update or create a VisionMission
+     * const visionMission = await prisma.visionMission.upsert({
+     *   create: {
+     *     // ... data to create a VisionMission
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the VisionMission we want to update
+     *   }
+     * })
+     */
+    upsert<T extends VisionMissionUpsertArgs>(args: SelectSubset<T, VisionMissionUpsertArgs<ExtArgs>>): Prisma__VisionMissionClient<$Result.GetResult<Prisma.$VisionMissionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of VisionMissions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VisionMissionCountArgs} args - Arguments to filter VisionMissions to count.
+     * @example
+     * // Count the number of VisionMissions
+     * const count = await prisma.visionMission.count({
+     *   where: {
+     *     // ... the filter for the VisionMissions we want to count
+     *   }
+     * })
+    **/
+    count<T extends VisionMissionCountArgs>(
+      args?: Subset<T, VisionMissionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], VisionMissionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a VisionMission.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VisionMissionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends VisionMissionAggregateArgs>(args: Subset<T, VisionMissionAggregateArgs>): Prisma.PrismaPromise<GetVisionMissionAggregateType<T>>
+
+    /**
+     * Group by VisionMission.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VisionMissionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends VisionMissionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: VisionMissionGroupByArgs['orderBy'] }
+        : { orderBy?: VisionMissionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, VisionMissionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetVisionMissionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the VisionMission model
+   */
+  readonly fields: VisionMissionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for VisionMission.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__VisionMissionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the VisionMission model
+   */
+  interface VisionMissionFieldRefs {
+    readonly id: FieldRef<"VisionMission", 'Int'>
+    readonly type: FieldRef<"VisionMission", 'String'>
+    readonly content: FieldRef<"VisionMission", 'String'>
+    readonly icon: FieldRef<"VisionMission", 'String'>
+    readonly sortOrder: FieldRef<"VisionMission", 'Int'>
+    readonly isActive: FieldRef<"VisionMission", 'Boolean'>
+    readonly createdAt: FieldRef<"VisionMission", 'DateTime'>
+    readonly updatedAt: FieldRef<"VisionMission", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * VisionMission findUnique
+   */
+  export type VisionMissionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VisionMission
+     */
+    select?: VisionMissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VisionMission
+     */
+    omit?: VisionMissionOmit<ExtArgs> | null
+    /**
+     * Filter, which VisionMission to fetch.
+     */
+    where: VisionMissionWhereUniqueInput
+  }
+
+  /**
+   * VisionMission findUniqueOrThrow
+   */
+  export type VisionMissionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VisionMission
+     */
+    select?: VisionMissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VisionMission
+     */
+    omit?: VisionMissionOmit<ExtArgs> | null
+    /**
+     * Filter, which VisionMission to fetch.
+     */
+    where: VisionMissionWhereUniqueInput
+  }
+
+  /**
+   * VisionMission findFirst
+   */
+  export type VisionMissionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VisionMission
+     */
+    select?: VisionMissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VisionMission
+     */
+    omit?: VisionMissionOmit<ExtArgs> | null
+    /**
+     * Filter, which VisionMission to fetch.
+     */
+    where?: VisionMissionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of VisionMissions to fetch.
+     */
+    orderBy?: VisionMissionOrderByWithRelationInput | VisionMissionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for VisionMissions.
+     */
+    cursor?: VisionMissionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` VisionMissions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` VisionMissions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of VisionMissions.
+     */
+    distinct?: VisionMissionScalarFieldEnum | VisionMissionScalarFieldEnum[]
+  }
+
+  /**
+   * VisionMission findFirstOrThrow
+   */
+  export type VisionMissionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VisionMission
+     */
+    select?: VisionMissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VisionMission
+     */
+    omit?: VisionMissionOmit<ExtArgs> | null
+    /**
+     * Filter, which VisionMission to fetch.
+     */
+    where?: VisionMissionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of VisionMissions to fetch.
+     */
+    orderBy?: VisionMissionOrderByWithRelationInput | VisionMissionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for VisionMissions.
+     */
+    cursor?: VisionMissionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` VisionMissions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` VisionMissions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of VisionMissions.
+     */
+    distinct?: VisionMissionScalarFieldEnum | VisionMissionScalarFieldEnum[]
+  }
+
+  /**
+   * VisionMission findMany
+   */
+  export type VisionMissionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VisionMission
+     */
+    select?: VisionMissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VisionMission
+     */
+    omit?: VisionMissionOmit<ExtArgs> | null
+    /**
+     * Filter, which VisionMissions to fetch.
+     */
+    where?: VisionMissionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of VisionMissions to fetch.
+     */
+    orderBy?: VisionMissionOrderByWithRelationInput | VisionMissionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing VisionMissions.
+     */
+    cursor?: VisionMissionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` VisionMissions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` VisionMissions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of VisionMissions.
+     */
+    distinct?: VisionMissionScalarFieldEnum | VisionMissionScalarFieldEnum[]
+  }
+
+  /**
+   * VisionMission create
+   */
+  export type VisionMissionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VisionMission
+     */
+    select?: VisionMissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VisionMission
+     */
+    omit?: VisionMissionOmit<ExtArgs> | null
+    /**
+     * The data needed to create a VisionMission.
+     */
+    data: XOR<VisionMissionCreateInput, VisionMissionUncheckedCreateInput>
+  }
+
+  /**
+   * VisionMission createMany
+   */
+  export type VisionMissionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many VisionMissions.
+     */
+    data: VisionMissionCreateManyInput | VisionMissionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * VisionMission update
+   */
+  export type VisionMissionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VisionMission
+     */
+    select?: VisionMissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VisionMission
+     */
+    omit?: VisionMissionOmit<ExtArgs> | null
+    /**
+     * The data needed to update a VisionMission.
+     */
+    data: XOR<VisionMissionUpdateInput, VisionMissionUncheckedUpdateInput>
+    /**
+     * Choose, which VisionMission to update.
+     */
+    where: VisionMissionWhereUniqueInput
+  }
+
+  /**
+   * VisionMission updateMany
+   */
+  export type VisionMissionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update VisionMissions.
+     */
+    data: XOR<VisionMissionUpdateManyMutationInput, VisionMissionUncheckedUpdateManyInput>
+    /**
+     * Filter which VisionMissions to update
+     */
+    where?: VisionMissionWhereInput
+    /**
+     * Limit how many VisionMissions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * VisionMission upsert
+   */
+  export type VisionMissionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VisionMission
+     */
+    select?: VisionMissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VisionMission
+     */
+    omit?: VisionMissionOmit<ExtArgs> | null
+    /**
+     * The filter to search for the VisionMission to update in case it exists.
+     */
+    where: VisionMissionWhereUniqueInput
+    /**
+     * In case the VisionMission found by the `where` argument doesn't exist, create a new VisionMission with this data.
+     */
+    create: XOR<VisionMissionCreateInput, VisionMissionUncheckedCreateInput>
+    /**
+     * In case the VisionMission was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<VisionMissionUpdateInput, VisionMissionUncheckedUpdateInput>
+  }
+
+  /**
+   * VisionMission delete
+   */
+  export type VisionMissionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VisionMission
+     */
+    select?: VisionMissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VisionMission
+     */
+    omit?: VisionMissionOmit<ExtArgs> | null
+    /**
+     * Filter which VisionMission to delete.
+     */
+    where: VisionMissionWhereUniqueInput
+  }
+
+  /**
+   * VisionMission deleteMany
+   */
+  export type VisionMissionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which VisionMissions to delete
+     */
+    where?: VisionMissionWhereInput
+    /**
+     * Limit how many VisionMissions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * VisionMission without action
+   */
+  export type VisionMissionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VisionMission
+     */
+    select?: VisionMissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VisionMission
+     */
+    omit?: VisionMissionOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model CoreValue
+   */
+
+  export type AggregateCoreValue = {
+    _count: CoreValueCountAggregateOutputType | null
+    _avg: CoreValueAvgAggregateOutputType | null
+    _sum: CoreValueSumAggregateOutputType | null
+    _min: CoreValueMinAggregateOutputType | null
+    _max: CoreValueMaxAggregateOutputType | null
+  }
+
+  export type CoreValueAvgAggregateOutputType = {
+    id: number | null
+    sortOrder: number | null
+  }
+
+  export type CoreValueSumAggregateOutputType = {
+    id: number | null
+    sortOrder: number | null
+  }
+
+  export type CoreValueMinAggregateOutputType = {
+    id: number | null
+    title: string | null
+    icon: string | null
+    sortOrder: number | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type CoreValueMaxAggregateOutputType = {
+    id: number | null
+    title: string | null
+    icon: string | null
+    sortOrder: number | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type CoreValueCountAggregateOutputType = {
+    id: number
+    title: number
+    icon: number
+    sortOrder: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type CoreValueAvgAggregateInputType = {
+    id?: true
+    sortOrder?: true
+  }
+
+  export type CoreValueSumAggregateInputType = {
+    id?: true
+    sortOrder?: true
+  }
+
+  export type CoreValueMinAggregateInputType = {
+    id?: true
+    title?: true
+    icon?: true
+    sortOrder?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type CoreValueMaxAggregateInputType = {
+    id?: true
+    title?: true
+    icon?: true
+    sortOrder?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type CoreValueCountAggregateInputType = {
+    id?: true
+    title?: true
+    icon?: true
+    sortOrder?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type CoreValueAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CoreValue to aggregate.
+     */
+    where?: CoreValueWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CoreValues to fetch.
+     */
+    orderBy?: CoreValueOrderByWithRelationInput | CoreValueOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CoreValueWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CoreValues from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CoreValues.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CoreValues
+    **/
+    _count?: true | CoreValueCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CoreValueAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CoreValueSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CoreValueMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CoreValueMaxAggregateInputType
+  }
+
+  export type GetCoreValueAggregateType<T extends CoreValueAggregateArgs> = {
+        [P in keyof T & keyof AggregateCoreValue]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCoreValue[P]>
+      : GetScalarType<T[P], AggregateCoreValue[P]>
+  }
+
+
+
+
+  export type CoreValueGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CoreValueWhereInput
+    orderBy?: CoreValueOrderByWithAggregationInput | CoreValueOrderByWithAggregationInput[]
+    by: CoreValueScalarFieldEnum[] | CoreValueScalarFieldEnum
+    having?: CoreValueScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CoreValueCountAggregateInputType | true
+    _avg?: CoreValueAvgAggregateInputType
+    _sum?: CoreValueSumAggregateInputType
+    _min?: CoreValueMinAggregateInputType
+    _max?: CoreValueMaxAggregateInputType
+  }
+
+  export type CoreValueGroupByOutputType = {
+    id: number
+    title: string
+    icon: string | null
+    sortOrder: number
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: CoreValueCountAggregateOutputType | null
+    _avg: CoreValueAvgAggregateOutputType | null
+    _sum: CoreValueSumAggregateOutputType | null
+    _min: CoreValueMinAggregateOutputType | null
+    _max: CoreValueMaxAggregateOutputType | null
+  }
+
+  type GetCoreValueGroupByPayload<T extends CoreValueGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CoreValueGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CoreValueGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CoreValueGroupByOutputType[P]>
+            : GetScalarType<T[P], CoreValueGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CoreValueSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    icon?: boolean
+    sortOrder?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["coreValue"]>
+
+
+
+  export type CoreValueSelectScalar = {
+    id?: boolean
+    title?: boolean
+    icon?: boolean
+    sortOrder?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type CoreValueOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "icon" | "sortOrder" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["coreValue"]>
+
+  export type $CoreValuePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CoreValue"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      title: string
+      icon: string | null
+      sortOrder: number
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["coreValue"]>
+    composites: {}
+  }
+
+  type CoreValueGetPayload<S extends boolean | null | undefined | CoreValueDefaultArgs> = $Result.GetResult<Prisma.$CoreValuePayload, S>
+
+  type CoreValueCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CoreValueFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CoreValueCountAggregateInputType | true
+    }
+
+  export interface CoreValueDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CoreValue'], meta: { name: 'CoreValue' } }
+    /**
+     * Find zero or one CoreValue that matches the filter.
+     * @param {CoreValueFindUniqueArgs} args - Arguments to find a CoreValue
+     * @example
+     * // Get one CoreValue
+     * const coreValue = await prisma.coreValue.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CoreValueFindUniqueArgs>(args: SelectSubset<T, CoreValueFindUniqueArgs<ExtArgs>>): Prisma__CoreValueClient<$Result.GetResult<Prisma.$CoreValuePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one CoreValue that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CoreValueFindUniqueOrThrowArgs} args - Arguments to find a CoreValue
+     * @example
+     * // Get one CoreValue
+     * const coreValue = await prisma.coreValue.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CoreValueFindUniqueOrThrowArgs>(args: SelectSubset<T, CoreValueFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CoreValueClient<$Result.GetResult<Prisma.$CoreValuePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CoreValue that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CoreValueFindFirstArgs} args - Arguments to find a CoreValue
+     * @example
+     * // Get one CoreValue
+     * const coreValue = await prisma.coreValue.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CoreValueFindFirstArgs>(args?: SelectSubset<T, CoreValueFindFirstArgs<ExtArgs>>): Prisma__CoreValueClient<$Result.GetResult<Prisma.$CoreValuePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CoreValue that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CoreValueFindFirstOrThrowArgs} args - Arguments to find a CoreValue
+     * @example
+     * // Get one CoreValue
+     * const coreValue = await prisma.coreValue.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CoreValueFindFirstOrThrowArgs>(args?: SelectSubset<T, CoreValueFindFirstOrThrowArgs<ExtArgs>>): Prisma__CoreValueClient<$Result.GetResult<Prisma.$CoreValuePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more CoreValues that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CoreValueFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CoreValues
+     * const coreValues = await prisma.coreValue.findMany()
+     * 
+     * // Get first 10 CoreValues
+     * const coreValues = await prisma.coreValue.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const coreValueWithIdOnly = await prisma.coreValue.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CoreValueFindManyArgs>(args?: SelectSubset<T, CoreValueFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CoreValuePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a CoreValue.
+     * @param {CoreValueCreateArgs} args - Arguments to create a CoreValue.
+     * @example
+     * // Create one CoreValue
+     * const CoreValue = await prisma.coreValue.create({
+     *   data: {
+     *     // ... data to create a CoreValue
+     *   }
+     * })
+     * 
+     */
+    create<T extends CoreValueCreateArgs>(args: SelectSubset<T, CoreValueCreateArgs<ExtArgs>>): Prisma__CoreValueClient<$Result.GetResult<Prisma.$CoreValuePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many CoreValues.
+     * @param {CoreValueCreateManyArgs} args - Arguments to create many CoreValues.
+     * @example
+     * // Create many CoreValues
+     * const coreValue = await prisma.coreValue.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CoreValueCreateManyArgs>(args?: SelectSubset<T, CoreValueCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a CoreValue.
+     * @param {CoreValueDeleteArgs} args - Arguments to delete one CoreValue.
+     * @example
+     * // Delete one CoreValue
+     * const CoreValue = await prisma.coreValue.delete({
+     *   where: {
+     *     // ... filter to delete one CoreValue
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CoreValueDeleteArgs>(args: SelectSubset<T, CoreValueDeleteArgs<ExtArgs>>): Prisma__CoreValueClient<$Result.GetResult<Prisma.$CoreValuePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one CoreValue.
+     * @param {CoreValueUpdateArgs} args - Arguments to update one CoreValue.
+     * @example
+     * // Update one CoreValue
+     * const coreValue = await prisma.coreValue.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CoreValueUpdateArgs>(args: SelectSubset<T, CoreValueUpdateArgs<ExtArgs>>): Prisma__CoreValueClient<$Result.GetResult<Prisma.$CoreValuePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more CoreValues.
+     * @param {CoreValueDeleteManyArgs} args - Arguments to filter CoreValues to delete.
+     * @example
+     * // Delete a few CoreValues
+     * const { count } = await prisma.coreValue.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CoreValueDeleteManyArgs>(args?: SelectSubset<T, CoreValueDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CoreValues.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CoreValueUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CoreValues
+     * const coreValue = await prisma.coreValue.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CoreValueUpdateManyArgs>(args: SelectSubset<T, CoreValueUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one CoreValue.
+     * @param {CoreValueUpsertArgs} args - Arguments to update or create a CoreValue.
+     * @example
+     * // Update or create a CoreValue
+     * const coreValue = await prisma.coreValue.upsert({
+     *   create: {
+     *     // ... data to create a CoreValue
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CoreValue we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CoreValueUpsertArgs>(args: SelectSubset<T, CoreValueUpsertArgs<ExtArgs>>): Prisma__CoreValueClient<$Result.GetResult<Prisma.$CoreValuePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of CoreValues.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CoreValueCountArgs} args - Arguments to filter CoreValues to count.
+     * @example
+     * // Count the number of CoreValues
+     * const count = await prisma.coreValue.count({
+     *   where: {
+     *     // ... the filter for the CoreValues we want to count
+     *   }
+     * })
+    **/
+    count<T extends CoreValueCountArgs>(
+      args?: Subset<T, CoreValueCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CoreValueCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CoreValue.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CoreValueAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CoreValueAggregateArgs>(args: Subset<T, CoreValueAggregateArgs>): Prisma.PrismaPromise<GetCoreValueAggregateType<T>>
+
+    /**
+     * Group by CoreValue.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CoreValueGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CoreValueGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CoreValueGroupByArgs['orderBy'] }
+        : { orderBy?: CoreValueGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CoreValueGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCoreValueGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CoreValue model
+   */
+  readonly fields: CoreValueFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CoreValue.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CoreValueClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CoreValue model
+   */
+  interface CoreValueFieldRefs {
+    readonly id: FieldRef<"CoreValue", 'Int'>
+    readonly title: FieldRef<"CoreValue", 'String'>
+    readonly icon: FieldRef<"CoreValue", 'String'>
+    readonly sortOrder: FieldRef<"CoreValue", 'Int'>
+    readonly isActive: FieldRef<"CoreValue", 'Boolean'>
+    readonly createdAt: FieldRef<"CoreValue", 'DateTime'>
+    readonly updatedAt: FieldRef<"CoreValue", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CoreValue findUnique
+   */
+  export type CoreValueFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoreValue
+     */
+    select?: CoreValueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoreValue
+     */
+    omit?: CoreValueOmit<ExtArgs> | null
+    /**
+     * Filter, which CoreValue to fetch.
+     */
+    where: CoreValueWhereUniqueInput
+  }
+
+  /**
+   * CoreValue findUniqueOrThrow
+   */
+  export type CoreValueFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoreValue
+     */
+    select?: CoreValueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoreValue
+     */
+    omit?: CoreValueOmit<ExtArgs> | null
+    /**
+     * Filter, which CoreValue to fetch.
+     */
+    where: CoreValueWhereUniqueInput
+  }
+
+  /**
+   * CoreValue findFirst
+   */
+  export type CoreValueFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoreValue
+     */
+    select?: CoreValueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoreValue
+     */
+    omit?: CoreValueOmit<ExtArgs> | null
+    /**
+     * Filter, which CoreValue to fetch.
+     */
+    where?: CoreValueWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CoreValues to fetch.
+     */
+    orderBy?: CoreValueOrderByWithRelationInput | CoreValueOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CoreValues.
+     */
+    cursor?: CoreValueWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CoreValues from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CoreValues.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CoreValues.
+     */
+    distinct?: CoreValueScalarFieldEnum | CoreValueScalarFieldEnum[]
+  }
+
+  /**
+   * CoreValue findFirstOrThrow
+   */
+  export type CoreValueFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoreValue
+     */
+    select?: CoreValueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoreValue
+     */
+    omit?: CoreValueOmit<ExtArgs> | null
+    /**
+     * Filter, which CoreValue to fetch.
+     */
+    where?: CoreValueWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CoreValues to fetch.
+     */
+    orderBy?: CoreValueOrderByWithRelationInput | CoreValueOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CoreValues.
+     */
+    cursor?: CoreValueWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CoreValues from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CoreValues.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CoreValues.
+     */
+    distinct?: CoreValueScalarFieldEnum | CoreValueScalarFieldEnum[]
+  }
+
+  /**
+   * CoreValue findMany
+   */
+  export type CoreValueFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoreValue
+     */
+    select?: CoreValueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoreValue
+     */
+    omit?: CoreValueOmit<ExtArgs> | null
+    /**
+     * Filter, which CoreValues to fetch.
+     */
+    where?: CoreValueWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CoreValues to fetch.
+     */
+    orderBy?: CoreValueOrderByWithRelationInput | CoreValueOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CoreValues.
+     */
+    cursor?: CoreValueWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CoreValues from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CoreValues.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CoreValues.
+     */
+    distinct?: CoreValueScalarFieldEnum | CoreValueScalarFieldEnum[]
+  }
+
+  /**
+   * CoreValue create
+   */
+  export type CoreValueCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoreValue
+     */
+    select?: CoreValueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoreValue
+     */
+    omit?: CoreValueOmit<ExtArgs> | null
+    /**
+     * The data needed to create a CoreValue.
+     */
+    data: XOR<CoreValueCreateInput, CoreValueUncheckedCreateInput>
+  }
+
+  /**
+   * CoreValue createMany
+   */
+  export type CoreValueCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CoreValues.
+     */
+    data: CoreValueCreateManyInput | CoreValueCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CoreValue update
+   */
+  export type CoreValueUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoreValue
+     */
+    select?: CoreValueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoreValue
+     */
+    omit?: CoreValueOmit<ExtArgs> | null
+    /**
+     * The data needed to update a CoreValue.
+     */
+    data: XOR<CoreValueUpdateInput, CoreValueUncheckedUpdateInput>
+    /**
+     * Choose, which CoreValue to update.
+     */
+    where: CoreValueWhereUniqueInput
+  }
+
+  /**
+   * CoreValue updateMany
+   */
+  export type CoreValueUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CoreValues.
+     */
+    data: XOR<CoreValueUpdateManyMutationInput, CoreValueUncheckedUpdateManyInput>
+    /**
+     * Filter which CoreValues to update
+     */
+    where?: CoreValueWhereInput
+    /**
+     * Limit how many CoreValues to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CoreValue upsert
+   */
+  export type CoreValueUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoreValue
+     */
+    select?: CoreValueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoreValue
+     */
+    omit?: CoreValueOmit<ExtArgs> | null
+    /**
+     * The filter to search for the CoreValue to update in case it exists.
+     */
+    where: CoreValueWhereUniqueInput
+    /**
+     * In case the CoreValue found by the `where` argument doesn't exist, create a new CoreValue with this data.
+     */
+    create: XOR<CoreValueCreateInput, CoreValueUncheckedCreateInput>
+    /**
+     * In case the CoreValue was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CoreValueUpdateInput, CoreValueUncheckedUpdateInput>
+  }
+
+  /**
+   * CoreValue delete
+   */
+  export type CoreValueDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoreValue
+     */
+    select?: CoreValueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoreValue
+     */
+    omit?: CoreValueOmit<ExtArgs> | null
+    /**
+     * Filter which CoreValue to delete.
+     */
+    where: CoreValueWhereUniqueInput
+  }
+
+  /**
+   * CoreValue deleteMany
+   */
+  export type CoreValueDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CoreValues to delete
+     */
+    where?: CoreValueWhereInput
+    /**
+     * Limit how many CoreValues to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * CoreValue without action
+   */
+  export type CoreValueDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoreValue
+     */
+    select?: CoreValueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoreValue
+     */
+    omit?: CoreValueOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Approach
+   */
+
+  export type AggregateApproach = {
+    _count: ApproachCountAggregateOutputType | null
+    _avg: ApproachAvgAggregateOutputType | null
+    _sum: ApproachSumAggregateOutputType | null
+    _min: ApproachMinAggregateOutputType | null
+    _max: ApproachMaxAggregateOutputType | null
+  }
+
+  export type ApproachAvgAggregateOutputType = {
+    id: number | null
+    sortOrder: number | null
+  }
+
+  export type ApproachSumAggregateOutputType = {
+    id: number | null
+    sortOrder: number | null
+  }
+
+  export type ApproachMinAggregateOutputType = {
+    id: number | null
+    title: string | null
+    icon: string | null
+    sortOrder: number | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ApproachMaxAggregateOutputType = {
+    id: number | null
+    title: string | null
+    icon: string | null
+    sortOrder: number | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ApproachCountAggregateOutputType = {
+    id: number
+    title: number
+    icon: number
+    sortOrder: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ApproachAvgAggregateInputType = {
+    id?: true
+    sortOrder?: true
+  }
+
+  export type ApproachSumAggregateInputType = {
+    id?: true
+    sortOrder?: true
+  }
+
+  export type ApproachMinAggregateInputType = {
+    id?: true
+    title?: true
+    icon?: true
+    sortOrder?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ApproachMaxAggregateInputType = {
+    id?: true
+    title?: true
+    icon?: true
+    sortOrder?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ApproachCountAggregateInputType = {
+    id?: true
+    title?: true
+    icon?: true
+    sortOrder?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ApproachAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Approach to aggregate.
+     */
+    where?: ApproachWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Approaches to fetch.
+     */
+    orderBy?: ApproachOrderByWithRelationInput | ApproachOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ApproachWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Approaches from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Approaches.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Approaches
+    **/
+    _count?: true | ApproachCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ApproachAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ApproachSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ApproachMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ApproachMaxAggregateInputType
+  }
+
+  export type GetApproachAggregateType<T extends ApproachAggregateArgs> = {
+        [P in keyof T & keyof AggregateApproach]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateApproach[P]>
+      : GetScalarType<T[P], AggregateApproach[P]>
+  }
+
+
+
+
+  export type ApproachGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ApproachWhereInput
+    orderBy?: ApproachOrderByWithAggregationInput | ApproachOrderByWithAggregationInput[]
+    by: ApproachScalarFieldEnum[] | ApproachScalarFieldEnum
+    having?: ApproachScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ApproachCountAggregateInputType | true
+    _avg?: ApproachAvgAggregateInputType
+    _sum?: ApproachSumAggregateInputType
+    _min?: ApproachMinAggregateInputType
+    _max?: ApproachMaxAggregateInputType
+  }
+
+  export type ApproachGroupByOutputType = {
+    id: number
+    title: string
+    icon: string | null
+    sortOrder: number
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: ApproachCountAggregateOutputType | null
+    _avg: ApproachAvgAggregateOutputType | null
+    _sum: ApproachSumAggregateOutputType | null
+    _min: ApproachMinAggregateOutputType | null
+    _max: ApproachMaxAggregateOutputType | null
+  }
+
+  type GetApproachGroupByPayload<T extends ApproachGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ApproachGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ApproachGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ApproachGroupByOutputType[P]>
+            : GetScalarType<T[P], ApproachGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ApproachSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    icon?: boolean
+    sortOrder?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["approach"]>
+
+
+
+  export type ApproachSelectScalar = {
+    id?: boolean
+    title?: boolean
+    icon?: boolean
+    sortOrder?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ApproachOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "icon" | "sortOrder" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["approach"]>
+
+  export type $ApproachPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Approach"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      title: string
+      icon: string | null
+      sortOrder: number
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["approach"]>
+    composites: {}
+  }
+
+  type ApproachGetPayload<S extends boolean | null | undefined | ApproachDefaultArgs> = $Result.GetResult<Prisma.$ApproachPayload, S>
+
+  type ApproachCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ApproachFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ApproachCountAggregateInputType | true
+    }
+
+  export interface ApproachDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Approach'], meta: { name: 'Approach' } }
+    /**
+     * Find zero or one Approach that matches the filter.
+     * @param {ApproachFindUniqueArgs} args - Arguments to find a Approach
+     * @example
+     * // Get one Approach
+     * const approach = await prisma.approach.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ApproachFindUniqueArgs>(args: SelectSubset<T, ApproachFindUniqueArgs<ExtArgs>>): Prisma__ApproachClient<$Result.GetResult<Prisma.$ApproachPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Approach that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ApproachFindUniqueOrThrowArgs} args - Arguments to find a Approach
+     * @example
+     * // Get one Approach
+     * const approach = await prisma.approach.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ApproachFindUniqueOrThrowArgs>(args: SelectSubset<T, ApproachFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ApproachClient<$Result.GetResult<Prisma.$ApproachPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Approach that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ApproachFindFirstArgs} args - Arguments to find a Approach
+     * @example
+     * // Get one Approach
+     * const approach = await prisma.approach.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ApproachFindFirstArgs>(args?: SelectSubset<T, ApproachFindFirstArgs<ExtArgs>>): Prisma__ApproachClient<$Result.GetResult<Prisma.$ApproachPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Approach that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ApproachFindFirstOrThrowArgs} args - Arguments to find a Approach
+     * @example
+     * // Get one Approach
+     * const approach = await prisma.approach.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ApproachFindFirstOrThrowArgs>(args?: SelectSubset<T, ApproachFindFirstOrThrowArgs<ExtArgs>>): Prisma__ApproachClient<$Result.GetResult<Prisma.$ApproachPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Approaches that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ApproachFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Approaches
+     * const approaches = await prisma.approach.findMany()
+     * 
+     * // Get first 10 Approaches
+     * const approaches = await prisma.approach.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const approachWithIdOnly = await prisma.approach.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ApproachFindManyArgs>(args?: SelectSubset<T, ApproachFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApproachPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Approach.
+     * @param {ApproachCreateArgs} args - Arguments to create a Approach.
+     * @example
+     * // Create one Approach
+     * const Approach = await prisma.approach.create({
+     *   data: {
+     *     // ... data to create a Approach
+     *   }
+     * })
+     * 
+     */
+    create<T extends ApproachCreateArgs>(args: SelectSubset<T, ApproachCreateArgs<ExtArgs>>): Prisma__ApproachClient<$Result.GetResult<Prisma.$ApproachPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Approaches.
+     * @param {ApproachCreateManyArgs} args - Arguments to create many Approaches.
+     * @example
+     * // Create many Approaches
+     * const approach = await prisma.approach.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ApproachCreateManyArgs>(args?: SelectSubset<T, ApproachCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Approach.
+     * @param {ApproachDeleteArgs} args - Arguments to delete one Approach.
+     * @example
+     * // Delete one Approach
+     * const Approach = await prisma.approach.delete({
+     *   where: {
+     *     // ... filter to delete one Approach
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ApproachDeleteArgs>(args: SelectSubset<T, ApproachDeleteArgs<ExtArgs>>): Prisma__ApproachClient<$Result.GetResult<Prisma.$ApproachPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Approach.
+     * @param {ApproachUpdateArgs} args - Arguments to update one Approach.
+     * @example
+     * // Update one Approach
+     * const approach = await prisma.approach.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ApproachUpdateArgs>(args: SelectSubset<T, ApproachUpdateArgs<ExtArgs>>): Prisma__ApproachClient<$Result.GetResult<Prisma.$ApproachPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Approaches.
+     * @param {ApproachDeleteManyArgs} args - Arguments to filter Approaches to delete.
+     * @example
+     * // Delete a few Approaches
+     * const { count } = await prisma.approach.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ApproachDeleteManyArgs>(args?: SelectSubset<T, ApproachDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Approaches.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ApproachUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Approaches
+     * const approach = await prisma.approach.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ApproachUpdateManyArgs>(args: SelectSubset<T, ApproachUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Approach.
+     * @param {ApproachUpsertArgs} args - Arguments to update or create a Approach.
+     * @example
+     * // Update or create a Approach
+     * const approach = await prisma.approach.upsert({
+     *   create: {
+     *     // ... data to create a Approach
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Approach we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ApproachUpsertArgs>(args: SelectSubset<T, ApproachUpsertArgs<ExtArgs>>): Prisma__ApproachClient<$Result.GetResult<Prisma.$ApproachPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Approaches.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ApproachCountArgs} args - Arguments to filter Approaches to count.
+     * @example
+     * // Count the number of Approaches
+     * const count = await prisma.approach.count({
+     *   where: {
+     *     // ... the filter for the Approaches we want to count
+     *   }
+     * })
+    **/
+    count<T extends ApproachCountArgs>(
+      args?: Subset<T, ApproachCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ApproachCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Approach.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ApproachAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ApproachAggregateArgs>(args: Subset<T, ApproachAggregateArgs>): Prisma.PrismaPromise<GetApproachAggregateType<T>>
+
+    /**
+     * Group by Approach.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ApproachGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ApproachGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ApproachGroupByArgs['orderBy'] }
+        : { orderBy?: ApproachGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ApproachGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetApproachGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Approach model
+   */
+  readonly fields: ApproachFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Approach.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ApproachClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Approach model
+   */
+  interface ApproachFieldRefs {
+    readonly id: FieldRef<"Approach", 'Int'>
+    readonly title: FieldRef<"Approach", 'String'>
+    readonly icon: FieldRef<"Approach", 'String'>
+    readonly sortOrder: FieldRef<"Approach", 'Int'>
+    readonly isActive: FieldRef<"Approach", 'Boolean'>
+    readonly createdAt: FieldRef<"Approach", 'DateTime'>
+    readonly updatedAt: FieldRef<"Approach", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Approach findUnique
+   */
+  export type ApproachFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Approach
+     */
+    select?: ApproachSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Approach
+     */
+    omit?: ApproachOmit<ExtArgs> | null
+    /**
+     * Filter, which Approach to fetch.
+     */
+    where: ApproachWhereUniqueInput
+  }
+
+  /**
+   * Approach findUniqueOrThrow
+   */
+  export type ApproachFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Approach
+     */
+    select?: ApproachSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Approach
+     */
+    omit?: ApproachOmit<ExtArgs> | null
+    /**
+     * Filter, which Approach to fetch.
+     */
+    where: ApproachWhereUniqueInput
+  }
+
+  /**
+   * Approach findFirst
+   */
+  export type ApproachFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Approach
+     */
+    select?: ApproachSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Approach
+     */
+    omit?: ApproachOmit<ExtArgs> | null
+    /**
+     * Filter, which Approach to fetch.
+     */
+    where?: ApproachWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Approaches to fetch.
+     */
+    orderBy?: ApproachOrderByWithRelationInput | ApproachOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Approaches.
+     */
+    cursor?: ApproachWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Approaches from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Approaches.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Approaches.
+     */
+    distinct?: ApproachScalarFieldEnum | ApproachScalarFieldEnum[]
+  }
+
+  /**
+   * Approach findFirstOrThrow
+   */
+  export type ApproachFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Approach
+     */
+    select?: ApproachSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Approach
+     */
+    omit?: ApproachOmit<ExtArgs> | null
+    /**
+     * Filter, which Approach to fetch.
+     */
+    where?: ApproachWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Approaches to fetch.
+     */
+    orderBy?: ApproachOrderByWithRelationInput | ApproachOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Approaches.
+     */
+    cursor?: ApproachWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Approaches from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Approaches.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Approaches.
+     */
+    distinct?: ApproachScalarFieldEnum | ApproachScalarFieldEnum[]
+  }
+
+  /**
+   * Approach findMany
+   */
+  export type ApproachFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Approach
+     */
+    select?: ApproachSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Approach
+     */
+    omit?: ApproachOmit<ExtArgs> | null
+    /**
+     * Filter, which Approaches to fetch.
+     */
+    where?: ApproachWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Approaches to fetch.
+     */
+    orderBy?: ApproachOrderByWithRelationInput | ApproachOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Approaches.
+     */
+    cursor?: ApproachWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Approaches from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Approaches.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Approaches.
+     */
+    distinct?: ApproachScalarFieldEnum | ApproachScalarFieldEnum[]
+  }
+
+  /**
+   * Approach create
+   */
+  export type ApproachCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Approach
+     */
+    select?: ApproachSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Approach
+     */
+    omit?: ApproachOmit<ExtArgs> | null
+    /**
+     * The data needed to create a Approach.
+     */
+    data: XOR<ApproachCreateInput, ApproachUncheckedCreateInput>
+  }
+
+  /**
+   * Approach createMany
+   */
+  export type ApproachCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Approaches.
+     */
+    data: ApproachCreateManyInput | ApproachCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Approach update
+   */
+  export type ApproachUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Approach
+     */
+    select?: ApproachSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Approach
+     */
+    omit?: ApproachOmit<ExtArgs> | null
+    /**
+     * The data needed to update a Approach.
+     */
+    data: XOR<ApproachUpdateInput, ApproachUncheckedUpdateInput>
+    /**
+     * Choose, which Approach to update.
+     */
+    where: ApproachWhereUniqueInput
+  }
+
+  /**
+   * Approach updateMany
+   */
+  export type ApproachUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Approaches.
+     */
+    data: XOR<ApproachUpdateManyMutationInput, ApproachUncheckedUpdateManyInput>
+    /**
+     * Filter which Approaches to update
+     */
+    where?: ApproachWhereInput
+    /**
+     * Limit how many Approaches to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Approach upsert
+   */
+  export type ApproachUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Approach
+     */
+    select?: ApproachSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Approach
+     */
+    omit?: ApproachOmit<ExtArgs> | null
+    /**
+     * The filter to search for the Approach to update in case it exists.
+     */
+    where: ApproachWhereUniqueInput
+    /**
+     * In case the Approach found by the `where` argument doesn't exist, create a new Approach with this data.
+     */
+    create: XOR<ApproachCreateInput, ApproachUncheckedCreateInput>
+    /**
+     * In case the Approach was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ApproachUpdateInput, ApproachUncheckedUpdateInput>
+  }
+
+  /**
+   * Approach delete
+   */
+  export type ApproachDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Approach
+     */
+    select?: ApproachSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Approach
+     */
+    omit?: ApproachOmit<ExtArgs> | null
+    /**
+     * Filter which Approach to delete.
+     */
+    where: ApproachWhereUniqueInput
+  }
+
+  /**
+   * Approach deleteMany
+   */
+  export type ApproachDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Approaches to delete
+     */
+    where?: ApproachWhereInput
+    /**
+     * Limit how many Approaches to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Approach without action
+   */
+  export type ApproachDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Approach
+     */
+    select?: ApproachSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Approach
+     */
+    omit?: ApproachOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Award
+   */
+
+  export type AggregateAward = {
+    _count: AwardCountAggregateOutputType | null
+    _avg: AwardAvgAggregateOutputType | null
+    _sum: AwardSumAggregateOutputType | null
+    _min: AwardMinAggregateOutputType | null
+    _max: AwardMaxAggregateOutputType | null
+  }
+
+  export type AwardAvgAggregateOutputType = {
+    id: number | null
+    sortOrder: number | null
+  }
+
+  export type AwardSumAggregateOutputType = {
+    id: number | null
+    sortOrder: number | null
+  }
+
+  export type AwardMinAggregateOutputType = {
+    id: number | null
+    title: string | null
+    image: string | null
+    sortOrder: number | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AwardMaxAggregateOutputType = {
+    id: number | null
+    title: string | null
+    image: string | null
+    sortOrder: number | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AwardCountAggregateOutputType = {
+    id: number
+    title: number
+    image: number
+    sortOrder: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type AwardAvgAggregateInputType = {
+    id?: true
+    sortOrder?: true
+  }
+
+  export type AwardSumAggregateInputType = {
+    id?: true
+    sortOrder?: true
+  }
+
+  export type AwardMinAggregateInputType = {
+    id?: true
+    title?: true
+    image?: true
+    sortOrder?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AwardMaxAggregateInputType = {
+    id?: true
+    title?: true
+    image?: true
+    sortOrder?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AwardCountAggregateInputType = {
+    id?: true
+    title?: true
+    image?: true
+    sortOrder?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type AwardAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Award to aggregate.
+     */
+    where?: AwardWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Awards to fetch.
+     */
+    orderBy?: AwardOrderByWithRelationInput | AwardOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AwardWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Awards from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Awards.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Awards
+    **/
+    _count?: true | AwardCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: AwardAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: AwardSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AwardMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AwardMaxAggregateInputType
+  }
+
+  export type GetAwardAggregateType<T extends AwardAggregateArgs> = {
+        [P in keyof T & keyof AggregateAward]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAward[P]>
+      : GetScalarType<T[P], AggregateAward[P]>
+  }
+
+
+
+
+  export type AwardGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AwardWhereInput
+    orderBy?: AwardOrderByWithAggregationInput | AwardOrderByWithAggregationInput[]
+    by: AwardScalarFieldEnum[] | AwardScalarFieldEnum
+    having?: AwardScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AwardCountAggregateInputType | true
+    _avg?: AwardAvgAggregateInputType
+    _sum?: AwardSumAggregateInputType
+    _min?: AwardMinAggregateInputType
+    _max?: AwardMaxAggregateInputType
+  }
+
+  export type AwardGroupByOutputType = {
+    id: number
+    title: string
+    image: string | null
+    sortOrder: number
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: AwardCountAggregateOutputType | null
+    _avg: AwardAvgAggregateOutputType | null
+    _sum: AwardSumAggregateOutputType | null
+    _min: AwardMinAggregateOutputType | null
+    _max: AwardMaxAggregateOutputType | null
+  }
+
+  type GetAwardGroupByPayload<T extends AwardGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AwardGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AwardGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AwardGroupByOutputType[P]>
+            : GetScalarType<T[P], AwardGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AwardSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    image?: boolean
+    sortOrder?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["award"]>
+
+
+
+  export type AwardSelectScalar = {
+    id?: boolean
+    title?: boolean
+    image?: boolean
+    sortOrder?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type AwardOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "image" | "sortOrder" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["award"]>
+
+  export type $AwardPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Award"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      title: string
+      image: string | null
+      sortOrder: number
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["award"]>
+    composites: {}
+  }
+
+  type AwardGetPayload<S extends boolean | null | undefined | AwardDefaultArgs> = $Result.GetResult<Prisma.$AwardPayload, S>
+
+  type AwardCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AwardFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AwardCountAggregateInputType | true
+    }
+
+  export interface AwardDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Award'], meta: { name: 'Award' } }
+    /**
+     * Find zero or one Award that matches the filter.
+     * @param {AwardFindUniqueArgs} args - Arguments to find a Award
+     * @example
+     * // Get one Award
+     * const award = await prisma.award.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AwardFindUniqueArgs>(args: SelectSubset<T, AwardFindUniqueArgs<ExtArgs>>): Prisma__AwardClient<$Result.GetResult<Prisma.$AwardPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Award that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AwardFindUniqueOrThrowArgs} args - Arguments to find a Award
+     * @example
+     * // Get one Award
+     * const award = await prisma.award.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AwardFindUniqueOrThrowArgs>(args: SelectSubset<T, AwardFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AwardClient<$Result.GetResult<Prisma.$AwardPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Award that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AwardFindFirstArgs} args - Arguments to find a Award
+     * @example
+     * // Get one Award
+     * const award = await prisma.award.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AwardFindFirstArgs>(args?: SelectSubset<T, AwardFindFirstArgs<ExtArgs>>): Prisma__AwardClient<$Result.GetResult<Prisma.$AwardPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Award that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AwardFindFirstOrThrowArgs} args - Arguments to find a Award
+     * @example
+     * // Get one Award
+     * const award = await prisma.award.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AwardFindFirstOrThrowArgs>(args?: SelectSubset<T, AwardFindFirstOrThrowArgs<ExtArgs>>): Prisma__AwardClient<$Result.GetResult<Prisma.$AwardPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Awards that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AwardFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Awards
+     * const awards = await prisma.award.findMany()
+     * 
+     * // Get first 10 Awards
+     * const awards = await prisma.award.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const awardWithIdOnly = await prisma.award.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AwardFindManyArgs>(args?: SelectSubset<T, AwardFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AwardPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Award.
+     * @param {AwardCreateArgs} args - Arguments to create a Award.
+     * @example
+     * // Create one Award
+     * const Award = await prisma.award.create({
+     *   data: {
+     *     // ... data to create a Award
+     *   }
+     * })
+     * 
+     */
+    create<T extends AwardCreateArgs>(args: SelectSubset<T, AwardCreateArgs<ExtArgs>>): Prisma__AwardClient<$Result.GetResult<Prisma.$AwardPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Awards.
+     * @param {AwardCreateManyArgs} args - Arguments to create many Awards.
+     * @example
+     * // Create many Awards
+     * const award = await prisma.award.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AwardCreateManyArgs>(args?: SelectSubset<T, AwardCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Award.
+     * @param {AwardDeleteArgs} args - Arguments to delete one Award.
+     * @example
+     * // Delete one Award
+     * const Award = await prisma.award.delete({
+     *   where: {
+     *     // ... filter to delete one Award
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AwardDeleteArgs>(args: SelectSubset<T, AwardDeleteArgs<ExtArgs>>): Prisma__AwardClient<$Result.GetResult<Prisma.$AwardPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Award.
+     * @param {AwardUpdateArgs} args - Arguments to update one Award.
+     * @example
+     * // Update one Award
+     * const award = await prisma.award.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AwardUpdateArgs>(args: SelectSubset<T, AwardUpdateArgs<ExtArgs>>): Prisma__AwardClient<$Result.GetResult<Prisma.$AwardPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Awards.
+     * @param {AwardDeleteManyArgs} args - Arguments to filter Awards to delete.
+     * @example
+     * // Delete a few Awards
+     * const { count } = await prisma.award.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AwardDeleteManyArgs>(args?: SelectSubset<T, AwardDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Awards.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AwardUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Awards
+     * const award = await prisma.award.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AwardUpdateManyArgs>(args: SelectSubset<T, AwardUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Award.
+     * @param {AwardUpsertArgs} args - Arguments to update or create a Award.
+     * @example
+     * // Update or create a Award
+     * const award = await prisma.award.upsert({
+     *   create: {
+     *     // ... data to create a Award
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Award we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AwardUpsertArgs>(args: SelectSubset<T, AwardUpsertArgs<ExtArgs>>): Prisma__AwardClient<$Result.GetResult<Prisma.$AwardPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Awards.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AwardCountArgs} args - Arguments to filter Awards to count.
+     * @example
+     * // Count the number of Awards
+     * const count = await prisma.award.count({
+     *   where: {
+     *     // ... the filter for the Awards we want to count
+     *   }
+     * })
+    **/
+    count<T extends AwardCountArgs>(
+      args?: Subset<T, AwardCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AwardCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Award.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AwardAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AwardAggregateArgs>(args: Subset<T, AwardAggregateArgs>): Prisma.PrismaPromise<GetAwardAggregateType<T>>
+
+    /**
+     * Group by Award.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AwardGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AwardGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AwardGroupByArgs['orderBy'] }
+        : { orderBy?: AwardGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AwardGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAwardGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Award model
+   */
+  readonly fields: AwardFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Award.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AwardClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Award model
+   */
+  interface AwardFieldRefs {
+    readonly id: FieldRef<"Award", 'Int'>
+    readonly title: FieldRef<"Award", 'String'>
+    readonly image: FieldRef<"Award", 'String'>
+    readonly sortOrder: FieldRef<"Award", 'Int'>
+    readonly isActive: FieldRef<"Award", 'Boolean'>
+    readonly createdAt: FieldRef<"Award", 'DateTime'>
+    readonly updatedAt: FieldRef<"Award", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Award findUnique
+   */
+  export type AwardFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Award
+     */
+    select?: AwardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Award
+     */
+    omit?: AwardOmit<ExtArgs> | null
+    /**
+     * Filter, which Award to fetch.
+     */
+    where: AwardWhereUniqueInput
+  }
+
+  /**
+   * Award findUniqueOrThrow
+   */
+  export type AwardFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Award
+     */
+    select?: AwardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Award
+     */
+    omit?: AwardOmit<ExtArgs> | null
+    /**
+     * Filter, which Award to fetch.
+     */
+    where: AwardWhereUniqueInput
+  }
+
+  /**
+   * Award findFirst
+   */
+  export type AwardFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Award
+     */
+    select?: AwardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Award
+     */
+    omit?: AwardOmit<ExtArgs> | null
+    /**
+     * Filter, which Award to fetch.
+     */
+    where?: AwardWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Awards to fetch.
+     */
+    orderBy?: AwardOrderByWithRelationInput | AwardOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Awards.
+     */
+    cursor?: AwardWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Awards from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Awards.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Awards.
+     */
+    distinct?: AwardScalarFieldEnum | AwardScalarFieldEnum[]
+  }
+
+  /**
+   * Award findFirstOrThrow
+   */
+  export type AwardFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Award
+     */
+    select?: AwardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Award
+     */
+    omit?: AwardOmit<ExtArgs> | null
+    /**
+     * Filter, which Award to fetch.
+     */
+    where?: AwardWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Awards to fetch.
+     */
+    orderBy?: AwardOrderByWithRelationInput | AwardOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Awards.
+     */
+    cursor?: AwardWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Awards from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Awards.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Awards.
+     */
+    distinct?: AwardScalarFieldEnum | AwardScalarFieldEnum[]
+  }
+
+  /**
+   * Award findMany
+   */
+  export type AwardFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Award
+     */
+    select?: AwardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Award
+     */
+    omit?: AwardOmit<ExtArgs> | null
+    /**
+     * Filter, which Awards to fetch.
+     */
+    where?: AwardWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Awards to fetch.
+     */
+    orderBy?: AwardOrderByWithRelationInput | AwardOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Awards.
+     */
+    cursor?: AwardWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Awards from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Awards.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Awards.
+     */
+    distinct?: AwardScalarFieldEnum | AwardScalarFieldEnum[]
+  }
+
+  /**
+   * Award create
+   */
+  export type AwardCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Award
+     */
+    select?: AwardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Award
+     */
+    omit?: AwardOmit<ExtArgs> | null
+    /**
+     * The data needed to create a Award.
+     */
+    data: XOR<AwardCreateInput, AwardUncheckedCreateInput>
+  }
+
+  /**
+   * Award createMany
+   */
+  export type AwardCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Awards.
+     */
+    data: AwardCreateManyInput | AwardCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Award update
+   */
+  export type AwardUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Award
+     */
+    select?: AwardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Award
+     */
+    omit?: AwardOmit<ExtArgs> | null
+    /**
+     * The data needed to update a Award.
+     */
+    data: XOR<AwardUpdateInput, AwardUncheckedUpdateInput>
+    /**
+     * Choose, which Award to update.
+     */
+    where: AwardWhereUniqueInput
+  }
+
+  /**
+   * Award updateMany
+   */
+  export type AwardUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Awards.
+     */
+    data: XOR<AwardUpdateManyMutationInput, AwardUncheckedUpdateManyInput>
+    /**
+     * Filter which Awards to update
+     */
+    where?: AwardWhereInput
+    /**
+     * Limit how many Awards to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Award upsert
+   */
+  export type AwardUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Award
+     */
+    select?: AwardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Award
+     */
+    omit?: AwardOmit<ExtArgs> | null
+    /**
+     * The filter to search for the Award to update in case it exists.
+     */
+    where: AwardWhereUniqueInput
+    /**
+     * In case the Award found by the `where` argument doesn't exist, create a new Award with this data.
+     */
+    create: XOR<AwardCreateInput, AwardUncheckedCreateInput>
+    /**
+     * In case the Award was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AwardUpdateInput, AwardUncheckedUpdateInput>
+  }
+
+  /**
+   * Award delete
+   */
+  export type AwardDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Award
+     */
+    select?: AwardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Award
+     */
+    omit?: AwardOmit<ExtArgs> | null
+    /**
+     * Filter which Award to delete.
+     */
+    where: AwardWhereUniqueInput
+  }
+
+  /**
+   * Award deleteMany
+   */
+  export type AwardDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Awards to delete
+     */
+    where?: AwardWhereInput
+    /**
+     * Limit how many Awards to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Award without action
+   */
+  export type AwardDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Award
+     */
+    select?: AwardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Award
+     */
+    omit?: AwardOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -42903,6 +49116,7 @@ export namespace Prisma {
     id: 'id',
     serviceTitle: 'serviceTitle',
     serviceIcon: 'serviceIcon',
+    sortOrder: 'sortOrder',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -43006,6 +49220,86 @@ export namespace Prisma {
   };
 
   export type WelcomeMessageScalarFieldEnum = (typeof WelcomeMessageScalarFieldEnum)[keyof typeof WelcomeMessageScalarFieldEnum]
+
+
+  export const HeroHomeScalarFieldEnum: {
+    id: 'id',
+    title: 'title',
+    description: 'description',
+    image: 'image',
+    isActive: 'isActive',
+    sortOrder: 'sortOrder',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type HeroHomeScalarFieldEnum = (typeof HeroHomeScalarFieldEnum)[keyof typeof HeroHomeScalarFieldEnum]
+
+
+  export const HeroAboutScalarFieldEnum: {
+    id: 'id',
+    title: 'title',
+    watermarkImage: 'watermarkImage',
+    description: 'description',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type HeroAboutScalarFieldEnum = (typeof HeroAboutScalarFieldEnum)[keyof typeof HeroAboutScalarFieldEnum]
+
+
+  export const VisionMissionScalarFieldEnum: {
+    id: 'id',
+    type: 'type',
+    content: 'content',
+    icon: 'icon',
+    sortOrder: 'sortOrder',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type VisionMissionScalarFieldEnum = (typeof VisionMissionScalarFieldEnum)[keyof typeof VisionMissionScalarFieldEnum]
+
+
+  export const CoreValueScalarFieldEnum: {
+    id: 'id',
+    title: 'title',
+    icon: 'icon',
+    sortOrder: 'sortOrder',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type CoreValueScalarFieldEnum = (typeof CoreValueScalarFieldEnum)[keyof typeof CoreValueScalarFieldEnum]
+
+
+  export const ApproachScalarFieldEnum: {
+    id: 'id',
+    title: 'title',
+    icon: 'icon',
+    sortOrder: 'sortOrder',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ApproachScalarFieldEnum = (typeof ApproachScalarFieldEnum)[keyof typeof ApproachScalarFieldEnum]
+
+
+  export const AwardScalarFieldEnum: {
+    id: 'id',
+    title: 'title',
+    image: 'image',
+    sortOrder: 'sortOrder',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type AwardScalarFieldEnum = (typeof AwardScalarFieldEnum)[keyof typeof AwardScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -43370,6 +49664,57 @@ export namespace Prisma {
   };
 
   export type WelcomeMessageOrderByRelevanceFieldEnum = (typeof WelcomeMessageOrderByRelevanceFieldEnum)[keyof typeof WelcomeMessageOrderByRelevanceFieldEnum]
+
+
+  export const HeroHomeOrderByRelevanceFieldEnum: {
+    title: 'title',
+    description: 'description',
+    image: 'image'
+  };
+
+  export type HeroHomeOrderByRelevanceFieldEnum = (typeof HeroHomeOrderByRelevanceFieldEnum)[keyof typeof HeroHomeOrderByRelevanceFieldEnum]
+
+
+  export const HeroAboutOrderByRelevanceFieldEnum: {
+    title: 'title',
+    watermarkImage: 'watermarkImage',
+    description: 'description'
+  };
+
+  export type HeroAboutOrderByRelevanceFieldEnum = (typeof HeroAboutOrderByRelevanceFieldEnum)[keyof typeof HeroAboutOrderByRelevanceFieldEnum]
+
+
+  export const VisionMissionOrderByRelevanceFieldEnum: {
+    type: 'type',
+    content: 'content',
+    icon: 'icon'
+  };
+
+  export type VisionMissionOrderByRelevanceFieldEnum = (typeof VisionMissionOrderByRelevanceFieldEnum)[keyof typeof VisionMissionOrderByRelevanceFieldEnum]
+
+
+  export const CoreValueOrderByRelevanceFieldEnum: {
+    title: 'title',
+    icon: 'icon'
+  };
+
+  export type CoreValueOrderByRelevanceFieldEnum = (typeof CoreValueOrderByRelevanceFieldEnum)[keyof typeof CoreValueOrderByRelevanceFieldEnum]
+
+
+  export const ApproachOrderByRelevanceFieldEnum: {
+    title: 'title',
+    icon: 'icon'
+  };
+
+  export type ApproachOrderByRelevanceFieldEnum = (typeof ApproachOrderByRelevanceFieldEnum)[keyof typeof ApproachOrderByRelevanceFieldEnum]
+
+
+  export const AwardOrderByRelevanceFieldEnum: {
+    title: 'title',
+    image: 'image'
+  };
+
+  export type AwardOrderByRelevanceFieldEnum = (typeof AwardOrderByRelevanceFieldEnum)[keyof typeof AwardOrderByRelevanceFieldEnum]
 
 
   /**
@@ -45517,6 +51862,7 @@ export namespace Prisma {
     id?: IntFilter<"Service"> | number
     serviceTitle?: StringFilter<"Service"> | string
     serviceIcon?: StringFilter<"Service"> | string
+    sortOrder?: IntFilter<"Service"> | number
     createdAt?: DateTimeFilter<"Service"> | Date | string
     updatedAt?: DateTimeFilter<"Service"> | Date | string
     packages?: ServicePackageListRelationFilter
@@ -45527,6 +51873,7 @@ export namespace Prisma {
     id?: SortOrder
     serviceTitle?: SortOrder
     serviceIcon?: SortOrder
+    sortOrder?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     packages?: ServicePackageOrderByRelationAggregateInput
@@ -45541,6 +51888,7 @@ export namespace Prisma {
     NOT?: ServiceWhereInput | ServiceWhereInput[]
     serviceTitle?: StringFilter<"Service"> | string
     serviceIcon?: StringFilter<"Service"> | string
+    sortOrder?: IntFilter<"Service"> | number
     createdAt?: DateTimeFilter<"Service"> | Date | string
     updatedAt?: DateTimeFilter<"Service"> | Date | string
     packages?: ServicePackageListRelationFilter
@@ -45551,6 +51899,7 @@ export namespace Prisma {
     id?: SortOrder
     serviceTitle?: SortOrder
     serviceIcon?: SortOrder
+    sortOrder?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ServiceCountOrderByAggregateInput
@@ -45567,6 +51916,7 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"Service"> | number
     serviceTitle?: StringWithAggregatesFilter<"Service"> | string
     serviceIcon?: StringWithAggregatesFilter<"Service"> | string
+    sortOrder?: IntWithAggregatesFilter<"Service"> | number
     createdAt?: DateTimeWithAggregatesFilter<"Service"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Service"> | Date | string
   }
@@ -46087,6 +52437,406 @@ export namespace Prisma {
     isActive?: BoolWithAggregatesFilter<"WelcomeMessage"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"WelcomeMessage"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"WelcomeMessage"> | Date | string
+  }
+
+  export type HeroHomeWhereInput = {
+    AND?: HeroHomeWhereInput | HeroHomeWhereInput[]
+    OR?: HeroHomeWhereInput[]
+    NOT?: HeroHomeWhereInput | HeroHomeWhereInput[]
+    id?: IntFilter<"HeroHome"> | number
+    title?: StringFilter<"HeroHome"> | string
+    description?: StringFilter<"HeroHome"> | string
+    image?: StringFilter<"HeroHome"> | string
+    isActive?: BoolFilter<"HeroHome"> | boolean
+    sortOrder?: IntFilter<"HeroHome"> | number
+    createdAt?: DateTimeFilter<"HeroHome"> | Date | string
+    updatedAt?: DateTimeFilter<"HeroHome"> | Date | string
+  }
+
+  export type HeroHomeOrderByWithRelationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    image?: SortOrder
+    isActive?: SortOrder
+    sortOrder?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _relevance?: HeroHomeOrderByRelevanceInput
+  }
+
+  export type HeroHomeWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: HeroHomeWhereInput | HeroHomeWhereInput[]
+    OR?: HeroHomeWhereInput[]
+    NOT?: HeroHomeWhereInput | HeroHomeWhereInput[]
+    title?: StringFilter<"HeroHome"> | string
+    description?: StringFilter<"HeroHome"> | string
+    image?: StringFilter<"HeroHome"> | string
+    isActive?: BoolFilter<"HeroHome"> | boolean
+    sortOrder?: IntFilter<"HeroHome"> | number
+    createdAt?: DateTimeFilter<"HeroHome"> | Date | string
+    updatedAt?: DateTimeFilter<"HeroHome"> | Date | string
+  }, "id">
+
+  export type HeroHomeOrderByWithAggregationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    image?: SortOrder
+    isActive?: SortOrder
+    sortOrder?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: HeroHomeCountOrderByAggregateInput
+    _avg?: HeroHomeAvgOrderByAggregateInput
+    _max?: HeroHomeMaxOrderByAggregateInput
+    _min?: HeroHomeMinOrderByAggregateInput
+    _sum?: HeroHomeSumOrderByAggregateInput
+  }
+
+  export type HeroHomeScalarWhereWithAggregatesInput = {
+    AND?: HeroHomeScalarWhereWithAggregatesInput | HeroHomeScalarWhereWithAggregatesInput[]
+    OR?: HeroHomeScalarWhereWithAggregatesInput[]
+    NOT?: HeroHomeScalarWhereWithAggregatesInput | HeroHomeScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"HeroHome"> | number
+    title?: StringWithAggregatesFilter<"HeroHome"> | string
+    description?: StringWithAggregatesFilter<"HeroHome"> | string
+    image?: StringWithAggregatesFilter<"HeroHome"> | string
+    isActive?: BoolWithAggregatesFilter<"HeroHome"> | boolean
+    sortOrder?: IntWithAggregatesFilter<"HeroHome"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"HeroHome"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"HeroHome"> | Date | string
+  }
+
+  export type HeroAboutWhereInput = {
+    AND?: HeroAboutWhereInput | HeroAboutWhereInput[]
+    OR?: HeroAboutWhereInput[]
+    NOT?: HeroAboutWhereInput | HeroAboutWhereInput[]
+    id?: IntFilter<"HeroAbout"> | number
+    title?: StringFilter<"HeroAbout"> | string
+    watermarkImage?: StringNullableFilter<"HeroAbout"> | string | null
+    description?: StringNullableFilter<"HeroAbout"> | string | null
+    isActive?: BoolFilter<"HeroAbout"> | boolean
+    createdAt?: DateTimeFilter<"HeroAbout"> | Date | string
+    updatedAt?: DateTimeFilter<"HeroAbout"> | Date | string
+  }
+
+  export type HeroAboutOrderByWithRelationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    watermarkImage?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _relevance?: HeroAboutOrderByRelevanceInput
+  }
+
+  export type HeroAboutWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: HeroAboutWhereInput | HeroAboutWhereInput[]
+    OR?: HeroAboutWhereInput[]
+    NOT?: HeroAboutWhereInput | HeroAboutWhereInput[]
+    title?: StringFilter<"HeroAbout"> | string
+    watermarkImage?: StringNullableFilter<"HeroAbout"> | string | null
+    description?: StringNullableFilter<"HeroAbout"> | string | null
+    isActive?: BoolFilter<"HeroAbout"> | boolean
+    createdAt?: DateTimeFilter<"HeroAbout"> | Date | string
+    updatedAt?: DateTimeFilter<"HeroAbout"> | Date | string
+  }, "id">
+
+  export type HeroAboutOrderByWithAggregationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    watermarkImage?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: HeroAboutCountOrderByAggregateInput
+    _avg?: HeroAboutAvgOrderByAggregateInput
+    _max?: HeroAboutMaxOrderByAggregateInput
+    _min?: HeroAboutMinOrderByAggregateInput
+    _sum?: HeroAboutSumOrderByAggregateInput
+  }
+
+  export type HeroAboutScalarWhereWithAggregatesInput = {
+    AND?: HeroAboutScalarWhereWithAggregatesInput | HeroAboutScalarWhereWithAggregatesInput[]
+    OR?: HeroAboutScalarWhereWithAggregatesInput[]
+    NOT?: HeroAboutScalarWhereWithAggregatesInput | HeroAboutScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"HeroAbout"> | number
+    title?: StringWithAggregatesFilter<"HeroAbout"> | string
+    watermarkImage?: StringNullableWithAggregatesFilter<"HeroAbout"> | string | null
+    description?: StringNullableWithAggregatesFilter<"HeroAbout"> | string | null
+    isActive?: BoolWithAggregatesFilter<"HeroAbout"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"HeroAbout"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"HeroAbout"> | Date | string
+  }
+
+  export type VisionMissionWhereInput = {
+    AND?: VisionMissionWhereInput | VisionMissionWhereInput[]
+    OR?: VisionMissionWhereInput[]
+    NOT?: VisionMissionWhereInput | VisionMissionWhereInput[]
+    id?: IntFilter<"VisionMission"> | number
+    type?: StringFilter<"VisionMission"> | string
+    content?: StringFilter<"VisionMission"> | string
+    icon?: StringNullableFilter<"VisionMission"> | string | null
+    sortOrder?: IntFilter<"VisionMission"> | number
+    isActive?: BoolFilter<"VisionMission"> | boolean
+    createdAt?: DateTimeFilter<"VisionMission"> | Date | string
+    updatedAt?: DateTimeFilter<"VisionMission"> | Date | string
+  }
+
+  export type VisionMissionOrderByWithRelationInput = {
+    id?: SortOrder
+    type?: SortOrder
+    content?: SortOrder
+    icon?: SortOrderInput | SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _relevance?: VisionMissionOrderByRelevanceInput
+  }
+
+  export type VisionMissionWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: VisionMissionWhereInput | VisionMissionWhereInput[]
+    OR?: VisionMissionWhereInput[]
+    NOT?: VisionMissionWhereInput | VisionMissionWhereInput[]
+    type?: StringFilter<"VisionMission"> | string
+    content?: StringFilter<"VisionMission"> | string
+    icon?: StringNullableFilter<"VisionMission"> | string | null
+    sortOrder?: IntFilter<"VisionMission"> | number
+    isActive?: BoolFilter<"VisionMission"> | boolean
+    createdAt?: DateTimeFilter<"VisionMission"> | Date | string
+    updatedAt?: DateTimeFilter<"VisionMission"> | Date | string
+  }, "id">
+
+  export type VisionMissionOrderByWithAggregationInput = {
+    id?: SortOrder
+    type?: SortOrder
+    content?: SortOrder
+    icon?: SortOrderInput | SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: VisionMissionCountOrderByAggregateInput
+    _avg?: VisionMissionAvgOrderByAggregateInput
+    _max?: VisionMissionMaxOrderByAggregateInput
+    _min?: VisionMissionMinOrderByAggregateInput
+    _sum?: VisionMissionSumOrderByAggregateInput
+  }
+
+  export type VisionMissionScalarWhereWithAggregatesInput = {
+    AND?: VisionMissionScalarWhereWithAggregatesInput | VisionMissionScalarWhereWithAggregatesInput[]
+    OR?: VisionMissionScalarWhereWithAggregatesInput[]
+    NOT?: VisionMissionScalarWhereWithAggregatesInput | VisionMissionScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"VisionMission"> | number
+    type?: StringWithAggregatesFilter<"VisionMission"> | string
+    content?: StringWithAggregatesFilter<"VisionMission"> | string
+    icon?: StringNullableWithAggregatesFilter<"VisionMission"> | string | null
+    sortOrder?: IntWithAggregatesFilter<"VisionMission"> | number
+    isActive?: BoolWithAggregatesFilter<"VisionMission"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"VisionMission"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"VisionMission"> | Date | string
+  }
+
+  export type CoreValueWhereInput = {
+    AND?: CoreValueWhereInput | CoreValueWhereInput[]
+    OR?: CoreValueWhereInput[]
+    NOT?: CoreValueWhereInput | CoreValueWhereInput[]
+    id?: IntFilter<"CoreValue"> | number
+    title?: StringFilter<"CoreValue"> | string
+    icon?: StringNullableFilter<"CoreValue"> | string | null
+    sortOrder?: IntFilter<"CoreValue"> | number
+    isActive?: BoolFilter<"CoreValue"> | boolean
+    createdAt?: DateTimeFilter<"CoreValue"> | Date | string
+    updatedAt?: DateTimeFilter<"CoreValue"> | Date | string
+  }
+
+  export type CoreValueOrderByWithRelationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    icon?: SortOrderInput | SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _relevance?: CoreValueOrderByRelevanceInput
+  }
+
+  export type CoreValueWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: CoreValueWhereInput | CoreValueWhereInput[]
+    OR?: CoreValueWhereInput[]
+    NOT?: CoreValueWhereInput | CoreValueWhereInput[]
+    title?: StringFilter<"CoreValue"> | string
+    icon?: StringNullableFilter<"CoreValue"> | string | null
+    sortOrder?: IntFilter<"CoreValue"> | number
+    isActive?: BoolFilter<"CoreValue"> | boolean
+    createdAt?: DateTimeFilter<"CoreValue"> | Date | string
+    updatedAt?: DateTimeFilter<"CoreValue"> | Date | string
+  }, "id">
+
+  export type CoreValueOrderByWithAggregationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    icon?: SortOrderInput | SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: CoreValueCountOrderByAggregateInput
+    _avg?: CoreValueAvgOrderByAggregateInput
+    _max?: CoreValueMaxOrderByAggregateInput
+    _min?: CoreValueMinOrderByAggregateInput
+    _sum?: CoreValueSumOrderByAggregateInput
+  }
+
+  export type CoreValueScalarWhereWithAggregatesInput = {
+    AND?: CoreValueScalarWhereWithAggregatesInput | CoreValueScalarWhereWithAggregatesInput[]
+    OR?: CoreValueScalarWhereWithAggregatesInput[]
+    NOT?: CoreValueScalarWhereWithAggregatesInput | CoreValueScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"CoreValue"> | number
+    title?: StringWithAggregatesFilter<"CoreValue"> | string
+    icon?: StringNullableWithAggregatesFilter<"CoreValue"> | string | null
+    sortOrder?: IntWithAggregatesFilter<"CoreValue"> | number
+    isActive?: BoolWithAggregatesFilter<"CoreValue"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"CoreValue"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"CoreValue"> | Date | string
+  }
+
+  export type ApproachWhereInput = {
+    AND?: ApproachWhereInput | ApproachWhereInput[]
+    OR?: ApproachWhereInput[]
+    NOT?: ApproachWhereInput | ApproachWhereInput[]
+    id?: IntFilter<"Approach"> | number
+    title?: StringFilter<"Approach"> | string
+    icon?: StringNullableFilter<"Approach"> | string | null
+    sortOrder?: IntFilter<"Approach"> | number
+    isActive?: BoolFilter<"Approach"> | boolean
+    createdAt?: DateTimeFilter<"Approach"> | Date | string
+    updatedAt?: DateTimeFilter<"Approach"> | Date | string
+  }
+
+  export type ApproachOrderByWithRelationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    icon?: SortOrderInput | SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _relevance?: ApproachOrderByRelevanceInput
+  }
+
+  export type ApproachWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: ApproachWhereInput | ApproachWhereInput[]
+    OR?: ApproachWhereInput[]
+    NOT?: ApproachWhereInput | ApproachWhereInput[]
+    title?: StringFilter<"Approach"> | string
+    icon?: StringNullableFilter<"Approach"> | string | null
+    sortOrder?: IntFilter<"Approach"> | number
+    isActive?: BoolFilter<"Approach"> | boolean
+    createdAt?: DateTimeFilter<"Approach"> | Date | string
+    updatedAt?: DateTimeFilter<"Approach"> | Date | string
+  }, "id">
+
+  export type ApproachOrderByWithAggregationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    icon?: SortOrderInput | SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ApproachCountOrderByAggregateInput
+    _avg?: ApproachAvgOrderByAggregateInput
+    _max?: ApproachMaxOrderByAggregateInput
+    _min?: ApproachMinOrderByAggregateInput
+    _sum?: ApproachSumOrderByAggregateInput
+  }
+
+  export type ApproachScalarWhereWithAggregatesInput = {
+    AND?: ApproachScalarWhereWithAggregatesInput | ApproachScalarWhereWithAggregatesInput[]
+    OR?: ApproachScalarWhereWithAggregatesInput[]
+    NOT?: ApproachScalarWhereWithAggregatesInput | ApproachScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Approach"> | number
+    title?: StringWithAggregatesFilter<"Approach"> | string
+    icon?: StringNullableWithAggregatesFilter<"Approach"> | string | null
+    sortOrder?: IntWithAggregatesFilter<"Approach"> | number
+    isActive?: BoolWithAggregatesFilter<"Approach"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"Approach"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Approach"> | Date | string
+  }
+
+  export type AwardWhereInput = {
+    AND?: AwardWhereInput | AwardWhereInput[]
+    OR?: AwardWhereInput[]
+    NOT?: AwardWhereInput | AwardWhereInput[]
+    id?: IntFilter<"Award"> | number
+    title?: StringFilter<"Award"> | string
+    image?: StringNullableFilter<"Award"> | string | null
+    sortOrder?: IntFilter<"Award"> | number
+    isActive?: BoolFilter<"Award"> | boolean
+    createdAt?: DateTimeFilter<"Award"> | Date | string
+    updatedAt?: DateTimeFilter<"Award"> | Date | string
+  }
+
+  export type AwardOrderByWithRelationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    image?: SortOrderInput | SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _relevance?: AwardOrderByRelevanceInput
+  }
+
+  export type AwardWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: AwardWhereInput | AwardWhereInput[]
+    OR?: AwardWhereInput[]
+    NOT?: AwardWhereInput | AwardWhereInput[]
+    title?: StringFilter<"Award"> | string
+    image?: StringNullableFilter<"Award"> | string | null
+    sortOrder?: IntFilter<"Award"> | number
+    isActive?: BoolFilter<"Award"> | boolean
+    createdAt?: DateTimeFilter<"Award"> | Date | string
+    updatedAt?: DateTimeFilter<"Award"> | Date | string
+  }, "id">
+
+  export type AwardOrderByWithAggregationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    image?: SortOrderInput | SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: AwardCountOrderByAggregateInput
+    _avg?: AwardAvgOrderByAggregateInput
+    _max?: AwardMaxOrderByAggregateInput
+    _min?: AwardMinOrderByAggregateInput
+    _sum?: AwardSumOrderByAggregateInput
+  }
+
+  export type AwardScalarWhereWithAggregatesInput = {
+    AND?: AwardScalarWhereWithAggregatesInput | AwardScalarWhereWithAggregatesInput[]
+    OR?: AwardScalarWhereWithAggregatesInput[]
+    NOT?: AwardScalarWhereWithAggregatesInput | AwardScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Award"> | number
+    title?: StringWithAggregatesFilter<"Award"> | string
+    image?: StringNullableWithAggregatesFilter<"Award"> | string | null
+    sortOrder?: IntWithAggregatesFilter<"Award"> | number
+    isActive?: BoolWithAggregatesFilter<"Award"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"Award"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Award"> | Date | string
   }
 
   export type UserCreateInput = {
@@ -48229,6 +54979,7 @@ export namespace Prisma {
   export type ServiceCreateInput = {
     serviceTitle: string
     serviceIcon: string
+    sortOrder?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     packages?: ServicePackageCreateNestedManyWithoutServiceInput
@@ -48239,6 +54990,7 @@ export namespace Prisma {
     id?: number
     serviceTitle: string
     serviceIcon: string
+    sortOrder?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     packages?: ServicePackageUncheckedCreateNestedManyWithoutServiceInput
@@ -48248,6 +55000,7 @@ export namespace Prisma {
   export type ServiceUpdateInput = {
     serviceTitle?: StringFieldUpdateOperationsInput | string
     serviceIcon?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     packages?: ServicePackageUpdateManyWithoutServiceNestedInput
@@ -48258,6 +55011,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     serviceTitle?: StringFieldUpdateOperationsInput | string
     serviceIcon?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     packages?: ServicePackageUncheckedUpdateManyWithoutServiceNestedInput
@@ -48268,6 +55022,7 @@ export namespace Prisma {
     id?: number
     serviceTitle: string
     serviceIcon: string
+    sortOrder?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -48275,6 +55030,7 @@ export namespace Prisma {
   export type ServiceUpdateManyMutationInput = {
     serviceTitle?: StringFieldUpdateOperationsInput | string
     serviceIcon?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -48283,6 +55039,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     serviceTitle?: StringFieldUpdateOperationsInput | string
     serviceIcon?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -48777,6 +55534,422 @@ export namespace Prisma {
     facebook?: NullableStringFieldUpdateOperationsInput | string | null
     linkedin?: NullableStringFieldUpdateOperationsInput | string | null
     instagram?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type HeroHomeCreateInput = {
+    title: string
+    description: string
+    image: string
+    isActive?: boolean
+    sortOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type HeroHomeUncheckedCreateInput = {
+    id?: number
+    title: string
+    description: string
+    image: string
+    isActive?: boolean
+    sortOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type HeroHomeUpdateInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    image?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type HeroHomeUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    image?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type HeroHomeCreateManyInput = {
+    id?: number
+    title: string
+    description: string
+    image: string
+    isActive?: boolean
+    sortOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type HeroHomeUpdateManyMutationInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    image?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type HeroHomeUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    image?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type HeroAboutCreateInput = {
+    title: string
+    watermarkImage?: string | null
+    description?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type HeroAboutUncheckedCreateInput = {
+    id?: number
+    title: string
+    watermarkImage?: string | null
+    description?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type HeroAboutUpdateInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    watermarkImage?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type HeroAboutUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    watermarkImage?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type HeroAboutCreateManyInput = {
+    id?: number
+    title: string
+    watermarkImage?: string | null
+    description?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type HeroAboutUpdateManyMutationInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    watermarkImage?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type HeroAboutUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    watermarkImage?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VisionMissionCreateInput = {
+    type: string
+    content: string
+    icon?: string | null
+    sortOrder?: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type VisionMissionUncheckedCreateInput = {
+    id?: number
+    type: string
+    content: string
+    icon?: string | null
+    sortOrder?: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type VisionMissionUpdateInput = {
+    type?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    icon?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VisionMissionUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    type?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    icon?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VisionMissionCreateManyInput = {
+    id?: number
+    type: string
+    content: string
+    icon?: string | null
+    sortOrder?: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type VisionMissionUpdateManyMutationInput = {
+    type?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    icon?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VisionMissionUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    type?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    icon?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CoreValueCreateInput = {
+    title: string
+    icon?: string | null
+    sortOrder?: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CoreValueUncheckedCreateInput = {
+    id?: number
+    title: string
+    icon?: string | null
+    sortOrder?: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CoreValueUpdateInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    icon?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CoreValueUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    icon?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CoreValueCreateManyInput = {
+    id?: number
+    title: string
+    icon?: string | null
+    sortOrder?: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CoreValueUpdateManyMutationInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    icon?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CoreValueUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    icon?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ApproachCreateInput = {
+    title: string
+    icon?: string | null
+    sortOrder?: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ApproachUncheckedCreateInput = {
+    id?: number
+    title: string
+    icon?: string | null
+    sortOrder?: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ApproachUpdateInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    icon?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ApproachUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    icon?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ApproachCreateManyInput = {
+    id?: number
+    title: string
+    icon?: string | null
+    sortOrder?: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ApproachUpdateManyMutationInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    icon?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ApproachUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    icon?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AwardCreateInput = {
+    title: string
+    image?: string | null
+    sortOrder?: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AwardUncheckedCreateInput = {
+    id?: number
+    title: string
+    image?: string | null
+    sortOrder?: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AwardUpdateInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AwardUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AwardCreateManyInput = {
+    id?: number
+    title: string
+    image?: string | null
+    sortOrder?: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AwardUpdateManyMutationInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AwardUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -50675,18 +57848,21 @@ export namespace Prisma {
     id?: SortOrder
     serviceTitle?: SortOrder
     serviceIcon?: SortOrder
+    sortOrder?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
   export type ServiceAvgOrderByAggregateInput = {
     id?: SortOrder
+    sortOrder?: SortOrder
   }
 
   export type ServiceMaxOrderByAggregateInput = {
     id?: SortOrder
     serviceTitle?: SortOrder
     serviceIcon?: SortOrder
+    sortOrder?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -50695,12 +57871,14 @@ export namespace Prisma {
     id?: SortOrder
     serviceTitle?: SortOrder
     serviceIcon?: SortOrder
+    sortOrder?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
   export type ServiceSumOrderByAggregateInput = {
     id?: SortOrder
+    sortOrder?: SortOrder
   }
 
   export type ServiceScalarRelationFilter = {
@@ -51083,6 +58261,286 @@ export namespace Prisma {
 
   export type WelcomeMessageSumOrderByAggregateInput = {
     id?: SortOrder
+  }
+
+  export type HeroHomeOrderByRelevanceInput = {
+    fields: HeroHomeOrderByRelevanceFieldEnum | HeroHomeOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type HeroHomeCountOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    image?: SortOrder
+    isActive?: SortOrder
+    sortOrder?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type HeroHomeAvgOrderByAggregateInput = {
+    id?: SortOrder
+    sortOrder?: SortOrder
+  }
+
+  export type HeroHomeMaxOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    image?: SortOrder
+    isActive?: SortOrder
+    sortOrder?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type HeroHomeMinOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    image?: SortOrder
+    isActive?: SortOrder
+    sortOrder?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type HeroHomeSumOrderByAggregateInput = {
+    id?: SortOrder
+    sortOrder?: SortOrder
+  }
+
+  export type HeroAboutOrderByRelevanceInput = {
+    fields: HeroAboutOrderByRelevanceFieldEnum | HeroAboutOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type HeroAboutCountOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    watermarkImage?: SortOrder
+    description?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type HeroAboutAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type HeroAboutMaxOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    watermarkImage?: SortOrder
+    description?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type HeroAboutMinOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    watermarkImage?: SortOrder
+    description?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type HeroAboutSumOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type VisionMissionOrderByRelevanceInput = {
+    fields: VisionMissionOrderByRelevanceFieldEnum | VisionMissionOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type VisionMissionCountOrderByAggregateInput = {
+    id?: SortOrder
+    type?: SortOrder
+    content?: SortOrder
+    icon?: SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type VisionMissionAvgOrderByAggregateInput = {
+    id?: SortOrder
+    sortOrder?: SortOrder
+  }
+
+  export type VisionMissionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    type?: SortOrder
+    content?: SortOrder
+    icon?: SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type VisionMissionMinOrderByAggregateInput = {
+    id?: SortOrder
+    type?: SortOrder
+    content?: SortOrder
+    icon?: SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type VisionMissionSumOrderByAggregateInput = {
+    id?: SortOrder
+    sortOrder?: SortOrder
+  }
+
+  export type CoreValueOrderByRelevanceInput = {
+    fields: CoreValueOrderByRelevanceFieldEnum | CoreValueOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type CoreValueCountOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    icon?: SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CoreValueAvgOrderByAggregateInput = {
+    id?: SortOrder
+    sortOrder?: SortOrder
+  }
+
+  export type CoreValueMaxOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    icon?: SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CoreValueMinOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    icon?: SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CoreValueSumOrderByAggregateInput = {
+    id?: SortOrder
+    sortOrder?: SortOrder
+  }
+
+  export type ApproachOrderByRelevanceInput = {
+    fields: ApproachOrderByRelevanceFieldEnum | ApproachOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type ApproachCountOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    icon?: SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ApproachAvgOrderByAggregateInput = {
+    id?: SortOrder
+    sortOrder?: SortOrder
+  }
+
+  export type ApproachMaxOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    icon?: SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ApproachMinOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    icon?: SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ApproachSumOrderByAggregateInput = {
+    id?: SortOrder
+    sortOrder?: SortOrder
+  }
+
+  export type AwardOrderByRelevanceInput = {
+    fields: AwardOrderByRelevanceFieldEnum | AwardOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type AwardCountOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    image?: SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AwardAvgOrderByAggregateInput = {
+    id?: SortOrder
+    sortOrder?: SortOrder
+  }
+
+  export type AwardMaxOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    image?: SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AwardMinOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    image?: SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AwardSumOrderByAggregateInput = {
+    id?: SortOrder
+    sortOrder?: SortOrder
   }
 
   export type RoleCreateNestedOneWithoutUsersInput = {
@@ -54628,6 +62086,7 @@ export namespace Prisma {
   export type ServiceCreateWithoutTransactionsInput = {
     serviceTitle: string
     serviceIcon: string
+    sortOrder?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     packages?: ServicePackageCreateNestedManyWithoutServiceInput
@@ -54637,6 +62096,7 @@ export namespace Prisma {
     id?: number
     serviceTitle: string
     serviceIcon: string
+    sortOrder?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     packages?: ServicePackageUncheckedCreateNestedManyWithoutServiceInput
@@ -54751,6 +62211,7 @@ export namespace Prisma {
   export type ServiceUpdateWithoutTransactionsInput = {
     serviceTitle?: StringFieldUpdateOperationsInput | string
     serviceIcon?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     packages?: ServicePackageUpdateManyWithoutServiceNestedInput
@@ -54760,6 +62221,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     serviceTitle?: StringFieldUpdateOperationsInput | string
     serviceIcon?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     packages?: ServicePackageUncheckedUpdateManyWithoutServiceNestedInput
@@ -55070,6 +62532,7 @@ export namespace Prisma {
   export type ServiceCreateWithoutPackagesInput = {
     serviceTitle: string
     serviceIcon: string
+    sortOrder?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     transactions?: TransactionCreateNestedManyWithoutServiceInput
@@ -55079,6 +62542,7 @@ export namespace Prisma {
     id?: number
     serviceTitle: string
     serviceIcon: string
+    sortOrder?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     transactions?: TransactionUncheckedCreateNestedManyWithoutServiceInput
@@ -55122,6 +62586,7 @@ export namespace Prisma {
   export type ServiceUpdateWithoutPackagesInput = {
     serviceTitle?: StringFieldUpdateOperationsInput | string
     serviceIcon?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transactions?: TransactionUpdateManyWithoutServiceNestedInput
@@ -55131,6 +62596,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     serviceTitle?: StringFieldUpdateOperationsInput | string
     serviceIcon?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transactions?: TransactionUncheckedUpdateManyWithoutServiceNestedInput
