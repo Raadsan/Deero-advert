@@ -18,6 +18,7 @@ import { getAllRoles } from "@/api-client/roleApi";
 export default function UsersPage() {
   const [data, setData] = useState([]);
   const [roles, setRoles] = useState<any[]>([]); // roles state
+  const [roleFilter, setRoleFilter] = useState("");
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -251,16 +252,38 @@ export default function UsersPage() {
     },
   ];
 
+  const filteredUsers = data.filter((user: any) => {
+    if (!roleFilter) return true;
+    const roleName =
+      typeof user.role === "object" ? user.role?.name : user.role;
+    return roleName?.toLowerCase() === roleFilter;
+  });
+
   return (
     <div className="space-y-6">
       <DataTable
         title="Users Management"
         columns={columns}
-        data={data}
+        data={filteredUsers}
         onAddClick={() => setIsModalOpen(true)}
         onRefresh={fetchData}
         loading={loading}
         disableUpdatingOverlay={true}
+        toolbarFilters={
+          <select
+            aria-label="Filter users by role"
+            value={roleFilter}
+            onChange={(e) => setRoleFilter(e.target.value)}
+            className="border border-gray-200 bg-white text-gray-700 rounded-lg px-3 py-2 min-w-36 focus:outline-none focus:ring-2 focus:ring-[#EB4724] focus:border-transparent transition-all"
+          >
+            <option value="">All roles</option>
+            {roles.map((role: any) => (
+              <option key={role.id || role._id || role.name} value={role.name.toLowerCase()}>
+                {role.name.charAt(0).toUpperCase() + role.name.slice(1)}
+              </option>
+            ))}
+          </select>
+        }
       />
 
       <DeleteConfirmModal

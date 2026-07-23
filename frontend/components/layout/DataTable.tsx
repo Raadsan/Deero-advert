@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 // Removed ThemeContext dependency for now as it wasn't requested/verified to exist in this context,
 // and we want to enforce brand colors.
 
-const DataTable = ({ title, columns, data = [], onAddClick, onRefresh, showAddButton = true, loading = false, addButtonLabel = "Add New", disableUpdatingOverlay = false }: any) => {
+const DataTable = ({ title, columns, data = [], onAddClick, onRefresh, showAddButton = true, loading = false, addButtonLabel = "Add New", disableUpdatingOverlay = false, toolbarFilters }: any) => {
 
     const [search, setSearch] = useState("");
     const [filteredData, setFilteredData] = useState<any[]>(data);
@@ -72,7 +72,6 @@ const DataTable = ({ title, columns, data = [], onAddClick, onRefresh, showAddBu
                 });
             });
             setFilteredData(filtered);
-            setCurrentPage(1);
         } else {
             setFilteredData([]);
         }
@@ -81,6 +80,20 @@ const DataTable = ({ title, columns, data = [], onAddClick, onRefresh, showAddBu
     const startIdx = (currentPage - 1) * entriesPerPage;
     const endIdx = startIdx + entriesPerPage;
     const totalPages = Math.ceil(filteredData.length / entriesPerPage);
+
+    // A new search starts at page one, but ordinary data refreshes (such as
+    // deleting a row) keep the user on their current page.
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [search]);
+
+    // If the final row on the last page is removed, move to the last page that
+    // still exists instead of displaying an empty, out-of-range page.
+    useEffect(() => {
+        if (totalPages > 0 && currentPage > totalPages) {
+            setCurrentPage(totalPages);
+        }
+    }, [currentPage, totalPages]);
 
     return (
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 max-w-full mx-auto overflow-hidden">
@@ -124,18 +137,21 @@ const DataTable = ({ title, columns, data = [], onAddClick, onRefresh, showAddBu
                         </select>
                         <span className="text-sm text-gray-600 ml-1"> entries</span>
                     </div>
-                    <div className="relative w-full sm:w-64">
-                        {/* Search Icon */}
-                        <svg className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
-                        <input
-                            type="text"
-                            placeholder="Search details..."
-                            className="border border-gray-200 pl-9 pr-4 py-2 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-[#EB4724] focus:border-transparent transition-all"
-                            value={search}
-                            onChange={(e) => setSearch(e.target.value)}
-                        />
+                    <div className="flex items-center gap-3 w-full sm:w-auto">
+                        {toolbarFilters}
+                        <div className="relative w-full sm:w-64">
+                            {/* Search Icon */}
+                            <svg className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                            <input
+                                type="text"
+                                placeholder="Search details..."
+                                className="border border-gray-200 pl-9 pr-4 py-2 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-[#EB4724] focus:border-transparent transition-all"
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                            />
+                        </div>
                     </div>
                 </div>
             </div>

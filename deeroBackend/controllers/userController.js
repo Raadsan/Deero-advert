@@ -486,13 +486,68 @@ export const updateUser = async (req, res) => {
 
 // DELETE USER
 export const deleteUser = async (req, res) => {
+  const userId = parseInt(req.params.id, 10);
+
+  if (Number.isNaN(userId)) {
+    return res.status(400).json({ message: "Invalid user ID" });
+  }
+
   try {
-    await prisma.user.delete({
-      where: { id: parseInt(req.params.id) }
+    await prisma.$transaction(async (tx) => {
+      const user = await tx.user.findUnique({
+        where: { id: userId },
+        select: { id: true }
+      });
+
+      if (!user) {
+        const notFoundError = new Error("User not found");
+        notFoundError.code = "USER_NOT_FOUND";
+        throw notFoundError;
+      }
+
+      const conversations = await tx.conversation.findMany({
+        where: {
+          OR: [
+            { participant1Id: userId },
+            { participant2Id: userId }
+          ]
+        },
+        select: { id: true }
+      });
+      const conversationIds = conversations.map(({ id }) => id);
+
+      if (conversationIds.length > 0) {
+        await tx.message.deleteMany({
+          where: { conversationId: { in: conversationIds } }
+        });
+        await tx.conversation.deleteMany({
+          where: { id: { in: conversationIds } }
+        });
+      }
+
+      await tx.message.deleteMany({ where: { senderId: userId } });
+      await tx.transaction.deleteMany({ where: { userId } });
+      await tx.bonusHistory.deleteMany({ where: { userId } });
+      await tx.announcement.deleteMany({ where: { createdById: userId } });
+      await tx.discount.deleteMany({ where: { userId } });
+      await tx.deviceToken.deleteMany({ where: { userId } });
+      await tx.user.delete({ where: { id: userId } });
     });
+
     res.json({ message: "User deleted successfully" });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    if (error.code === "USER_NOT_FOUND" || error.code === "P2025") {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (error.code === "P2003") {
+      return res.status(409).json({
+        message: "This user has another related record that could not be removed."
+      });
+    }
+
+    console.error("Failed to delete user:", error);
+    res.status(500).json({ message: "Failed to delete user" });
   }
 };
 
