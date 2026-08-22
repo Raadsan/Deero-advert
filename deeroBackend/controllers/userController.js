@@ -392,6 +392,37 @@ export const resetPassword = async (req, res) => {
  * 🛡 PROTECTED USER CRUD
  */
 
+const getCustomerCareRoleIds = async () => {
+  const roles = await prisma.role.findMany({
+    select: { id: true, name: true },
+  });
+
+  return roles
+    .filter((role) => role.name?.toLowerCase().trim() === "customer care")
+    .map((role) => role.id);
+};
+
+// GET CUSTOMER CARE USERS (for regular app users)
+export const getCustomerCareUsers = async (req, res) => {
+  try {
+    const customerCareRoleIds = await getCustomerCareRoleIds();
+
+    if (customerCareRoleIds.length === 0) {
+      return res.json([]);
+    }
+
+    const users = await prisma.user.findMany({
+      where: { roleId: { in: customerCareRoleIds } },
+      include: { role: true },
+      orderBy: { fullname: "asc" },
+    });
+
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // GET ALL USERS
 export const getUsers = async (req, res) => {
   try {
