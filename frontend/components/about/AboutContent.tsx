@@ -18,6 +18,7 @@ const formatDescription = (desc: string): string => {
 
 export default function AboutContent() {
     const [heroData, setHeroData] = useState<{ watermarkImage: string; description: string } | null>(null);
+    const [heroLoading, setHeroLoading] = useState(true);
     const [vmItems, setVmItems] = useState<any[]>([]);
 
     useEffect(() => {
@@ -26,16 +27,14 @@ export default function AboutContent() {
                 const res = await getActiveHeroAbout();
                 if (res.success && res.data) {
                     setHeroData({
-                        watermarkImage: res.data.watermarkImage
-                            ? res.data.watermarkImage.startsWith("http") || res.data.watermarkImage.startsWith("/")
-                                ? res.data.watermarkImage
-                                : `http://localhost:5000/${res.data.watermarkImage}`
-                            : "",
+                        watermarkImage: res.data.watermarkImage ? (getImageUrl(res.data.watermarkImage) || res.data.watermarkImage) : "",
                         description: res.data.description
                     });
                 }
             } catch (error) {
                 console.error("Failed to fetch hero about", error);
+            } finally {
+                setHeroLoading(false);
             }
         };
 
@@ -65,7 +64,21 @@ export default function AboutContent() {
                 <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
                     <div className="w-full lg:w-1/2 flex justify-center">
                         <div className="relative w-full max-w-[450px] aspect-square">
-                            <Image src={imageSrc} alt="About Deero Advert" fill className="object-contain" priority />
+                            {heroLoading ? (
+                                <div
+                                    className="h-full w-full animate-pulse rounded-full bg-[#651313]/5"
+                                    aria-label="Loading About image"
+                                />
+                            ) : (
+                                <Image
+                                    src={imageSrc}
+                                    alt="About Deero Advert"
+                                    fill
+                                    unoptimized
+                                    className="object-contain"
+                                    priority
+                                />
+                            )}
                         </div>
                     </div>
 

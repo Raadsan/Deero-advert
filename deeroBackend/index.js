@@ -41,6 +41,7 @@ import visionMissionRoutes from "./routes/visionMissionRoutes.js";
 import coreValueRoutes from "./routes/coreValueRoutes.js";
 import approachRoutes from "./routes/approachRoutes.js";
 import awardRoutes from "./routes/awardRoutes.js";
+import consultationRoutes from "./routes/consultationRoutes.js";
 import multerErrorHandler from "./middlewares/multerErrorHandler.js";
 
 dotenv.config();
@@ -126,6 +127,7 @@ app.use("/api/vision-mission", visionMissionRoutes);
 app.use("/api/core-values", coreValueRoutes);
 app.use("/api/approaches", approachRoutes);
 app.use("/api/awards", awardRoutes);
+app.use("/api/consultations", consultationRoutes);
 
 // Error Handling Middleware
 app.use(multerErrorHandler);

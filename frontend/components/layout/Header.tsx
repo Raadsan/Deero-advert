@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { Bell, User, LogOut, ShoppingCart } from "lucide-react";
+import { User, LogOut, ShoppingCart } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { isAuthenticated, getUser, clearAuth, isStaff as hasStaffRole, isAdmin } from "@/utils/auth";
 import { logout as apiLogout } from "../../api-client/authApi";
@@ -15,29 +15,31 @@ import { motion, AnimatePresence } from "framer-motion";
 const navLinks = [
   { label: "Home", href: "/" },
   { label: "About Us", href: "/about" },
-  //  { 
-  //   label: "About Deero", 
-  //   href: "/about", 
-  //   subLinks: [
-  //     { label: "Welcome", href: "/welcome" },
-  //     { label: "About Us", href: "/about" },
-  //   ] 
-  // },
-  { label: "Services", href: "/services" },
-  { label: "Hosting", href: "/hosting" },
+  {
+    label: "Solutions",
+    href: "#",
+    subLinks: [
+      { label: "Services", href: "/services" },
+      { label: "Packages", href: "/shop" },
+      { label: "Domains", href: "/hosting#domains" }
+    ]
+  },
   { label: "Portfolio", href: "/portfolio" },
-  { 
-    label: "Resources", 
-    href: "#", 
+  {
+    label: "Resources",
+    href: "#",
     subLinks: [
       { label: "Blog", href: "/blogs" },
       { label: "News & Events", href: "/news" },
       { label: "Case Studies", href: "/casestudy" }
-    ] 
+    ]
   },
-  // { label: "Team", href: "/team" },
   { label: "Contact", href: "/contact" },
 ];
+
+const handleOpenBooking = () => {
+  window.dispatchEvent(new Event("openConsultationModal"));
+};
 
 export default function Header() {
   const { cartItems } = useCart();
@@ -54,6 +56,15 @@ export default function Header() {
   const [showBanner, setShowBanner] = useState(true);
   const [mounted, setMounted] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     setMounted(true);
@@ -73,7 +84,6 @@ export default function Header() {
       try {
         const res = await getActiveAnnouncements();
         if (res.data?.success && res.data?.data?.length > 0) {
-          // Get the latest active announcement
           setActiveAnnouncement(res.data.data[0]);
         }
       } catch (err) {
@@ -89,7 +99,6 @@ export default function Header() {
     return () => window.removeEventListener("hashchange", setCurrentHash);
   }, []);
 
-  // Re-check auth status when pathname changes (e.g., after login/logout)
   useEffect(() => {
     setIsLoggedIn(isAuthenticated());
     const userData = getUser();
@@ -116,37 +125,37 @@ export default function Header() {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 w-full z-50 shadow-sm transition-all duration-300">
+    <header className="fixed top-0 left-0 right-0 w-full z-50 transition-all duration-300">
       {/* Announcement Banner */}
       {showBanner && activeAnnouncement && (
         <div className="bg-[#EB4724] text-white py-1.5 md:py-2 px-4 shadow-inner">
           <div className="mx-auto max-w-7xl flex items-center justify-between">
             <div className="flex-1 flex items-center justify-center gap-2 md:gap-4 overflow-hidden">
-               <div className="flex-shrink-0 bg-white/20 p-1.5 rounded-full animate-pulse">
-                  <Megaphone className="h-4 w-4 md:h-5 md:w-5 text-white" />
-               </div>
-               <div className="flex flex-col md:flex-row items-center gap-1 md:gap-2 overflow-hidden">
-                  <span className="font-bold text-xs md:text-sm uppercase tracking-wider whitespace-nowrap bg-white/20 px-2 py-0.5 rounded leading-none">
-                    Announcement
+              <div className="flex-shrink-0 bg-white/20 p-1.5 rounded-full animate-pulse">
+                <Megaphone className="h-4 w-4 md:h-5 md:w-5 text-white" />
+              </div>
+              <div className="flex flex-col md:flex-row items-center gap-1 md:gap-2 overflow-hidden">
+                <span className="font-bold text-xs md:text-sm uppercase tracking-wider whitespace-nowrap bg-white/20 px-2 py-0.5 rounded leading-none">
+                  Announcement
+                </span>
+                {activeAnnouncement.linkUrl ? (
+                  <a
+                    href={activeAnnouncement.linkUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-semibold text-xs md:text-base truncate max-w-[200px] sm:max-w-md md:max-w-none underline-offset-2 hover:underline"
+                    title={activeAnnouncement.linkUrl}
+                  >
+                    {activeAnnouncement.title}: <span className="font-normal opacity-90">{activeAnnouncement.message}</span>
+                  </a>
+                ) : (
+                  <span className="font-semibold text-xs md:text-base truncate max-w-[200px] sm:max-w-md md:max-w-none">
+                    {activeAnnouncement.title}: <span className="font-normal opacity-90">{activeAnnouncement.message}</span>
                   </span>
-                  {activeAnnouncement.linkUrl ? (
-                    <a
-                      href={activeAnnouncement.linkUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="font-semibold text-xs md:text-base truncate max-w-[200px] sm:max-w-md md:max-w-none underline-offset-2 hover:underline"
-                      title={activeAnnouncement.linkUrl}
-                    >
-                      {activeAnnouncement.title}: <span className="font-normal opacity-90">{activeAnnouncement.message}</span>
-                    </a>
-                  ) : (
-                    <span className="font-semibold text-xs md:text-base truncate max-w-[200px] sm:max-w-md md:max-w-none">
-                      {activeAnnouncement.title}: <span className="font-normal opacity-90">{activeAnnouncement.message}</span>
-                    </span>
-                  )}
-               </div>
+                )}
+              </div>
             </div>
-            <button 
+            <button
               onClick={() => setShowBanner(false)}
               className="flex-shrink-0 ml-4 p-1 hover:bg-white/10 rounded-full transition-colors"
             >
@@ -155,41 +164,36 @@ export default function Header() {
           </div>
         </div>
       )}
-      {/* Top bar logic... */}
+
+      {/* Top bar */}
       <div className="flex flex-wrap md:flex-nowrap items-center justify-center gap-3 bg-[#651313] py-1.5 text-sm font-medium text-white sm:px-6 md:gap-6 md:py-2 md:text-base leading-tight">
         <span className="text-base md:text-lg">+252 61 8553566</span>
         <span className="hidden sm:inline">|</span>
-        <a
-          href="mailto:info@advert.deero.so"
-          className="underline-offset-2 hover:underline"
-        >
+        <a href="mailto:info@advert.deero.so" className="underline-offset-2 hover:underline">
           info@advert.deero.so
         </a>
         <span className="hidden sm:inline">|</span>
         <span>HQ Digfeer, Mogadishu - Somalia</span>
         <span className="hidden sm:inline">|</span>
         <div className="flex items-center gap-3 font-semibold">
-          <Link
-            href="/news"
-            className="transition hover:text-[#EB4724]"
-          >
-            News
-          </Link>
+          <Link href="/news" className="transition hover:text-[#EB4724]">News</Link>
           <span className="hidden sm:inline">|</span>
-          <Link
-            href="/careers"
-            className="transition hover:text-[#EB4724]"
+          <Link href="/careers" className="transition hover:text-[#EB4724]">Career</Link>
+          <span className="hidden sm:inline">|</span>
+          <button
+            onClick={handleOpenBooking}
+            className="transition hover:text-[#EB4724] font-semibold"
           >
-            Career
-          </Link>
+            Free Booking
+          </button>
         </div>
       </div>
 
       {/* Main header */}
-      <div className="border-b border-white/20 bg-white/95 backdrop-blur-sm shadow-sm sm:px-6">
+      <div className="border-b border-gray-200/80 bg-white/95 backdrop-blur-sm shadow-xs sm:px-6">
         <div className="mx-auto max-w-6xl xl:max-w-7xl px-4 sm:px-6 h-[70px] md:h-[95px] flex items-center justify-between">
 
-          {/* Logo - Left */}
+          {/* Logo */}
           <div className="flex-shrink-0">
             <Link href="/" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
               <Image
@@ -203,24 +207,28 @@ export default function Header() {
             </Link>
           </div>
 
-          {/* Navigation - Center */}
+          {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-6 lg:gap-8 font-semibold text-[#651313]">
             {navLinks.map((link) => {
               if (link.subLinks) {
+                const isSubActive = link.subLinks.some((sub) => {
+                  const [subPath] = sub.href.split("#");
+                  return mounted && (pathname === subPath || (subPath !== "/" && pathname.startsWith(subPath)));
+                });
+
                 return (
-                  <div 
+                  <div
                     key={link.label}
                     className="relative group"
                     onMouseEnter={() => setOpenDropdown(link.label)}
                     onMouseLeave={() => setOpenDropdown(null)}
                   >
-                    <button
-                      className="flex items-center gap-1 transition hover:text-[#EB4724] py-4"
-                    >
+                    <button className={`flex items-center gap-1 transition py-4 ${
+                      isSubActive ? "text-[#EB4724] font-bold" : "text-[#651313] hover:text-[#EB4724]"
+                    }`}>
                       {link.label}
                       <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${openDropdown === link.label ? "rotate-180" : ""}`} />
                     </button>
-
                     <AnimatePresence>
                       {openDropdown === link.label && (
                         <motion.div
@@ -230,16 +238,22 @@ export default function Header() {
                           className="absolute left-0 mt-0 w-48 rounded-xl border border-gray-100 bg-white shadow-xl z-50 overflow-hidden"
                         >
                           <div className="p-1">
-                            {link.subLinks.map((sub) => (
-                              <Link
-                                key={sub.href}
-                                href={sub.href}
-                                className="block px-4 py-2.5 rounded-lg text-sm text-[#651313] hover:bg-gray-50 hover:text-[#EB4724] transition-colors"
-                                onClick={() => setOpenDropdown(null)}
-                              >
-                                {sub.label}
-                              </Link>
-                            ))}
+                            {link.subLinks.map((sub) => {
+                              const [subPath] = sub.href.split("#");
+                              const isChildActive = mounted && (pathname === subPath || (subPath !== "/" && pathname.startsWith(subPath)));
+                              return (
+                                <Link
+                                  key={sub.href}
+                                  href={sub.href}
+                                  className={`block px-4 py-2.5 rounded-lg text-sm transition-colors ${
+                                    isChildActive ? "bg-gray-50 text-[#EB4724] font-bold" : "text-[#651313] hover:bg-gray-50 hover:text-[#EB4724]"
+                                  }`}
+                                  onClick={() => setOpenDropdown(null)}
+                                >
+                                  {sub.label}
+                                </Link>
+                              );
+                            })}
                           </div>
                         </motion.div>
                       )}
@@ -251,17 +265,19 @@ export default function Header() {
               const [linkPathPart, linkHashPart] = link.href.split("#");
               const linkPath = linkPathPart || "/";
               const linkHash = linkHashPart ? `#${linkHashPart}` : "";
-
               const isActive = mounted && (linkHash
                 ? pathname === linkPath && hash === linkHash
                 : pathname === linkPath);
 
               return (
                 <Link
-                  key={link.href}
+                  key={link.label}
                   href={link.href}
-                  className={`transition ${isActive ? "text-[#EB4724]" : "text-[#651313]"
-                    } hover:text-[#EB4724]`}
+                  className={`relative py-1 transition-colors duration-200 ${
+                    isActive ? "text-[#EB4724] font-bold" : "text-[#651313] hover:text-[#EB4724]"
+                  } after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:w-full after:h-[2px] after:bg-[#EB4724] after:rounded-full after:transition-transform after:duration-300 ${
+                    isActive ? "after:scale-x-100" : "after:scale-x-0 hover:after:scale-x-100"
+                  }`}
                 >
                   {link.label}
                 </Link>
@@ -269,9 +285,8 @@ export default function Header() {
             })}
           </nav>
 
-          {/* Client Area - Right */}
+          {/* Desktop Right — Client Area */}
           <div className="hidden md:flex items-center gap-6">
-            {/* Shopping Cart - Only show when logged in */}
             {isLoggedIn && !isStaff && (
               <Link href="/cart" className="relative p-2 text-[#651313] hover:bg-gray-100 rounded-full transition">
                 <ShoppingCart className="h-6 w-6" />
@@ -312,12 +327,7 @@ export default function Header() {
                   <AnimatePresence>
                     {showProfileDropdown && (
                       <>
-                        {/* Backdrop to close dropdown */}
-                        <div 
-                          className="fixed inset-0 z-40" 
-                          onClick={() => setShowProfileDropdown(false)}
-                        ></div>
-                        
+                        <div className="fixed inset-0 z-40" onClick={() => setShowProfileDropdown(false)}></div>
                         <motion.div
                           initial={{ opacity: 0, y: 10, scale: 0.95 }}
                           animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -328,7 +338,6 @@ export default function Header() {
                             <p className="text-sm font-bold text-gray-900">{user?.fullname || "User"}</p>
                             <p className="text-xs text-gray-500 truncate">{user?.email || ""}</p>
                           </div>
-                          
                           <div className="p-1">
                             <button
                               onClick={handleLogout}
@@ -412,23 +421,28 @@ export default function Header() {
                   );
                 }
 
-                const isActive =
-                  mounted &&
-                  link.href.startsWith("/") &&
-                  (pathname === link.href || pathname.startsWith(link.href));
+                const isActive = mounted && link.href.startsWith("/") && (pathname === link.href || pathname.startsWith(link.href));
 
                 return (
                   <Link
-                    key={link.href}
+                    key={link.label}
                     href={link.href}
-                    className={`rounded-md px-2 py-2 transition ${isActive ? "text-[#EB4724]" : "text-[#651313]"
-                      } hover:bg-[#651313]/5`}
+                    className={`rounded-md px-2 py-2 transition ${isActive ? "text-[#EB4724]" : "text-[#651313]"} hover:bg-[#651313]/5`}
                     onClick={() => setOpen(false)}
                   >
                     {link.label}
                   </Link>
                 );
               })}
+
+              {/* Mobile Booking Button */}
+              <button
+                onClick={() => { setOpen(false); handleOpenBooking(); }}
+                className="rounded-md px-2 py-2 transition text-[#651313] hover:bg-[#651313]/5 hover:text-[#EB4724] font-semibold text-left"
+              >
+                Free Booking
+              </button>
+
               {isLoggedIn ? (
                 <div className="flex flex-col gap-3 mt-2 pt-2 border-t border-gray-100">
                   <div className="flex items-center justify-between px-2 py-2">
@@ -441,7 +455,6 @@ export default function Header() {
                         <p className="text-xs text-gray-400">{user?.email}</p>
                       </div>
                     </div>
-
                   </div>
                   {hasStaffRole() && (
                     <Link
@@ -475,4 +488,3 @@ export default function Header() {
     </header>
   );
 }
-

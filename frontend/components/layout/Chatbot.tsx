@@ -223,7 +223,7 @@ export default function Chatbot() {
                   },
                   {
                     label: "WhatsApp",
-                    href: "https://wa.me/252618553566",
+                    href: "https://wa.me/252618553839",
                     icon: (
                       <svg
                         viewBox="0 0 24 24"

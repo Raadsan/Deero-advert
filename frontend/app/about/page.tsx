@@ -7,6 +7,8 @@ import CoreValues from "@/components/about/CoreValues";
 import OurApproaches from "@/components/about/OurApproaches";
 import AwardsSection from "@/components/about/AwardsSection";
 import AchievementsSection from "@/components/home/AchievementsSection";
+import WhyChooseUs from "@/components/about/WhyChooseUs";
+import NewsletterSection from "@/components/home/NewsletterSection";
 
 export default function AboutPage() {
     return (
@@ -15,10 +17,12 @@ export default function AboutPage() {
             <main className="flex-grow pt-[106px] md:pt-[131px]">
                 <AboutHero />
                 <AboutContent />
-                <CoreValues />
+                <WhyChooseUs />
+                {/* <CoreValues /> */}
                 <OurApproaches />
                 <AwardsSection />
                 <AchievementsSection />
+                <NewsletterSection />
             </main>
             <Footer />
         </div>

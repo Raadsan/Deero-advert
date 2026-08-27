@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Montserrat } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "../context/CartContext";
 import Chatbot from "../components/layout/Chatbot";
 import Protection from "../components/layout/Protection";
+import ConsultationModal from "../components/layout/ConsultationModal";
+import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,6 +15,12 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const montserrat = Montserrat({
+  variable: "--font-montserrat",
+  subsets: ["latin"],
+  weight: ["700", "800", "900"],
 });
 
 export const metadata: Metadata = {
@@ -33,15 +41,23 @@ export default function RootLayout({
 
       <body
         suppressHydrationWarning
-        className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden`}
+        className={`${geistSans.variable} ${geistMono.variable} ${montserrat.variable} antialiased overflow-x-hidden`}
       >
         <Protection />
         <CartProvider>
           {children}
         </CartProvider>
+        <ConsultationModal />
+        <Toaster
+          position="top-center"
+          toastOptions={{
+            duration: 5000,
+            style: { maxWidth: '420px' },
+            success: { iconTheme: { primary: '#EB4724', secondary: '#fff' } },
+          }}
+        />
         <Chatbot />
       </body>
     </html>
   );
 }
-

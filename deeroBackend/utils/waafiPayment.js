@@ -20,9 +20,11 @@ export const sendWaafiPayment = async ({ transactionId, accountNo, amount, descr
     cleanAccountNo = '252' + cleanAccountNo;
   }
 
+  const uniqueRef = `DEERO-${transactionId}-${Date.now()}`;
+
   const payload = {
     schemaVersion: "1.0",
-    requestId: transactionId,
+    requestId: uniqueRef,
     timestamp: timestamp,
     channelName: "WEB",
     serviceName: "API_PURCHASE",
@@ -33,8 +35,8 @@ export const sendWaafiPayment = async ({ transactionId, accountNo, amount, descr
       paymentMethod: "mwallet_account",
       payerInfo: { accountNo: cleanAccountNo },
       transactionInfo: {
-        referenceId: transactionId,
-        invoiceId: transactionId,
+        referenceId: uniqueRef,
+        invoiceId: uniqueRef,
         amount: formattedAmount,
         currency: "USD",
         description: description
