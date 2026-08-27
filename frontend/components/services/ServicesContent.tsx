@@ -45,7 +45,7 @@ const itemVariants = {
 };
 
 const getServiceSlug = (title: string) =>
-    (title || "service").trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+    (title || "service").trim().toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
 
 interface ServicesContentProps {
     showTitle?: boolean;
@@ -62,7 +62,7 @@ export default function ServicesContent({
 }: ServicesContentProps) {
     const pathname = usePathname();
     const router = useRouter();
-    const isServicesPage = pathname?.startsWith("/services");
+    const isServicesPage = pathname?.startsWith("/services") || pathname?.startsWith("/shop");
 
     const [groupedServices, setGroupedServices] = useState<Service[]>([]);
     const [loading, setLoading] = useState(true);
@@ -191,7 +191,7 @@ export default function ServicesContent({
 
     const handleServiceClick = (service: Service) => {
         const slug = getServiceSlug(service.serviceTitle || "service");
-        router.push(`/services/${slug}`);
+        router.push(`/shop/${slug}`);
     };
 
     const handlePurchaseClick = (pkg: any, service: Service) => {

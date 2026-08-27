@@ -1,22 +1,23 @@
-"use client";
 export const dynamic = 'force-static';
 
-import { useEffect } from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ServicesHero from "@/components/services/ServicesHero";
-import ServicesContent from "@/components/services/ServicesContent";
+import BusinessServices from "@/components/services/BusinessServices";
+import AwardsSection from "@/components/about/AwardsSection";
+import AchievementsSection from "@/components/home/AchievementsSection";
 
 export default function ServicesPage() {
     return (
         <div className="flex flex-col min-h-screen">
             <Header />
             <main className="flex-grow pt-[106px] md:pt-[131px]">
-                <ServicesHero />
-                <ServicesContent showTitle={false} paddingClasses="py-20 px-4 sm:px-10" />
+                <ServicesHero subtitle="Deero Advertising Agency provides a comprehensive range of one-stop creative, digital marketing, and advertising services, including:" />
+                <BusinessServices />
+                <AwardsSection />
+                <AchievementsSection />
             </main>
             <Footer />
         </div>
     );
 }
-

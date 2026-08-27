@@ -162,12 +162,13 @@ export const createTransaction = async (req, res) => {
         description: data.description || "Deero Payment"
       });
 
-      const status = paymentResponse.responseCode === "2001" ? "completed" : "failed";
+      const isSuccessful = paymentResponse.responseCode === "2001" || paymentResponse.responseCode === "2000" || paymentResponse.responseCode === "0000" || paymentResponse.responseCode === "W000";
+      const status = isSuccessful ? "completed" : "failed";
       transaction = await prisma.transaction.update({
         where: { id: transaction.id },
         data: {
           status,
-          paymentReferenceId: paymentResponse.referenceId || transaction.id.toString()
+          paymentReferenceId: paymentResponse.referenceId || paymentResponse.params?.transactionId || transaction.id.toString()
         },
         include: { user: true, service: true, hostingPackage: true }
       });

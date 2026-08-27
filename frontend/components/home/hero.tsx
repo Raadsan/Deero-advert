@@ -1,234 +1,93 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
-import { motion, AnimatePresence } from "framer-motion";
-import { getActiveHeroHomes } from "@/api-client/heroHomeApi";
-import { getAllServices, Service } from "@/api-client/serviceApi";
-import { getImageUrl } from "@/utils/url";
-import { fetchApplicableDiscounts, matchesDiscountTarget } from "@/utils/discounts";
+import { Calendar, CheckCircle2, Award, Headset } from "lucide-react";
 
-type Slide = {
-  id: string | number;
-  title: string;
-  description: string;
-  image: string;
-  href?: string;
-  isOffer?: boolean;
-};
-
-const getServiceSlug = (title: string) =>
-  (title || "service").trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "");
-
-const parseServices = (response: any): Service[] => {
-  if (Array.isArray(response?.data?.data)) return response.data.data;
-  if (Array.isArray(response?.data)) return response.data;
-  if (Array.isArray(response?.data?.services)) return response.data.services;
-  return [];
-};
+const WhatsAppIcon = ({ className = "w-5 h-5" }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" className={className} fill="currentColor">
+    <path d="M12.012 2c-5.506 0-9.989 4.478-9.99 9.984 0 1.758.459 3.474 1.33 4.982l-1.413 5.161 5.283-1.386c1.455.794 3.097 1.213 4.787 1.214h.003c5.507 0 9.99-4.478 9.99-9.985 0-2.667-1.039-5.176-2.924-7.062a9.923 9.923 0 0 0-7.066-2.928zm5.626 14.162c-.234.658-1.157 1.205-1.879 1.261-.497.039-1.144.184-3.328-.72-2.793-1.156-4.595-4.004-4.735-4.188-.139-.184-1.129-1.503-1.129-2.868 0-1.364.714-2.036.969-2.316.255-.28.558-.35.744-.35.186 0 .372.002.535.01.173.008.406-.065.635.485.234.561.792 1.932.861 2.073.069.14.116.304.023.49-.093.185-.139.302-.278.465-.139.163-.292.365-.418.49-.139.14-.284.292-.122.57.162.278.72 1.189 1.547 1.926 1.063.948 1.96 1.242 2.238 1.381.278.139.441.116.604-.07.162-.186.697-.813.882-1.092.185-.278.371-.232.627-.139.255.093 1.626.766 1.905.905.278.14.464.21.534.325.069.117.069.674-.165 1.332z" />
+  </svg>
+);
 
 export default function Hero() {
-  const [slides, setSlides] = useState<Slide[]>([]);
-  const [active, setActive] = useState(0);
-  const router = useRouter();
-  const [isMounted, setIsMounted] = useState(false);
-  const [firstLoad, setFirstLoad] = useState(true);
 
-  useEffect(() => {
-    const fetchSlides = async () => {
-      try {
-        const [heroResponse, servicesResponse, discounts] = await Promise.all([
-          getActiveHeroHomes(),
-          getAllServices(),
-          fetchApplicableDiscounts(),
-        ]);
-
-        const now = new Date();
-        const offerSlides: Slide[] = [];
-
-        parseServices(servicesResponse).forEach((service) => {
-          const serviceId = service._id || service.id;
-
-          (service.packages || []).forEach((pkg) => {
-            const packageId = pkg._id || pkg.id;
-            let bestPercentage = 0;
-
-            discounts.forEach((discount: any) => {
-              const matchesTarget = matchesDiscountTarget(
-                discount,
-                "service",
-                [serviceId, packageId]
-              );
-              const isActive = discount.status === "active" &&
-                (!discount.startDate || new Date(discount.startDate) <= now) &&
-                (!discount.endDate || new Date(discount.endDate) >= now);
-
-              if (!matchesTarget || !isActive || !pkg.price) return;
-
-              const percentage = discount.discountType === "percentage"
-                ? Number(discount.discountValue)
-                : (Number(discount.discountValue) / Number(pkg.price)) * 100;
-              bestPercentage = Math.max(bestPercentage, Math.min(100, percentage));
-            });
-
-            if (bestPercentage > 0 && service.serviceIcon) {
-              offerSlides.push({
-                id: `offer-${serviceId}-${packageId}`,
-                title: `${Math.round(bestPercentage)}% OFF`,
-                description: pkg.packageTitle,
-                image: getImageUrl(service.serviceIcon) || service.serviceIcon,
-                href: `/services#${getServiceSlug(service.serviceTitle)}`,
-                isOffer: true,
-              });
-            }
-          });
-        });
-
-        if (offerSlides.length > 0) {
-          setSlides(offerSlides);
-        } else if (heroResponse.success && heroResponse.data.length > 0) {
-          setSlides(heroResponse.data);
-        }
-      } catch (error) {
-        console.error("Failed to fetch hero homes", error);
-      }
-    };
-    fetchSlides();
-  }, []);
-
-  const total = useMemo(() => slides.length, [slides]);
-
-  useEffect(() => {
-    setIsMounted(true);
-    if (total === 0) return;
-    const id = setInterval(() => {
-      setFirstLoad(false);
-      setActive((prev) => (prev + 1) % total);
-    }, 5500);
-    return () => clearInterval(id);
-  }, [total]);
-
-  if (slides.length === 0) return <div className="min-h-[500px] bg-[linear-gradient(to_right,#651313_0%,#651313_60%,#EB4724_100%)]"></div>;
-
-  const slide = slides[active];
-
-  const goTo = (idx: number) => {
-    setFirstLoad(false);
-    setActive(idx);
-  };
-  const next = () => {
-    setFirstLoad(false);
-    setActive((prev) => (prev + 1) % total);
-  };
-  const prev = () => {
-    setFirstLoad(false);
-    setActive((prev) => (prev - 1 + total) % total);
+  const handleFreeConsultation = () => {
+    window.dispatchEvent(new Event("openConsultationModal"));
   };
 
-  const handleSeeMore = () => {
-    if (slide.href) {
-      router.push(slide.href);
-    } else if (slide.title === "Digital Consulting") {
-      router.push("/services#business-growth");
-    } else {
-      router.push("/services");
-    }
+  const handleWhatsApp = () => {
+    const message = encodeURIComponent("Asc Deero Advert, waxaan doonayaa tashiga bilaashka ah.");
+    window.open(`https://wa.me/252618553839?text=${message}`, "_blank", "noopener,noreferrer");
   };
 
   return (
-    <section className="relative overflow-hidden bg-[linear-gradient(to_right,#651313_0%,#651313_60%,#EB4724_100%)] text-white">
-      <div className="mx-auto flex max-w-6xl flex-col gap-12 px-4 py-14 sm:px-10 lg:flex-row lg:items-center lg:py-10 2xl:py-20 min-h-[500px] lg:min-h-[400px] 2xl:min-h-[600px]">
-        {total > 1 && (
-          <button
-            type="button"
-            aria-label="Previous slide"
-            onClick={prev}
-            className="absolute left-5 top-1/2 -translate-y-1/2 text-white/70 transition-all hover:text-white hover:scale-110 hidden lg:flex z-20"
-          >
-            <ChevronLeftIcon className="h-10 w-10" />
-          </button>
-        )}
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between w-full gap-10 ">
-          <div className="space-y-6 lg:w-1/2 w-full flex flex-col justify-center min-h-[350px] sm:min-h-[400px] lg:h-[450px]">
-            <AnimatePresence mode="popLayout">
-              <motion.div
-                key={active}
-                initial={isMounted && !firstLoad ? { opacity: 0, x: 500 } : false}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -500 }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
-                className="space-y-6 w-full min-h-[250px] flex flex-col justify-center"
+    <section className="relative w-full bg-white overflow-hidden pt-2 pb-6 lg:pt-3 lg:pb-8">
+
+      <div className="relative w-full max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-14 z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 xl:gap-16 items-center justify-between">
+
+          {/* Left Content — Pushed left with clean spacing */}
+          <div className="lg:col-span-6 flex flex-col justify-center space-y-4 text-left max-w-xl">
+
+            <h1
+              className="text-3xl sm:text-4xl lg:text-[38px] xl:text-[42px] font-extrabold text-[#111111] leading-[1.18] tracking-tight"
+              style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
+            >
+              Your Key to Business <br className="hidden sm:inline" />
+              <span className="text-[#EB4724]">Growth and Success.</span>
+            </h1>
+
+            <p className="text-gray-900 font-normal text-lg sm:text-xl leading-snug">
+              Your One-Stop Partner for Business Growth and Success.
+            </p>
+
+            <div className="w-24 h-[3px] bg-[#EB4724] rounded-full my-0.5" />
+
+            <p className="text-gray-700 font-medium text-base sm:text-lg max-w-xl leading-relaxed">
+              "Everything you need to grow and succeed in your business in a one-stop agency: Creative, Digital Marketing, and Advertising Services."
+            </p>
+
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 sm:gap-4 pt-1">
+
+              {/* Book Consultation — Secondary Color (#651313) */}
+              <button
+                onClick={handleFreeConsultation}
+                className="inline-flex items-center justify-center gap-3 rounded-xl bg-[#651313] hover:bg-[#4d0e0e] px-6 py-3.5 text-base font-bold text-white shadow-lg shadow-[#651313]/25 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] whitespace-nowrap"
               >
-                <h1 className="text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">
-                  {slide.title}
-                </h1>
-                <p className="max-w-2xl text-lg leading-8 text-white/90">
-                  {slide.description}
-                </p>
-                <div className="flex items-center gap-4">
-                  <button
-                    onClick={handleSeeMore}
-                    className="rounded-md bg-[#c88a66] px-10 py-3 pl-8 text-base font-semibold text-white shadow transition hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-                  >
-                    {slide.isOffer ? "View Package" : "See More"}
-                  </button>
-                </div>
-              </motion.div>
-            </AnimatePresence>
+                <Calendar className="w-5 h-5 text-white shrink-0" />
+                <span>Book a Free Consultation</span>
+              </button>
+
+              {/* WhatsApp Button — Primary Color (#EB4724) */}
+              <button
+                onClick={handleWhatsApp}
+                className="inline-flex items-center justify-center gap-3 rounded-xl bg-[#EB4724] hover:bg-[#d63d1f] px-6 py-3.5 text-base font-bold text-white shadow-lg shadow-[#EB4724]/25 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] whitespace-nowrap"
+              >
+                <WhatsAppIcon className="w-5 h-5 text-white shrink-0" />
+                <span>Chat on WhatsApp</span>
+              </button>
+
+            </div>
+
           </div>
 
-          <div className="relative lg:w-1/2 flex justify-center items-center w-full min-h-[350px] sm:min-h-[450px] lg:h-[450px]">
-            <AnimatePresence mode="popLayout">
-              <motion.div
-                key={active}
-                initial={isMounted && !firstLoad ? { opacity: 0, x: 500 } : false}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -500 }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
-                className="relative z-10 w-full flex justify-center"
-              >
-                <Image
-                  src={slide.image.startsWith("http") || slide.image.startsWith("/") ? slide.image : `http://localhost:5000/${slide.image}`}
-                  alt={slide.title}
-                  width={620}
-                  height={400}
-                  className={`h-auto w-full max-w-[620px] object-contain lg:max-w-[500px] 2xl:max-w-none lg:scale-95 transition-all duration-500 ${slide.isOffer ? "cursor-pointer" : ""}`}
-                  onClick={slide.isOffer ? handleSeeMore : undefined}
-                  priority
-                />
-              </motion.div>
-            </AnimatePresence>
+          {/* Right Image Section — Compact height and clean fit */}
+          <div className="lg:col-span-6 flex items-center justify-center lg:justify-end relative">
+            <div className="relative w-full aspect-[4/3] max-w-[720px] xl:max-w-[780px] h-[360px] sm:h-[480px] lg:h-[540px] xl:h-[580px] lg:scale-105 lg:origin-right">
+              <Image
+                src="/home-images/right-image-2.png"
+                alt="Deero Advertising Agency Showcase"
+                fill
+                className="object-contain object-center lg:object-right drop-shadow-2xl"
+                priority
+              />
+            </div>
           </div>
+
         </div>
-
-        {total > 1 && (
-          <button
-            type="button"
-            aria-label="Next slide"
-            onClick={next}
-            className="absolute right-5 top-1/2 -translate-y-1/2 text-white/70 transition-all hover:text-white hover:scale-110 hidden lg:flex z-20"
-          >
-            <ChevronRightIcon className="h-10 w-10" />
-          </button>
-        )}
       </div>
 
-      {total > 1 && (
-        <div className="flex items-center justify-center gap-3 pb-8">
-          {slides.map((_, idx) => (
-            <button
-              key={idx}
-              type="button"
-              aria-label={`Go to slide ${idx + 1}`}
-              onClick={() => goTo(idx)}
-              className={`h-2 rounded-full transition-all duration-300 ${active === idx ? "w-6 bg-white" : "w-2 bg-white/60 hover:bg-white"
-                }`}
-            />
-          ))}
-        </div>
-      )}
     </section>
   );
 }

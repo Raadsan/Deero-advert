@@ -574,6 +574,18 @@ exports.Prisma.AwardScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.ConsultationScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  phone: 'phone',
+  email: 'email',
+  location: 'location',
+  service: 'service',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -854,6 +866,15 @@ exports.Prisma.AwardOrderByRelevanceFieldEnum = {
   image: 'image'
 };
 
+exports.Prisma.ConsultationOrderByRelevanceFieldEnum = {
+  name: 'name',
+  phone: 'phone',
+  email: 'email',
+  location: 'location',
+  service: 'service',
+  status: 'status'
+};
+
 
 exports.Prisma.ModelName = {
   User: 'User',
@@ -899,7 +920,8 @@ exports.Prisma.ModelName = {
   VisionMission: 'VisionMission',
   CoreValue: 'CoreValue',
   Approach: 'Approach',
-  Award: 'Award'
+  Award: 'Award',
+  Consultation: 'Consultation'
 };
 
 /**

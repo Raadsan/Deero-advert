@@ -1,71 +1,36 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "framer-motion";
-import { EnvelopeIcon, CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
-import { subscribeEmail } from "@/api-client/subscriberApi";
+
+const WhatsAppIcon = ({ className = "w-6 h-6" }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" className={className} fill="currentColor">
+    <path d="M12.012 2c-5.506 0-9.989 4.478-9.99 9.984 0 1.758.459 3.474 1.33 4.982l-1.413 5.161 5.283-1.386c1.455.794 3.097 1.213 4.787 1.214h.003c5.507 0 9.99-4.478 9.99-9.985 0-2.667-1.039-5.176-2.924-7.062a9.923 9.923 0 0 0-7.066-2.928zm5.626 14.162c-.234.658-1.157 1.205-1.879 1.261-.497.039-1.144.184-3.328-.72-2.793-1.156-4.595-4.004-4.735-4.188-.139-.184-1.129-1.503-1.129-2.868 0-1.364.714-2.036.969-2.316.255-.28.558-.35.744-.35.186 0 .372.002.535.01.173.008.406-.065.635.485.234.561.792 1.932.861 2.073.069.14.116.304.023.49-.093.185-.139.302-.278.465-.139.163-.292.365-.418.49-.139.14-.284.292-.122.57.162.278.72 1.189 1.547 1.926 1.063.948 1.96 1.242 2.238 1.381.278.139.441.116.604-.07.162-.186.697-.813.882-1.092.185-.278.371-.232.627-.139.255.093 1.626.766 1.905.905.278.14.464.21.534.325.069.117.069.674-.165 1.332z"/>
+  </svg>
+);
 
 const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
         opacity: 1,
         transition: {
-            staggerChildren: 0.2,
+            staggerChildren: 0.15,
         },
     },
 };
 
 const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
 };
 
 export default function NewsletterSection() {
-    const [email, setEmail] = useState("");
-    const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
-    const [message, setMessage] = useState("");
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!email) return;
-
-        setStatus("loading");
-        setMessage("");
-
-        try {
-            const response = await subscribeEmail({ email });
-            setStatus("success");
-            setMessage(response.data.message || "Thank you for subscribing!");
-            setEmail("");
-
-            // Reset status after 5 seconds
-            setTimeout(() => {
-                setStatus("idle");
-                setMessage("");
-            }, 5000);
-        } catch (error: any) {
-            setStatus("error");
-            setMessage(
-                error.response?.data?.message ||
-                "Something went wrong. Please try again later."
-            );
-
-            // Reset status after 5 seconds
-            setTimeout(() => {
-                setStatus("idle");
-            }, 5000);
-        }
+    const handleWhatsApp = () => {
+        const message = encodeURIComponent("Asc Deero Advert, waxaan doonayaa inaan idinla soo xiriiro.");
+        window.open(`https://wa.me/252618553839?text=${message}`, "_blank", "noopener,noreferrer");
     };
 
     return (
-        <section className=" py-20 px-4 sm:px-10 overflow-hidden relative">
-            {/* Decorative Background Elements */}
-            <div className="absolute inset-0 opacity-10 pointer-events-none">
-                <div className="absolute top-10 left-10 w-32 h-32 rounded-full border border-white/20"></div>
-                <div className="absolute bottom-10 right-10 w-40 h-40 rounded-full border border-white/20"></div>
-                <div className="absolute top-1/2 left-1/4 w-24 h-24 rounded-full border border-white/20"></div>
-            </div>
-
+        <section className="py-8 px-4 sm:px-10 overflow-hidden relative">
             <motion.div
                 initial="hidden"
                 whileInView="visible"
@@ -73,83 +38,44 @@ export default function NewsletterSection() {
                 variants={containerVariants}
                 className="mx-auto max-w-4xl relative z-10"
             >
-                <div className="bg-gradient-to-br from-[#4d0e0e] via-[#651313] to-[#4d0e0e] backdrop-blur-sm rounded-3xl p-8 md:p-12 border border-white/10 shadow-2xl">
-                    <motion.div variants={itemVariants} className="text-center mb-8">
-                        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#EB4724]/20 mb-6">
-                            <EnvelopeIcon className="w-8 h-8 text-[#EB4724]" />
+                <div className="bg-gradient-to-br from-[#4A0D13] via-[#651313] to-[#4A0D13] rounded-3xl p-6 sm:p-8 md:p-9 border border-white/10 shadow-2xl flex flex-col items-center justify-center text-center">
+                    
+                    {/* Top White Badge with Dark Icon */}
+                    <motion.div variants={itemVariants} className="mb-4">
+                        <div className="w-11 h-11 sm:w-12 sm:h-12 bg-white rounded-xl flex items-center justify-center shadow-md">
+                            <WhatsAppIcon className="w-6 h-6 sm:w-7 sm:h-7 text-[#4A0D13]" />
                         </div>
-                        <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
-                            Stay Updated with Our Newsletter
-                        </h2>
-                        <p className="text-white/80 text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
-                            Get the latest updates on our creative campaigns, industry insights,
-                            and exclusive offers delivered straight to your inbox.
-                        </p>
                     </motion.div>
 
-                    <motion.form
+                    {/* Title */}
+                    <motion.h2
                         variants={itemVariants}
-                        onSubmit={handleSubmit}
-                        className="flex flex-col sm:flex-row gap-4 max-w-2xl mx-auto"
+                        className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white mb-2 tracking-tight leading-tight max-w-xl"
                     >
-                        <div className="flex-1 relative bg-white rounded-xl">
-                            <input
-                                type="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                placeholder="Enter your email address"
-                                required
-                                disabled={status === "loading"}
-                                className="w-full px-6 py-4 pr-12 rounded-xl bg-transparent border-none text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#EB4724] focus:border-transparent transition-all duration-300 disabled:opacity-50"
-                            />
-                            <EnvelopeIcon className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                        </div>
-                        <button
-                            type="submit"
-                            disabled={status === "loading"}
-                            className="px-8 py-4 bg-[#EB4724] text-white font-bold rounded-xl hover:bg-[#d63d1f] active:scale-95 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed whitespace-nowrap flex items-center justify-center gap-2 min-w-[160px]"
-                        >
-                            {status === "loading" ? (
-                                <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                            ) : status === "success" ? (
-                                <>
-                                    <CheckCircleIcon className="w-5 h-5" />
-                                    <span>Subscribed!</span>
-                                </>
-                            ) : (
-                                <span>Subscribe Now</span>
-                            )}
-                        </button>
-                    </motion.form>
+                        Ready to start your journey?
+                    </motion.h2>
 
-                    {message && (
-                        <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="mt-6 text-center"
-                        >
-                            <p className={`font-medium text-sm flex items-center justify-center gap-2 ${status === "success" ? "text-green-400" : "text-[#EB4724]"
-                                }`}>
-                                {status === "success" ? (
-                                    <CheckCircleIcon className="w-5 h-5" />
-                                ) : (
-                                    <XCircleIcon className="w-5 h-5" />
-                                )}
-                                {message}
-                            </p>
-                        </motion.div>
-                    )}
-
+                    {/* Subtitle */}
                     <motion.p
                         variants={itemVariants}
-                        className="text-white/60 text-xs text-center mt-6"
+                        className="text-white/80 text-sm sm:text-base md:text-lg max-w-lg mb-5 leading-relaxed font-medium"
                     >
-                        We respect your privacy. Unsubscribe at any time.
+                        Let's work together to make your brand stand out.
                     </motion.p>
+
+                    {/* Button */}
+                    <motion.div variants={itemVariants}>
+                        <button
+                            type="button"
+                            onClick={handleWhatsApp}
+                            className="px-9 py-3.5 sm:px-10 sm:py-3.5 bg-[#EB4724] hover:bg-[#d63d1f] text-white font-bold text-base sm:text-lg rounded-2xl transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 inline-flex items-center gap-3"
+                        >
+                            <span>Contact Us Now</span>
+                        </button>
+                    </motion.div>
+
                 </div>
             </motion.div>
         </section>
     );
 }
-
-

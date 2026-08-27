@@ -17,7 +17,7 @@ export default function WhatsAppButton() {
   return (
     <div className="fixed bottom-6 right-6 z-50">
       <a
-        href="https://wa.me/252618553566"
+        href="https://wa.me/252618553839"
         target="_blank"
         rel="noopener noreferrer"
         aria-label="WhatsApp"

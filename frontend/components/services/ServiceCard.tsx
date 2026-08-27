@@ -50,27 +50,6 @@ export default function ServiceCard({ name, icon, index, active, itemVariants, o
                         className="w-full h-full object-contain group-hover:invert-0 transition-all duration-300"
                     />
                 </motion.div>
-
-                {/* Decorative Curved Line (Smile) */}
-                <motion.div
-                    variants={{
-                        hover: { opacity: 1, scale: 1.1, y: -5 }
-                    }}
-                    initial={{ opacity: 0, scale: 0.8, y: 5 }}
-                    className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-20 h-8 pointer-events-none"
-                >
-                    <svg viewBox="0 0 100 40" className="w-full h-full">
-                        <path
-                            d="M10 10 Q50 40 90 10"
-                            fill="none"
-                            stroke="#EB4724"
-                            strokeWidth="4"
-                            strokeLinecap="round"
-                        />
-                        <circle cx="10" cy="10" r="4" fill="#651313" />
-                        <circle cx="90" cy="10" r="4" fill="#651313" />
-                    </svg>
-                </motion.div>
             </div>
 
             {/* Title */}
