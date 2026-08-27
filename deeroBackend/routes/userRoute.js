@@ -13,6 +13,7 @@ import {
   getBonusHistory,
   googleLogin,
   getMe,
+  getCustomerCareUsers,
 } from "../controllers/userController.js";
 import { allowSelfOrMenuAccess, authorizeMenuAccess, protect } from "../middlewares/authMiddleware.js";
 
@@ -20,6 +21,9 @@ const router = express.Router();
 
 // Current User Profile
 router.get("/me", protect, getMe);
+
+// Customer Care contacts for mobile app users
+router.get("/customer-care", protect, getCustomerCareUsers);
 
 // Bonus History route
 router.get("/:id/bonus-history", protect, allowSelfOrMenuAccess("users"), getBonusHistory);
