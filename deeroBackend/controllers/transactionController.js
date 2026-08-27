@@ -38,10 +38,21 @@ export const createTransaction = async (req, res) => {
       targetId = domain.tld || "all";
     } else if (serviceId) {
       targetType = "service";
-      targetId = packageId ? packageId.toString() : "all";
+      // Discounts may be created on the service OR a specific package
+      targetId = packageId ? packageId.toString() : serviceId.toString();
     } else if (hostingPackageId) {
       targetType = "hosting";
       targetId = hostingPackageId.toString();
+    }
+
+    const targetIdMatchers = [
+      { targetId: targetId },
+      { targetId: "all" },
+      { targetId: null },
+    ];
+    // When buying a service package, also match a discount on the parent service id
+    if (serviceId && packageId) {
+      targetIdMatchers.push({ targetId: serviceId.toString() });
     }
 
     const applicableDiscounts = await prisma.discount.findMany({
@@ -61,11 +72,7 @@ export const createTransaction = async (req, res) => {
             ]
           },
           {
-            OR: [
-              { targetId: targetId },
-              { targetId: "all" },
-              { targetId: null }
-            ]
+            OR: targetIdMatchers
           }
         ]
       },

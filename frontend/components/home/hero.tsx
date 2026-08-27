@@ -6,12 +6,27 @@ import { useRouter } from "next/navigation";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { motion, AnimatePresence } from "framer-motion";
 import { getActiveHeroHomes } from "@/api-client/heroHomeApi";
+import { getAllServices, Service } from "@/api-client/serviceApi";
+import { getImageUrl } from "@/utils/url";
+import { fetchApplicableDiscounts, matchesDiscountTarget } from "@/utils/discounts";
 
 type Slide = {
-  id: number;
+  id: string | number;
   title: string;
   description: string;
   image: string;
+  href?: string;
+  isOffer?: boolean;
+};
+
+const getServiceSlug = (title: string) =>
+  (title || "service").trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "");
+
+const parseServices = (response: any): Service[] => {
+  if (Array.isArray(response?.data?.data)) return response.data.data;
+  if (Array.isArray(response?.data)) return response.data;
+  if (Array.isArray(response?.data?.services)) return response.data.services;
+  return [];
 };
 
 export default function Hero() {
@@ -24,9 +39,57 @@ export default function Hero() {
   useEffect(() => {
     const fetchSlides = async () => {
       try {
-        const res = await getActiveHeroHomes();
-        if (res.success && res.data.length > 0) {
-          setSlides(res.data);
+        const [heroResponse, servicesResponse, discounts] = await Promise.all([
+          getActiveHeroHomes(),
+          getAllServices(),
+          fetchApplicableDiscounts(),
+        ]);
+
+        const now = new Date();
+        const offerSlides: Slide[] = [];
+
+        parseServices(servicesResponse).forEach((service) => {
+          const serviceId = service._id || service.id;
+
+          (service.packages || []).forEach((pkg) => {
+            const packageId = pkg._id || pkg.id;
+            let bestPercentage = 0;
+
+            discounts.forEach((discount: any) => {
+              const matchesTarget = matchesDiscountTarget(
+                discount,
+                "service",
+                [serviceId, packageId]
+              );
+              const isActive = discount.status === "active" &&
+                (!discount.startDate || new Date(discount.startDate) <= now) &&
+                (!discount.endDate || new Date(discount.endDate) >= now);
+
+              if (!matchesTarget || !isActive || !pkg.price) return;
+
+              const percentage = discount.discountType === "percentage"
+                ? Number(discount.discountValue)
+                : (Number(discount.discountValue) / Number(pkg.price)) * 100;
+              bestPercentage = Math.max(bestPercentage, Math.min(100, percentage));
+            });
+
+            if (bestPercentage > 0 && service.serviceIcon) {
+              offerSlides.push({
+                id: `offer-${serviceId}-${packageId}`,
+                title: `${Math.round(bestPercentage)}% OFF`,
+                description: pkg.packageTitle,
+                image: getImageUrl(service.serviceIcon) || service.serviceIcon,
+                href: `/services#${getServiceSlug(service.serviceTitle)}`,
+                isOffer: true,
+              });
+            }
+          });
+        });
+
+        if (offerSlides.length > 0) {
+          setSlides(offerSlides);
+        } else if (heroResponse.success && heroResponse.data.length > 0) {
+          setSlides(heroResponse.data);
         }
       } catch (error) {
         console.error("Failed to fetch hero homes", error);
@@ -65,7 +128,9 @@ export default function Hero() {
   };
 
   const handleSeeMore = () => {
-    if (slide.title === "Digital Consulting") {
+    if (slide.href) {
+      router.push(slide.href);
+    } else if (slide.title === "Digital Consulting") {
       router.push("/services#business-growth");
     } else {
       router.push("/services");
@@ -107,7 +172,7 @@ export default function Hero() {
                     onClick={handleSeeMore}
                     className="rounded-md bg-[#c88a66] px-10 py-3 pl-8 text-base font-semibold text-white shadow transition hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                   >
-                    See More
+                    {slide.isOffer ? "View Package" : "See More"}
                   </button>
                 </div>
               </motion.div>
@@ -129,7 +194,8 @@ export default function Hero() {
                   alt={slide.title}
                   width={620}
                   height={400}
-                  className="h-auto w-full max-w-[620px] object-contain lg:max-w-[500px] 2xl:max-w-none lg:scale-95 transition-all duration-500"
+                  className={`h-auto w-full max-w-[620px] object-contain lg:max-w-[500px] 2xl:max-w-none lg:scale-95 transition-all duration-500 ${slide.isOffer ? "cursor-pointer" : ""}`}
+                  onClick={slide.isOffer ? handleSeeMore : undefined}
                   priority
                 />
               </motion.div>

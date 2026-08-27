@@ -7,8 +7,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { checkDomainAvailability, DomainCheckResult, fetchAllDomainPrices, DomainPrice } from "../../api-client/domainCheckerApi";
 import { ExclamationCircleIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
 import { useRouter, useSearchParams } from "next/navigation";
-import { isAuthenticated, isAdminOrManager, getUser, refreshUser } from "@/utils/auth";
+import { isAuthenticated, isAdminOrManager, refreshUser } from "@/utils/auth";
 import { useCart } from "@/context/CartContext";
+import { useApplicableDiscounts } from "@/hooks/useApplicableDiscounts";
+import { getBestDiscountedPrice } from "@/utils/discounts";
 
 export default function HostingDomainSearch({ transparent = false }: { transparent?: boolean }) {
     const { toggleCartItem, isInCart } = useCart();
@@ -19,6 +21,7 @@ export default function HostingDomainSearch({ transparent = false }: { transpare
     const [loading, setLoading] = useState(false);
     const [allPrices, setAllPrices] = useState<DomainPrice[]>([]);
     const [selectedDuration, setSelectedDuration] = useState(1);
+    const { discounts } = useApplicableDiscounts();
 
     useEffect(() => {
         refreshUser();
@@ -29,48 +32,8 @@ export default function HostingDomainSearch({ transparent = false }: { transpare
     const searchParams = useSearchParams();
 
     const getDiscountedPrice = (domainName: string, basePrice: number) => {
-        const user = getUser();
-        if (!user || !user.discounts) {
-            return { finalPrice: basePrice, discount: 0, hasDiscount: false };
-        }
-
         const tld = domainName.substring(domainName.lastIndexOf('.'));
-
-        const applicableDiscounts = user.discounts.filter((d: any) => {
-            const isTargetMatch = d.targetType === "domain" &&
-                (String(d.targetId) === String(tld) || d.targetId === "all");
-
-            const now = new Date();
-            const isDateValid = (!d.startDate || new Date(d.startDate) <= now) &&
-                (!d.endDate || new Date(d.endDate) >= now);
-
-            return isTargetMatch && isDateValid && d.status === "active";
-        });
-
-        if (applicableDiscounts.length === 0) return { finalPrice: basePrice, discount: 0, hasDiscount: false };
-
-        let bestPrice = basePrice;
-        let appliedDiscount = 0;
-
-        applicableDiscounts.forEach((d: any) => {
-            let currentDiscount = 0;
-            if (d.discountType === "percentage") {
-                currentDiscount = basePrice * (d.discountValue / 100);
-            } else if (d.discountType === "fixed") {
-                currentDiscount = d.discountValue;
-            }
-            const currentPrice = basePrice - currentDiscount;
-            if (currentPrice < bestPrice) {
-                bestPrice = currentPrice;
-                appliedDiscount = currentDiscount;
-            }
-        });
-
-        return {
-            finalPrice: bestPrice > 0 ? bestPrice : 0,
-            discount: appliedDiscount,
-            hasDiscount: appliedDiscount > 0
-        };
+        return getBestDiscountedPrice(basePrice, discounts, "domain", [tld]);
     };
 
     useEffect(() => {
