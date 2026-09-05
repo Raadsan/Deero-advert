@@ -34,6 +34,37 @@ export const createDiscount = async (req, res) => {
   }
 };
 
+// Public: active "All Users" discounts (no login required)
+export const getPublicDiscounts = async (req, res) => {
+  try {
+    const now = new Date();
+    const discounts = await prisma.discount.findMany({
+      where: {
+        userId: null,
+        status: "active",
+        AND: [
+          {
+            OR: [
+              { startDate: null },
+              { startDate: { lte: now } },
+            ],
+          },
+          {
+            OR: [
+              { endDate: null },
+              { endDate: { gte: now } },
+            ],
+          },
+        ],
+      },
+      orderBy: { discountValue: "desc" },
+    });
+    res.json({ success: true, discounts });
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+};
+
 // Get all discounts (for admin)
 export const getAllDiscounts = async (req, res) => {
   try {

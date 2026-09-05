@@ -3,7 +3,8 @@
 import Image from "next/image";
 import { CheckIcon } from "@heroicons/react/24/outline";
 import { Service } from "@/api-client/serviceApi";
-import { getUser, isAdminOrManager } from "@/utils/auth";
+import { useApplicableDiscounts } from "@/hooks/useApplicableDiscounts";
+import { getBestDiscountedPrice } from "@/utils/discounts";
 
 interface DigitalConsultingSectionProps {
     service: Service;
@@ -12,56 +13,17 @@ interface DigitalConsultingSectionProps {
 
 export default function DigitalConsultingSection({ service, onPurchase }: DigitalConsultingSectionProps) {
     const pkg = service.packages?.[0]; // Show the first package for this featured design
+    const { discounts } = useApplicableDiscounts();
 
-    const getDiscountedPrice = (p: any, s: Service) => {
-        const user = getUser();
-        const basePrice = p?.price || 0;
-
-        if (!user || !user.discounts) {
-            return { finalPrice: basePrice, discount: 0, hasDiscount: false };
-        }
-
-        const serviceId = s._id || (s as any).id;
-        const packageId = p._id || p.id;
-
-        const applicableDiscounts = user.discounts.filter((d: any) => {
-            const isTargetMatch = d.targetType === "service" &&
-                (String(d.targetId) === String(serviceId) || String(d.targetId) === String(packageId) || d.targetId === "all");
-
-            const now = new Date();
-            const isDateValid = (!d.startDate || new Date(d.startDate) <= now) &&
-                (!d.endDate || new Date(d.endDate) >= now);
-
-            return isTargetMatch && isDateValid && d.status === "active";
-        });
-
-        if (applicableDiscounts.length === 0) return { finalPrice: basePrice, discount: 0, hasDiscount: false };
-
-        let bestPrice = basePrice;
-        let appliedDiscount = 0;
-
-        applicableDiscounts.forEach((d: any) => {
-            let currentDiscount = 0;
-            if (d.discountType === "percentage") {
-                currentDiscount = basePrice * (d.discountValue / 100);
-            } else if (d.discountType === "fixed") {
-                currentDiscount = d.discountValue;
-            }
-            const currentPrice = basePrice - currentDiscount;
-            if (currentPrice < bestPrice) {
-                bestPrice = currentPrice;
-                appliedDiscount = currentDiscount;
-            }
-        });
-
-        return {
-            finalPrice: bestPrice > 0 ? bestPrice : 0,
-            discount: appliedDiscount,
-            hasDiscount: appliedDiscount > 0
-        };
-    };
-
-    const { finalPrice, discount, hasDiscount } = getDiscountedPrice(pkg, service);
+    const basePrice = pkg?.price || 0;
+    const serviceId = service._id || (service as any).id;
+    const packageId = pkg?._id || pkg?.id;
+    const { finalPrice, discount, hasDiscount } = getBestDiscountedPrice(
+        basePrice,
+        discounts,
+        "service",
+        [serviceId, packageId]
+    );
 
     // In case there's no diagnostic package, but ideally there should be
     if (!pkg) return null;
@@ -126,4 +88,3 @@ export default function DigitalConsultingSection({ service, onPurchase }: Digita
         </section>
     );
 }
-

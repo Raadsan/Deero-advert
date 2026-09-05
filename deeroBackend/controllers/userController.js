@@ -247,7 +247,13 @@ export const googleLogin = async (req, res) => {
         bonus: user.bonus,
         bonusStatus: user.bonusStatus,
         registerSource: user.registerSource,
-        role: user.role
+        role: user.role,
+        discounts: await prisma.discount.findMany({
+          where: {
+            OR: [{ userId: user.id }, { userId: null }],
+            status: "active"
+          }
+        })
       }
     });
   } catch (error) {
@@ -440,20 +446,28 @@ export const getUsers = async (req, res) => {
   }
 };
 
+// Active discounts for a user: their own + global (userId null)
+const getActiveDiscountsForUser = async (userId) => {
+  return prisma.discount.findMany({
+    where: {
+      OR: [{ userId }, { userId: null }],
+      status: "active",
+    },
+    orderBy: { createdAt: "desc" },
+  });
+};
+
 // GET CURRENT USER PROFILE (Lightweight version for refreshUser)
 export const getMe = async (req, res) => {
   try {
     const user = await prisma.user.findUnique({
       where: { id: parseInt(req.user.id) },
-      include: { 
-        role: true,
-        discounts: {
-          where: { status: "active" }
-        }
-      }
+      include: { role: true },
     });
     if (!user) return res.status(404).json({ message: "User not found" });
-    res.json(user);
+
+    const discounts = await getActiveDiscountsForUser(user.id);
+    res.json({ ...user, discounts });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -466,9 +480,6 @@ export const getUserById = async (req, res) => {
       where: { id: parseInt(req.params.id) },
       include: {
         role: true,
-        discounts: {
-          where: { status: "active" }
-        },
         transactions: {
           include: {
             service: true,
@@ -479,7 +490,9 @@ export const getUserById = async (req, res) => {
       }
     });
     if (!user) return res.status(404).json({ message: "User not found" });
-    res.json(user);
+
+    const discounts = await getActiveDiscountsForUser(user.id);
+    res.json({ ...user, discounts });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

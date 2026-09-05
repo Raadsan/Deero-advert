@@ -7,7 +7,9 @@ import { useCart } from "@/context/CartContext";
 import { useRouter, usePathname } from "next/navigation";
 import { getAllPackages, HostingPackage } from "@/api-client/hostingPackageApi";
 import { createTransaction } from "@/api-client/transactionApi";
-import { getUserId, getUser, isAuthenticated, isAdminOrManager, refreshUser } from "@/utils/auth";
+import { getUserId, isAuthenticated, isAdminOrManager, refreshUser } from "@/utils/auth";
+import { useApplicableDiscounts } from "@/hooks/useApplicableDiscounts";
+import { getBestDiscountedPrice } from "@/utils/discounts";
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -39,7 +41,7 @@ export default function HostingPackages() {
     const [accountNo, setAccountNo] = useState("");
     const [isPurchasing, setIsPurchasing] = useState(false);
     const [purchaseStatus, setPurchaseStatus] = useState<{ success: boolean; message: string } | null>(null);
-
+    const { discounts } = useApplicableDiscounts();
 
     useEffect(() => {
         const fetchPackages = async () => {
@@ -63,50 +65,9 @@ export default function HostingPackages() {
     }, []);
 
     const getDiscountedPrice = (plan: HostingPackage) => {
-        const user = getUser();
         const basePrice = isYearly ? plan.price * 12 : plan.price;
-
-        if (!user || !user.discounts) {
-            return { finalPrice: basePrice, discount: 0, hasDiscount: false };
-        }
-
         const planId = plan.id || plan._id;
-
-        const applicableDiscounts = user.discounts.filter((d: any) => {
-            const isTargetMatch = d.targetType === "hosting" &&
-                (String(d.targetId) === String(planId) || d.targetId === "all");
-
-            const now = new Date();
-            const isDateValid = (!d.startDate || new Date(d.startDate) <= now) &&
-                (!d.endDate || new Date(d.endDate) >= now);
-
-            return isTargetMatch && isDateValid && d.status === "active";
-        });
-
-        if (applicableDiscounts.length === 0) return { finalPrice: basePrice, discount: 0, hasDiscount: false };
-
-        let bestPrice = basePrice;
-        let appliedDiscount = 0;
-
-        applicableDiscounts.forEach((d: any) => {
-            let currentDiscount = 0;
-            if (d.discountType === "percentage") {
-                currentDiscount = basePrice * (d.discountValue / 100);
-            } else if (d.discountType === "fixed") {
-                currentDiscount = d.discountValue;
-            }
-            const currentPrice = basePrice - currentDiscount;
-            if (currentPrice < bestPrice) {
-                bestPrice = currentPrice;
-                appliedDiscount = currentDiscount;
-            }
-        });
-
-        return {
-            finalPrice: bestPrice > 0 ? bestPrice : 0,
-            discount: appliedDiscount,
-            hasDiscount: appliedDiscount > 0
-        };
+        return getBestDiscountedPrice(basePrice, discounts, "hosting", [planId]);
     };
 
     const handleChoosePlan = (plan: HostingPackage) => {

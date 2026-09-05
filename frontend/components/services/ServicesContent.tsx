@@ -6,10 +6,12 @@ import ServiceCard from "./ServiceCard";
 import { getAllServices, Service } from "../../api-client/serviceApi";
 import { CheckIcon, ChevronDownIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { getImageUrl } from "@/utils/url";
-import { getUserId, getUser, isAuthenticated, isUser, isAdminOrManager, refreshUser } from "@/utils/auth";
+import { getUserId, isAuthenticated, isUser, isAdminOrManager, refreshUser } from "@/utils/auth";
 import { createTransaction } from "@/api-client/transactionApi";
 import DigitalConsultingSection from "./DigitalConsultingSection";
 import { useCart } from "@/context/CartContext";
+import { useApplicableDiscounts } from "@/hooks/useApplicableDiscounts";
+import { getBestDiscountedPrice } from "@/utils/discounts";
 
 const HEADER_OFFSET = 170; // match fixed header height
 
@@ -76,6 +78,7 @@ export default function ServicesContent({
     const [accountNo, setAccountNo] = useState("");
     const [isPurchasing, setIsPurchasing] = useState(false);
     const [purchaseStatus, setPurchaseStatus] = useState<{ success: boolean; message: string } | null>(null);
+    const { discounts } = useApplicableDiscounts();
 
     useEffect(() => {
         const fetchServices = async () => {
@@ -148,51 +151,10 @@ export default function ServicesContent({
     }, []);
 
     const getDiscountedPrice = (pkg: any, service: Service) => {
-        const user = getUser();
         const basePrice = pkg.price;
-
-        if (!user || !user.discounts) {
-            return { finalPrice: basePrice, discount: 0, hasDiscount: false };
-        }
-
         const serviceId = service._id || service.id;
         const packageId = pkg._id || pkg.id;
-
-        const applicableDiscounts = user.discounts.filter((d: any) => {
-            const isTargetMatch = d.targetType === "service" &&
-                (String(d.targetId) === String(serviceId) || String(d.targetId) === String(packageId) || d.targetId === "all");
-
-            const now = new Date();
-            const isDateValid = (!d.startDate || new Date(d.startDate) <= now) &&
-                (!d.endDate || new Date(d.endDate) >= now);
-
-            return isTargetMatch && isDateValid && d.status === "active";
-        });
-
-        if (applicableDiscounts.length === 0) return { finalPrice: basePrice, discount: 0, hasDiscount: false };
-
-        let bestPrice = basePrice;
-        let appliedDiscount = 0;
-
-        applicableDiscounts.forEach((d: any) => {
-            let currentDiscount = 0;
-            if (d.discountType === "percentage") {
-                currentDiscount = basePrice * (d.discountValue / 100);
-            } else if (d.discountType === "fixed") {
-                currentDiscount = d.discountValue;
-            }
-            const currentPrice = basePrice - currentDiscount;
-            if (currentPrice < bestPrice) {
-                bestPrice = currentPrice;
-                appliedDiscount = currentDiscount;
-            }
-        });
-
-        return {
-            finalPrice: bestPrice > 0 ? bestPrice : 0,
-            discount: appliedDiscount,
-            hasDiscount: appliedDiscount > 0
-        };
+        return getBestDiscountedPrice(basePrice, discounts, "service", [serviceId, packageId]);
     };
 
     // Handle scroll after navigation from hash or slug - wait for loading to finish
