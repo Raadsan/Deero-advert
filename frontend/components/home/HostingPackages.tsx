@@ -25,7 +25,7 @@ const itemVariants = {
 };
 
 export default function HostingPackages() {
-    // const { toggleCartItem, isInCart } = useCart(); // REMOVED Cart Logic
+    const { toggleCartItem, isInCart } = useCart();
     const router = useRouter();
     const pathname = usePathname();
     const [isYearly, setIsYearly] = useState(false);
@@ -121,10 +121,22 @@ export default function HostingPackages() {
             return;
         }
 
-        setSelectedPlan(plan);
-        setAccountNo("");
-        setPurchaseStatus(null);
-        setPurchaseModalOpen(true);
+        const planId = plan.id || plan._id;
+        const { finalPrice, discount } = getDiscountedPrice(plan);
+        const cycle = isYearly ? "Yearly" : "Monthly";
+        const subtitle = `${plan.name} (${cycle})`;
+
+        toggleCartItem({
+            id: `hosting-${planId}-${cycle.toLowerCase()}`,
+            type: "hosting",
+            title: "Web Hosting",
+            subtitle,
+            price: finalPrice,
+            originalAmount: isYearly ? plan.price * 12 : plan.price,
+            discountApplied: discount,
+            hostingPackageId: planId,
+            options: `${cycle} billing`
+        });
     };
 
     const processPurchase = async () => {
@@ -278,7 +290,7 @@ export default function HostingPackages() {
                                     onClick={() => handleChoosePlan(plan)}
                                     className={`${buttonColor} text-white font-bold py-4 rounded-full shadow-lg hover:brightness-110 active:scale-95 transition-all uppercase tracking-widest text-xs`}
                                 >
-                                    Choose Plan
+                                    {isInCart(`${plan.name} (${isYearly ? "Yearly" : "Monthly"})`) ? "Remove from Cart" : "Add to Cart"}
                                 </button>
                             </motion.div>
                         );

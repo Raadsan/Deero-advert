@@ -25,6 +25,23 @@ export const createTransaction = (data: {
   return api.post("/transactions", data);
 };
 
+export const checkoutCart = (data: {
+  userId: string | number;
+  accountNo: string;
+  paymentMethod: "waafi";
+  items: Array<{
+    type: "domain" | "service" | "hosting";
+    amount: number;
+    originalAmount?: number;
+    discountApplied?: number;
+    description: string;
+    domain?: { name: string; price: number };
+    serviceId?: string | number;
+    packageId?: string | number;
+    hostingPackageId?: string | number;
+  }>;
+}) => api.post("/transactions/checkout", data);
+
 // 📄 GET ALL TRANSACTIONS (ADMIN)
 export const getAllTransactions = () => {
   return api.get("/transactions");

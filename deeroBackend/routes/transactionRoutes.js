@@ -1,6 +1,7 @@
 import express from "express";
 import {
   createTransaction,
+  checkoutCart,
   getAllTransactions,
   getTransactionById,
   getTransactionsByUser,
@@ -20,6 +21,7 @@ router.get("/type/:type", protect, authorizeMenuAccess("transactions", "transact
 router.get("/:id", protect, authorizeMenuAccess("transactions", "transaction"), getTransactionById);
 
 router.post("/", protect, createTransaction);
+router.post("/checkout", protect, checkoutCart);
 router.patch("/:id", protect, authorizeMenuAccess("transactions", "transaction"), updateTransaction);
 router.delete("/:id", protect, authorizeMenuAccess("transactions", "transaction"), deleteTransaction);
 

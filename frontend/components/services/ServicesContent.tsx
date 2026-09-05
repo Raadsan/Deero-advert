@@ -9,6 +9,7 @@ import { getImageUrl } from "@/utils/url";
 import { getUserId, getUser, isAuthenticated, isUser, isAdminOrManager, refreshUser } from "@/utils/auth";
 import { createTransaction } from "@/api-client/transactionApi";
 import DigitalConsultingSection from "./DigitalConsultingSection";
+import { useCart } from "@/context/CartContext";
 
 const HEADER_OFFSET = 170; // match fixed header height
 
@@ -58,6 +59,7 @@ export default function ServicesContent({
     paddingClasses = "py-16 px-4 sm:px-10",
     filterSlug
 }: ServicesContentProps) {
+    const { toggleCartItem, isInCart } = useCart();
     const pathname = usePathname();
     const router = useRouter();
     const isServicesPage = pathname?.startsWith("/services") || pathname?.startsWith("/shop");
@@ -245,12 +247,23 @@ export default function ServicesContent({
             return;
         }
 
-        // User is authenticated and is a regular user
-        setSelectedPlan(pkg);
-        setSelectedService(service);
-        setAccountNo("");
-        setPurchaseStatus(null);
-        setPurchaseModalOpen(true);
+        const serviceId = service._id || service.id;
+        const packageId = pkg._id || pkg.id;
+        const { finalPrice, discount } = getDiscountedPrice(pkg, service);
+        const subtitle = `${service.serviceTitle} - ${pkg.packageTitle}`;
+
+        toggleCartItem({
+            id: `service-${serviceId}-${packageId}`,
+            type: "service",
+            title: service.serviceTitle || "Service",
+            subtitle,
+            price: finalPrice,
+            originalAmount: pkg.price,
+            discountApplied: discount,
+            serviceId,
+            packageId,
+            options: pkg.packageTitle
+        });
     };
 
     const processPurchase = async () => {
@@ -447,7 +460,7 @@ export default function ServicesContent({
                                                                 onClick={() => handlePurchaseClick(pkg, service)}
                                                                 className="w-full py-4 px-6 rounded-xl bg-[#651313] text-white font-bold text-sm uppercase tracking-widest hover:brightness-110 active:scale-95 transition-all shadow-lg"
                                                             >
-                                                                Purchase Plan
+                                                                {isInCart(`${service.serviceTitle} - ${pkg.packageTitle}`) ? "Remove from Cart" : "Add to Cart"}
                                                             </button>
                                                         </motion.div>
                                                     );

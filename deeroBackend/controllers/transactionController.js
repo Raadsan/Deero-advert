@@ -214,6 +214,110 @@ export const createTransaction = async (req, res) => {
   }
 };
 
+export const checkoutCart = async (req, res) => {
+  try {
+    const { userId, items, accountNo, paymentMethod } = req.body;
+
+    if (!Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({ message: "Cart must contain at least one item" });
+    }
+    if (!accountNo) {
+      return res.status(400).json({ message: "Waafi account number is required" });
+    }
+
+    const user = await prisma.user.findUnique({ where: { id: parseInt(userId) } });
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    const transactionData = [];
+    for (const item of items) {
+      const amount = Number(item.amount);
+      if (!Number.isFinite(amount) || amount < 0) {
+        return res.status(400).json({ message: "Every cart item must have a valid amount" });
+      }
+
+      const data = {
+        userId: user.id,
+        amount,
+        originalAmount: Number(item.originalAmount ?? amount),
+        discountApplied: Number(item.discountApplied ?? 0),
+        description: item.description || "Cart purchase",
+        status: "pending",
+        paymentMethod: paymentMethod || "waafi"
+      };
+
+      if (item.type === "domain" && item.domain?.name) {
+        transactionData.push({ ...data, type: "register", domainName: item.domain.name });
+      } else if (item.type === "service" && item.serviceId && item.packageId) {
+        const service = await prisma.service.findUnique({ where: { id: parseInt(item.serviceId) } });
+        if (!service) return res.status(404).json({ message: "A service in your cart was not found" });
+        transactionData.push({
+          ...data,
+          type: "service_payment",
+          serviceId: service.id,
+          packageId: item.packageId.toString()
+        });
+      } else if (item.type === "hosting" && item.hostingPackageId) {
+        const hostingPackage = await prisma.hostingPackage.findUnique({ where: { id: parseInt(item.hostingPackageId) } });
+        if (!hostingPackage) return res.status(404).json({ message: "A hosting package in your cart was not found" });
+        transactionData.push({ ...data, type: "hosting_payment", hostingPackageId: hostingPackage.id });
+      } else {
+        return res.status(400).json({ message: "A cart item is missing required purchase information" });
+      }
+    }
+
+    const totalAmount = transactionData.reduce((sum, item) => sum + item.amount, 0);
+    const transactions = await prisma.$transaction(
+      transactionData.map((data) => prisma.transaction.create({ data }))
+    );
+    const transactionIds = transactions.map((transaction) => transaction.id);
+
+    const paymentResponse = await sendWaafiPayment({
+      transactionId: `cart-${transactionIds[0]}`,
+      accountNo,
+      amount: totalAmount,
+      description: `Deero cart payment (${transactions.length} item${transactions.length === 1 ? "" : "s"})`
+    });
+
+    const isSuccessful = ["2001", "2000", "0000", "W000"].includes(paymentResponse.responseCode);
+    const status = isSuccessful ? "completed" : "failed";
+    const paymentReferenceId = paymentResponse.referenceId || paymentResponse.params?.transactionId || `cart-${transactionIds[0]}`;
+
+    await prisma.transaction.updateMany({
+      where: { id: { in: transactionIds } },
+      data: {
+        status,
+        paymentReferenceId,
+        completedAt: isSuccessful ? new Date() : null
+      }
+    });
+
+    if (!isSuccessful) {
+      return res.status(400).json({
+        success: false,
+        message: `Payment failed: ${paymentResponse.responseMsg || "Unknown error"}`,
+        paymentResponse
+      });
+    }
+
+    await handleBonusPoints(user.id, "cart_payment");
+    const completedTransactions = await prisma.transaction.findMany({
+      where: { id: { in: transactionIds } },
+      include: { service: true, hostingPackage: true }
+    });
+
+    return res.json({
+      success: true,
+      message: "Cart payment completed successfully",
+      totalAmount,
+      transactions: completedTransactions,
+      paymentResponse
+    });
+  } catch (err) {
+    console.error("Cart checkout error:", err);
+    return res.status(500).json({ message: "Cart checkout failed", error: err.message });
+  }
+};
+
 /**
  * 🎁 BONUS LOGIC HELPER
  */

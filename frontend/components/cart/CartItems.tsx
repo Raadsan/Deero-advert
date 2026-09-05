@@ -1,13 +1,14 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { Trash2, Edit3, Globe, Server, ShoppingCart } from "lucide-react";
+import { Trash2, Edit3, Globe, Server, ShoppingCart, BriefcaseBusiness } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 
 const getIcon = (type: string) => {
     switch (type) {
         case 'domain': return <Globe className="w-5 h-5" />;
         case 'hosting': return <Server className="w-5 h-5" />;
+        case 'service': return <BriefcaseBusiness className="w-5 h-5" />;
         default: return <ShoppingCart className="w-5 h-5" />;
     }
 };
@@ -29,7 +30,7 @@ export default function CartItemsList() {
 
     return (
         <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-[#651313]">Review & Checkout</h2>
+            <h2 className="text-2xl font-bold text-[#651313]">Review &amp; Checkout</h2>
 
             <div className="space-y-4">
                 <AnimatePresence>
@@ -48,9 +49,6 @@ export default function CartItemsList() {
                                 <div className="space-y-1">
                                     <div className="flex items-center gap-2">
                                         <h3 className="font-bold text-[#651313]">{item.title}</h3>
-                                        <button className="text-gray-400 hover:text-[#EB4724] transition-colors">
-                                            <Edit3 className="w-4 h-4" />
-                                        </button>
                                     </div>
                                     <p className="text-[#EB4724] font-medium">{item.subtitle}</p>
                                     <p className="text-sm text-gray-500">{item.options}</p>
@@ -77,31 +75,6 @@ export default function CartItemsList() {
                 </AnimatePresence>
             </div>
 
-            {/* Promo Code Section */}
-            <div className="bg-gray-50/50 rounded-2xl p-6 border border-dashed border-gray-200">
-                <h4 className="font-bold text-[#651313] mb-4">Apply Promo Code</h4>
-                <div className="flex gap-2">
-                    <input
-                        type="text"
-                        placeholder="Enter promo code if you have one"
-                        className="flex-1 bg-white border border-gray-200 rounded-xl px-4 py-3 text-black focus:border-[#EB4724] focus:ring-2 focus:ring-[#EB4724]/10 focus:outline-none transition-all"
-                    />
-                    <button className="bg-white border border-gray-200 text-[#651313] px-6 py-3 rounded-xl font-bold hover:bg-[#651313] hover:text-white hover:border-[#651313] transition-all whitespace-nowrap">
-                        Validate Code
-                    </button>
-                </div>
-            </div>
-
-            <div className="flex justify-start">
-                <button
-                    onClick={clearCart}
-                    className="flex items-center gap-2 text-red-400 hover:text-red-600 font-bold transition-colors"
-                >
-                    <Trash2 className="w-4 h-4" />
-                    Empty Cart
-                </button>
-            </div>
         </div>
     );
 }
-

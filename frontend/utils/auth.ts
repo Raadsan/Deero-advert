@@ -52,6 +52,7 @@ export const setAuth = (token: string, user: any): void => {
     setSessionCookie();
     localStorage.setItem("token", token);
     localStorage.setItem("user", JSON.stringify(user));
+    window.dispatchEvent(new Event("auth-change"));
 };
 
 export const isAuthenticated = (): boolean => {
@@ -167,4 +168,5 @@ export const clearAuth = (): void => {
     clearSessionCookie();
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    window.dispatchEvent(new Event("auth-change"));
 };

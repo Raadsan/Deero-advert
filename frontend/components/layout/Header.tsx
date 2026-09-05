@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { User, LogOut, ShoppingCart } from "lucide-react";
+import { ArrowRight, Globe2, LogOut, Package, ShoppingCart, User } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { isAuthenticated, getUser, clearAuth, isStaff as hasStaffRole, isAdmin } from "@/utils/auth";
 import { logout as apiLogout } from "../../api-client/authApi";
@@ -16,12 +16,17 @@ const navLinks = [
   { label: "Home", href: "/" },
   { label: "About Us", href: "/about" },
   {
-    label: "Solutions",
+    label: "Services",
     href: "#",
     subLinks: [
-      { label: "Services", href: "/services" },
-      { label: "Packages", href: "/shop" },
-      { label: "Domains", href: "/hosting#domains" }
+      {
+        label: "Hosting & Domains",
+        href: "/hosting"
+      },
+      {
+        label: "Packages",
+        href: "/shop"
+      }
     ]
   },
   { label: "Portfolio", href: "/portfolio" },
@@ -235,25 +240,47 @@ export default function Header() {
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: 10 }}
-                          className="absolute left-0 mt-0 w-48 rounded-xl border border-gray-100 bg-white shadow-xl z-50 overflow-hidden"
+                          className={link.label === "Services"
+                            ? "absolute left-1/2 mt-0 w-72 -translate-x-1/2 rounded-2xl border border-[#651313]/10 bg-white shadow-2xl z-50 overflow-hidden"
+                            : "absolute left-0 mt-0 w-48 rounded-xl border border-gray-100 bg-white shadow-xl z-50 overflow-hidden"
+                          }
                         >
-                          <div className="p-1">
+                          <div className={link.label === "Services" ? "flex flex-col gap-1 p-3" : "p-1"}>
                             {link.subLinks.map((sub) => {
                               const [subPath] = sub.href.split("#");
                               const isChildActive = mounted && (pathname === subPath || (subPath !== "/" && pathname.startsWith(subPath)));
+                              const MenuIcon = sub.label === "Hosting & Domains" ? Globe2 : Package;
                               return (
                                 <Link
                                   key={sub.href}
                                   href={sub.href}
-                                  className={`block px-4 py-2.5 rounded-lg text-sm transition-colors ${
-                                    isChildActive ? "bg-gray-50 text-[#EB4724] font-bold" : "text-[#651313] hover:bg-gray-50 hover:text-[#EB4724]"
-                                  }`}
+                                  className={link.label === "Services"
+                                    ? `group/item flex w-full items-center gap-3 rounded-xl p-3 transition-colors ${isChildActive ? "bg-[#EB4724]/5" : "hover:bg-[#651313]/5"}`
+                                    : `block px-4 py-2.5 rounded-lg text-sm transition-colors ${isChildActive ? "bg-gray-50 text-[#EB4724] font-bold" : "text-[#651313] hover:bg-gray-50 hover:text-[#EB4724]"}`
+                                  }
                                   onClick={() => setOpenDropdown(null)}
                                 >
-                                  {sub.label}
+                                  {link.label === "Services" ? (
+                                    <>
+                                      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#651313] text-white transition-colors group-hover/item:bg-[#EB4724]">
+                                        <MenuIcon className="h-5 w-5" />
+                                      </span>
+                                      <span className="font-bold text-[#651313] group-hover/item:text-[#EB4724]">{sub.label}</span>
+                                    </>
+                                  ) : sub.label}
                                 </Link>
                               );
                             })}
+                            {link.label === "Services" && (
+                              <Link
+                                href="/services"
+                                onClick={() => setOpenDropdown(null)}
+                                className="flex w-full items-center justify-center gap-2 rounded-xl border-t border-[#651313]/10 px-4 py-3 text-sm font-bold text-[#EB4724] transition hover:bg-[#EB4724] hover:text-white"
+                              >
+                                Explore All Services
+                                <ArrowRight className="h-4 w-4" />
+                              </Link>
+                            )}
                           </div>
                         </motion.div>
                       )}
