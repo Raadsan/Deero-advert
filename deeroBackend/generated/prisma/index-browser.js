@@ -158,6 +158,7 @@ exports.Prisma.DiscountScalarFieldEnum = {
   targetId: 'targetId',
   discountValue: 'discountValue',
   discountType: 'discountType',
+  platform: 'platform',
   status: 'status',
   startDate: 'startDate',
   endDate: 'endDate',
@@ -622,6 +623,7 @@ exports.Prisma.DiscountOrderByRelevanceFieldEnum = {
   targetType: 'targetType',
   targetId: 'targetId',
   discountType: 'discountType',
+  platform: 'platform',
   status: 'status'
 };
 

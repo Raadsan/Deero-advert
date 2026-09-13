@@ -19,7 +19,16 @@ if (process.env.FIREBASE_SERVICE_ACCOUNT) {
     console.log("➡️ Error details:", error.message);
   }
 } else if (existsSync("./serviceAccountKey.json")) {
-  serviceAccount = JSON.parse(readFileSync("./serviceAccountKey.json", "utf-8"));
+  try {
+    const fileContent = readFileSync("./serviceAccountKey.json", "utf-8").trim();
+    if (fileContent) {
+      serviceAccount = JSON.parse(fileContent);
+    } else {
+      console.log("⚠️ File-ka serviceAccountKey.json waa maran yahay (empty file).");
+    }
+  } catch (error) {
+    console.error("❌ Cilad baa ka dhacday akhriska serviceAccountKey.json:", error.message);
+  }
 } else {
   console.log(
     "⚠️ Variable-ka FIREBASE_SERVICE_ACCOUNT iyo file-ka serviceAccountKey.json midna lama helin."

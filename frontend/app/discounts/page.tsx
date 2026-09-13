@@ -58,9 +58,35 @@ export default function DiscountManagementPage() {
             render: (row: any) => (
                 <div className="flex flex-col">
                     <span className="font-bold text-[#651313] uppercase text-xs">{row.targetType}</span>
-                    <span className="text-[10px] text-gray-500 truncate max-w-[150px]" title={row.targetId}>ID: {row.targetId}</span>
+                    <span className="text-[10px] text-gray-500 truncate max-w-[150px]" title={row.targetId}>ID: {row.targetId || "All"}</span>
                 </div>
             )
+        },
+        { 
+            label: "Platform", 
+            key: "platform",
+            render: (row: any) => {
+                const plat = (row.platform || "all").toLowerCase();
+                if (plat === "website" || plat === "web") {
+                    return (
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-amber-100 text-amber-800 border border-amber-200">
+                            🌐 Web Only
+                        </span>
+                    );
+                }
+                if (plat === "app") {
+                    return (
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-purple-100 text-purple-800 border border-purple-200">
+                            📱 App Only
+                        </span>
+                    );
+                }
+                return (
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-blue-100 text-blue-800 border border-blue-200">
+                        🌐📱 Both
+                    </span>
+                );
+            }
         },
         { 
             label: "User", 

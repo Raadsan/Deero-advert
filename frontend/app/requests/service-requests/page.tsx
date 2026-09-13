@@ -76,15 +76,15 @@ export default function ServiceRequestsPage() {
 
   const columns = [
     { label: "Service", key: "service", width: "200px", render: (r: any) => r.service?.serviceTitle || r.description || "N/A" },
-    { 
-        label: "User", 
-        key: "user", 
-        render: (r: any) => (
-            <div>
-                <p className="font-bold text-gray-800">{r.user?.fullname || "Unknown"}</p>
-                <p className="text-[10px] text-gray-500">{r.user?.email || ""}</p>
-            </div>
-        )
+    {
+      label: "User",
+      key: "user",
+      render: (r: any) => (
+        <div>
+          <p className="font-bold text-gray-800">{r.user?.fullname || "Unknown"}</p>
+          <p className="text-[10px] text-gray-500">{r.user?.email || ""}</p>
+        </div>
+      )
     },
     { label: "Amount", key: "amount", render: (r: any) => `$${r.amount} ${r.currency || "USD"}` },
     { label: "Payment", key: "paymentMethod" },

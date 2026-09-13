@@ -58,6 +58,7 @@ model Discount {
   targetId      String? // ID of the package/service
   discountValue Float
   discountType  String    @default("percentage") // "percentage" or "fixed"
+  platform      String    @default("all") // "all", "app", "website"
   status        String    @default("active") // "active", "used", "expired"
   startDate     DateTime?
   endDate       DateTime?

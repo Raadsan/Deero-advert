@@ -7,6 +7,7 @@ export type AppDiscount = {
   targetId?: string | null;
   discountValue?: number;
   discountType?: string;
+  platform?: string;
   status?: string;
   startDate?: string | null;
   endDate?: string | null;
@@ -17,8 +18,11 @@ const isDateValid = (d: AppDiscount, now = new Date()) =>
   (!d.startDate || new Date(d.startDate) <= now) &&
   (!d.endDate || new Date(d.endDate) >= now);
 
+const isPlatformValid = (d: AppDiscount, currentPlatform = "website") =>
+  !d.platform || d.platform === "all" || d.platform === currentPlatform;
+
 const isActive = (d: AppDiscount) =>
-  (d.status || "active") === "active" && isDateValid(d);
+  (d.status || "active") === "active" && isDateValid(d) && isPlatformValid(d, "website");
 
 /** Merge global + user discounts by id (user-specific kept). */
 export const mergeDiscounts = (
@@ -42,7 +46,8 @@ export const mergeDiscounts = (
 export const fetchApplicableDiscounts = async (): Promise<AppDiscount[]> => {
   let globalList: AppDiscount[] = [];
   try {
-    const res: any = await getPublicDiscounts();
+    // Pass platform=website so backend only returns "website" or "all" discounts
+    const res: any = await getPublicDiscounts("website");
     globalList = res.data?.discounts || res.data || [];
     if (!Array.isArray(globalList)) globalList = [];
   } catch {
@@ -53,10 +58,13 @@ export const fetchApplicableDiscounts = async (): Promise<AppDiscount[]> => {
   try {
     const refreshed = await refreshUser();
     const user = refreshed || getUser();
-    userList = Array.isArray(user?.discounts) ? user.discounts : [];
+    // Filter user-specific discounts: only those valid for website
+    const raw: AppDiscount[] = Array.isArray(user?.discounts) ? user.discounts : [];
+    userList = raw.filter((d) => isPlatformValid(d, "website"));
   } catch {
     const user = getUser();
-    userList = Array.isArray(user?.discounts) ? user.discounts : [];
+    const raw: AppDiscount[] = Array.isArray(user?.discounts) ? user.discounts : [];
+    userList = raw.filter((d) => isPlatformValid(d, "website"));
   }
 
   return mergeDiscounts(globalList, userList);

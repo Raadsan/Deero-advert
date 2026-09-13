@@ -257,7 +257,7 @@ export default function HostingPackageManagement() {
                 )}
             </AnimatePresence>
 
-            <DiscountModal 
+            <DiscountModal
                 isOpen={discountModal.open}
                 onClose={() => setDiscountModal({ ...discountModal, open: false })}
                 targetType="hosting"

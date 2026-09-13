@@ -617,7 +617,7 @@ export default function AdminServicesPage() {
         </form>
       </Modal>
 
-      <DiscountModal 
+      <DiscountModal
         isOpen={discountModal.open}
         onClose={() => setDiscountModal({ ...discountModal, open: false })}
         targetType="service"

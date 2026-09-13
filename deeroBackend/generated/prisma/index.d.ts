@@ -7320,6 +7320,7 @@ export namespace Prisma {
     targetId: string | null
     discountValue: number | null
     discountType: string | null
+    platform: string | null
     status: string | null
     startDate: Date | null
     endDate: Date | null
@@ -7334,6 +7335,7 @@ export namespace Prisma {
     targetId: string | null
     discountValue: number | null
     discountType: string | null
+    platform: string | null
     status: string | null
     startDate: Date | null
     endDate: Date | null
@@ -7348,6 +7350,7 @@ export namespace Prisma {
     targetId: number
     discountValue: number
     discountType: number
+    platform: number
     status: number
     startDate: number
     endDate: number
@@ -7376,6 +7379,7 @@ export namespace Prisma {
     targetId?: true
     discountValue?: true
     discountType?: true
+    platform?: true
     status?: true
     startDate?: true
     endDate?: true
@@ -7390,6 +7394,7 @@ export namespace Prisma {
     targetId?: true
     discountValue?: true
     discountType?: true
+    platform?: true
     status?: true
     startDate?: true
     endDate?: true
@@ -7404,6 +7409,7 @@ export namespace Prisma {
     targetId?: true
     discountValue?: true
     discountType?: true
+    platform?: true
     status?: true
     startDate?: true
     endDate?: true
@@ -7505,6 +7511,7 @@ export namespace Prisma {
     targetId: string | null
     discountValue: number
     discountType: string
+    platform: string
     status: string
     startDate: Date | null
     endDate: Date | null
@@ -7538,6 +7545,7 @@ export namespace Prisma {
     targetId?: boolean
     discountValue?: boolean
     discountType?: boolean
+    platform?: boolean
     status?: boolean
     startDate?: boolean
     endDate?: boolean
@@ -7555,6 +7563,7 @@ export namespace Prisma {
     targetId?: boolean
     discountValue?: boolean
     discountType?: boolean
+    platform?: boolean
     status?: boolean
     startDate?: boolean
     endDate?: boolean
@@ -7562,7 +7571,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type DiscountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "targetType" | "targetId" | "discountValue" | "discountType" | "status" | "startDate" | "endDate" | "createdAt" | "updatedAt", ExtArgs["result"]["discount"]>
+  export type DiscountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "targetType" | "targetId" | "discountValue" | "discountType" | "platform" | "status" | "startDate" | "endDate" | "createdAt" | "updatedAt", ExtArgs["result"]["discount"]>
   export type DiscountInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | Discount$userArgs<ExtArgs>
   }
@@ -7579,6 +7588,7 @@ export namespace Prisma {
       targetId: string | null
       discountValue: number
       discountType: string
+      platform: string
       status: string
       startDate: Date | null
       endDate: Date | null
@@ -7960,6 +7970,7 @@ export namespace Prisma {
     readonly targetId: FieldRef<"Discount", 'String'>
     readonly discountValue: FieldRef<"Discount", 'Float'>
     readonly discountType: FieldRef<"Discount", 'String'>
+    readonly platform: FieldRef<"Discount", 'String'>
     readonly status: FieldRef<"Discount", 'String'>
     readonly startDate: FieldRef<"Discount", 'DateTime'>
     readonly endDate: FieldRef<"Discount", 'DateTime'>
@@ -49808,6 +49819,7 @@ export namespace Prisma {
     targetId: 'targetId',
     discountValue: 'discountValue',
     discountType: 'discountType',
+    platform: 'platform',
     status: 'status',
     startDate: 'startDate',
     endDate: 'endDate',
@@ -50413,6 +50425,7 @@ export namespace Prisma {
     targetType: 'targetType',
     targetId: 'targetId',
     discountType: 'discountType',
+    platform: 'platform',
     status: 'status'
   };
 
@@ -51070,6 +51083,7 @@ export namespace Prisma {
     targetId?: StringNullableFilter<"Discount"> | string | null
     discountValue?: FloatFilter<"Discount"> | number
     discountType?: StringFilter<"Discount"> | string
+    platform?: StringFilter<"Discount"> | string
     status?: StringFilter<"Discount"> | string
     startDate?: DateTimeNullableFilter<"Discount"> | Date | string | null
     endDate?: DateTimeNullableFilter<"Discount"> | Date | string | null
@@ -51085,6 +51099,7 @@ export namespace Prisma {
     targetId?: SortOrderInput | SortOrder
     discountValue?: SortOrder
     discountType?: SortOrder
+    platform?: SortOrder
     status?: SortOrder
     startDate?: SortOrderInput | SortOrder
     endDate?: SortOrderInput | SortOrder
@@ -51104,6 +51119,7 @@ export namespace Prisma {
     targetId?: StringNullableFilter<"Discount"> | string | null
     discountValue?: FloatFilter<"Discount"> | number
     discountType?: StringFilter<"Discount"> | string
+    platform?: StringFilter<"Discount"> | string
     status?: StringFilter<"Discount"> | string
     startDate?: DateTimeNullableFilter<"Discount"> | Date | string | null
     endDate?: DateTimeNullableFilter<"Discount"> | Date | string | null
@@ -51119,6 +51135,7 @@ export namespace Prisma {
     targetId?: SortOrderInput | SortOrder
     discountValue?: SortOrder
     discountType?: SortOrder
+    platform?: SortOrder
     status?: SortOrder
     startDate?: SortOrderInput | SortOrder
     endDate?: SortOrderInput | SortOrder
@@ -51141,6 +51158,7 @@ export namespace Prisma {
     targetId?: StringNullableWithAggregatesFilter<"Discount"> | string | null
     discountValue?: FloatWithAggregatesFilter<"Discount"> | number
     discountType?: StringWithAggregatesFilter<"Discount"> | string
+    platform?: StringWithAggregatesFilter<"Discount"> | string
     status?: StringWithAggregatesFilter<"Discount"> | string
     startDate?: DateTimeNullableWithAggregatesFilter<"Discount"> | Date | string | null
     endDate?: DateTimeNullableWithAggregatesFilter<"Discount"> | Date | string | null
@@ -54236,6 +54254,7 @@ export namespace Prisma {
     targetId?: string | null
     discountValue: number
     discountType?: string
+    platform?: string
     status?: string
     startDate?: Date | string | null
     endDate?: Date | string | null
@@ -54251,6 +54270,7 @@ export namespace Prisma {
     targetId?: string | null
     discountValue: number
     discountType?: string
+    platform?: string
     status?: string
     startDate?: Date | string | null
     endDate?: Date | string | null
@@ -54263,6 +54283,7 @@ export namespace Prisma {
     targetId?: NullableStringFieldUpdateOperationsInput | string | null
     discountValue?: FloatFieldUpdateOperationsInput | number
     discountType?: StringFieldUpdateOperationsInput | string
+    platform?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -54278,6 +54299,7 @@ export namespace Prisma {
     targetId?: NullableStringFieldUpdateOperationsInput | string | null
     discountValue?: FloatFieldUpdateOperationsInput | number
     discountType?: StringFieldUpdateOperationsInput | string
+    platform?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -54292,6 +54314,7 @@ export namespace Prisma {
     targetId?: string | null
     discountValue: number
     discountType?: string
+    platform?: string
     status?: string
     startDate?: Date | string | null
     endDate?: Date | string | null
@@ -54304,6 +54327,7 @@ export namespace Prisma {
     targetId?: NullableStringFieldUpdateOperationsInput | string | null
     discountValue?: FloatFieldUpdateOperationsInput | number
     discountType?: StringFieldUpdateOperationsInput | string
+    platform?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -54318,6 +54342,7 @@ export namespace Prisma {
     targetId?: NullableStringFieldUpdateOperationsInput | string | null
     discountValue?: FloatFieldUpdateOperationsInput | number
     discountType?: StringFieldUpdateOperationsInput | string
+    platform?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -57588,6 +57613,7 @@ export namespace Prisma {
     targetId?: SortOrder
     discountValue?: SortOrder
     discountType?: SortOrder
+    platform?: SortOrder
     status?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
@@ -57608,6 +57634,7 @@ export namespace Prisma {
     targetId?: SortOrder
     discountValue?: SortOrder
     discountType?: SortOrder
+    platform?: SortOrder
     status?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
@@ -57622,6 +57649,7 @@ export namespace Prisma {
     targetId?: SortOrder
     discountValue?: SortOrder
     discountType?: SortOrder
+    platform?: SortOrder
     status?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
@@ -61579,6 +61607,7 @@ export namespace Prisma {
     targetId?: string | null
     discountValue: number
     discountType?: string
+    platform?: string
     status?: string
     startDate?: Date | string | null
     endDate?: Date | string | null
@@ -61592,6 +61621,7 @@ export namespace Prisma {
     targetId?: string | null
     discountValue: number
     discountType?: string
+    platform?: string
     status?: string
     startDate?: Date | string | null
     endDate?: Date | string | null
@@ -61874,6 +61904,7 @@ export namespace Prisma {
     targetId?: StringNullableFilter<"Discount"> | string | null
     discountValue?: FloatFilter<"Discount"> | number
     discountType?: StringFilter<"Discount"> | string
+    platform?: StringFilter<"Discount"> | string
     status?: StringFilter<"Discount"> | string
     startDate?: DateTimeNullableFilter<"Discount"> | Date | string | null
     endDate?: DateTimeNullableFilter<"Discount"> | Date | string | null
@@ -64651,6 +64682,7 @@ export namespace Prisma {
     targetId?: string | null
     discountValue: number
     discountType?: string
+    platform?: string
     status?: string
     startDate?: Date | string | null
     endDate?: Date | string | null
@@ -64824,6 +64856,7 @@ export namespace Prisma {
     targetId?: NullableStringFieldUpdateOperationsInput | string | null
     discountValue?: FloatFieldUpdateOperationsInput | number
     discountType?: StringFieldUpdateOperationsInput | string
+    platform?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -64837,6 +64870,7 @@ export namespace Prisma {
     targetId?: NullableStringFieldUpdateOperationsInput | string | null
     discountValue?: FloatFieldUpdateOperationsInput | number
     discountType?: StringFieldUpdateOperationsInput | string
+    platform?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -64850,6 +64884,7 @@ export namespace Prisma {
     targetId?: NullableStringFieldUpdateOperationsInput | string | null
     discountValue?: FloatFieldUpdateOperationsInput | number
     discountType?: StringFieldUpdateOperationsInput | string
+    platform?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
