@@ -7,7 +7,7 @@ import Footer from "@/components/layout/Footer";
 import ServicesHero from "@/components/services/ServicesHero";
 import ServicesContent from "@/components/services/ServicesContent";
 
-export default function ShopPage() {
+export default function PackagesPage() {
     return (
         <div className="flex min-h-screen flex-col">
             <Header />

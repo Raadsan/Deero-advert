@@ -35289,6 +35289,7 @@ export namespace Prisma {
     serviceId: number | null
     packageTitle: string | null
     price: number | null
+    deliveryTime: string | null
   }
 
   export type ServicePackageMaxAggregateOutputType = {
@@ -35296,6 +35297,7 @@ export namespace Prisma {
     serviceId: number | null
     packageTitle: string | null
     price: number | null
+    deliveryTime: string | null
   }
 
   export type ServicePackageCountAggregateOutputType = {
@@ -35303,6 +35305,7 @@ export namespace Prisma {
     serviceId: number
     packageTitle: number
     price: number
+    deliveryTime: number
     _all: number
   }
 
@@ -35324,6 +35327,7 @@ export namespace Prisma {
     serviceId?: true
     packageTitle?: true
     price?: true
+    deliveryTime?: true
   }
 
   export type ServicePackageMaxAggregateInputType = {
@@ -35331,6 +35335,7 @@ export namespace Prisma {
     serviceId?: true
     packageTitle?: true
     price?: true
+    deliveryTime?: true
   }
 
   export type ServicePackageCountAggregateInputType = {
@@ -35338,6 +35343,7 @@ export namespace Prisma {
     serviceId?: true
     packageTitle?: true
     price?: true
+    deliveryTime?: true
     _all?: true
   }
 
@@ -35432,6 +35438,7 @@ export namespace Prisma {
     serviceId: number
     packageTitle: string
     price: number
+    deliveryTime: string | null
     _count: ServicePackageCountAggregateOutputType | null
     _avg: ServicePackageAvgAggregateOutputType | null
     _sum: ServicePackageSumAggregateOutputType | null
@@ -35458,6 +35465,7 @@ export namespace Prisma {
     serviceId?: boolean
     packageTitle?: boolean
     price?: boolean
+    deliveryTime?: boolean
     service?: boolean | ServiceDefaultArgs<ExtArgs>
     features?: boolean | ServicePackage$featuresArgs<ExtArgs>
     _count?: boolean | ServicePackageCountOutputTypeDefaultArgs<ExtArgs>
@@ -35470,9 +35478,10 @@ export namespace Prisma {
     serviceId?: boolean
     packageTitle?: boolean
     price?: boolean
+    deliveryTime?: boolean
   }
 
-  export type ServicePackageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "serviceId" | "packageTitle" | "price", ExtArgs["result"]["servicePackage"]>
+  export type ServicePackageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "serviceId" | "packageTitle" | "price" | "deliveryTime", ExtArgs["result"]["servicePackage"]>
   export type ServicePackageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     service?: boolean | ServiceDefaultArgs<ExtArgs>
     features?: boolean | ServicePackage$featuresArgs<ExtArgs>
@@ -35490,6 +35499,7 @@ export namespace Prisma {
       serviceId: number
       packageTitle: string
       price: number
+      deliveryTime: string | null
     }, ExtArgs["result"]["servicePackage"]>
     composites: {}
   }
@@ -35865,6 +35875,7 @@ export namespace Prisma {
     readonly serviceId: FieldRef<"ServicePackage", 'Int'>
     readonly packageTitle: FieldRef<"ServicePackage", 'String'>
     readonly price: FieldRef<"ServicePackage", 'Float'>
+    readonly deliveryTime: FieldRef<"ServicePackage", 'String'>
   }
     
 
@@ -50188,7 +50199,8 @@ export namespace Prisma {
     id: 'id',
     serviceId: 'serviceId',
     packageTitle: 'packageTitle',
-    price: 'price'
+    price: 'price',
+    deliveryTime: 'deliveryTime'
   };
 
   export type ServicePackageScalarFieldEnum = (typeof ServicePackageScalarFieldEnum)[keyof typeof ServicePackageScalarFieldEnum]
@@ -50676,7 +50688,8 @@ export namespace Prisma {
 
 
   export const ServicePackageOrderByRelevanceFieldEnum: {
-    packageTitle: 'packageTitle'
+    packageTitle: 'packageTitle',
+    deliveryTime: 'deliveryTime'
   };
 
   export type ServicePackageOrderByRelevanceFieldEnum = (typeof ServicePackageOrderByRelevanceFieldEnum)[keyof typeof ServicePackageOrderByRelevanceFieldEnum]
@@ -53022,6 +53035,7 @@ export namespace Prisma {
     serviceId?: IntFilter<"ServicePackage"> | number
     packageTitle?: StringFilter<"ServicePackage"> | string
     price?: FloatFilter<"ServicePackage"> | number
+    deliveryTime?: StringNullableFilter<"ServicePackage"> | string | null
     service?: XOR<ServiceScalarRelationFilter, ServiceWhereInput>
     features?: ServicePackageFeatureListRelationFilter
   }
@@ -53031,6 +53045,7 @@ export namespace Prisma {
     serviceId?: SortOrder
     packageTitle?: SortOrder
     price?: SortOrder
+    deliveryTime?: SortOrderInput | SortOrder
     service?: ServiceOrderByWithRelationInput
     features?: ServicePackageFeatureOrderByRelationAggregateInput
     _relevance?: ServicePackageOrderByRelevanceInput
@@ -53044,6 +53059,7 @@ export namespace Prisma {
     serviceId?: IntFilter<"ServicePackage"> | number
     packageTitle?: StringFilter<"ServicePackage"> | string
     price?: FloatFilter<"ServicePackage"> | number
+    deliveryTime?: StringNullableFilter<"ServicePackage"> | string | null
     service?: XOR<ServiceScalarRelationFilter, ServiceWhereInput>
     features?: ServicePackageFeatureListRelationFilter
   }, "id">
@@ -53053,6 +53069,7 @@ export namespace Prisma {
     serviceId?: SortOrder
     packageTitle?: SortOrder
     price?: SortOrder
+    deliveryTime?: SortOrderInput | SortOrder
     _count?: ServicePackageCountOrderByAggregateInput
     _avg?: ServicePackageAvgOrderByAggregateInput
     _max?: ServicePackageMaxOrderByAggregateInput
@@ -53068,6 +53085,7 @@ export namespace Prisma {
     serviceId?: IntWithAggregatesFilter<"ServicePackage"> | number
     packageTitle?: StringWithAggregatesFilter<"ServicePackage"> | string
     price?: FloatWithAggregatesFilter<"ServicePackage"> | number
+    deliveryTime?: StringNullableWithAggregatesFilter<"ServicePackage"> | string | null
   }
 
   export type ServicePackageFeatureWhereInput = {
@@ -56222,6 +56240,7 @@ export namespace Prisma {
   export type ServicePackageCreateInput = {
     packageTitle: string
     price: number
+    deliveryTime?: string | null
     service: ServiceCreateNestedOneWithoutPackagesInput
     features?: ServicePackageFeatureCreateNestedManyWithoutServicePackageInput
   }
@@ -56231,12 +56250,14 @@ export namespace Prisma {
     serviceId: number
     packageTitle: string
     price: number
+    deliveryTime?: string | null
     features?: ServicePackageFeatureUncheckedCreateNestedManyWithoutServicePackageInput
   }
 
   export type ServicePackageUpdateInput = {
     packageTitle?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
+    deliveryTime?: NullableStringFieldUpdateOperationsInput | string | null
     service?: ServiceUpdateOneRequiredWithoutPackagesNestedInput
     features?: ServicePackageFeatureUpdateManyWithoutServicePackageNestedInput
   }
@@ -56246,6 +56267,7 @@ export namespace Prisma {
     serviceId?: IntFieldUpdateOperationsInput | number
     packageTitle?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
+    deliveryTime?: NullableStringFieldUpdateOperationsInput | string | null
     features?: ServicePackageFeatureUncheckedUpdateManyWithoutServicePackageNestedInput
   }
 
@@ -56254,11 +56276,13 @@ export namespace Prisma {
     serviceId: number
     packageTitle: string
     price: number
+    deliveryTime?: string | null
   }
 
   export type ServicePackageUpdateManyMutationInput = {
     packageTitle?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
+    deliveryTime?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ServicePackageUncheckedUpdateManyInput = {
@@ -56266,6 +56290,7 @@ export namespace Prisma {
     serviceId?: IntFieldUpdateOperationsInput | number
     packageTitle?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
+    deliveryTime?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ServicePackageFeatureCreateInput = {
@@ -59166,6 +59191,7 @@ export namespace Prisma {
     serviceId?: SortOrder
     packageTitle?: SortOrder
     price?: SortOrder
+    deliveryTime?: SortOrder
   }
 
   export type ServicePackageAvgOrderByAggregateInput = {
@@ -59179,6 +59205,7 @@ export namespace Prisma {
     serviceId?: SortOrder
     packageTitle?: SortOrder
     price?: SortOrder
+    deliveryTime?: SortOrder
   }
 
   export type ServicePackageMinOrderByAggregateInput = {
@@ -59186,6 +59213,7 @@ export namespace Prisma {
     serviceId?: SortOrder
     packageTitle?: SortOrder
     price?: SortOrder
+    deliveryTime?: SortOrder
   }
 
   export type ServicePackageSumOrderByAggregateInput = {
@@ -63730,6 +63758,7 @@ export namespace Prisma {
   export type ServicePackageCreateWithoutServiceInput = {
     packageTitle: string
     price: number
+    deliveryTime?: string | null
     features?: ServicePackageFeatureCreateNestedManyWithoutServicePackageInput
   }
 
@@ -63737,6 +63766,7 @@ export namespace Prisma {
     id?: number
     packageTitle: string
     price: number
+    deliveryTime?: string | null
     features?: ServicePackageFeatureUncheckedCreateNestedManyWithoutServicePackageInput
   }
 
@@ -63823,6 +63853,7 @@ export namespace Prisma {
     serviceId?: IntFilter<"ServicePackage"> | number
     packageTitle?: StringFilter<"ServicePackage"> | string
     price?: FloatFilter<"ServicePackage"> | number
+    deliveryTime?: StringNullableFilter<"ServicePackage"> | string | null
   }
 
   export type TransactionUpsertWithWhereUniqueWithoutServiceInput = {
@@ -63942,6 +63973,7 @@ export namespace Prisma {
   export type ServicePackageCreateWithoutFeaturesInput = {
     packageTitle: string
     price: number
+    deliveryTime?: string | null
     service: ServiceCreateNestedOneWithoutPackagesInput
   }
 
@@ -63950,6 +63982,7 @@ export namespace Prisma {
     serviceId: number
     packageTitle: string
     price: number
+    deliveryTime?: string | null
   }
 
   export type ServicePackageCreateOrConnectWithoutFeaturesInput = {
@@ -63971,6 +64004,7 @@ export namespace Prisma {
   export type ServicePackageUpdateWithoutFeaturesInput = {
     packageTitle?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
+    deliveryTime?: NullableStringFieldUpdateOperationsInput | string | null
     service?: ServiceUpdateOneRequiredWithoutPackagesNestedInput
   }
 
@@ -63979,6 +64013,7 @@ export namespace Prisma {
     serviceId?: IntFieldUpdateOperationsInput | number
     packageTitle?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
+    deliveryTime?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UserCreateWithoutDeviceTokensInput = {
@@ -65376,6 +65411,7 @@ export namespace Prisma {
     id?: number
     packageTitle: string
     price: number
+    deliveryTime?: string | null
   }
 
   export type TransactionCreateManyServiceInput = {
@@ -65401,6 +65437,7 @@ export namespace Prisma {
   export type ServicePackageUpdateWithoutServiceInput = {
     packageTitle?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
+    deliveryTime?: NullableStringFieldUpdateOperationsInput | string | null
     features?: ServicePackageFeatureUpdateManyWithoutServicePackageNestedInput
   }
 
@@ -65408,6 +65445,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     packageTitle?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
+    deliveryTime?: NullableStringFieldUpdateOperationsInput | string | null
     features?: ServicePackageFeatureUncheckedUpdateManyWithoutServicePackageNestedInput
   }
 
@@ -65415,6 +65453,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     packageTitle?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
+    deliveryTime?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type TransactionUpdateWithoutServiceInput = {

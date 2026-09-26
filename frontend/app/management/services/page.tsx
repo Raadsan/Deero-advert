@@ -18,6 +18,7 @@ type Service = any;
 interface Package {
   packageTitle: string;
   price: number | string;
+  deliveryTime?: string;
   features: string[];
 }
 
@@ -82,7 +83,7 @@ export default function AdminServicesPage() {
   const addPackage = () => {
     setFormData((prev) => ({
       ...prev,
-      packages: [...prev.packages, { packageTitle: "", price: "", features: [""] }],
+      packages: [...prev.packages, { packageTitle: "", price: "", deliveryTime: "", features: [""] }],
     }));
   };
 
@@ -176,6 +177,7 @@ export default function AdminServicesPage() {
         return {
           packageTitle: pkg.packageTitle.trim(),
           price: priceNum,
+          deliveryTime: (pkg.deliveryTime || "").trim() || null,
           features: features,
         };
       });
@@ -252,6 +254,7 @@ export default function AdminServicesPage() {
       const packages = (row.packages || []).map((pkg: any) => ({
         packageTitle: pkg.packageTitle || "",
         price: pkg.price || "",
+        deliveryTime: pkg.deliveryTime || "",
         features: Array.isArray(pkg.features) ? pkg.features : [],
       }));
 
@@ -260,7 +263,7 @@ export default function AdminServicesPage() {
         sortOrder: row.sortOrder ?? 0,
         serviceIcon: null,
         serviceIconPreview: row.serviceIcon || "",
-        packages: packages.length > 0 ? packages : [{ packageTitle: "", price: "", features: [""] }],
+        packages: packages.length > 0 ? packages : [{ packageTitle: "", price: "", deliveryTime: "", features: [""] }],
       });
       setIsModalOpen(true);
     } catch (err) {
@@ -357,7 +360,7 @@ export default function AdminServicesPage() {
             sortOrder: rows.length,
             serviceIcon: null,
             serviceIconPreview: "",
-            packages: [{ packageTitle: "", price: "", features: [""] }],
+            packages: [{ packageTitle: "", price: "", deliveryTime: "", features: [""] }],
           });
         }}
         onRefresh={fetchData}
@@ -539,6 +542,19 @@ export default function AdminServicesPage() {
                     </div>
                   </div>
 
+                  <div className="space-y-0.5">
+                    <label className="text-[10px] text-gray-600">Delivery Time</label>
+                    <input
+                      type="text"
+                      value={pkg.deliveryTime || ""}
+                      onChange={(e) =>
+                        updatePackage(pkgIndex, "deliveryTime", e.target.value)
+                      }
+                      placeholder="e.g., 3-5 days, 1 week"
+                      className="w-full px-2 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#EB4724] focus:border-[#EB4724]"
+                    />
+                  </div>
+
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
                       <label className="text-[10px] text-gray-600">Features *</label>
@@ -642,6 +658,11 @@ export default function AdminServicesPage() {
                   <h4 className="text-sm font-semibold text-gray-800">{pkg.packageTitle}</h4>
                   <span className="text-sm font-bold text-[#651313]">${pkg.price}</span>
                 </div>
+                {pkg.deliveryTime && (
+                  <p className="text-xs text-gray-500">
+                    Delivery: <span className="font-medium text-gray-700">{pkg.deliveryTime}</span>
+                  </p>
+                )}
                 {Array.isArray(pkg.features) && pkg.features.length > 0 && (
                   <ul className="space-y-1 mt-2">
                     {pkg.features.map((f: string, fi: number) => (

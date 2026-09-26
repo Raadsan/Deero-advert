@@ -372,6 +372,7 @@ model ServicePackage {
   service      Service                 @relation(fields: [serviceId], references: [id])
   packageTitle String
   price        Float
+  deliveryTime String?
   features     ServicePackageFeature[]
 }
 

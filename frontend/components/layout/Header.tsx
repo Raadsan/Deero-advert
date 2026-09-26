@@ -19,14 +19,15 @@ const navLinks = [
     label: "Services",
     href: "#",
     subLinks: [
+      
+      {
+        label: "Packages",
+        href: "/Packages"
+      },
       {
         label: "Hosting & Domains",
         href: "/hosting"
       },
-      {
-        label: "Packages",
-        href: "/shop"
-      }
     ]
   },
   { label: "Portfolio", href: "/portfolio" },

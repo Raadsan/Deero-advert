@@ -8,7 +8,7 @@ import Footer from "@/components/layout/Footer";
 import ServicesHero from "@/components/services/ServicesHero";
 import ServicesContent from "@/components/services/ServicesContent";
 
-export default function ShopServicePage({ params }: { params: Promise<{ slug: string }> }) {
+export default function PackagesServicePage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = use(params);
 
     return (

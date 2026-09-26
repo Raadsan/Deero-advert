@@ -61,6 +61,16 @@ const nextConfig: NextConfig = {
         destination: '/user/domains',
         permanent: true,
       },
+      {
+        source: '/shop',
+        destination: '/Packages',
+        permanent: true,
+      },
+      {
+        source: '/shop/:slug',
+        destination: '/Packages/:slug',
+        permanent: true,
+      },
     ];
   },
   async rewrites() {

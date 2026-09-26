@@ -64,7 +64,7 @@ export default function ServicesContent({
     const { toggleCartItem, isInCart } = useCart();
     const pathname = usePathname();
     const router = useRouter();
-    const isServicesPage = pathname?.startsWith("/services") || pathname?.startsWith("/shop");
+    const isServicesPage = pathname?.startsWith("/services") || pathname?.toLowerCase().startsWith("/packages");
 
     const [groupedServices, setGroupedServices] = useState<Service[]>([]);
     const [loading, setLoading] = useState(true);
@@ -193,7 +193,7 @@ export default function ServicesContent({
 
     const handleServiceClick = (service: Service) => {
         const slug = getServiceSlug(service.serviceTitle || "service");
-        router.push(`/shop/${slug}`);
+        router.push(`/Packages/${slug}`);
     };
 
     const handlePurchaseClick = (pkg: any, service: Service) => {
@@ -387,6 +387,14 @@ export default function ServicesContent({
                                                                  <span className="text-5xl font-bold text-[#EB4724]">${getDiscountedPrice(pkg, service).finalPrice.toFixed(2)}</span>
                                                              </div>
 
+                                                            {pkg.deliveryTime && (
+                                                                <p className="flex items-center gap-2 text-sm font-medium text-[#4d0e0e]/70 mb-4">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 text-[#EB4724]">
+                                                                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clipRule="evenodd" />
+                                                                    </svg>
+                                                                    Delivery: {pkg.deliveryTime}
+                                                                </p>
+                                                            )}
 
                                                             <div className="flex-1">
                                                                 <ul className="space-y-4 mb-6">

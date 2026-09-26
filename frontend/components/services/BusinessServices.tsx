@@ -10,12 +10,13 @@ import {
     ArrowRight
 } from "lucide-react";
 
+// Slugs must match API serviceTitle → /Packages/[slug] (same as ServicesContent getServiceSlug)
 const businessServices = [
     {
         title: "Marketing and Campaign Strategy",
         intro: "We provide comprehensive marketing and campaign strategy services.",
         outro: "We help businesses develop effective marketing strategies that increase brand awareness, engage customers, and drive business growth.",
-        slug: "marketing-and-campaign-strategy",
+        slug: "marketing-and-strategy",
         includes: [
             "Market Research", "Marketing Planning",
             "Brand Development", "Campaign Planning",
@@ -66,7 +67,7 @@ const businessServices = [
         title: "Video Production & Motion Graphics",
         intro: "We provide professional video production and motion graphics services.",
         outro: "We create engaging visual content that strengthens brands, enhances audience engagement, and supports sustainable business growth.",
-        slug: "video-production-and-motion-graphics",
+        slug: "video-and-motion-graphics",
         includes: [
             "Corporate Videos", "Motion Graphics",
             "Infographic Videos", "Animated Explainer Videos",
@@ -79,7 +80,7 @@ const businessServices = [
         title: "Event Branding and Promotion",
         intro: "We provide comprehensive event branding and promotion services.",
         outro: "We help clients plan, promote, and manage successful events through professional consultation, creative solutions, and seamless execution.",
-        slug: "event-branding-and-promotion",
+        slug: "event-branding",
         includes: [
             "Event Identity & Brand Design", "Event Digital Strategy",
             "Social Media Branding", "Marketing Campaigns",
@@ -104,11 +105,11 @@ export default function BusinessServices() {
                         const Icon = service.icon;
                         const isEven = index % 2 === 0;
                         const iconBg = isEven ? "bg-[#651313]" : "bg-[#EB4724]";
-                        const numberStr = String(index + 1).padStart(2, '0');
 
                         return (
-                            <article
+                            <Link
                                 key={service.title}
+                                href={`/Packages/${service.slug}`}
                                 className="group rounded-[1.5rem] border border-[#fdb494]/30 bg-white p-7 md:p-9 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-[#EB4724]/40 flex flex-col"
                             >
                                 {/* Header */}
@@ -170,14 +171,13 @@ export default function BusinessServices() {
                                 </p>
 
                                 {/* CTA Button */}
-                                <Link
-                                    href={`/shop/${service.slug}`}
-                                    className="mt-5 flex items-center justify-center gap-2 rounded-xl bg-[#651313] px-5 py-2.5 text-[13px] font-semibold text-white transition-all duration-300 hover:bg-[#EB4724] hover:gap-3 group/btn"
+                                <span
+                                    className="mt-5 flex items-center justify-center gap-2 rounded-xl bg-[#651313] px-5 py-2.5 text-[13px] font-semibold text-white transition-all duration-300 group-hover:bg-[#EB4724] group-hover:gap-3"
                                 >
                                     View
-                                    <ArrowRight size={15} className="transition-transform duration-300 group-hover/btn:translate-x-1" />
-                                </Link>
-                            </article>
+                                    <ArrowRight size={15} className="transition-transform duration-300 group-hover:translate-x-1" />
+                                </span>
+                            </Link>
                         );
                     })}
                 </div>

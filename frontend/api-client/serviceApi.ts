@@ -8,6 +8,7 @@ export interface Service {
   packages?: {
     packageTitle: string;
     price: number;
+    deliveryTime?: string | null;
     features: string[];
     _id?: string;
     id?: string | number;
