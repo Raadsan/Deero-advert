@@ -29,12 +29,20 @@ export default function ProtectedRoute({
             const user = getUser();
 
             if (!token || !user) {
+                if (isMounted) {
+                    setIsAuthorized(false);
+                    setIsLoading(false);
+                }
                 router.push("/login");
                 return;
             }
 
             if (requiredRole === "staff") {
                 if (!isStaff()) {
+                    if (isMounted) {
+                        setIsAuthorized(false);
+                        setIsLoading(false);
+                    }
                     router.push("/");
                     return;
                 }
@@ -42,12 +50,20 @@ export default function ProtectedRoute({
                 if (enforceMenuAccess) {
                     const allowed = await canAccessStaffPath(pathname || "/dashboard");
                     if (!allowed) {
+                        if (isMounted) {
+                            setIsAuthorized(false);
+                            setIsLoading(false);
+                        }
                         router.push("/dashboard");
                         return;
                     }
                 }
             } else if (requiredRole === "user") {
                 if (!isUser()) {
+                    if (isMounted) {
+                        setIsAuthorized(false);
+                        setIsLoading(false);
+                    }
                     router.push("/dashboard");
                     return;
                 }
@@ -59,8 +75,8 @@ export default function ProtectedRoute({
             }
         };
 
-        setIsLoading(true);
-        setIsAuthorized(false);
+        // Keep the shell mounted across navigations — only the first auth check
+        // shows the full-page loader. Path changes re-check access in place.
         checkAuth();
 
         return () => {

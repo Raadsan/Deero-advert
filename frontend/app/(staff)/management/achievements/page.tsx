@@ -243,9 +243,10 @@ export default function AchievementsPage() {
                 Count <span className="text-red-500">*</span>
               </label>
               <input
-                type="number"
+                type="text"
                 name="count"
                 required
+                placeholder="e.g. 7+ Years"
                 value={formData.count}
                 onChange={handleInputChange}
                 className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#EB4724] focus:border-[#EB4724]"

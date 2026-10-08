@@ -259,7 +259,7 @@ export default function CompanyContactPage() {
                             onChange={(e) => setValuesText(e.target.value)}
                             placeholder={
                                 editingType === "phone"
-                                    ? "+252 618 553566\n+252 615 123456"
+                                    ? "+252 61 8553839\n+252 618 55 36 33"
                                     : editingType === "email"
                                     ? "info@example.com\nsupport@example.com"
                                     : "Enter full address..."

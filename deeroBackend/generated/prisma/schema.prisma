@@ -173,7 +173,7 @@ model CaseStudy {
 model Achievement {
   id        Int      @id @default(autoincrement())
   title     String
-  count     Int
+  count     String
   icon      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

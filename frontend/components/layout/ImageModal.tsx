@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 
 interface ImageModalProps {
@@ -14,39 +14,27 @@ interface ImageModalProps {
 }
 
 const ImageModal = ({ isOpen, onClose, children, onNext, onPrev, hasNext, hasPrev }: ImageModalProps) => {
-    const modalRef = useRef<HTMLDivElement>(null);
-
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.key === "Escape") onClose();
             if (e.key === "ArrowRight" && onNext && hasNext) onNext();
             if (e.key === "ArrowLeft" && onPrev && hasPrev) onPrev();
         };
 
         if (isOpen) {
             document.addEventListener("keydown", handleKeyDown);
-            document.body.style.overflow = "hidden"; // Prevent scrolling when modal is open
+            document.body.style.overflow = "hidden";
         }
 
         return () => {
             document.removeEventListener("keydown", handleKeyDown);
             document.body.style.overflow = "unset";
         };
-    }, [isOpen, onClose, onNext, onPrev, hasNext, hasPrev]);
+    }, [isOpen, onNext, onPrev, hasNext, hasPrev]);
 
     if (!isOpen) return null;
 
-    const handleBackdropClick = (e: React.MouseEvent) => {
-        if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
-            onClose();
-        }
-    };
-
     return (
-        <div
-            className="fixed inset-0 z-[60] flex items-center justify-center bg-black/90 backdrop-blur-sm p-4 animate-in fade-in duration-200"
-            onClick={handleBackdropClick}
-        >
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/90 backdrop-blur-sm p-4 animate-in fade-in duration-200">
             <button
                 onClick={onClose}
                 className="absolute top-4 right-4 z-[70] p-2 bg-black/50 hover:bg-black/80 rounded-full text-white transition-colors"
@@ -55,11 +43,7 @@ const ImageModal = ({ isOpen, onClose, children, onNext, onPrev, hasNext, hasPre
                 <X className="h-6 w-6" />
             </button>
 
-            <div
-                ref={modalRef}
-                className="relative max-w-[95vw] max-h-[95vh] flex items-center justify-center outline-none animate-in zoom-in-95 duration-200"
-            >
-                {/* Navigation Buttons */}
+            <div className="relative max-w-[95vw] max-h-[95vh] flex items-center justify-center outline-none animate-in zoom-in-95 duration-200">
                 {hasPrev && onPrev && (
                     <button
                         onClick={(e) => {
@@ -93,4 +77,3 @@ const ImageModal = ({ isOpen, onClose, children, onNext, onPrev, hasNext, hasPre
 };
 
 export default ImageModal;
-

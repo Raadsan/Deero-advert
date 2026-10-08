@@ -43,10 +43,6 @@ const navLinks = [
   { label: "Contact", href: "/contact" },
 ];
 
-const handleOpenBooking = () => {
-  window.dispatchEvent(new Event("openConsultationModal"));
-};
-
 export default function Header() {
   const { cartItems } = useCart();
   const [open, setOpen] = useState(false);
@@ -173,7 +169,7 @@ export default function Header() {
 
       {/* Top bar */}
       <div className="flex flex-wrap md:flex-nowrap items-center justify-center gap-3 bg-[#651313] py-1.5 text-sm font-medium text-white sm:px-6 md:gap-6 md:py-2 md:text-base leading-tight">
-        <span className="text-base md:text-lg">+252 61 8553566</span>
+        <a href="tel:+252618553839" className="text-base md:text-lg hover:underline">+252 61 8553839</a>
         <span className="hidden sm:inline">|</span>
         <a href="mailto:info@advert.deero.so" className="underline-offset-2 hover:underline">
           info@advert.deero.so
@@ -186,12 +182,9 @@ export default function Header() {
           <span className="hidden sm:inline">|</span>
           <Link href="/careers" className="transition hover:text-[#EB4724]">Career</Link>
           <span className="hidden sm:inline">|</span>
-          <button
-            onClick={handleOpenBooking}
-            className="transition hover:text-[#EB4724] font-semibold"
-          >
+          <Link href="/free-booking" className="transition hover:text-[#EB4724] font-semibold">
             Free Booking
-          </button>
+          </Link>
         </div>
       </div>
 
@@ -464,12 +457,13 @@ export default function Header() {
               })}
 
               {/* Mobile Booking Button */}
-              <button
-                onClick={() => { setOpen(false); handleOpenBooking(); }}
+              <Link
+                href="/free-booking"
+                onClick={() => setOpen(false)}
                 className="rounded-md px-2 py-2 transition text-[#651313] hover:bg-[#651313]/5 hover:text-[#EB4724] font-semibold text-left"
               >
                 Free Booking
-              </button>
+              </Link>
 
               {isLoggedIn ? (
                 <div className="flex flex-col gap-3 mt-2 pt-2 border-t border-gray-100">

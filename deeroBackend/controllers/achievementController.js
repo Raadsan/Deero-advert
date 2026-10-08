@@ -6,11 +6,8 @@ export const addAchievement = async (req, res) => {
     const { title, count } = req.body;
 
     if (!title) return res.status(400).json({ message: "Title is required", success: false });
-    if (count === undefined || count === null || count === "") return res.status(400).json({ message: "Count is required", success: false });
-
-    let countNumber = Number(count);
-    if (isNaN(countNumber) || !isFinite(countNumber)) {
-      return res.status(400).json({ message: `Count must be a valid number. Received: "${count}"`, success: false });
+    if (count === undefined || count === null || String(count).trim() === "") {
+      return res.status(400).json({ message: "Count is required", success: false });
     }
 
     if (!req.file) return res.status(400).json({ message: "Icon image is required", success: false });
@@ -18,7 +15,7 @@ export const addAchievement = async (req, res) => {
     const achievement = await prisma.achievement.create({
       data: {
         title: title.trim(),
-        count: countNumber,
+        count: String(count).trim(),
         icon: req.file.path.replace(/\\/g, "/"),
       },
     });
@@ -63,12 +60,8 @@ export const updateAchievement = async (req, res) => {
 
     const data = {};
     if (title !== undefined) data.title = title.trim();
-    if (count !== undefined && count !== null && count !== "") {
-      let countNumber = Number(count);
-      if (isNaN(countNumber) || !isFinite(countNumber)) {
-        return res.status(400).json({ message: `Count must be a valid number.`, success: false });
-      }
-      data.count = countNumber;
+    if (count !== undefined && count !== null && String(count).trim() !== "") {
+      data.count = String(count).trim();
     }
 
     if (req.file) data.icon = req.file.path.replace(/\\/g, "/");

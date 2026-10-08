@@ -31,8 +31,8 @@ import {
 import Image from "next/image";
 import { logout } from "@/api-client/authApi";
 import { useEffect, useState } from "react";
-import { getUserMenus } from "@/api-client/menuApi";
 import { getUser, normalizeStaffMenuUrl } from "@/utils/auth";
+import { getCachedStaffMenus, loadStaffMenus } from "@/utils/menuAccess";
 import { Menu } from "@/types/menu";
 import { Users as UsersIcon } from "lucide-react"; // Rename to avoid confusion with the mapping
 
@@ -92,8 +92,9 @@ const iconMap: Record<string, LucideIcon> = {
 export default function UnifiedSidebar({ isOpen, onClose }: { isOpen?: boolean; onClose?: () => void }) {
     const pathname = usePathname();
     const router = useRouter();
-    const [menus, setMenus] = useState<Menu[]>([]);
-    const [loading, setLoading] = useState(true);
+    const cachedMenus = getCachedStaffMenus();
+    const [menus, setMenus] = useState<Menu[]>(cachedMenus || []);
+    const [loading, setLoading] = useState(!cachedMenus);
     const [error, setError] = useState<string | null>(null);
     const [expandedMenuId, setExpandedMenuId] = useState<string | null>(null);
 
@@ -101,11 +102,6 @@ export default function UnifiedSidebar({ isOpen, onClose }: { isOpen?: boolean; 
         let isMounted = true;
         const fetchMenus = async () => {
             try {
-                if (isMounted) {
-                    setLoading(true);
-                    setError(null);
-                }
-
                 const user = getUser();
                 if (!user) {
                     if (isMounted) {
@@ -129,25 +125,17 @@ export default function UnifiedSidebar({ isOpen, onClose }: { isOpen?: boolean; 
                     return;
                 }
 
-                // Try to get menus for this role
-                try {
-                    const response = await getUserMenus(typeof roleId === 'object' ? roleId._id : roleId);
-                    if (isMounted) {
-                        if (response && response.menus) {
-                            // Filter out Domain Management from menus and submenus
-                            const filteredMenus = response.menus.filter((m: Menu) =>
-                                m.title !== "Domain Managment" && m.title !== "Domain Management"
-                            ).map((m: Menu) => ({
-                                ...m,
-                                subMenus: m.subMenus.filter((sm: any) =>
-                                    sm.title !== "Domain Managment" && sm.title !== "Domain Management"
-                                )
-                            }));
+                // Only show loading if we have nothing cached to display
+                if (isMounted && !getCachedStaffMenus()) {
+                    setLoading(true);
+                    setError(null);
+                }
 
-                            setMenus(filteredMenus);
-                        } else {
-                            setMenus([]);
-                        }
+                try {
+                    const nextMenus = await loadStaffMenus();
+                    if (isMounted) {
+                        setMenus(nextMenus);
+                        setError(null);
                     }
                 } catch (innerErr: any) {
                     if (innerErr.code === "ERR_CANCELED" || innerErr.name === "CanceledError") {
@@ -158,7 +146,9 @@ export default function UnifiedSidebar({ isOpen, onClose }: { isOpen?: boolean; 
 
             } catch (err: any) {
                 console.error("Error fetching menus:", err);
-                if (isMounted) setError(err.message || "Failed to load menus");
+                if (isMounted && !getCachedStaffMenus()) {
+                    setError(err.message || "Failed to load menus");
+                }
             } finally {
                 if (isMounted) setLoading(false);
             }

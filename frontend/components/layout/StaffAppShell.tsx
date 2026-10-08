@@ -5,7 +5,7 @@ import UnifiedSidebar from "@/components/layout/UnifiedSidebar";
 import UnifiedHeader from "@/components/layout/UnifiedHeader";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 
-export default function ManagementLayout({
+export default function StaffAppShell({
     children,
 }: {
     children: React.ReactNode;
@@ -27,4 +27,3 @@ export default function ManagementLayout({
         </ProtectedRoute>
     );
 }
-

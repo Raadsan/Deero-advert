@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, CalendarCheck, CheckCircle2, ArrowRight } from "lucide-react";
 import toast from "react-hot-toast";
@@ -12,6 +13,8 @@ const DISMISSED_KEY = "consultationModalDismissed";
 const SESSION_KEY = "consultationModalShown";
 
 export default function ConsultationModal() {
+  const pathname = usePathname();
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -22,7 +25,17 @@ export default function ConsultationModal() {
     service: "",
   });
 
+  // Open booking form when visiting /free-booking
   useEffect(() => {
+    if (pathname === "/free-booking") {
+      setIsOpen(true);
+    }
+  }, [pathname]);
+
+  useEffect(() => {
+    // Dedicated booking URL always opens the form
+    if (pathname === "/free-booking") return;
+
     // If permanently dismissed by user, never show again
     if (localStorage.getItem(DISMISSED_KEY)) return;
 
@@ -42,9 +55,9 @@ export default function ConsultationModal() {
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []); // Runs once per mount — sessionStorage handles per-tab logic
+  }, [pathname]);
 
-  // Always open modal when the header "Free Booking" button is clicked
+  // Always open modal when "Book a Free Consultation" (or similar) is clicked
   useEffect(() => {
     const handleForceOpen = () => setIsOpen(true);
     window.addEventListener("openConsultationModal", handleForceOpen);
@@ -55,6 +68,9 @@ export default function ConsultationModal() {
     // Mark as permanently dismissed in localStorage
     localStorage.setItem(DISMISSED_KEY, "true");
     setIsOpen(false);
+    if (pathname === "/free-booking") {
+      router.push("/");
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -87,6 +103,9 @@ export default function ConsultationModal() {
         localStorage.setItem(DISMISSED_KEY, "true");
         setIsOpen(false);
         setFormData({ name: "", phone: "", email: "", location: "", service: "" });
+        if (pathname === "/free-booking") {
+          router.push("/");
+        }
       } else {
         toast.error(res.error || "Failed to book. Please try again.");
       }

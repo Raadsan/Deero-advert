@@ -18241,18 +18241,16 @@ export namespace Prisma {
 
   export type AchievementAvgAggregateOutputType = {
     id: number | null
-    count: number | null
   }
 
   export type AchievementSumAggregateOutputType = {
     id: number | null
-    count: number | null
   }
 
   export type AchievementMinAggregateOutputType = {
     id: number | null
     title: string | null
-    count: number | null
+    count: string | null
     icon: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -18261,7 +18259,7 @@ export namespace Prisma {
   export type AchievementMaxAggregateOutputType = {
     id: number | null
     title: string | null
-    count: number | null
+    count: string | null
     icon: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -18280,12 +18278,10 @@ export namespace Prisma {
 
   export type AchievementAvgAggregateInputType = {
     id?: true
-    count?: true
   }
 
   export type AchievementSumAggregateInputType = {
     id?: true
-    count?: true
   }
 
   export type AchievementMinAggregateInputType = {
@@ -18405,7 +18401,7 @@ export namespace Prisma {
   export type AchievementGroupByOutputType = {
     id: number
     title: string
-    count: number
+    count: string
     icon: string
     createdAt: Date
     updatedAt: Date
@@ -18458,7 +18454,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: number
       title: string
-      count: number
+      count: string
       icon: string
       createdAt: Date
       updatedAt: Date
@@ -18833,7 +18829,7 @@ export namespace Prisma {
   interface AchievementFieldRefs {
     readonly id: FieldRef<"Achievement", 'Int'>
     readonly title: FieldRef<"Achievement", 'String'>
-    readonly count: FieldRef<"Achievement", 'Int'>
+    readonly count: FieldRef<"Achievement", 'String'>
     readonly icon: FieldRef<"Achievement", 'String'>
     readonly createdAt: FieldRef<"Achievement", 'DateTime'>
     readonly updatedAt: FieldRef<"Achievement", 'DateTime'>
@@ -50530,6 +50526,7 @@ export namespace Prisma {
 
   export const AchievementOrderByRelevanceFieldEnum: {
     title: 'title',
+    count: 'count',
     icon: 'icon'
   };
 
@@ -51828,7 +51825,7 @@ export namespace Prisma {
     NOT?: AchievementWhereInput | AchievementWhereInput[]
     id?: IntFilter<"Achievement"> | number
     title?: StringFilter<"Achievement"> | string
-    count?: IntFilter<"Achievement"> | number
+    count?: StringFilter<"Achievement"> | string
     icon?: StringFilter<"Achievement"> | string
     createdAt?: DateTimeFilter<"Achievement"> | Date | string
     updatedAt?: DateTimeFilter<"Achievement"> | Date | string
@@ -51850,7 +51847,7 @@ export namespace Prisma {
     OR?: AchievementWhereInput[]
     NOT?: AchievementWhereInput | AchievementWhereInput[]
     title?: StringFilter<"Achievement"> | string
-    count?: IntFilter<"Achievement"> | number
+    count?: StringFilter<"Achievement"> | string
     icon?: StringFilter<"Achievement"> | string
     createdAt?: DateTimeFilter<"Achievement"> | Date | string
     updatedAt?: DateTimeFilter<"Achievement"> | Date | string
@@ -51876,7 +51873,7 @@ export namespace Prisma {
     NOT?: AchievementScalarWhereWithAggregatesInput | AchievementScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"Achievement"> | number
     title?: StringWithAggregatesFilter<"Achievement"> | string
-    count?: IntWithAggregatesFilter<"Achievement"> | number
+    count?: StringWithAggregatesFilter<"Achievement"> | string
     icon?: StringWithAggregatesFilter<"Achievement"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Achievement"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Achievement"> | Date | string
@@ -55003,7 +55000,7 @@ export namespace Prisma {
 
   export type AchievementCreateInput = {
     title: string
-    count: number
+    count: string
     icon: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -55012,7 +55009,7 @@ export namespace Prisma {
   export type AchievementUncheckedCreateInput = {
     id?: number
     title: string
-    count: number
+    count: string
     icon: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -55020,7 +55017,7 @@ export namespace Prisma {
 
   export type AchievementUpdateInput = {
     title?: StringFieldUpdateOperationsInput | string
-    count?: IntFieldUpdateOperationsInput | number
+    count?: StringFieldUpdateOperationsInput | string
     icon?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -55029,7 +55026,7 @@ export namespace Prisma {
   export type AchievementUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
-    count?: IntFieldUpdateOperationsInput | number
+    count?: StringFieldUpdateOperationsInput | string
     icon?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -55038,7 +55035,7 @@ export namespace Prisma {
   export type AchievementCreateManyInput = {
     id?: number
     title: string
-    count: number
+    count: string
     icon: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -55046,7 +55043,7 @@ export namespace Prisma {
 
   export type AchievementUpdateManyMutationInput = {
     title?: StringFieldUpdateOperationsInput | string
-    count?: IntFieldUpdateOperationsInput | number
+    count?: StringFieldUpdateOperationsInput | string
     icon?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -55055,7 +55052,7 @@ export namespace Prisma {
   export type AchievementUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
-    count?: IntFieldUpdateOperationsInput | number
+    count?: StringFieldUpdateOperationsInput | string
     icon?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -58260,7 +58257,6 @@ export namespace Prisma {
 
   export type AchievementAvgOrderByAggregateInput = {
     id?: SortOrder
-    count?: SortOrder
   }
 
   export type AchievementMaxOrderByAggregateInput = {
@@ -58283,7 +58279,6 @@ export namespace Prisma {
 
   export type AchievementSumOrderByAggregateInput = {
     id?: SortOrder
-    count?: SortOrder
   }
 
   export type AnnouncementOrderByRelevanceInput = {

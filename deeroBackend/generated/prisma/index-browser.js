@@ -687,6 +687,7 @@ exports.Prisma.CaseStudyOrderByRelevanceFieldEnum = {
 
 exports.Prisma.AchievementOrderByRelevanceFieldEnum = {
   title: 'title',
+  count: 'count',
   icon: 'icon'
 };
 

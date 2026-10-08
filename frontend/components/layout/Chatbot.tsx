@@ -23,7 +23,7 @@ const COMMON_QUESTIONS = [
   },
   {
     question: "How to contact you?",
-    answer: "You can reach us at +252 61 8553566 or email info@advert.deero.so. We are also available at our HQ in Digfeer, Mogadishu.",
+    answer: "You can reach us at +252 61 8553839 or email info@advert.deero.so. We are also available at our HQ in Digfeer, Mogadishu.",
   },
   {
     question: "Service pricing?",
@@ -100,7 +100,7 @@ export default function Chatbot() {
         role: "bot",
         content: questionMatch
           ? questionMatch.answer
-          : "Thank you for your message! Our team will get back to you shortly. For immediate assistance, feel free to contact us at +252 61 8553566.",
+          : "Thank you for your message! Our team will get back to you shortly. For immediate assistance, feel free to contact us at +252 61 8553839.",
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       };
 

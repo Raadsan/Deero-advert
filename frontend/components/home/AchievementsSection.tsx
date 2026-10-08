@@ -147,7 +147,14 @@ export default function AchievementsSection() {
                                                 </div>
                                             </div>
                                             <h3 className="text-4xl font-semibold text-[#651313] mb-2">
-                                                <Counter value={Number(item.count)} />+
+                                                {(() => {
+                                                    const raw = String(item.count ?? "").trim();
+                                                    const numeric = Number(raw);
+                                                    if (raw !== "" && !Number.isNaN(numeric) && Number.isFinite(numeric)) {
+                                                        return <><Counter value={numeric} />+</>;
+                                                    }
+                                                    return raw;
+                                                })()}
                                             </h3>
                                             <p className="text-sm font-semibold text-[#651313]/60">{item.title}</p>
                                         </motion.div>

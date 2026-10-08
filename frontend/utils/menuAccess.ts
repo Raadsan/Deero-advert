@@ -61,9 +61,29 @@ export const getRoleIdFromUser = (user: any) => {
     return user.roleId || user.role?.id || user.role?._id || user.role || null;
 };
 
-let cachedMenuAccess: { roleId: string; paths: string[] } | null = null;
+let cachedMenuAccess: { roleId: string; paths: string[]; menus: Menu[] } | null = null;
 
-export const loadAllowedStaffPaths = async () => {
+const filterMenus = (menus: Menu[] = []) =>
+    menus
+        .filter(
+            (m) => m.title !== "Domain Managment" && m.title !== "Domain Management"
+        )
+        .map((m) => ({
+            ...m,
+            subMenus: (m.subMenus || []).filter(
+                (sm) => sm.title !== "Domain Managment" && sm.title !== "Domain Management"
+            ),
+        }));
+
+export const getCachedStaffMenus = (): Menu[] | null => {
+    const user = getUser();
+    const roleId = getRoleIdFromUser(user);
+    if (!roleId || !cachedMenuAccess) return null;
+    if (cachedMenuAccess.roleId !== String(roleId)) return null;
+    return cachedMenuAccess.menus;
+};
+
+export const loadStaffMenus = async (): Promise<Menu[]> => {
     const user = getUser();
     const roleId = getRoleIdFromUser(user);
 
@@ -71,15 +91,29 @@ export const loadAllowedStaffPaths = async () => {
 
     const roleKey = String(roleId);
     if (cachedMenuAccess?.roleId === roleKey) {
-        return cachedMenuAccess.paths;
+        return cachedMenuAccess.menus;
     }
 
     const { getUserMenus } = await import("@/api-client/menuApi");
     const response = await getUserMenus(roleKey);
-    const paths = collectAllowedStaffPaths(response?.menus || []);
+    const menus = filterMenus(response?.menus || []);
+    const paths = collectAllowedStaffPaths(menus);
 
-    cachedMenuAccess = { roleId: roleKey, paths };
-    return paths;
+    cachedMenuAccess = { roleId: roleKey, paths, menus };
+    return menus;
+};
+
+export const loadAllowedStaffPaths = async () => {
+    const menus = await loadStaffMenus();
+    const user = getUser();
+    const roleId = getRoleIdFromUser(user);
+    if (!roleId) return [];
+
+    if (cachedMenuAccess?.roleId === String(roleId)) {
+        return cachedMenuAccess.paths;
+    }
+
+    return collectAllowedStaffPaths(menus);
 };
 
 export const clearMenuAccessCache = () => {

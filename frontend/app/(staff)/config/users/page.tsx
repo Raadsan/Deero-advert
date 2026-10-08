@@ -341,7 +341,7 @@ export default function UsersPage() {
                 value={formData.phone}
                 onChange={handleInputChange}
                 className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#EB4724] focus:border-[#EB4724] transition-all"
-                placeholder="+252 61 8553566"
+                placeholder="+252 61 8553839"
               />
             </div>
 
