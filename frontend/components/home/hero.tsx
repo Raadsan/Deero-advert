@@ -10,9 +10,9 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative w-full bg-white pt-28 pb-0 sm:pt-32 sm:pb-2.5 lg:pt-36 lg:pb-[26px] overflow-hidden">
+    <section className="relative w-full bg-white pt-28 pb-[100px] sm:pt-32 sm:pb-[100px] lg:pt-36 lg:pb-[100px] overflow-hidden">
       <div className="relative w-full mx-auto max-w-6xl xl:max-w-7xl px-4 sm:px-6 z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 xl:gap-20 items-start min-h-[440px] sm:min-h-[500px] lg:min-h-[560px]">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 xl:gap-20 items-start">
 
           {/* Left Content */}
           <div

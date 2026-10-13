@@ -297,7 +297,7 @@ export default function ServicesContent({
                 ) : (
                     <>
                         {/* Icon Navigation Grid */}
-                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-y-12 gap-x-8 mb-24">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-y-12 gap-x-8 mb-[47px]">
                             {groupedServices.map((service, index) => (
                                 <ServiceCard
                                     key={service._id}
@@ -445,7 +445,7 @@ export default function ServicesContent({
                 )}
 
                 {showViewMore && (
-                    <motion.div variants={itemVariants} className="flex justify-center pt-8">
+                    <motion.div variants={itemVariants} className="flex justify-center pt-2">
                         <Link
                             href="/services"
                             className="bg-[#EB4724] text-white px-8 py-3 rounded-full font-bold text-lg uppercase tracking-wide hover:bg-[#EB4724] hover:scale-105 active:scale-95 transition-all shadow-lg"
