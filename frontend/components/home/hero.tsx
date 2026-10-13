@@ -56,13 +56,13 @@ export default function Hero() {
           <div className="relative z-10 lg:col-span-7 flex items-start justify-end min-w-0 overflow-hidden">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/home-images/home-hero.png"
+              src="/home-images/12.png"
               alt="Deero Advertising Agency Showcase"
               width={2940}
               height={2140}
               decoding="async"
               fetchPriority="high"
-              className="w-full h-auto max-w-full object-contain object-right"
+              className="w-[95%] h-auto max-w-[95%] object-contain object-right"
               draggable={false}
             />
           </div>
