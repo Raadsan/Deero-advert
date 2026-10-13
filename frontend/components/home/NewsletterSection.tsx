@@ -25,8 +25,7 @@ const itemVariants = {
 
 export default function NewsletterSection() {
     const handleWhatsApp = () => {
-        const message = encodeURIComponent("Asc Deero Advert, waxaan doonayaa inaan idinla soo xiriiro.");
-        window.open(`https://wa.me/252618553839?text=${message}`, "_blank", "noopener,noreferrer");
+        window.open("https://wa.me/252618553839", "_blank", "noopener,noreferrer");
     };
 
     return (

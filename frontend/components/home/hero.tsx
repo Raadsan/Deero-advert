@@ -5,8 +5,7 @@ import Link from "next/link";
 export default function Hero() {
 
   const handleWhatsApp = () => {
-    const message = encodeURIComponent("Asc Deero Advert, waxaan doonayaa tashiga bilaashka ah.");
-    window.open(`https://wa.me/252618553839?text=${message}`, "_blank", "noopener,noreferrer");
+    window.open("https://wa.me/252618553839", "_blank", "noopener,noreferrer");
   };
 
   return (
