@@ -170,23 +170,25 @@ export default function DashboardContent() {
                     }
                 } else if (userId) {
                     setRevenueLoading(true);
-                    // REGULAR USER STATS - Personal
-                    const [transactionsRes, revenueRes] = await Promise.all([
-                        getTransactionsByUser(userId),
-                        getRevenueAnalytics(userId),
-                    ]);
-
+                    // REGULAR USER STATS - Personal (own transactions by userId)
+                    const transactionsRes = await getTransactionsByUser(userId);
                     const myTransactions = transactionsRes.data?.transactions || [];
+
+                    // Spending chart — non-blocking if analytics unavailable
+                    try {
+                        const revenueRes = await getRevenueAnalytics(userId);
+                        if (revenueRes.data && revenueRes.data.success) {
+                            setRevenueData(revenueRes.data.data);
+                        }
+                    } catch (revenueErr) {
+                        console.warn("Dashboard: user spending analytics unavailable", revenueErr);
+                        setRevenueData([]);
+                    }
 
                     // Filter transactions to count active domains
                     const activeDomainsCount = myTransactions.filter((t: any) =>
                         (t.type === 'register' || t.domain || t.domainId) && t.status === 'completed'
                     ).length;
-
-                    // Set revenue data (Spending Overview)
-                    if (revenueRes.data && revenueRes.data.success) {
-                        setRevenueData(revenueRes.data.data);
-                    }
 
                     const totalSpent = myTransactions
                         .filter((t: any) => t.status === "completed")

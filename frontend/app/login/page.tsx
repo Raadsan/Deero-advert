@@ -24,18 +24,23 @@ function LoginContent() {
   const [success, setSuccess] = useState("");
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirectUrl = searchParams.get("redirect") || "/";
+  const redirectParam = searchParams.get("redirect");
+  const redirectUrl = redirectParam || "/";
+
+  const getPostLoginPath = () => {
+    if (isUser()) {
+      // Default clients to their portal; honor explicit redirect when set
+      if (!redirectParam || redirectParam === "/") return "/user";
+      return redirectParam;
+    }
+    if (isStaff()) return "/dashboard";
+    return redirectUrl;
+  };
 
   // Redirect if already logged in
   useEffect(() => {
     if (isAuthenticated()) {
-      if (isUser()) {
-        router.push(redirectUrl);
-      } else if (isStaff()) {
-        router.push("/dashboard");
-      } else {
-        router.push(redirectUrl);
-      }
+      router.push(getPostLoginPath());
     }
   }, [router, redirectUrl]);
 
@@ -70,14 +75,7 @@ function LoginContent() {
         setAuth(res.data.token, res.data.user);
         setSuccess("Login successful! Redirecting...");
         setTimeout(() => {
-          // Redirect to dashboard or requested page
-          if (isUser()) {
-            router.push(redirectUrl);
-          } else if (isStaff()) {
-            router.push("/dashboard");
-          } else {
-            router.push(redirectUrl);
-          }
+          router.push(getPostLoginPath());
         }, 1000);
       }
     } catch (err: any) {

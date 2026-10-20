@@ -141,9 +141,7 @@ export default function UserDomainsPage() {
                 title="Domain Portfolio"
                 columns={columns}
                 data={domains}
-                showAddButton={true}
-                onAddClick={() => router.push("/#search")}
-                addButtonLabel="Register New Domain"
+                showAddButton={false}
                 loading={isLoading}
             />
         </div>

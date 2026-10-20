@@ -1,7 +1,95 @@
 import { Menu } from "@/types/menu";
-import { getUser, isAdmin, normalizeStaffMenuUrl } from "@/utils/auth";
+import { getUser, isAdmin, isUser, normalizeStaffMenuUrl } from "@/utils/auth";
 
 const ALWAYS_ALLOWED_STAFF_PATHS = ["/dashboard"];
+
+/** Default portal links for role "user" when Role Permissions has no menus assigned */
+export const DEFAULT_CLIENT_MENUS: Menu[] = [
+    {
+        _id: "client-dashboard",
+        title: "Dashboard",
+        icon: "dashboard",
+        url: "/user",
+        isCollapsible: false,
+        subMenus: [],
+    },
+    {
+        _id: "client-payments",
+        title: "My Payments",
+        icon: "payments",
+        url: "/payments",
+        isCollapsible: false,
+        subMenus: [],
+    },
+    {
+        _id: "client-services",
+        title: "My Services",
+        icon: "my services",
+        url: "/user/my-services",
+        isCollapsible: false,
+        subMenus: [],
+    },
+    {
+        _id: "client-domains",
+        title: "My Domains",
+        icon: "my domains",
+        url: "/user/domains",
+        isCollapsible: false,
+        subMenus: [],
+    },
+    {
+        _id: "client-hosting",
+        title: "My Hosting",
+        icon: "package",
+        url: "/my-hosting",
+        isCollapsible: false,
+        subMenus: [],
+    },
+];
+
+/** Flatten menus into simple { title, url } links for profile dropdowns */
+export const flattenMenuLinks = (menus: Menu[] = []) => {
+    const links: { title: string; url: string }[] = [];
+    menus.forEach((menu) => {
+        if (!menu.isCollapsible && menu.url) {
+            links.push({ title: menu.title, url: normalizeStaffMenuUrl(menu.url) });
+        }
+        menu.subMenus?.forEach((sub) => {
+            if (sub.url) {
+                links.push({ title: sub.title, url: normalizeStaffMenuUrl(sub.url) });
+            }
+        });
+    });
+    return links;
+};
+
+/** Map staff request/CRM URLs to the client "my …" portal pages (role user) */
+const CLIENT_URL_MAP: Record<string, string> = {
+    "/dashboard": "/user",
+    "/requests/domain-requests": "/user/domains",
+    "/requests/service-requests": "/user/my-services",
+    "/requests/hosting-requests": "/my-hosting",
+    "/request/domains": "/user/domains",
+    "/request/request-service": "/user/my-services",
+    "/request/request-hosting-packages": "/my-hosting",
+};
+
+const mapClientMenuUrl = (url?: string) => {
+    if (!url) return url;
+    const normalized = normalizeStaffMenuUrl(url);
+    return CLIENT_URL_MAP[normalized] || normalized;
+};
+
+/** For role "user": remap staff menu URLs to client portal pages */
+export const adaptMenusForClient = (menus: Menu[] = []): Menu[] =>
+    menus.map((menu) => ({
+        ...menu,
+        url: menu.url ? mapClientMenuUrl(menu.url) : menu.url,
+        subMenus: (menu.subMenus || []).map((sub) => ({
+            ...sub,
+            url: mapClientMenuUrl(sub.url) || sub.url,
+        })),
+    }));
 
 const normalizePath = (path: string) => {
     const clean = path.replace(/\\/g, "/").trim();
@@ -87,7 +175,10 @@ export const loadStaffMenus = async (): Promise<Menu[]> => {
     const user = getUser();
     const roleId = getRoleIdFromUser(user);
 
-    if (!roleId) return [];
+    if (!roleId) {
+        // Client with missing roleId still gets a usable portal menu
+        return isUser() ? DEFAULT_CLIENT_MENUS : [];
+    }
 
     const roleKey = String(roleId);
     if (cachedMenuAccess?.roleId === roleKey) {
@@ -96,7 +187,23 @@ export const loadStaffMenus = async (): Promise<Menu[]> => {
 
     const { getUserMenus } = await import("@/api-client/menuApi");
     const response = await getUserMenus(roleKey);
-    const menus = filterMenus(response?.menus || []);
+    let menus = filterMenus(response?.menus || []);
+
+    // Role "user": if admin assigned no menus yet, show default client portal links
+    if (menus.length === 0 && isUser()) {
+        menus = DEFAULT_CLIENT_MENUS;
+    } else if (isUser()) {
+        // Permissions assigned for requests → show in sidebar as client's own pages
+        menus = adaptMenusForClient(menus);
+        // Always keep Dashboard first for clients
+        const hasDashboard = menus.some(
+            (m) => !m.isCollapsible && (m.url === "/user" || m.title.toLowerCase() === "dashboard")
+        );
+        if (!hasDashboard) {
+            menus = [DEFAULT_CLIENT_MENUS[0], ...menus];
+        }
+    }
+
     const paths = collectAllowedStaffPaths(menus);
 
     cachedMenuAccess = { roleId: roleKey, paths, menus };

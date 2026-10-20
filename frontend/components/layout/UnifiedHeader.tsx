@@ -1,16 +1,18 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Bell, Search, Menu, LogOut, User } from "lucide-react";
+import { Bell, Search, Menu, LogOut, User, LayoutDashboard } from "lucide-react";
 import { logout } from "../../api-client/authApi";
-import { getUser } from "@/utils/auth";
+import { getUser, isUser } from "@/utils/auth";
 
 export default function UnifiedHeader({ onMenuClick }: { onMenuClick: () => void }) {
     const router = useRouter();
     const [user, setUser] = useState<any>(null);
     const [showDropdown, setShowDropdown] = useState(false);
     const [portalTitle, setPortalTitle] = useState("Portal");
+    const [dashboardHref, setDashboardHref] = useState("/user");
 
     useEffect(() => {
         const userData = getUser();
@@ -22,6 +24,7 @@ export default function UnifiedHeader({ onMenuClick }: { onMenuClick: () => void
             // Unified title for all portals
             const formattedRole = roleName.charAt(0).toUpperCase() + roleName.slice(1);
             setPortalTitle(`${formattedRole} Dashboard`);
+            setDashboardHref(isUser() ? "/user" : "/dashboard");
         }
     }, []);
 
@@ -85,18 +88,28 @@ export default function UnifiedHeader({ onMenuClick }: { onMenuClick: () => void
                                 className="fixed inset-0 z-10"
                                 onClick={() => setShowDropdown(false)}
                             />
-                            <div className="absolute right-0 mt-2 w-48 rounded-lg border border-gray-200 bg-white shadow-lg z-20">
+                            <div className="absolute right-0 mt-2 w-56 rounded-lg border border-gray-200 bg-white shadow-lg z-20 overflow-hidden">
                                 <div className="p-3 border-b border-gray-100">
                                     <p className="text-sm font-semibold text-gray-900">{user?.fullname || portalTitle.split(" ")[0]}</p>
                                     <p className="text-xs text-gray-500">{user?.email || ""}</p>
                                 </div>
-                                <button
-                                    onClick={handleLogout}
-                                    className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
-                                >
-                                    <LogOut className="h-4 w-4" />
-                                    Logout
-                                </button>
+                                <div className="p-1">
+                                    <Link
+                                        href={dashboardHref}
+                                        onClick={() => setShowDropdown(false)}
+                                        className="w-full flex items-center gap-2 px-3 py-2 text-sm text-[#651313] hover:bg-[#651313]/5 transition-colors font-medium"
+                                    >
+                                        <LayoutDashboard className="h-4 w-4" />
+                                        Dashboard
+                                    </Link>
+                                    <button
+                                        onClick={handleLogout}
+                                        className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                                    >
+                                        <LogOut className="h-4 w-4" />
+                                        Logout
+                                    </button>
+                                </div>
                             </div>
                         </>
                     )}

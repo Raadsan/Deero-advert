@@ -497,6 +497,16 @@ export const getRevenueAnalytics = async (req, res) => {
       }
     }
 
+    // Non-staff callers may only see their own spending analytics
+    const roleName = (req.user?.role?.name || req.user?.role || "").toString().toLowerCase();
+    const isStaffUser = roleName && roleName !== "user";
+    if (!isStaffUser) {
+      userId = parseInt(req.user?.id);
+      if (isNaN(userId)) {
+        return res.status(403).json({ message: "Forbidden" });
+      }
+    }
+
     const transactions = await prisma.transaction.findMany({
       where: {
         status: "completed",

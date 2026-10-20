@@ -15,7 +15,8 @@ import { allowSelfOrMenuAccess, authorizeMenuAccess, protect } from "../middlewa
 const router = express.Router();
 
 router.get("/", protect, authorizeMenuAccess("transactions", "transaction"), getAllTransactions);
-router.get("/analytics/revenue", protect, authorizeMenuAccess("transactions", "transaction"), getRevenueAnalytics);
+// Staff with transactions menu, OR a user requesting their own analytics via ?userId=
+router.get("/analytics/revenue", protect, allowSelfOrMenuAccess("transactions", "transaction"), getRevenueAnalytics);
 router.get("/user/:userId", protect, allowSelfOrMenuAccess("transactions", "transaction"), getTransactionsByUser);
 router.get("/type/:type", protect, authorizeMenuAccess("transactions", "transaction"), getTransactionsByType);
 router.get("/:id", protect, authorizeMenuAccess("transactions", "transaction"), getTransactionById);

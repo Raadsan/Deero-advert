@@ -106,8 +106,8 @@ export const allowSelfOrMenuAccess = (...menuAliases) => {
   const authorize = authorizeMenuAccess(...menuAliases);
 
   return async (req, res, next) => {
-    const targetId = req.params.id || req.params.userId;
-    if (req.user && String(req.user.id) === String(targetId)) {
+    const targetId = req.params.id || req.params.userId || req.query.userId;
+    if (req.user && targetId && String(req.user.id) === String(targetId)) {
       return next();
     }
 

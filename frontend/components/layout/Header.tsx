@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { ArrowRight, Globe2, LogOut, Package, ShoppingCart, User } from "lucide-react";
+import { ArrowRight, Globe2, ShoppingCart, User } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { isAuthenticated, getUser, clearAuth, isStaff as hasStaffRole, isAdmin } from "@/utils/auth";
 import { logout as apiLogout } from "../../api-client/authApi";
@@ -53,7 +53,6 @@ export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdminUser, setIsAdminUser] = useState(false);
   const [isStaff, setIsStaff] = useState(false);
-  const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [activeAnnouncement, setActiveAnnouncement] = useState<Announcement | null>(null);
   const [showBanner, setShowBanner] = useState(true);
   const [mounted, setMounted] = useState(false);
@@ -320,60 +319,12 @@ export default function Header() {
             )}
 
             {isLoggedIn ? (
-              hasStaffRole() ? (
-                <Link
-                  href="/dashboard"
-                  className="rounded-full bg-[#EB4724] px-6 py-2.5 font-semibold text-white transition hover:opacity-90 shadow-md"
-                >
-                  Dashboard
-                </Link>
-              ) : (
-                <div className="relative">
-                  <button
-                    onClick={() => setShowProfileDropdown(!showProfileDropdown)}
-                    className="h-10 w-10 overflow-hidden rounded-full bg-gray-200 hover:ring-2 hover:ring-[#EB4724] transition-all shadow-md"
-                  >
-                    {user?.fullname ? (
-                      <div className="flex h-full w-full items-center justify-center bg-[#651313] text-sm font-bold text-white uppercase">
-                        {user.fullname.charAt(0)}
-                        {user.fullname.split(" ")[1]?.charAt(0) || ""}
-                      </div>
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center bg-[#651313] text-white">
-                        <User className="h-5 w-5" />
-                      </div>
-                    )}
-                  </button>
-
-                  <AnimatePresence>
-                    {showProfileDropdown && (
-                      <>
-                        <div className="fixed inset-0 z-40" onClick={() => setShowProfileDropdown(false)}></div>
-                        <motion.div
-                          initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                          animate={{ opacity: 1, y: 0, scale: 1 }}
-                          exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                          className="absolute right-0 mt-2 w-56 rounded-xl border border-gray-200 bg-white shadow-xl z-50 overflow-hidden"
-                        >
-                          <div className="p-4 border-b border-gray-100 bg-gray-50/50">
-                            <p className="text-sm font-bold text-gray-900">{user?.fullname || "User"}</p>
-                            <p className="text-xs text-gray-500 truncate">{user?.email || ""}</p>
-                          </div>
-                          <div className="p-1">
-                            <button
-                              onClick={handleLogout}
-                              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-red-600 hover:bg-red-50 transition-colors font-semibold text-sm"
-                            >
-                              <LogOut className="h-4 w-4" />
-                              Logout
-                            </button>
-                          </div>
-                        </motion.div>
-                      </>
-                    )}
-                  </AnimatePresence>
-                </div>
-              )
+              <Link
+                href={hasStaffRole() ? "/dashboard" : "/user"}
+                className="rounded-full bg-[#EB4724] px-6 py-2.5 font-semibold text-white transition hover:opacity-90 shadow-md"
+              >
+                Dashboard
+              </Link>
             ) : (
               <Link
                 href="/login"
@@ -478,15 +429,13 @@ export default function Header() {
                       </div>
                     </div>
                   </div>
-                  {hasStaffRole() && (
-                    <Link
-                      href="/dashboard"
-                      className="w-full rounded-full bg-[#EB4724] py-2 text-center text-white font-semibold transition"
-                      onClick={() => setOpen(false)}
-                    >
-                      Dashboard
-                    </Link>
-                  )}
+                  <Link
+                    href={hasStaffRole() ? "/dashboard" : "/user"}
+                    className="w-full rounded-full bg-[#EB4724] py-2 text-center text-white font-semibold transition"
+                    onClick={() => setOpen(false)}
+                  >
+                    Dashboard
+                  </Link>
                   <button
                     onClick={handleLogout}
                     className="w-full rounded-full border border-red-100 py-2 text-center text-red-600 bg-red-50 font-semibold transition"
