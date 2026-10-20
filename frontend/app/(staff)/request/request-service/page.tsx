@@ -149,6 +149,7 @@ export default function RequestServicePage() {
                 showAddButton={false}
                 onRefresh={fetchServiceRequests}
                 loading={loading}
+                enableLastFilter
             />
         </div>
     );

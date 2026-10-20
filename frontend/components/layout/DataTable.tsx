@@ -4,11 +4,27 @@ import React, { useState, useEffect } from "react";
 // Removed ThemeContext dependency for now as it wasn't requested/verified to exist in this context,
 // and we want to enforce brand colors.
 
-const DataTable = ({ title, columns, data = [], onAddClick, onRefresh, showAddButton = true, loading = false, addButtonLabel = "Add New", disableUpdatingOverlay = false, toolbarFilters }: any) => {
+const LAST_OPTIONS = [5, 10, 30, 50, 100] as const;
+
+const getRowDate = (row: any): number => {
+    const raw =
+        row?.createdAt ||
+        row?.created_at ||
+        row?.date ||
+        row?.updatedAt ||
+        row?.updated_at ||
+        null;
+    if (!raw) return 0;
+    const t = new Date(raw).getTime();
+    return Number.isNaN(t) ? 0 : t;
+};
+
+const DataTable = ({ title, columns, data = [], onAddClick, onRefresh, showAddButton = true, loading = false, addButtonLabel = "Add New", disableUpdatingOverlay = false, toolbarFilters, enableLastFilter = false }: any) => {
 
     const [search, setSearch] = useState("");
     const [filteredData, setFilteredData] = useState<any[]>(data);
     const [entriesPerPage, setEntriesPerPage] = useState(10);
+    const [lastCount, setLastCount] = useState<number | "all">("all");
     const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
@@ -41,7 +57,15 @@ const DataTable = ({ title, columns, data = [], onAddClick, onRefresh, showAddBu
                 return "";
             };
 
-            const filtered = data.filter((row) => {
+            // "Last N" = most recent N records (by date). Separate from Show entries (page size).
+            let working = [...data];
+            if (enableLastFilter && lastCount !== "all") {
+                working = [...working]
+                    .sort((a, b) => getRowDate(b) - getRowDate(a))
+                    .slice(0, lastCount);
+            }
+
+            const filtered = working.filter((row) => {
                 if (!searchStr) return true;
 
                 return columns.some((col: any) => {
@@ -75,17 +99,17 @@ const DataTable = ({ title, columns, data = [], onAddClick, onRefresh, showAddBu
         } else {
             setFilteredData([]);
         }
-    }, [search, data, columns]);
+    }, [search, data, columns, lastCount, enableLastFilter]);
 
     const startIdx = (currentPage - 1) * entriesPerPage;
     const endIdx = startIdx + entriesPerPage;
     const totalPages = Math.ceil(filteredData.length / entriesPerPage);
 
-    // A new search starts at page one, but ordinary data refreshes (such as
-    // deleting a row) keep the user on their current page.
+    // A new search / last-filter starts at page one, but ordinary data refreshes
+    // (such as deleting a row) keep the user on their current page.
     useEffect(() => {
         setCurrentPage(1);
-    }, [search]);
+    }, [search, lastCount]);
 
     // If the final row on the last page is removed, move to the last page that
     // still exists instead of displaying an empty, out-of-range page.
@@ -119,23 +143,47 @@ const DataTable = ({ title, columns, data = [], onAddClick, onRefresh, showAddBu
                 </div>
 
                 <div className="flex justify-between items-center mb-4 gap-4 flex-wrap">
-                    <div className="flex items-center">
-                        <label className="text-sm text-gray-600">Show&nbsp;</label>
-                        <select
-                            value={entriesPerPage}
-                            onChange={(e) => {
-                                setEntriesPerPage(Number(e.target.value));
-                                setCurrentPage(1);
-                            }}
-                            className="border border-gray-300 bg-white text-gray-900 rounded-md px-2 py-1 focus:ring-[#EB4724] focus:border-[#EB4724]"
-                        >
-                            {[5, 10, 25, 50, 100].map((num) => (
-                                <option key={num} value={num}>
-                                    {num}
-                                </option>
-                            ))}
-                        </select>
-                        <span className="text-sm text-gray-600 ml-1"> entries</span>
+                    <div className="flex items-center gap-4 flex-wrap">
+                        <div className="flex items-center">
+                            <label className="text-sm text-gray-600">Show&nbsp;</label>
+                            <select
+                                value={entriesPerPage}
+                                onChange={(e) => {
+                                    setEntriesPerPage(Number(e.target.value));
+                                    setCurrentPage(1);
+                                }}
+                                className="border border-gray-300 bg-white text-gray-900 rounded-md px-2 py-1 focus:ring-[#EB4724] focus:border-[#EB4724]"
+                            >
+                                {[5, 10, 30, 50, 100].map((num) => (
+                                    <option key={num} value={num}>
+                                        {num}
+                                    </option>
+                                ))}
+                            </select>
+                            <span className="text-sm text-gray-600 ml-1"> entries</span>
+                        </div>
+                        {enableLastFilter && (
+                            <div className="flex items-center">
+                                <label className="text-sm text-gray-600">Last&nbsp;</label>
+                                <select
+                                    value={lastCount === "all" ? "all" : String(lastCount)}
+                                    onChange={(e) => {
+                                        const v = e.target.value;
+                                        setLastCount(v === "all" ? "all" : Number(v));
+                                        setCurrentPage(1);
+                                    }}
+                                    className="border border-gray-300 bg-white text-gray-900 rounded-md px-2 py-1 focus:ring-[#EB4724] focus:border-[#EB4724]"
+                                >
+                                    <option value="all">All</option>
+                                    {LAST_OPTIONS.map((num) => (
+                                        <option key={num} value={num}>
+                                            {num}
+                                        </option>
+                                    ))}
+                                </select>
+                                <span className="text-sm text-gray-600 ml-1"> records</span>
+                            </div>
+                        )}
                     </div>
                     <div className="flex items-center gap-3 w-full sm:w-auto">
                         {toolbarFilters}

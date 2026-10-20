@@ -48,12 +48,15 @@ export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [isSocialOpen, setIsSocialOpen] = useState(false);
 
-  // Hide on dashboard and system pages
+  // Hide on dashboard / staff pages — only show on public website
   const isDashboard = pathname.startsWith("/dashboard") ||
     pathname.startsWith("/management") ||
     pathname.startsWith("/config") ||
     pathname.startsWith("/configuration") ||
     pathname.startsWith("/payments") ||
+    pathname.startsWith("/requests") ||
+    pathname.startsWith("/request") ||
+    pathname.startsWith("/discounts") ||
     pathname === "/login" ||
     pathname === "/signup" ||
     pathname.startsWith("/reset-password");

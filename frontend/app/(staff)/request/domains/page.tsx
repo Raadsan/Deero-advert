@@ -223,6 +223,7 @@ export default function DomainsPage() {
                 showAddButton={false}
                 onRefresh={fetchData}
                 loading={loading}
+                enableLastFilter
             />
         </div>
     );

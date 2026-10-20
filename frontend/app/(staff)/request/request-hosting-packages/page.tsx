@@ -110,6 +110,7 @@ export default function RequestHostingPage() {
                 showAddButton={false}
                 onRefresh={fetchHostingRequests}
                 loading={loading}
+                enableLastFilter
             />
         </div>
     );

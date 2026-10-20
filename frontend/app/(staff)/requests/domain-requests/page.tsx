@@ -128,7 +128,7 @@ export default function DomainRequestsPage() {
 
   return (
     <div className="space-y-6">
-      <DataTable title="Domain Requests" columns={columns} data={rows} onRefresh={fetchData} loading={loading} />
+      <DataTable title="Domain Requests" columns={columns} data={rows} onRefresh={fetchData} loading={loading} enableLastFilter />
       <DeleteConfirmModal isOpen={isDeleteModalOpen} onClose={() => setIsDeleteModalOpen(false)} onConfirm={confirmDelete} itemName="this domain request" />
     </div>
   );

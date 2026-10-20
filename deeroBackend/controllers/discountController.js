@@ -73,6 +73,67 @@ export const getPublicDiscounts = async (req, res) => {
   }
 };
 
+// Resolve human-readable name for a discount target (service / hosting / domain / package)
+async function resolveTargetName(targetType, targetId) {
+  if (!targetId) return "All";
+  const type = (targetType || "").toLowerCase();
+  const id = targetId.toString();
+  const numericId = parseInt(id, 10);
+
+  try {
+    if (type === "service") {
+      if (!Number.isNaN(numericId)) {
+        const service = await prisma.service.findUnique({
+          where: { id: numericId },
+          select: { serviceTitle: true },
+        });
+        if (service) return service.serviceTitle;
+
+        // Fallback: discount may point at a ServicePackage id
+        const pkg = await prisma.servicePackage.findUnique({
+          where: { id: numericId },
+          select: {
+            packageTitle: true,
+            service: { select: { serviceTitle: true } },
+          },
+        });
+        if (pkg) {
+          return pkg.service?.serviceTitle
+            ? `${pkg.service.serviceTitle} — ${pkg.packageTitle}`
+            : pkg.packageTitle;
+        }
+      }
+      return null;
+    }
+
+    if (type === "hosting") {
+      if (!Number.isNaN(numericId)) {
+        const hosting = await prisma.hostingPackage.findUnique({
+          where: { id: numericId },
+          select: { name: true },
+        });
+        return hosting?.name || null;
+      }
+      return null;
+    }
+
+    if (type === "domain") {
+      // Domain discounts store TLD as targetId (e.g. ".com")
+      const domain = await prisma.domainPrice.findFirst({
+        where: Number.isNaN(numericId)
+          ? { tld: id }
+          : { OR: [{ tld: id }, { id: numericId }] },
+        select: { tld: true },
+      });
+      return domain?.tld || id;
+    }
+  } catch {
+    return null;
+  }
+
+  return null;
+}
+
 // Get all discounts (for admin)
 export const getAllDiscounts = async (req, res) => {
   try {
@@ -99,7 +160,22 @@ export const getAllDiscounts = async (req, res) => {
       },
       orderBy: { createdAt: 'desc' }
     });
-    res.json({ success: true, discounts });
+
+    // Attach targetName so admin UI can show package/service names
+    const enriched = await Promise.all(
+      discounts.map(async (d) => {
+        const targetName = await resolveTargetName(d.targetType, d.targetId);
+        return {
+          ...d,
+          targetName: targetName || (d.targetId ? `ID: ${d.targetId}` : "All"),
+          user: d.user
+            ? { ...d.user, name: d.user.fullname }
+            : null,
+        };
+      })
+    );
+
+    res.json({ success: true, discounts: enriched });
   } catch (err) {
     res.status(500).json({ message: "Server error", error: err.message });
   }

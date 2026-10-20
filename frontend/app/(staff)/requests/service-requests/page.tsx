@@ -128,7 +128,7 @@ export default function ServiceRequestsPage() {
 
   return (
     <div className="space-y-6">
-      <DataTable title="Service Requests" columns={columns} data={rows} onRefresh={fetchData} loading={loading} />
+      <DataTable title="Service Requests" columns={columns} data={rows} onRefresh={fetchData} loading={loading} enableLastFilter />
       <DeleteConfirmModal isOpen={isDeleteModalOpen} onClose={() => setIsDeleteModalOpen(false)} onConfirm={confirmDelete} itemName="this service request" />
     </div>
   );

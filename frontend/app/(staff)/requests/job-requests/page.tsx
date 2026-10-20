@@ -181,7 +181,7 @@ export default function JobRequestsPage() {
 
   return (
     <div className="space-y-6">
-      <DataTable title="Job Application Requests" columns={columns} data={rows} onRefresh={fetchData} loading={loading} />
+      <DataTable title="Job Application Requests" columns={columns} data={rows} onRefresh={fetchData} loading={loading} enableLastFilter />
       <DeleteConfirmModal isOpen={isDeleteModalOpen} onClose={() => setIsDeleteModalOpen(false)} onConfirm={confirmDelete} itemName="this job application" />
 
       {/* View Details Modal */}
