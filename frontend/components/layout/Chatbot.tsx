@@ -57,6 +57,8 @@ export default function Chatbot() {
     pathname.startsWith("/requests") ||
     pathname.startsWith("/request") ||
     pathname.startsWith("/discounts") ||
+    pathname.startsWith("/reports") ||
+    pathname.startsWith("/report") ||
     pathname.startsWith("/user") ||
     pathname.startsWith("/my-hosting") ||
     pathname.startsWith("/my-services") ||

@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { ArrowRight, Globe2, ShoppingCart, User } from "lucide-react";
+import { ArrowRight, Globe2, ShoppingCart, User, Package } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { isAuthenticated, getUser, clearAuth, isStaff as hasStaffRole, isAdmin } from "@/utils/auth";
 import { logout as apiLogout } from "../../api-client/authApi";
@@ -121,7 +121,6 @@ export default function Header() {
     setIsAdminUser(false);
     setIsStaff(false);
     setUser(null);
-    setShowProfileDropdown(false);
     router.push("/");
   };
 

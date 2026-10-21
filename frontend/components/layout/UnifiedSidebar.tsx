@@ -26,7 +26,10 @@ import {
     CreditCard,
     User,
     Video,
-    Ticket
+    Ticket,
+    TrendingUp,
+    PieChart,
+    Receipt
 } from "lucide-react";
 import Image from "next/image";
 import { logout } from "@/api-client/authApi";
@@ -46,6 +49,14 @@ const iconMap: Record<string, LucideIcon> = {
     filetext: FileText,
     "bar-chart": BarChart3,
     barchart: BarChart3,
+    report: BarChart3,
+    reports: BarChart3,
+    transactions: CreditCard,
+    transaction: CreditCard,
+    receipt: Receipt,
+    revenue: TrendingUp,
+    "revenue-analytics": TrendingUp,
+    overview: PieChart,
     briefcase: Briefcase,
     career: Briefcase,
     newspaper: Newspaper,
@@ -55,6 +66,8 @@ const iconMap: Record<string, LucideIcon> = {
     achievements: Award,
     "message-square": MessageSquare,
     messagesquare: MessageSquare,
+    messages: MessageSquare,
+    message: MessageSquare,
     testimonials: MessageSquare,
     calendar: Calendar,
     "events-news": Calendar,
@@ -161,14 +174,16 @@ export default function UnifiedSidebar({ isOpen, onClose }: { isOpen?: boolean; 
         };
     }, []);
 
+    const getMenuId = (m: any) => String(m?._id || m?.id || "");
+
     // Auto-expand the active menu section
     useEffect(() => {
         if (menus.length > 0 && pathname) {
             const activeMenu = menus.find(menu =>
-                menu.isCollapsible && menu.subMenus.some(sub => pathname === sub.url)
+                menu.isCollapsible && menu.subMenus.some(sub => ensureAbsoluteUrl(sub.url) === pathname)
             );
             if (activeMenu) {
-                setExpandedMenuId(activeMenu._id);
+                setExpandedMenuId(getMenuId(activeMenu));
             }
         }
     }, [menus, pathname]);
@@ -244,13 +259,14 @@ export default function UnifiedSidebar({ isOpen, onClose }: { isOpen?: boolean; 
                             <li className="px-4 py-3 text-white/60 text-sm">No menus available</li>
                         ) : (
                             menus.map((menu, index) => {
+                                const menuId = getMenuId(menu);
                                 const Icon = getIcon(menu.icon || menu.title);
                                 const isActive = isMenuActive(menu);
-                                const isExpanded = expandedMenuId === menu._id;
+                                const isExpanded = expandedMenuId === menuId;
 
                                 if (!menu.isCollapsible && menu.url) {
                                     return (
-                                        <li key={`${menu._id}-${index}`}>
+                                        <li key={`${menuId}-${index}`}>
                                             <Link
                                                 href={ensureAbsoluteUrl(menu.url)}
                                                 onClick={onClose}
@@ -269,9 +285,9 @@ export default function UnifiedSidebar({ isOpen, onClose }: { isOpen?: boolean; 
                                 }
 
                                 return (
-                                    <li key={`${menu._id}-${index}`}>
+                                    <li key={`${menuId}-${index}`}>
                                         <button
-                                            onClick={() => toggleMenu(menu._id)}
+                                            onClick={() => toggleMenu(menuId)}
                                             className={`flex w-full items-center justify-between rounded-lg px-4 py-3 transition-colors hover:bg-white/10 ${isActive
                                                 ? "bg-[#EB4724] text-white shadow-md"
                                                 : "text-white/80 hover:text-white"
@@ -293,10 +309,11 @@ export default function UnifiedSidebar({ isOpen, onClose }: { isOpen?: boolean; 
                                         {isExpanded && menu.subMenus.length > 0 && (
                                             <ul className="mt-1 ml-4 space-y-1">
                                                 {menu.subMenus.map((submenu, subIndex) => {
+                                                    const subId = String(submenu._id || (submenu as any).id || subIndex);
                                                     const subUrl = ensureAbsoluteUrl(submenu.url);
                                                     const isSubActive = pathname === subUrl;
                                                     return (
-                                                        <li key={`${submenu._id}-${subIndex}`}>
+                                                        <li key={`${subId}-${subIndex}`}>
                                                             <Link
                                                                 href={subUrl}
                                                                 onClick={onClose}
