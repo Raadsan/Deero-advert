@@ -14,12 +14,12 @@ import { allowSelfOrMenuAccess, authorizeMenuAccess, protect } from "../middlewa
 
 const router = express.Router();
 
-router.get("/", protect, authorizeMenuAccess("transactions", "transaction"), getAllTransactions);
+router.get("/", protect, authorizeMenuAccess("transactions", "transaction", "reports", "report"), getAllTransactions);
 // Staff with transactions menu, OR a user requesting their own analytics via ?userId=
-router.get("/analytics/revenue", protect, allowSelfOrMenuAccess("transactions", "transaction"), getRevenueAnalytics);
-router.get("/user/:userId", protect, allowSelfOrMenuAccess("transactions", "transaction"), getTransactionsByUser);
-router.get("/type/:type", protect, authorizeMenuAccess("transactions", "transaction"), getTransactionsByType);
-router.get("/:id", protect, authorizeMenuAccess("transactions", "transaction"), getTransactionById);
+router.get("/analytics/revenue", protect, allowSelfOrMenuAccess("transactions", "transaction", "reports", "report"), getRevenueAnalytics);
+router.get("/user/:userId", protect, allowSelfOrMenuAccess("transactions", "transaction", "reports", "report"), getTransactionsByUser);
+router.get("/type/:type", protect, authorizeMenuAccess("transactions", "transaction", "reports", "report"), getTransactionsByType);
+router.get("/:id", protect, authorizeMenuAccess("transactions", "transaction", "reports", "report"), getTransactionById);
 
 router.post("/", protect, createTransaction);
 router.post("/checkout", protect, checkoutCart);

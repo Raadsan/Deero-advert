@@ -131,6 +131,11 @@ export const expandAllowedStaffPaths = (paths: string[]) => {
         expanded.add("/request");
     }
 
+    if (paths.some((path) => normalizePath(path).startsWith("/reports") || normalizePath(path).startsWith("/report"))) {
+        expanded.add("/reports");
+        expanded.add("/report");
+    }
+
     return Array.from(expanded);
 };
 
