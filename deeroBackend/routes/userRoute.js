@@ -33,7 +33,7 @@ router.get("/", protect, authorizeMenuAccess("users"), getUsers);
 router.get("/:id", protect, allowSelfOrMenuAccess("users"), getUserById);
 router.post("/", signup);
 router.patch("/:id", protect, allowSelfOrMenuAccess("users"), upload.single("image"), updateUser);
-router.delete("/:id", protect, authorizeMenuAccess("users"), deleteUser);
+router.delete("/:id", protect, allowSelfOrMenuAccess("users"), deleteUser);
 
 // Public authentication routes
 router.post("/signup", signup);

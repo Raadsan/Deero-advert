@@ -7,6 +7,7 @@ export interface Service {
   sortOrder?: number;
   packages?: {
     packageTitle: string;
+    subtitle?: string | null;
     price: number;
     deliveryTime?: string | null;
     features: string[];

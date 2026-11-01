@@ -443,6 +443,7 @@ exports.Prisma.ServicePackageScalarFieldEnum = {
   id: 'id',
   serviceId: 'serviceId',
   packageTitle: 'packageTitle',
+  subtitle: 'subtitle',
   price: 'price',
   deliveryTime: 'deliveryTime'
 };
@@ -796,6 +797,7 @@ exports.Prisma.ServiceOrderByRelevanceFieldEnum = {
 
 exports.Prisma.ServicePackageOrderByRelevanceFieldEnum = {
   packageTitle: 'packageTitle',
+  subtitle: 'subtitle',
   deliveryTime: 'deliveryTime'
 };
 

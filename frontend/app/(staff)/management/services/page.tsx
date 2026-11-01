@@ -17,6 +17,7 @@ type Service = any;
 
 interface Package {
   packageTitle: string;
+  subtitle?: string;
   price: number | string;
   deliveryTime?: string;
   features: string[];
@@ -83,7 +84,7 @@ export default function AdminServicesPage() {
   const addPackage = () => {
     setFormData((prev) => ({
       ...prev,
-      packages: [...prev.packages, { packageTitle: "", price: "", deliveryTime: "", features: [""] }],
+      packages: [...prev.packages, { packageTitle: "", subtitle: "", price: "", deliveryTime: "", features: [""] }],
     }));
   };
 
@@ -176,6 +177,7 @@ export default function AdminServicesPage() {
         }
         return {
           packageTitle: pkg.packageTitle.trim(),
+          subtitle: (pkg.subtitle || "").trim() || null,
           price: priceNum,
           deliveryTime: (pkg.deliveryTime || "").trim() || null,
           features: features,
@@ -253,6 +255,7 @@ export default function AdminServicesPage() {
       // Convert packages to form format
       const packages = (row.packages || []).map((pkg: any) => ({
         packageTitle: pkg.packageTitle || "",
+        subtitle: pkg.subtitle || "",
         price: pkg.price || "",
         deliveryTime: pkg.deliveryTime || "",
         features: Array.isArray(pkg.features) ? pkg.features : [],
@@ -263,7 +266,7 @@ export default function AdminServicesPage() {
         sortOrder: row.sortOrder ?? 0,
         serviceIcon: null,
         serviceIconPreview: row.serviceIcon || "",
-        packages: packages.length > 0 ? packages : [{ packageTitle: "", price: "", deliveryTime: "", features: [""] }],
+        packages: packages.length > 0 ? packages : [{ packageTitle: "", subtitle: "", price: "", deliveryTime: "", features: [""] }],
       });
       setIsModalOpen(true);
     } catch (err) {
@@ -360,7 +363,7 @@ export default function AdminServicesPage() {
             sortOrder: rows.length,
             serviceIcon: null,
             serviceIconPreview: "",
-            packages: [{ packageTitle: "", price: "", deliveryTime: "", features: [""] }],
+            packages: [{ packageTitle: "", subtitle: "", price: "", deliveryTime: "", features: [""] }],
           });
         }}
         onRefresh={fetchData}
@@ -520,7 +523,7 @@ export default function AdminServicesPage() {
                         onChange={(e) =>
                           updatePackage(pkgIndex, "packageTitle", e.target.value)
                         }
-                        placeholder="e.g., Basic Package"
+                        placeholder="e.g., Baahiye Package"
                         className="w-full px-2 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#EB4724] focus:border-[#EB4724]"
                         required
                       />
@@ -540,6 +543,19 @@ export default function AdminServicesPage() {
                         required
                       />
                     </div>
+                  </div>
+
+                  <div className="space-y-0.5">
+                    <label className="text-[10px] text-gray-600">Subtitle</label>
+                    <input
+                      type="text"
+                      value={pkg.subtitle || ""}
+                      onChange={(e) =>
+                        updatePackage(pkgIndex, "subtitle", e.target.value)
+                      }
+                      placeholder="e.g., Suitable for Small Businesses"
+                      className="w-full px-2 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#EB4724] focus:border-[#EB4724]"
+                    />
                   </div>
 
                   <div className="space-y-0.5">
@@ -655,7 +671,12 @@ export default function AdminServicesPage() {
                 className="p-4 border border-gray-200 rounded-lg bg-gray-50 space-y-2"
               >
                 <div className="flex items-center justify-between">
-                  <h4 className="text-sm font-semibold text-gray-800">{pkg.packageTitle}</h4>
+                  <div>
+                    <h4 className="text-sm font-semibold text-gray-800">{pkg.packageTitle}</h4>
+                    {pkg.subtitle && (
+                      <p className="text-xs text-gray-500 mt-0.5">{pkg.subtitle}</p>
+                    )}
+                  </div>
                   <span className="text-sm font-bold text-[#651313]">${pkg.price}</span>
                 </div>
                 {pkg.deliveryTime && (

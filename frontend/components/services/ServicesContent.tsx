@@ -370,7 +370,11 @@ export default function ServicesContent({
                                                                     </div>
                                                                 )}
 
-                                                            <h4 className="text-2xl font-bold text-[#4d0e0e] mb-4 pr-8 leading-tight">{pkg.packageTitle}</h4>
+                                                            <h4 className="text-2xl font-bold text-[#4d0e0e] pr-8 leading-tight">{pkg.packageTitle}</h4>
+                                                            {pkg.subtitle && (
+                                                                <p className="text-sm font-medium text-[#4d0e0e]/70 mt-1 mb-4 pr-8 leading-snug">{pkg.subtitle}</p>
+                                                            )}
+                                                            {!pkg.subtitle && <div className="mb-4" />}
 
                                                              {getDiscountedPrice(pkg, service).hasDiscount && (
                                                                 <div className="flex items-center gap-2 mb-1">

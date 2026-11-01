@@ -4,12 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { ArrowRight, Globe2, ShoppingCart, User } from "lucide-react";
+import { ArrowRight, Globe2, Megaphone, Package, ShoppingCart, User, X, ChevronDown } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { isAuthenticated, getUser, clearAuth, isStaff as hasStaffRole, isAdmin } from "@/utils/auth";
 import { logout as apiLogout } from "../../api-client/authApi";
 import { getActiveAnnouncements, Announcement } from "../../api-client/announcementApi";
-import { Megaphone, X, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const navLinks = [

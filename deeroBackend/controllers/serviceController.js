@@ -55,6 +55,9 @@ export const CreateService = async (req, res) => {
                 packages: {
                     create: (packagesData || []).map(pkg => ({
                         packageTitle: pkg.packageTitle,
+                        subtitle: pkg.subtitle
+                            ? String(pkg.subtitle).trim()
+                            : null,
                         price: parseFloat(pkg.price) || 0,
                         deliveryTime: pkg.deliveryTime
                             ? String(pkg.deliveryTime).trim()
@@ -147,6 +150,9 @@ export const updateServiceById = async (req, res) => {
                         packages: {
                             create: packagesData.map(p => ({
                                 packageTitle: p.packageTitle,
+                                subtitle: p.subtitle
+                                    ? String(p.subtitle).trim()
+                                    : null,
                                 price: parseFloat(p.price) || 0,
                                 deliveryTime: p.deliveryTime
                                     ? String(p.deliveryTime).trim()
