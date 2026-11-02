@@ -1,5 +1,5 @@
 import express from "express";
-import { createOrGetConversation, getUserConversations, getMessages, markAsRead, uploadVoiceMessage } from "../controllers/chatController.js";
+import { createOrGetConversation, getUserConversations, getMessages, markAsRead, uploadVoiceMessage, reportUser, blockUser, unblockUser, getBlockedUsers } from "../controllers/chatController.js";
 import { protect } from "../middlewares/authMiddleware.js";
 import upload from "../utils/multer.js";
 
@@ -10,6 +10,10 @@ router.get("/conversations", protect, getUserConversations);
 router.get("/messages/:conversationId", protect, getMessages);
 router.put("/messages/:conversationId/read", protect, markAsRead);
 router.post("/upload-voice", protect, upload.single("voice"), uploadVoiceMessage);
+router.post("/report", protect, reportUser);
+router.post("/block", protect, blockUser);
+router.delete("/block/:userId", protect, unblockUser);
+router.get("/blocked", protect, getBlockedUsers);
 
 export default router;
 

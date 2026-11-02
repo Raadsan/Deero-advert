@@ -41,6 +41,38 @@ model User {
   conversationsAsParticipant1 Conversation[] @relation("ConversationParticipant1")
   conversationsAsParticipant2 Conversation[] @relation("ConversationParticipant2")
   messagesSent                Message[]      @relation("MessageSender")
+  blocksMade                  UserBlock[]    @relation("BlocksMade")
+  blocksReceived              UserBlock[]    @relation("BlocksReceived")
+  reportsMade                 ChatReport[]   @relation("ReportsMade")
+  reportsReceived             ChatReport[]   @relation("ReportsReceived")
+}
+
+model UserBlock {
+  id        Int      @id @default(autoincrement())
+  blockerId Int
+  blockedId Int
+  blocker   User     @relation("BlocksMade", fields: [blockerId], references: [id])
+  blocked   User     @relation("BlocksReceived", fields: [blockedId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([blockerId, blockedId])
+  @@index([blockedId])
+}
+
+model ChatReport {
+  id             Int      @id @default(autoincrement())
+  reporterId     Int
+  reportedUserId Int
+  conversationId Int?
+  reason         String
+  details        String?  @db.LongText
+  status         String   @default("pending")
+  createdAt      DateTime @default(now())
+  reporter       User     @relation("ReportsMade", fields: [reporterId], references: [id])
+  reportedUser   User     @relation("ReportsReceived", fields: [reportedUserId], references: [id])
+
+  @@index([reportedUserId])
+  @@index([reporterId])
 }
 
 model GlobalSetting {

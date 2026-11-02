@@ -12,6 +12,7 @@ import {
   deleteUser,
   getBonusHistory,
   googleLogin,
+  appleLogin,
   getMe,
   getCustomerCareUsers,
 } from "../controllers/userController.js";
@@ -39,6 +40,7 @@ router.delete("/:id", protect, allowSelfOrMenuAccess("users"), deleteUser);
 router.post("/signup", signup);
 router.post("/login", login);
 router.post("/google-login", googleLogin);
+router.post("/apple-login", appleLogin);
 router.post("/forgot-password", forgotPassword);
 router.post("/verify-reset-code", verifyResetCode);
 router.post("/reset-password", resetPassword);

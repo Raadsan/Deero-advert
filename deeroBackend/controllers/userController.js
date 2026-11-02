@@ -262,6 +262,92 @@ export const googleLogin = async (req, res) => {
   }
 };
 
+/**
+ * 🔐 APPLE LOGIN / SYNC
+ */
+export const appleLogin = async (req, res) => {
+  try {
+    const { email, name, appleId, phone } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
+    }
+
+    let user = await prisma.user.findUnique({
+      where: { email: email.toLowerCase() },
+      include: { role: true }
+    });
+
+    if (!user) {
+      let userRole = await prisma.role.findUnique({ where: { name: "user" } });
+      if (!userRole) {
+        userRole = await prisma.role.create({
+          data: { name: "user", description: "Standard user" }
+        });
+      }
+
+      const hashedPassword = await bcrypt.hash(appleId || Math.random().toString(36), 10);
+      const initialBonus = 15;
+
+      user = await prisma.user.create({
+        data: {
+          fullname: name || email.split("@")[0],
+          email: email.toLowerCase(),
+          password: hashedPassword,
+          phone: phone || "",
+          roleId: userRole.id,
+          registerSource: "mobile",
+          bonus: initialBonus,
+          bonusHistory: {
+            create: {
+              amount: initialBonus,
+              reason: "Registration Bonus (Apple)",
+              type: "add"
+            }
+          }
+        },
+        include: { role: true }
+      });
+    } else if (name && (!user.fullname || user.fullname === user.email.split("@")[0])) {
+      user = await prisma.user.update({
+        where: { id: user.id },
+        data: { fullname: name },
+        include: { role: true }
+      });
+    }
+
+    const token = jwt.sign(
+      { userId: user.id, email: user.email, role: user.role },
+      process.env.JWT_SECRET || "secret",
+      { expiresIn: "7d" }
+    );
+
+    res.status(200).json({
+      message: "Apple login successful",
+      token,
+      user: {
+        id: user.id,
+        fullname: user.fullname,
+        email: user.email,
+        phone: user.phone,
+        bonus: user.bonus,
+        bonusStatus: user.bonusStatus,
+        registerSource: user.registerSource,
+        role: user.role,
+        discounts: await prisma.discount.findMany({
+          where: {
+            OR: [{ userId: user.id }, { userId: null }],
+            status: "active"
+          }
+        })
+      }
+    });
+  } catch (error) {
+    console.error("Apple Login Error:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
 
 /**
  * 🔑 FORGOT PASSWORD
@@ -575,6 +661,12 @@ export const deleteUser = async (req, res) => {
       }
 
       await tx.message.deleteMany({ where: { senderId: userId } });
+      await tx.chatReport.deleteMany({
+        where: { OR: [{ reporterId: userId }, { reportedUserId: userId }] },
+      });
+      await tx.userBlock.deleteMany({
+        where: { OR: [{ blockerId: userId }, { blockedId: userId }] },
+      });
       await tx.transaction.deleteMany({ where: { userId } });
       await tx.bonusHistory.deleteMany({ where: { userId } });
       await tx.announcement.deleteMany({ where: { createdById: userId } });

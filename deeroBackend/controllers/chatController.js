@@ -1,4 +1,5 @@
 import { prisma } from "../lib/prisma.js";
+import { areUsersBlocked, getBlockedUserIds } from "../utils/chatSafety.js";
 
 // Starts or gets a conversation
 export const createOrGetConversation = async (req, res) => {
@@ -8,6 +9,10 @@ export const createOrGetConversation = async (req, res) => {
 
     if (!participantId) {
       return res.status(400).json({ message: "Participant ID is required" });
+    }
+
+    if (await areUsersBlocked(userId, participantId)) {
+      return res.status(403).json({ message: "You cannot message this user." });
     }
 
     // Check if conversation exists
@@ -47,6 +52,7 @@ export const createOrGetConversation = async (req, res) => {
 export const getUserConversations = async (req, res) => {
   try {
     const userId = req.user.id;
+    const blockedIds = await getBlockedUserIds(userId);
 
     const conversations = await prisma.conversation.findMany({
       where: {
@@ -71,7 +77,13 @@ export const getUserConversations = async (req, res) => {
     });
 
     // Map to include unreadCount and remove messages array to keep response clean
-    const formattedConversations = conversations.map(conv => {
+    const formattedConversations = conversations
+      .filter((conv) => {
+        const otherId =
+          conv.participant1Id === userId ? conv.participant2Id : conv.participant1Id;
+        return !blockedIds.has(otherId);
+      })
+      .map(conv => {
       const { messages, ...convData } = conv;
       return {
         ...convData,
@@ -115,6 +127,94 @@ export const markAsRead = async (req, res) => {
     });
 
     res.status(200).json({ message: "Messages marked as read" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const reportUser = async (req, res) => {
+  try {
+    const reporterId = req.user.id;
+    const { reportedUserId, conversationId, reason, details } = req.body;
+
+    if (!reportedUserId || !reason) {
+      return res.status(400).json({ message: "reportedUserId and reason are required" });
+    }
+
+    if (parseInt(reportedUserId, 10) === reporterId) {
+      return res.status(400).json({ message: "You cannot report yourself." });
+    }
+
+    const report = await prisma.chatReport.create({
+      data: {
+        reporterId,
+        reportedUserId: parseInt(reportedUserId, 10),
+        conversationId: conversationId ? parseInt(conversationId, 10) : null,
+        reason: String(reason).slice(0, 120),
+        details: details ? String(details).slice(0, 2000) : null,
+      },
+    });
+
+    res.status(201).json({ message: "Report submitted. Our team will review it.", report });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const blockUser = async (req, res) => {
+  try {
+    const blockerId = req.user.id;
+    const blockedId = parseInt(req.body.blockedUserId ?? req.body.userId, 10);
+
+    if (Number.isNaN(blockedId)) {
+      return res.status(400).json({ message: "blockedUserId is required" });
+    }
+
+    if (blockedId === blockerId) {
+      return res.status(400).json({ message: "You cannot block yourself." });
+    }
+
+    await prisma.userBlock.upsert({
+      where: {
+        blockerId_blockedId: { blockerId, blockedId },
+      },
+      update: {},
+      create: { blockerId, blockedId },
+    });
+
+    res.status(200).json({ message: "User blocked." });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const unblockUser = async (req, res) => {
+  try {
+    const blockerId = req.user.id;
+    const blockedId = parseInt(req.params.userId, 10);
+
+    await prisma.userBlock.deleteMany({
+      where: { blockerId, blockedId },
+    });
+
+    res.status(200).json({ message: "User unblocked." });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const getBlockedUsers = async (req, res) => {
+  try {
+    const blockerId = req.user.id;
+    const blocks = await prisma.userBlock.findMany({
+      where: { blockerId },
+      include: {
+        blocked: { select: { id: true, fullname: true, image: true, email: true } },
+      },
+      orderBy: { createdAt: "desc" },
+    });
+
+    res.status(200).json(blocks.map((row) => row.blocked));
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

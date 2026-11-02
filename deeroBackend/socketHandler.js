@@ -1,6 +1,7 @@
 import { Server } from "socket.io";
 import { prisma } from "./lib/prisma.js";
 import admin from "./firebase.js";
+import { areUsersBlocked, containsBlockedLanguage } from "./utils/chatSafety.js";
 
 export const initSocket = (server) => {
   const io = new Server(server, {
@@ -34,6 +35,16 @@ export const initSocket = (server) => {
       const { conversationId, senderId, text, receiverId, messageType, mediaUrl, duration } = data;
 
       try {
+        if (await areUsersBlocked(senderId, receiverId)) {
+          socket.emit("message_error", { message: "You cannot message this user." });
+          return;
+        }
+
+        if (containsBlockedLanguage(text)) {
+          socket.emit("message_error", { message: "Message blocked because it contains prohibited language." });
+          return;
+        }
+
         // 1. Save message to DB
         const newMessage = await prisma.message.create({
           data: {
