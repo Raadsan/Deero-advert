@@ -26,7 +26,9 @@ export default function MobileDownload() {
                         <div className="flex flex-row items-center gap-2 sm:gap-4">
                             {/* App Store Badge */}
                             <Link
-                                href="#"
+                                href="https://apps.apple.com/us/app/deero-advert/id6829385152?l=en-GB"
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 className="flex items-center gap-2 sm:gap-3 bg-[#651313] px-3 py-2 sm:px-5 sm:py-2.5 rounded-xl transition-transform hover:scale-105 active:scale-95 shadow-lg flex-1 sm:flex-none justify-center"
                             >
                                 <svg viewBox="0 0 512 512" fill="white" className="w-6 h-6">
