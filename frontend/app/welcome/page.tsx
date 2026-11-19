@@ -84,8 +84,8 @@ export default function WelcomePage() {
           
           {/* Left Sidebar (Image, Socials & Signature) */}
           <div className="w-full lg:w-72 xl:w-80 shrink-0 flex flex-col items-center">
-            {/* Profile Image Container */}
-            <div className="relative w-52 h-52 md:w-60 md:h-60 rounded-full border-4 border-white shadow-[0_12px_40px_rgba(0,0,0,0.08)] bg-white z-10 overflow-hidden">
+            {/* Profile Image Container - Clean & Crisp (No blur/shadow shucaac) */}
+            <div className="relative w-52 h-52 md:w-60 md:h-60 rounded-full border border-gray-200 bg-white z-10 overflow-hidden">
               <Image
                 src={data?.image ? getImageUrl(data.image) : contentData.image} 
                 alt={contentData.presidentName || "Eng. Ayub Mohamud Abdikarim"}
@@ -95,20 +95,20 @@ export default function WelcomePage() {
               />
             </div>
             
-            {/* Social Icons */}
-            <div className="flex justify-center gap-4 relative z-20 mt-4">
+            {/* Social Icons - Clean without glow */}
+            <div className="flex justify-center gap-3 relative z-20 mt-4">
               {(!data || data.facebook) && (
-                  <a href={data?.facebook || "https://www.facebook.com/deeroadvert"} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-[#1877F2] text-white flex items-center justify-center hover:bg-[#1877F2]/90 hover:-translate-y-0.5 transition-all shadow-[0_4px_12px_rgba(24,119,242,0.35)]">
+                  <a href={data?.facebook || "https://www.facebook.com/deeroadvert"} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-[#1877F2] text-white flex items-center justify-center hover:bg-[#1877F2]/90 hover:-translate-y-0.5 transition-all shadow-sm">
                   <Facebook size={18} fill="currentColor" strokeWidth={0} />
                   </a>
               )}
               {(!data || data.linkedin) && (
-                  <a href={data?.linkedin || "https://so.linkedin.com/company/deero-advert"} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-[#0077B5] text-white flex items-center justify-center hover:bg-[#0077B5]/90 hover:-translate-y-0.5 transition-all shadow-[0_4px_12px_rgba(0,119,181,0.35)]">
+                  <a href={data?.linkedin || "https://so.linkedin.com/company/deero-advert"} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-[#0077B5] text-white flex items-center justify-center hover:bg-[#0077B5]/90 hover:-translate-y-0.5 transition-all shadow-sm">
                   <Linkedin size={18} fill="currentColor" strokeWidth={0} />
                   </a>
               )}
               {(!data || data.instagram) && (
-                  <a href={data?.instagram || "https://www.instagram.com/deeroadvert/"} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#f09433] via-[#e6683c] to-[#bc1888] text-white flex items-center justify-center hover:opacity-90 hover:-translate-y-0.5 transition-all shadow-[0_4px_12px_rgba(225,48,108,0.35)]">
+                  <a href={data?.instagram || "https://www.instagram.com/deeroadvert/"} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#f09433] via-[#e6683c] to-[#bc1888] text-white flex items-center justify-center hover:opacity-90 hover:-translate-y-0.5 transition-all shadow-sm">
                   <Instagram size={18} strokeWidth={2.5} />
                   </a>
               )}

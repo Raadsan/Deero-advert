@@ -6,7 +6,7 @@ import Image from "next/image";
 import DataTable from "@/components/layout/DataTable";
 import Modal from "@/components/layout/Modal";
 import DeleteConfirmModal from "@/components/layout/DeleteConfirmModal";
-import { Edit, Trash2, Camera } from "lucide-react";
+import { Edit, Trash2, Camera, Eye, ExternalLink } from "lucide-react";
 import {
     getWelcomeMessages,
     createWelcomeMessage,
@@ -20,6 +20,8 @@ export default function WelcomeMessageManagement() {
     const [data, setData] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+    const [viewingItem, setViewingItem] = useState<any | null>(null);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [editingId, setEditingId] = useState<string | null>(null);
     const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -169,6 +171,11 @@ export default function WelcomeMessageManagement() {
         });
     };
 
+    const handleView = (item: any) => {
+        setViewingItem(item);
+        setIsViewModalOpen(true);
+    };
+
     const columns = [
         {
             label: "Image",
@@ -212,9 +219,16 @@ export default function WelcomeMessageManagement() {
         {
             label: "Actions",
             key: "actions",
-            width: "100px",
+            width: "120px",
             render: (row: any) => (
-                <div className="flex gap-2">
+                <div className="flex gap-1.5 items-center">
+                    <button
+                        className="p-2 rounded-lg hover:bg-emerald-50 text-emerald-600 transition-colors"
+                        title="View Details"
+                        onClick={() => handleView(row)}
+                    >
+                        <Eye className="h-4 w-4" />
+                    </button>
                     <button
                         className="p-2 rounded-lg hover:bg-blue-50 text-blue-600 transition-colors"
                         title="Edit"
@@ -354,6 +368,113 @@ export default function WelcomeMessageManagement() {
                         </button>
                     </div>
                 </form>
+            </Modal>
+
+            {/* View Details Modal */}
+            <Modal
+                isOpen={isViewModalOpen}
+                onClose={() => {
+                    setIsViewModalOpen(false);
+                    setViewingItem(null);
+                }}
+                title="Welcome Message Details"
+            >
+                {viewingItem && (
+                    <div className="space-y-4 max-h-[75vh] overflow-y-auto pr-1">
+                        {/* Header Profile preview */}
+                        <div className="flex items-center gap-4 p-4 rounded-xl bg-gray-50 border border-gray-100">
+                            <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-full border-2 border-white shadow-sm bg-gray-200">
+                                {viewingItem.image ? (
+                                    <img
+                                        src={viewingItem.image}
+                                        alt={viewingItem.presidentName}
+                                        className="h-full w-full object-cover"
+                                    />
+                                ) : (
+                                    <div className="h-full w-full flex items-center justify-center text-gray-400 text-xs font-medium">No photo</div>
+                                )}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                                <h3 className="text-base font-bold text-gray-900 truncate">
+                                    {viewingItem.presidentName || "No Name"}
+                                </h3>
+                                <p className="text-xs font-semibold text-[#EB4724]">
+                                    {viewingItem.presidentTitle || "No Title"}
+                                </p>
+                                <div className="flex items-center gap-2 mt-2">
+                                    <span className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${viewingItem.isActive ? "bg-green-100 text-green-700" : "bg-gray-200 text-gray-600"}`}>
+                                        {viewingItem.isActive ? "Active on Website" : "Inactive"}
+                                    </span>
+                                    <span className="text-xs text-gray-400">
+                                        {new Date(viewingItem.createdAt).toLocaleDateString()}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Title & Subtitle */}
+                        <div className="space-y-1">
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-gray-400">Title</label>
+                            <p className="text-sm font-semibold text-[#651313] bg-gray-50 p-2.5 rounded-lg border border-gray-100">
+                                {viewingItem.title || "—"}
+                            </p>
+                        </div>
+
+                        <div className="space-y-1">
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-gray-400">Subtitle</label>
+                            <p className="text-sm text-gray-700 bg-gray-50 p-2.5 rounded-lg border border-gray-100">
+                                {viewingItem.subtitle || "—"}
+                            </p>
+                        </div>
+
+                        {/* Full Message Content */}
+                        <div className="space-y-1">
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-gray-400">Content</label>
+                            <div className="text-xs text-gray-700 bg-gray-50 p-3 rounded-lg border border-gray-100 leading-relaxed whitespace-pre-line max-h-48 overflow-y-auto">
+                                {viewingItem.content || "No message content"}
+                            </div>
+                        </div>
+
+                        {/* Social Media Links */}
+                        <div className="space-y-1">
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-gray-400">Social Links</label>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-xs">
+                                <div className="p-2 rounded-lg border border-gray-100 bg-gray-50">
+                                    <span className="font-semibold text-blue-600 block text-[11px]">Facebook:</span>
+                                    <span className="text-gray-600 truncate block mt-0.5">{viewingItem.facebook || "—"}</span>
+                                </div>
+                                <div className="p-2 rounded-lg border border-gray-100 bg-gray-50">
+                                    <span className="font-semibold text-sky-700 block text-[11px]">LinkedIn:</span>
+                                    <span className="text-gray-600 truncate block mt-0.5">{viewingItem.linkedin || "—"}</span>
+                                </div>
+                                <div className="p-2 rounded-lg border border-gray-100 bg-gray-50">
+                                    <span className="font-semibold text-pink-600 block text-[11px]">Instagram:</span>
+                                    <span className="text-gray-600 truncate block mt-0.5">{viewingItem.instagram || "—"}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Footer */}
+                        <div className="pt-3 border-t border-gray-100 flex items-center justify-between">
+                            <a
+                                href="/welcome"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#EB4724] hover:underline"
+                            >
+                                <ExternalLink className="h-3.5 w-3.5" />
+                                Open Public Page
+                            </a>
+                            <button
+                                type="button"
+                                onClick={() => setIsViewModalOpen(false)}
+                                className="px-3.5 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold transition-colors"
+                            >
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                )}
             </Modal>
         </div>
     );
