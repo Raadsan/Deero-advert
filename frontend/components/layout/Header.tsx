@@ -11,15 +11,29 @@ import { logout as apiLogout } from "../../api-client/authApi";
 import { getActiveAnnouncements, Announcement } from "../../api-client/announcementApi";
 import { motion, AnimatePresence } from "framer-motion";
 import { Megaphone, X, ChevronDown, Package } from "lucide-react";
+import { label } from "framer-motion/client";
 
 const navLinks = [
   { label: "Home", href: "/" },
-  { label: "About Us", href: "/about" },
+  {
+    label: "About Deero",
+    href: "#",
+    subLinks: [
+      {
+        label: "Welcome",
+        href: "/welcome"
+      },
+      {
+        label: "About Us",
+        href: "/about"
+      }
+    ]
+  },
   {
     label: "Services",
     href: "#",
     subLinks: [
-      
+
       {
         label: "Packages",
         href: "/Packages"
@@ -220,9 +234,8 @@ export default function Header() {
                     onMouseEnter={() => setOpenDropdown(link.label)}
                     onMouseLeave={() => setOpenDropdown(null)}
                   >
-                    <button className={`flex items-center gap-1 transition py-4 ${
-                      isSubActive ? "text-[#EB4724] font-bold" : "text-[#651313] hover:text-[#EB4724]"
-                    }`}>
+                    <button className={`flex items-center gap-1 transition py-4 ${isSubActive ? "text-[#EB4724] font-bold" : "text-[#651313] hover:text-[#EB4724]"
+                      }`}>
                       {link.label}
                       <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${openDropdown === link.label ? "rotate-180" : ""}`} />
                     </button>
@@ -292,11 +305,9 @@ export default function Header() {
                 <Link
                   key={link.label}
                   href={link.href}
-                  className={`relative py-1 transition-colors duration-200 ${
-                    isActive ? "text-[#EB4724] font-bold" : "text-[#651313] hover:text-[#EB4724]"
-                  } after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:w-full after:h-[2px] after:bg-[#EB4724] after:rounded-full after:transition-transform after:duration-300 ${
-                    isActive ? "after:scale-x-100" : "after:scale-x-0 hover:after:scale-x-100"
-                  }`}
+                  className={`relative py-1 transition-colors duration-200 ${isActive ? "text-[#EB4724] font-bold" : "text-[#651313] hover:text-[#EB4724]"
+                    } after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:w-full after:h-[2px] after:bg-[#EB4724] after:rounded-full after:transition-transform after:duration-300 ${isActive ? "after:scale-x-100" : "after:scale-x-0 hover:after:scale-x-100"
+                    }`}
                 >
                   {link.label}
                 </Link>
