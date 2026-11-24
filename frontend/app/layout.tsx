@@ -41,7 +41,7 @@ export default function RootLayout({
 
       <body
         suppressHydrationWarning
-        className={`${geistSans.variable} ${geistMono.variable} ${montserrat.variable} antialiased overflow-x-hidden`}
+        className={`${geistSans.variable} ${geistMono.variable} ${montserrat.variable} antialiased overflow-x-clip`}
       >
         <Protection />
         <CartProvider>

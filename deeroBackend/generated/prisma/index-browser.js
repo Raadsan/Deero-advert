@@ -144,6 +144,24 @@ exports.Prisma.UserScalarFieldEnum = {
   resetCodeExpires: 'resetCodeExpires'
 };
 
+exports.Prisma.UserBlockScalarFieldEnum = {
+  id: 'id',
+  blockerId: 'blockerId',
+  blockedId: 'blockedId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ChatReportScalarFieldEnum = {
+  id: 'id',
+  reporterId: 'reporterId',
+  reportedUserId: 'reportedUserId',
+  conversationId: 'conversationId',
+  reason: 'reason',
+  details: 'details',
+  status: 'status',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.GlobalSettingScalarFieldEnum = {
   id: 'id',
   globalDiscount: 'globalDiscount',
@@ -506,6 +524,9 @@ exports.Prisma.WelcomeMessageScalarFieldEnum = {
   content: 'content',
   presidentName: 'presidentName',
   presidentTitle: 'presidentTitle',
+  presidentBio: 'presidentBio',
+  background1: 'background1',
+  background2: 'background2',
   image: 'image',
   facebook: 'facebook',
   linkedin: 'linkedin',
@@ -619,6 +640,12 @@ exports.Prisma.UserOrderByRelevanceFieldEnum = {
   registerSource: 'registerSource',
   bonusStatus: 'bonusStatus',
   resetCode: 'resetCode'
+};
+
+exports.Prisma.ChatReportOrderByRelevanceFieldEnum = {
+  reason: 'reason',
+  details: 'details',
+  status: 'status'
 };
 
 exports.Prisma.DiscountOrderByRelevanceFieldEnum = {
@@ -834,6 +861,9 @@ exports.Prisma.WelcomeMessageOrderByRelevanceFieldEnum = {
   content: 'content',
   presidentName: 'presidentName',
   presidentTitle: 'presidentTitle',
+  presidentBio: 'presidentBio',
+  background1: 'background1',
+  background2: 'background2',
   image: 'image',
   facebook: 'facebook',
   linkedin: 'linkedin',
@@ -885,6 +915,8 @@ exports.Prisma.ConsultationOrderByRelevanceFieldEnum = {
 
 exports.Prisma.ModelName = {
   User: 'User',
+  UserBlock: 'UserBlock',
+  ChatReport: 'ChatReport',
   GlobalSetting: 'GlobalSetting',
   Discount: 'Discount',
   BonusHistory: 'BonusHistory',

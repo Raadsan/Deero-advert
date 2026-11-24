@@ -32,6 +32,9 @@ export default function WelcomeMessageManagement() {
         content: "",
         presidentName: "",
         presidentTitle: "",
+        presidentBio: "",
+        background1: "",
+        background2: "",
         facebook: "",
         linkedin: "",
         instagram: "",
@@ -52,6 +55,9 @@ export default function WelcomeMessageManagement() {
                     content: item.content || "",
                     presidentName: item.presidentName || "",
                     presidentTitle: item.presidentTitle || "",
+                    presidentBio: item.presidentBio || "",
+                    background1: item.background1 || "",
+                    background2: item.background2 || "",
                     facebook: item.facebook || "",
                     linkedin: item.linkedin || "",
                     instagram: item.instagram || "",
@@ -98,6 +104,9 @@ export default function WelcomeMessageManagement() {
         fd.append("content", formData.content);
         fd.append("presidentName", formData.presidentName);
         fd.append("presidentTitle", formData.presidentTitle);
+        fd.append("presidentBio", formData.presidentBio);
+        fd.append("background1", formData.background1);
+        fd.append("background2", formData.background2);
         fd.append("facebook", formData.facebook);
         fd.append("linkedin", formData.linkedin);
         fd.append("instagram", formData.instagram);
@@ -126,6 +135,9 @@ export default function WelcomeMessageManagement() {
             content: item.content,
             presidentName: item.presidentName,
             presidentTitle: item.presidentTitle,
+            presidentBio: item.presidentBio || "",
+            background1: item.background1 || "",
+            background2: item.background2 || "",
             facebook: item.facebook || "",
             linkedin: item.linkedin || "",
             instagram: item.instagram || "",
@@ -163,6 +175,9 @@ export default function WelcomeMessageManagement() {
             content: "",
             presidentName: "",
             presidentTitle: "",
+            presidentBio: "",
+            background1: "",
+            background2: "",
             facebook: "",
             linkedin: "",
             instagram: "",
@@ -325,6 +340,51 @@ export default function WelcomeMessageManagement() {
                         </div>
                     </div>
 
+                    {/* President Bio / Short Description */}
+                    <div className="space-y-0.5">
+                        <label className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">
+                            Bio Description (Under Photo on Left Sidebar)
+                        </label>
+                        <textarea
+                            name="presidentBio"
+                            rows={3}
+                            value={formData.presidentBio}
+                            onChange={handleInputChange}
+                            className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#EB4724] focus:border-[#EB4724] resize-y"
+                            placeholder="Brief bio or description displayed under the photo and title on the welcome page..."
+                        />
+                    </div>
+
+                    {/* 2 Optional Background Fields */}
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-0.5">
+                            <label className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">
+                                Background 1 <span className="text-gray-400 font-normal lowercase">(optional)</span>
+                            </label>
+                            <input
+                                type="text"
+                                name="background1"
+                                value={formData.background1}
+                                onChange={handleInputChange}
+                                className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#EB4724] focus:border-[#EB4724]"
+                                placeholder="e.g. 7+ Years Executive Experience"
+                            />
+                        </div>
+                        <div className="space-y-0.5">
+                            <label className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">
+                                Background 2 <span className="text-gray-400 font-normal lowercase">(optional)</span>
+                            </label>
+                            <input
+                                type="text"
+                                name="background2"
+                                value={formData.background2}
+                                onChange={handleInputChange}
+                                className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#EB4724] focus:border-[#EB4724]"
+                                placeholder="e.g. BSc & Portfolio Leadership"
+                            />
+                        </div>
+                    </div>
+
                     {/* Content */}
                     <div className="space-y-0.5">
                         <label className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">
@@ -426,6 +486,37 @@ export default function WelcomeMessageManagement() {
                                 {viewingItem.subtitle || "—"}
                             </p>
                         </div>
+
+                        {/* Bio / Description */}
+                        {viewingItem.presidentBio && (
+                            <div className="space-y-1">
+                                <label className="text-[10px] font-bold uppercase tracking-wider text-gray-400">Bio Description (Left Sidebar)</label>
+                                <p className="text-xs text-gray-700 bg-gray-50 p-2.5 rounded-lg border border-gray-100 whitespace-pre-line leading-relaxed">
+                                    {viewingItem.presidentBio}
+                                </p>
+                            </div>
+                        )}
+
+                        {/* Background 1 & Background 2 */}
+                        {(viewingItem.background1 || viewingItem.background2) && (
+                            <div className="space-y-1">
+                                <label className="text-[10px] font-bold uppercase tracking-wider text-gray-400">Backgrounds (Optional Fields)</label>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
+                                    {viewingItem.background1 && (
+                                        <div className="p-2.5 rounded-lg border border-gray-100 bg-gray-50">
+                                            <span className="font-semibold text-[#EB4724] block text-[11px]">Background 1:</span>
+                                            <span className="text-gray-700 block mt-0.5">{viewingItem.background1}</span>
+                                        </div>
+                                    )}
+                                    {viewingItem.background2 && (
+                                        <div className="p-2.5 rounded-lg border border-gray-100 bg-gray-50">
+                                            <span className="font-semibold text-[#EB4724] block text-[11px]">Background 2:</span>
+                                            <span className="text-gray-700 block mt-0.5">{viewingItem.background2}</span>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
 
                         {/* Full Message Content */}
                         <div className="space-y-1">

@@ -16,7 +16,7 @@ const getFilePath = (req, names) => {
 // ─── CREATE ───────────────────────────────────────────────────────────────────
 export const createWelcomeMessage = async (req, res) => {
   try {
-    const { title, subtitle, content, presidentName, presidentTitle, facebook, linkedin, instagram, isActive } = req.body;
+    const { title, subtitle, content, presidentName, presidentTitle, presidentBio, background1, background2, facebook, linkedin, instagram, isActive } = req.body;
     const image = getFilePath(req, ["image"]);
 
     const welcomeMessage = await prisma.welcomeMessage.create({
@@ -26,6 +26,9 @@ export const createWelcomeMessage = async (req, res) => {
         content: content || "",
         presidentName: presidentName || "Eng. Ayuub Mohamud",
         presidentTitle: presidentTitle || "President",
+        presidentBio: presidentBio || null,
+        background1: background1 || null,
+        background2: background2 || null,
         facebook: facebook || null,
         linkedin: linkedin || null,
         instagram: instagram || null,
@@ -91,7 +94,7 @@ export const getWelcomeMessageById = async (req, res) => {
 export const updateWelcomeMessage = async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, subtitle, content, presidentName, presidentTitle, facebook, linkedin, instagram, isActive } = req.body;
+    const { title, subtitle, content, presidentName, presidentTitle, presidentBio, background1, background2, facebook, linkedin, instagram, isActive } = req.body;
     const image = getFilePath(req, ["image"]);
 
     const existing = await prisma.welcomeMessage.findUnique({ where: { id: parseInt(id) } });
@@ -105,6 +108,9 @@ export const updateWelcomeMessage = async (req, res) => {
     if (content !== undefined) update.content = content;
     if (presidentName !== undefined) update.presidentName = presidentName;
     if (presidentTitle !== undefined) update.presidentTitle = presidentTitle;
+    if (presidentBio !== undefined) update.presidentBio = presidentBio;
+    if (background1 !== undefined) update.background1 = background1;
+    if (background2 !== undefined) update.background2 = background2;
     if (facebook !== undefined) update.facebook = facebook;
     if (linkedin !== undefined) update.linkedin = linkedin;
     if (instagram !== undefined) update.instagram = instagram;

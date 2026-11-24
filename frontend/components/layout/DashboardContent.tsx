@@ -2,13 +2,14 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Users, TrendingUp, Activity, Briefcase, Award, ArrowUpRight, Globe, CreditCard, Clock } from "lucide-react";
+import { Users, TrendingUp, Activity, Briefcase, Award, ArrowUpRight, Globe, CreditCard, Clock, CalendarCheck } from "lucide-react";
 import { getAllServices } from "@/api-client/serviceApi";
 import { getAllUsers } from "@/api-client/usersApi";
 import { getAllAchievements } from "@/api-client/achievementApi";
 import { getAllEventsNews } from "@/api-client/eventsNewsApi";
 import { getMajorClients } from "@/api-client/majorClientApi";
 import { getAllTransactions, getTransactionsByUser, getRevenueAnalytics } from "@/api-client/transactionApi";
+import { getConsultations } from "@/api-client/consultationApi";
 
 import DataTable from "@/components/layout/DataTable";
 import { Transaction } from "@/types/transaction";
@@ -29,6 +30,13 @@ export default function DashboardContent() {
     const [revenueData, setRevenueData] = useState<any[]>([]);
     const [revenueLoading, setRevenueLoading] = useState(false);
     const [canViewUsers, setCanViewUsers] = useState(false);
+
+    // Consultation Analytics State
+    const [consultationData, setConsultationData] = useState<any[]>([]);
+    const [consultationsCount, setConsultationsCount] = useState<number>(0);
+    const [consultationGrowth, setConsultationGrowth] = useState<number>(0);
+    const [consultationLoading, setConsultationLoading] = useState<boolean>(false);
+    const [recentConsultations, setRecentConsultations] = useState<any[]>([]);
 
     const isPrivileged = isStaff();
     const userId = getUserId();
@@ -125,9 +133,73 @@ export default function DashboardContent() {
                         setRevenueData([]);
                     }
 
-                    const totalRevenue = transactionsData
-                        .filter((t: any) => t.status === "completed")
-                        .reduce((acc: number, t: any) => acc + (t.amount || 0), 0);
+                    let currentConsultationsCount = 0;
+                    setConsultationLoading(true);
+                    try {
+                        const consultationsRes = await getConsultations();
+                        const consultationsList = Array.isArray(consultationsRes?.data)
+                            ? consultationsRes.data
+                            : (Array.isArray(consultationsRes) ? consultationsRes : []);
+
+                        currentConsultationsCount = consultationsList.length;
+                        setConsultationsCount(currentConsultationsCount);
+
+                        // 5 most recent consultation requests
+                        const sortedConsultations = [...consultationsList].sort((a: any, b: any) => {
+                            const dateA = new Date(a.createdAt || 0).getTime();
+                            const dateB = new Date(b.createdAt || 0).getTime();
+                            return dateB - dateA;
+                        });
+                        setRecentConsultations(sortedConsultations.slice(0, 3));
+
+                        // Build past 6 months data
+                        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                        const now = new Date();
+                        const sixMonthsAgo = new Date();
+                        sixMonthsAgo.setMonth(now.getMonth() - 5);
+                        sixMonthsAgo.setDate(1);
+                        sixMonthsAgo.setHours(0, 0, 0, 0);
+
+                        let currentDate = new Date(sixMonthsAgo);
+                        const monthlyData: any[] = [];
+
+                        while (currentDate <= now || monthlyData.length < 6) {
+                            const yr = currentDate.getFullYear();
+                            const mo = currentDate.getMonth();
+
+                            const countInMonth = consultationsList.filter((c: any) => {
+                                if (!c.createdAt) return false;
+                                const cDate = new Date(c.createdAt);
+                                return cDate.getFullYear() === yr && cDate.getMonth() === mo;
+                            }).length;
+
+                            monthlyData.push({
+                                label: months[mo],
+                                year: yr,
+                                count: countInMonth,
+                            });
+
+                            currentDate.setMonth(currentDate.getMonth() + 1);
+                        }
+
+                        const finalChartData = monthlyData.slice(-6);
+                        setConsultationData(finalChartData);
+
+                        const currentMonthCount = finalChartData[finalChartData.length - 1]?.count || 0;
+                        const prevMonthCount = finalChartData[finalChartData.length - 2]?.count || 0;
+                        let growth = 0;
+                        if (prevMonthCount > 0) {
+                            growth = Math.round(((currentMonthCount - prevMonthCount) / prevMonthCount) * 100);
+                        } else if (currentMonthCount > 0) {
+                            growth = 100;
+                        }
+                        setConsultationGrowth(growth);
+                    } catch (error) {
+                        console.warn("Dashboard: consultations unavailable", error);
+                        setConsultationData([]);
+                    } finally {
+                        setConsultationLoading(false);
+                    }
 
                     const formatNumber = (num: number) => num.toLocaleString();
 
@@ -158,10 +230,10 @@ export default function DashboardContent() {
                             color: "bg-orange-100 text-orange-700",
                         },
                         {
-                            title: "Total Revenue",
-                            value: `$${formatNumber(totalRevenue)}`,
-                            change: "Completed transactions",
-                            icon: TrendingUp,
+                            title: "Total Consultation Requests",
+                            value: formatNumber(currentConsultationsCount),
+                            change: "Total requests received",
+                            icon: CalendarCheck,
                             color: "bg-purple-100 text-purple-700",
                         },
                     ]);
@@ -309,24 +381,27 @@ export default function DashboardContent() {
                     {/* ... Revenue Overview unchanged ... */}
                     <div className="mb-4 flex items-center justify-between">
                         <h3 className="text-lg font-semibold text-gray-900">
-                            {isPrivileged ? "Revenue Overview" : "Spending Overview"}
+                            {isPrivileged ? "Consultation Requests Overview" : "Spending Overview"}
                         </h3>
                         <div className="flex items-center gap-2 text-sm text-green-600 font-medium">
                             <TrendingUp className="h-4 w-4" />
-                            <span>+12.5%</span>
+                            <span>
+                                {isPrivileged
+                                    ? (consultationGrowth >= 0 ? `+${consultationGrowth}%` : `${consultationGrowth}%`)
+                                    : "+12.5%"}
+                            </span>
                         </div>
                     </div>
-                    {/* ... (SVG content) ... */}
-                    {/* Dynamic Revenue Chart */}
+                    {/* Dynamic Chart (Consultation Requests for Staff/Admin, Spending for Users) */}
                     <div className="h-[300px] relative">
-                        {loading || revenueLoading ? (
+                        {loading || (isPrivileged ? consultationLoading : revenueLoading) ? (
                             <div className="w-full h-full flex items-center justify-center">
                                 <span className="animate-spin h-8 w-8 border-4 border-[#EB4724] border-t-transparent rounded-full"></span>
                             </div>
                         ) : (
                             <svg viewBox="0 0 600 300" className="w-full h-full">
                                 <defs>
-                                    <linearGradient id="revenueGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <linearGradient id="chartGradient" x1="0%" y1="0%" x2="0%" y2="100%">
                                         <stop offset="0%" stopColor="#EB4724" stopOpacity="0.3" />
                                         <stop offset="100%" stopColor="#EB4724" stopOpacity="0.05" />
                                     </linearGradient>
@@ -342,46 +417,42 @@ export default function DashboardContent() {
 
                                 {/* Dynamic Path Generation */}
                                 {(() => {
-                                    if (!revenueData || revenueData.length === 0) {
+                                    const activeChartData = isPrivileged ? consultationData : revenueData;
+                                    if (!activeChartData || activeChartData.length === 0) {
                                         return (
-                                            <text x="300" y="150" textAnchor="middle" className="text-gray-400 text-sm">No revenue data available</text>
+                                            <text x="300" y="150" textAnchor="middle" className="text-gray-400 text-sm">
+                                                {isPrivileged ? "No consultation requests data available" : "No spending data available"}
+                                            </text>
                                         );
                                     }
 
-                                    // Calculate maximum revenue to scale Y-axis
-                                    const maxRevenue = Math.max(...revenueData.map((d: any) => d.revenue), 100);
-                                    // Ensure we scale nicely (add 20% buffer)
-                                    const yMax = maxRevenue * 1.2;
+                                    const maxVal = Math.max(
+                                        ...activeChartData.map((d: any) => isPrivileged ? (d.count || 0) : (d.revenue || 0)),
+                                        isPrivileged ? 4 : 100
+                                    );
+                                    const yMax = isPrivileged ? Math.max(Math.ceil(maxVal * 1.25), 4) : maxVal * 1.2;
 
-                                    // Generate points
-                                    // X range: 50 to 550 (width = 500)
-                                    // Y range: 250 (bottom) to 50 (top) (height = 200)
-                                    // 6 points, so segments = 5. Step X = 500 / 5 = 100
-
-                                    const points = revenueData.map((d: any, i: number) => {
+                                    const points = activeChartData.map((d: any, i: number) => {
                                         const x = 50 + (i * 100);
-                                        // Normalize revenue to height
-                                        // ratio = d.revenue / yMax
-                                        // y = 250 - (ratio * 200)
-                                        const y = 250 - ((d.revenue / yMax) * 200);
-                                        return { x, y, val: d.revenue, label: d.label };
+                                        const val = isPrivileged ? (d.count || 0) : (d.revenue || 0);
+                                        const y = 250 - ((val / yMax) * 200);
+                                        return { x, y, val, label: d.label };
                                     });
 
                                     if (points.length === 0) return null;
 
-                                    // Create path string (Smooth curve using Catmull-Rom or Quadratic Bezier simplification)
-                                    // Simple line for now: L x y
                                     let pathD = `M ${points[0].x},${points[0].y}`;
                                     points.slice(1).forEach((p: any) => {
                                         pathD += ` L ${p.x},${p.y}`;
                                     });
-                                    // For area fetch, close the path
                                     const areaD = `${pathD} L ${points[points.length - 1].x},250 L ${points[0].x},250 Z`;
 
-                                    // Determine Y-axis labels dynamically
-                                    const yLabels = [0, yMax * 0.25, yMax * 0.5, yMax * 0.75, yMax].map(v =>
-                                        v >= 1000 ? `$${(v / 1000).toFixed(1)}k` : `$${Math.round(v)}`
-                                    );
+                                    const yLabels = [0, yMax * 0.25, yMax * 0.5, yMax * 0.75, yMax].map(v => {
+                                        if (isPrivileged) {
+                                            return Math.round(v).toString();
+                                        }
+                                        return v >= 1000 ? `$${(v / 1000).toFixed(1)}k` : `$${Math.round(v)}`;
+                                    });
 
                                     return (
                                         <>
@@ -391,7 +462,7 @@ export default function DashboardContent() {
                                             ))}
 
                                             {/* Area Fill */}
-                                            <path d={areaD} fill="url(#revenueGradient)" />
+                                            <path d={areaD} fill="url(#chartGradient)" />
 
                                             {/* Line Stroke */}
                                             <path d={pathD} fill="none" stroke="url(#lineGradient)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
@@ -401,7 +472,7 @@ export default function DashboardContent() {
                                                 <g key={i} className="group relative">
                                                     <circle cx={p.x} cy={p.y} r="5" fill="#EB4724" stroke="white" strokeWidth="2" />
                                                     {/* Tooltip on hover */}
-                                                    <title>${p.val.toLocaleString()}</title>
+                                                    <title>{isPrivileged ? `${p.val} ${p.val === 1 ? 'request' : 'requests'}` : `$${p.val.toLocaleString()}`}</title>
                                                 </g>
                                             ))}
 
@@ -417,67 +488,141 @@ export default function DashboardContent() {
                     </div>
                 </div>
 
-                <div className="col-span-3 rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
-                    <div className="mb-4 flex items-center justify-between">
-                        <h3 className="text-lg font-semibold text-gray-900">Recent Transactions</h3>
-                        <Activity className="h-5 w-5 text-[#EB4724]" />
-                    </div>
-                    <div className="space-y-4">
-                        {loading ? [1, 2, 3].map(i => <div key={i} className="h-16 bg-gray-50 rounded-lg animate-pulse" />) :
-                            transactions.filter(t => t.status === 'completed').length > 0 ? transactions.filter(t => t.status === 'completed').slice(0, 5).map((t, i) => {
-                                // Determine what to display based on transaction type
-                                let displayName = 'N/A';
+                <div className="col-span-3 rounded-xl border border-gray-100 bg-white p-6 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div className="mb-4 flex items-center justify-between">
+                            <h3 className="text-lg font-semibold text-gray-900">
+                                {isPrivileged ? "Recent Consultation Requests" : "Recent Transactions"}
+                            </h3>
+                            {isPrivileged ? (
+                                <CalendarCheck className="h-5 w-5 text-[#EB4724]" />
+                            ) : (
+                                <Activity className="h-5 w-5 text-[#EB4724]" />
+                            )}
+                        </div>
 
-                                if (t.type === 'hosting_payment') {
-                                    // For hosting package payments
-                                    displayName = typeof t.hostingPackage === 'object' ? t.hostingPackage?.name : 'Hosting Package';
-                                } else if (t.type === 'service_payment') {
-                                    // For service purchases, show the package name
-                                    const packageId = t.packageId;
-                                    if (typeof t.service === 'object' && t.service?.packages && packageId) {
-                                        const pkg = t.service.packages.find((p: any) => p._id === packageId);
-                                        displayName = pkg?.packageTitle || t.service?.serviceTitle || 'Service Purchase';
-                                    } else if (typeof t.service === 'object') {
-                                        displayName = t.service?.serviceTitle || 'Service Purchase';
-                                    }
-                                } else {
-                                    // For domain purchases, show the domain name
-                                    let name = typeof t.domain === 'object' ? t.domain?.name : t.domain;
-                                    // Check for new domainName field
-                                    if (t.domainName) name = t.domainName;
+                        <div className="space-y-3">
+                            {isPrivileged ? (
+                                loading || consultationLoading ? (
+                                    [1, 2, 3, 4, 5].map((i) => (
+                                        <div key={i} className="h-14 bg-gray-50 rounded-lg animate-pulse" />
+                                    ))
+                                ) : recentConsultations.length > 0 ? (
+                                    recentConsultations.map((c: any, i: number) => {
+                                        const statusLower = (c.status || "pending").toLowerCase();
+                                        const badgeColor =
+                                            statusLower === "completed"
+                                                ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                                                : statusLower === "contacted"
+                                                    ? "bg-blue-50 text-blue-700 border-blue-200"
+                                                    : "bg-amber-50 text-amber-700 border-amber-200";
 
-                                    // Fallback: If it looks like an ObjectId (24 hex chars) or is missing, try description
-                                    if (!name || (typeof name === 'string' && name.length === 24 && /^[0-9a-fA-F]{24}$/.test(name))) {
-                                        if (t.description) {
-                                            if (t.description.includes("Payment for domain - ")) {
-                                                name = t.description.replace("Payment for domain - ", "").trim();
-                                            } else if (t.description.includes("Domain Registration: ")) {
-                                                name = t.description.replace("Domain Registration: ", "").trim();
-                                            }
-                                        }
-                                    }
-                                    displayName = name || 'N/A';
-                                }
-
-                                return (
-                                    <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-gray-50 border border-gray-100">
-                                        <div className="flex items-center gap-3">
-                                            <div className={`p-2 rounded-lg ${t.status === 'completed' ? 'bg-green-100 text-green-600' : t.status === 'failed' ? 'bg-red-100 text-red-600' : 'bg-yellow-100 text-yellow-600'}`}>
-                                                <TrendingUp className="h-4 w-4" />
+                                        return (
+                                            <div
+                                                key={c.id || i}
+                                                className="flex items-center justify-between p-3 rounded-lg bg-gray-50/70 border border-gray-100 hover:bg-gray-100/60 transition-colors"
+                                            >
+                                                <div className="flex items-center gap-3 min-w-0">
+                                                    <div className={`p-2 rounded-lg shrink-0 ${statusLower === "completed" ? "bg-emerald-100 text-emerald-600" :
+                                                            statusLower === "contacted" ? "bg-blue-100 text-blue-600" : "bg-amber-100 text-amber-600"
+                                                        }`}>
+                                                        <CalendarCheck className="h-4 w-4" />
+                                                    </div>
+                                                    <div className="min-w-0">
+                                                        <p className="text-sm font-semibold text-gray-900 truncate">
+                                                            {c.name || "Anonymous Requester"}
+                                                        </p>
+                                                        <p className="text-xs text-gray-500 truncate">
+                                                            {c.service || "Consultation Request"}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div className="text-right shrink-0 ml-2">
+                                                    <span className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-full border ${badgeColor}`}>
+                                                        {c.status || "pending"}
+                                                    </span>
+                                                    <p className="text-[10px] text-gray-400 mt-1">
+                                                        {c.createdAt ? new Date(c.createdAt).toLocaleDateString() : ""}
+                                                    </p>
+                                                </div>
                                             </div>
-                                            <div className="min-w-0">
-                                                <p className="text-sm font-semibold text-gray-900 truncate">{displayName}</p>
-                                                <p className="text-xs text-gray-500">{new Date(t.createdAt).toLocaleDateString()}</p>
-                                            </div>
-                                        </div>
-                                        <div className="text-right">
-                                            <p className="text-sm font-bold text-gray-900">${t.amount}</p>
-                                            <p className={`text-[10px] uppercase font-bold ${t.status === 'completed' ? 'text-green-600' : t.status === 'failed' ? 'text-red-600' : 'text-yellow-600'}`}>{t.status}</p>
-                                        </div>
+                                        );
+                                    })
+                                ) : (
+                                    <div className="text-center py-8 text-gray-400 text-sm italic">
+                                        No consultation requests found.
                                     </div>
-                                );
-                            }) : <div className="text-center py-6 text-gray-400 text-sm italic">No transactions found.</div>}
+                                )
+                            ) : (
+                                loading ? (
+                                    [1, 2, 3].map((i) => <div key={i} className="h-16 bg-gray-50 rounded-lg animate-pulse" />)
+                                ) : transactions.filter((t) => t.status === "completed").length > 0 ? (
+                                    transactions
+                                        .filter((t) => t.status === "completed")
+                                        .slice(0, 5)
+                                        .map((t, i) => {
+                                            let displayName = "N/A";
+                                            if (t.type === "hosting_payment") {
+                                                displayName = typeof t.hostingPackage === "object" ? t.hostingPackage?.name : "Hosting Package";
+                                            } else if (t.type === "service_payment") {
+                                                const packageId = t.packageId;
+                                                if (typeof t.service === "object" && t.service?.packages && packageId) {
+                                                    const pkg = t.service.packages.find((p: any) => p._id === packageId);
+                                                    displayName = pkg?.packageTitle || t.service?.serviceTitle || "Service Purchase";
+                                                } else if (typeof t.service === "object") {
+                                                    displayName = t.service?.serviceTitle || "Service Purchase";
+                                                }
+                                            } else {
+                                                let name = typeof t.domain === "object" ? t.domain?.name : t.domain;
+                                                if (t.domainName) name = t.domainName;
+                                                if (!name || (typeof name === "string" && name.length === 24 && /^[0-9a-fA-F]{24}$/.test(name))) {
+                                                    if (t.description) {
+                                                        if (t.description.includes("Payment for domain - ")) {
+                                                            name = t.description.replace("Payment for domain - ", "").trim();
+                                                        } else if (t.description.includes("Domain Registration: ")) {
+                                                            name = t.description.replace("Domain Registration: ", "").trim();
+                                                        }
+                                                    }
+                                                }
+                                                displayName = name || "N/A";
+                                            }
+
+                                            return (
+                                                <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-gray-50 border border-gray-100">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className={`p-2 rounded-lg ${t.status === "completed" ? "bg-green-100 text-green-600" : t.status === "failed" ? "bg-red-100 text-red-600" : "bg-yellow-100 text-yellow-600"}`}>
+                                                            <TrendingUp className="h-4 w-4" />
+                                                        </div>
+                                                        <div className="min-w-0">
+                                                            <p className="text-sm font-semibold text-gray-900 truncate">{displayName}</p>
+                                                            <p className="text-xs text-gray-500">{new Date(t.createdAt).toLocaleDateString()}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div className="text-right">
+                                                        <p className="text-sm font-bold text-gray-900">${t.amount}</p>
+                                                        <p className={`text-[10px] uppercase font-bold ${t.status === "completed" ? "text-green-600" : t.status === "failed" ? "text-red-600" : "text-yellow-600"}`}>{t.status}</p>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })
+                                ) : (
+                                    <div className="text-center py-6 text-gray-400 text-sm italic">No transactions found.</div>
+                                )
+                            )}
+                        </div>
                     </div>
+
+                    {isPrivileged && (
+                        <div className="pt-4 mt-4 border-t border-gray-100">
+                            <Link
+                                href="/management/consultation"
+                                className="w-full inline-flex items-center justify-center gap-1.5 text-xs font-semibold text-[#EB4724] hover:text-[#c43617] hover:underline"
+                            >
+                                <span>View all consultation requests</span>
+                                <ArrowUpRight className="h-3.5 w-3.5" />
+                            </Link>
+                        </div>
+                    )}
                 </div>
             </div>
 

@@ -338,7 +338,7 @@ export default function ServicesContent({
                                             viewport={{ once: true, amount: 0.1 }}
                                             variants={containerVariants}
                                             id={slug}
-                                            className="pt-16 pb-24 border-t border-gray-200/50"
+                                            className=" pb-6 border-t border-gray-200/50"
                                         >
                                             <h3 className="text-3xl md:text-4xl font-bold text-[#EB4724] mb-12 text-center">
                                                 {service.serviceTitle} Packages
